@@ -14,7 +14,7 @@ public class FriendRank {
     private String tier; //longest is "Grand Master" = 12
 
     @Column (name = "ranking", length = 5)
-    private String rank; //longest is "THREE" = 5
+    private String rank; //longest is "iii" = 5
 
     @Column (name = "league_points")
     private int leaguePoints;
