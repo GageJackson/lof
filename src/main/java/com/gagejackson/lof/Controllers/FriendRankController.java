@@ -44,8 +44,7 @@ public class FriendRankController {
         System.out.println("friendRank.getRanking() = " + friendRank.getRanking());
         System.out.println("friendRank.getLeaguePoints() = " + friendRank.getLeaguePoints());
         System.out.println("friendID = " + friend.getId());
-
-
+        
         //friendRankRepositoryDao.save(friendRank);
     }
 }
