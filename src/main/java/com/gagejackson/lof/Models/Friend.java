@@ -2,6 +2,8 @@ package com.gagejackson.lof.Models;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "friend")
 public class Friend {
@@ -27,6 +29,9 @@ public class Friend {
 
     @Column(name = "account_id", nullable = false, length = 60)
     private String accountId;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "friend")
+    List<FriendMatch> friendMatch;
 
     /*////////////////////////////////////////////////////////////////
     CONSTRUCTORS

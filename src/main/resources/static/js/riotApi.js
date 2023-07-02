@@ -99,10 +99,13 @@
         console.log(data);
 
         for (var i = 0; i < data.length; i++){
+            const match = {
+                matchId: data[i],
+                summonerId: puuID
+            };
 
-            console.log(data[i]);
-
-            matches.push(data[i]);
+            console.log(match);
+            matches.push(match);
         }
 
         console.log(matches);
@@ -115,8 +118,6 @@
             },
             body: JSON.stringify(matches)
         });
-
-        //NA1_4699810363
     }
 
     getFriendMatches();
