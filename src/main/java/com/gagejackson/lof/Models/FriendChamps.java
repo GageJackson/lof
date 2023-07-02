@@ -19,7 +19,7 @@ public class FriendChamps {
     @Column (name = "champ_points")
     private int champPoints;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "friend_id", nullable = false)
     private Friend friend;
 

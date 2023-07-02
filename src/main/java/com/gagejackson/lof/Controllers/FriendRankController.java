@@ -31,6 +31,9 @@ public class FriendRankController {
         String tier = (String) data.get("tier");
         String ranking = (String) data.get("ranking");
         int leaguePoints = (int) data.get("leaguePoints");
+        int rankWins = (int) data.get("rankWins");
+        int rankLosses = (int) data.get("rankLosses");
+        boolean onHotStreak = (boolean) data.get("onHotStreak");
 
         String summonerId = (String) data.get("summonerId");
         Friend friend = friendRepositoryDao.findBySummonerId(summonerId);
@@ -38,6 +41,9 @@ public class FriendRankController {
         friendRank.setTier(tier);
         friendRank.setRanking(ranking);
         friendRank.setLeaguePoints(leaguePoints);
+        friendRank.setRankWins(rankWins);
+        friendRank.setRankLosses(rankLosses);
+        friendRank.setOnHotStreak(onHotStreak);
         friendRank.setFriend(friend);
 
         System.out.println("friendRank.getTier() = " + friendRank.getTier());

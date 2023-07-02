@@ -13,11 +13,20 @@ public class FriendRank {
     @Column (name = "tier", length = 12)
     private String tier; //longest is "Grand Master" = 12
 
-    @Column (name = "ranking", length = 5)
-    private String rank; //longest is "iii" = 5
+    @Column (name = "ranking", length = 3)
+    private String rank; //longest is "iii" = 3
 
     @Column (name = "league_points")
     private int leaguePoints;
+
+    @Column (name = "rank_wins")
+    private int rankWins;
+
+    @Column (name = "rank_losses")
+    private int rankLosses;
+
+    @Column (name = "hot_streak")
+    private boolean onHotStreak;
 
     @OneToOne
     @JoinColumn(name = "friend_id", nullable = false)
@@ -29,25 +38,30 @@ public class FriendRank {
     ////////////////////////////////////////////////////////////////*/
     public FriendRank(){}
 
-    public FriendRank(String tier, String ranking, int leaguePoints, Friend friend) {
+    public FriendRank(String tier, String rank, int leaguePoints, int rankWins, int rankLosses, boolean onHotstreak, Friend friend) {
         this.tier = tier;
-        this.rank = ranking;
+        this.rank = rank;
         this.leaguePoints = leaguePoints;
+        this.rankWins = rankWins;
+        this.rankLosses = rankLosses;
+        this.onHotStreak = onHotStreak;
         this.friend = friend;
     }
 
-    public FriendRank(long id, String tier, String ranking, int leaguePoints, Friend friend) {
+    public FriendRank(long id, String tier, String rank, int leaguePoints, int rankWins, int rankLosses, boolean onHotstreak, Friend friend) {
         this.id = id;
         this.tier = tier;
-        this.rank = ranking;
+        this.rank = rank;
         this.leaguePoints = leaguePoints;
+        this.rankWins = rankWins;
+        this.rankLosses = rankLosses;
+        this.onHotStreak = onHotStreak;
         this.friend = friend;
     }
 
-
     /*////////////////////////////////////////////////////////////////
-    GETTERS & SETTERS
-    ////////////////////////////////////////////////////////////////*/
+        GETTERS & SETTERS
+        ////////////////////////////////////////////////////////////////*/
     public long getId() {
         return id;
     }
@@ -86,5 +100,29 @@ public class FriendRank {
 
     public void setFriend(Friend friend) {
         this.friend = friend;
+    }
+
+    public int getRankWins() {
+        return rankWins;
+    }
+
+    public void setRankWins(int rankWins) {
+        this.rankWins = rankWins;
+    }
+
+    public int getRankLosses() {
+        return rankLosses;
+    }
+
+    public void setRankLosses(int rankLosses) {
+        this.rankLosses = rankLosses;
+    }
+
+    public boolean getOnHotStreak() {
+        return onHotStreak;
+    }
+
+    public void setOnHotStreak(boolean onHotStreak) {
+        this.onHotStreak = onHotStreak;
     }
 }
