@@ -90,5 +90,32 @@
         });
     }
 
-    getFriendData();
+    async function getFriendMatches(){
+        let puuID = 'LcGogwi3lEv5SCdlgEfIOhL8jOK-VW4BNhptrDtJEhJwSLqWgtK3gKPR2wG4L-k2E6D2Gycs38Lvsg';
+        let response = await  fetch(`https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuID}/ids?start=0&count=20&api_key=${RIOT_KEY}`)
+        let data = await response.json();
+
+        console.log(data);
+
+        // const friend = {
+        //     icon: data.profileIconId,
+        //     summonerLevel: data.summonerLevel,
+        //     summonerId: data.id
+        // };
+        //
+        // console.log(friend);
+        //
+        // // Send the extracted data to the backend
+        // await fetch('/saveFriendData', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify(friend)
+        // });
+
+        //NA1_4699810363
+    }
+
+    getFriendMatches();
 })();
