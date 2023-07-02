@@ -8,7 +8,6 @@ import com.gagejackson.lof.Repositories.FriendChampsRepository;
 import com.gagejackson.lof.Repositories.FriendMatchRepository;
 import com.gagejackson.lof.Repositories.FriendRepository;
 import com.gagejackson.lof.Repositories.MatchRepository;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,7 +50,7 @@ public class FriendMatchController {
             System.out.println("friend.getId() = " + friend.getId());
             System.out.println("matchId = " + newMatch.getId());
 
-            //friendChampsRepositoryDao.save(friendChamp);
+            //friendMatchRepositoryDao.save(friendMatch);
         }
     }
 }

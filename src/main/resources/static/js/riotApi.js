@@ -120,5 +120,31 @@
         });
     }
 
-    getFriendMatches();
+    async function getMatch(){
+        let matchId = 'NA1_4699810363';
+        let response = await  fetch(`https://americas.api.riotgames.com/lol/match/v5/matches/${matchId}?api_key=${RIOT_KEY}`)
+        let data = await response.json();
+
+        console.log(data);
+
+        const match = {
+            matchId: data.metadata.matchId,
+            info: data.info,
+            // participants: data.info.participants,
+            // teams: data.info.teams
+        };
+
+        console.log(match);
+
+        //Send the extracted data to the backend
+        await fetch('/saveMatchData', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(match)
+        });
+    }
+
+    getMatch();
 })();
