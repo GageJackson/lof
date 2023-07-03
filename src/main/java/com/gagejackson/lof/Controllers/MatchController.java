@@ -1,15 +1,14 @@
 package com.gagejackson.lof.Controllers;
 
-import com.gagejackson.lof.Models.Friend;
-import com.gagejackson.lof.Models.Match;
-import com.gagejackson.lof.Models.Participant;
-import com.gagejackson.lof.Models.Perk;
+import com.gagejackson.lof.Models.*;
 import com.gagejackson.lof.Repositories.*;
 import jakarta.persistence.Column;
+import jakarta.persistence.TemporalType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -51,6 +50,7 @@ public class MatchController {
 
         Match newMatch = saveMatchData(info);
         saveParticipantData(info, newMatch);
+        saveTeamData(info, newMatch);
 
 //        String summonerId = (String) data.get("summonerId");
 //        Friend friend = friendRepositoryDao.findBySummonerId(summonerId);
@@ -256,5 +256,103 @@ public class MatchController {
                 perkRepositoryDao.save(perkData);
             }
         }
+    }
+
+    private void saveTeamData(Map<String, Object> info, Match newMatch) {
+        List<Map<String, Object>> teams = (List<Map<String, Object>>) info.get("teams");
+
+        for (Map<String, Object> team : teams) {
+            Team teamObject = new Team();
+
+            int teamId = (int) team.get("teamId");
+
+            if ((team.get("win")).equals("true")){
+                teamObject.setWin(true);
+            } else {
+                teamObject.setWin(false);
+            }
+
+            teamObject.setTeamId(teamId);
+            teamObject.setMatch(newMatch);
+
+            Team newTeam = teamRepositoryDao.save(teamObject);
+            saveBanData(team, newTeam);
+            saveObjectiveData(team, newTeam);
+        }
+    }
+
+    private void saveBanData(Map<String, Object> info, Team newTeam) {
+        List<Map<String, Object>> bans = (List<Map<String, Object>>) info.get("bans");
+        if(bans.isEmpty()){
+            return;
+        }
+        for (Map<String, Object> ban : bans) {
+            int champId = (int) ban.get("championId");
+            int pickTurn = (int) ban.get("pickTurn");
+
+            Ban banData = new Ban();
+            banData.setChampId(champId);
+            banData.setPickTurn(pickTurn);
+            banData.setTeam(newTeam);
+
+            banRepositoryDao.save(banData);
+        }
+    }
+
+    private void saveObjectiveData(Map<String, Object> info, Team newTeam) {
+        Map<String, Object> objectives = (Map<String, Object>) info.get("objectives");
+        if(objectives.size() == 0){
+            System.out.println("empty");
+            return;
+        }
+
+        Map<String, Object> baron = (Map<String, Object>) objectives.get("baron");
+        Objective baronObjectiveData = new Objective();
+        baronObjectiveData.setName("baron");
+        baronObjectiveData.setFirst((boolean) baron.get("first"));
+        baronObjectiveData.setKills((int) baron.get("kills"));
+        baronObjectiveData.setTeam(newTeam);
+        objectiveRepositoryDao.save(baronObjectiveData);
+
+        Map<String, Object> champion = (Map<String, Object>) objectives.get("champion");
+        Objective championObjectiveData = new Objective();
+        championObjectiveData.setName("champion");
+        championObjectiveData.setFirst((boolean) champion.get("first"));
+        championObjectiveData.setKills((int) champion.get("kills"));
+        championObjectiveData.setTeam(newTeam);
+        objectiveRepositoryDao.save(championObjectiveData);
+
+        Map<String, Object> dragon = (Map<String, Object>) objectives.get("dragon");
+        Objective dragonObjectiveData = new Objective();
+        dragonObjectiveData.setName("dragon");
+        dragonObjectiveData.setFirst((boolean) dragon.get("first"));
+        dragonObjectiveData.setKills((int) dragon.get("kills"));
+        dragonObjectiveData.setTeam(newTeam);
+        objectiveRepositoryDao.save(dragonObjectiveData);
+
+        Map<String, Object> inhibitor = (Map<String, Object>) objectives.get("inhibitor");
+        Objective inhibitorObjectiveData = new Objective();
+        inhibitorObjectiveData.setName("inhibitor");
+        inhibitorObjectiveData.setFirst((boolean) inhibitor.get("first"));
+        inhibitorObjectiveData.setKills((int) inhibitor.get("kills"));
+        inhibitorObjectiveData.setTeam(newTeam);
+        objectiveRepositoryDao.save(inhibitorObjectiveData);
+
+        Map<String, Object> riftHerald = (Map<String, Object>) objectives.get("riftHerald");
+        Objective riftHeraldObjectiveData = new Objective();
+        riftHeraldObjectiveData.setName("riftHerald");
+        riftHeraldObjectiveData.setFirst((boolean) riftHerald.get("first"));
+        riftHeraldObjectiveData.setKills((int) riftHerald.get("kills"));
+        riftHeraldObjectiveData.setTeam(newTeam);
+        objectiveRepositoryDao.save(riftHeraldObjectiveData);
+
+        Map<String, Object> tower = (Map<String, Object>) objectives.get("tower");
+        Objective towerObjectiveData = new Objective();
+        towerObjectiveData.setName("tower");
+        towerObjectiveData.setFirst((boolean) tower.get("first"));
+        towerObjectiveData.setKills((int) tower.get("kills"));
+        towerObjectiveData.setTeam(newTeam);
+        objectiveRepositoryDao.save(towerObjectiveData);
+
     }
 }

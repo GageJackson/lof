@@ -121,7 +121,8 @@
     }
 
     async function getMatch(){
-        let matchId = 'NA1_4699810363';
+        // let matchId = 'NA1_4699810363';//aram
+        let matchId = 'NA1_4698817890';//SR game
         let response = await  fetch(`https://americas.api.riotgames.com/lol/match/v5/matches/${matchId}?api_key=${RIOT_KEY}`)
         let data = await response.json();
 
