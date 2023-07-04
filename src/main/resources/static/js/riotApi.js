@@ -92,7 +92,9 @@
 
     async function getFriendMatches(){
         let puuID = 'LcGogwi3lEv5SCdlgEfIOhL8jOK-VW4BNhptrDtJEhJwSLqWgtK3gKPR2wG4L-k2E6D2Gycs38Lvsg';
-        let response = await  fetch(`https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuID}/ids?start=0&count=20&api_key=${RIOT_KEY}`)
+        let start = 0; //starts at most recent
+        let count = 20; //pulls up to 100 games
+        let response = await  fetch(`https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuID}/ids?start=${start}&count=${count}&api_key=${RIOT_KEY}`)
         let data = await response.json();
         let matches = new Array();
 
@@ -120,7 +122,7 @@
         });
     }
 
-    async function getMatch(){
+    async function getMatchOverview(){
         // let matchId = 'NA1_4699810363';//aram
         let matchId = 'NA1_4698817890';//SR game
         let response = await  fetch(`https://americas.api.riotgames.com/lol/match/v5/matches/${matchId}?api_key=${RIOT_KEY}`)
@@ -130,15 +132,13 @@
 
         const match = {
             matchId: data.metadata.matchId,
-            info: data.info,
-            // participants: data.info.participants,
-            // teams: data.info.teams
+            info: data.info
         };
 
         console.log(match);
 
         //Send the extracted data to the backend
-        await fetch('/saveMatchData', {
+        await fetch('/saveMatchOverviewData', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -147,5 +147,30 @@
         });
     }
 
-    getMatch();
+    async function getMatchTimeline(){
+        // let matchId = 'NA1_4699810363';//aram
+        let matchId = 'NA1_4698817890';//SR game
+        let response = await fetch(`https://americas.api.riotgames.com/lol/match/v5/matches/${matchId}/timeline?api_key=${RIOT_KEY}`)
+        let data = await response.json();
+
+        console.log(data);
+
+        const match = {
+            matchId: data.metadata.matchId,
+            info: data.info
+        };
+
+        console.log(match);
+
+        //Send the extracted data to the backend
+        await fetch('/saveMatchTimelineData', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(match)
+        });
+    }
+
+    getMatchTimeline();
 })();
