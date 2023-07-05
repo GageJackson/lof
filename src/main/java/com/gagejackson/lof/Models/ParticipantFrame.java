@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "participant_frames")
+@Table(name = "participant_frame")
 public class ParticipantFrame {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,11 +33,15 @@ public class ParticipantFrame {
     @Column (name = "xp")
     private int xp;
 
-    @OneToMany (cascade = CascadeType.ALL, mappedBy = "participant_frames")
-    private List<ParticipantFrameChamp> champStats;
+    @OneToMany (cascade = CascadeType.ALL, mappedBy = "participantFrame")
+    private List<ParticipantFrameChamp> participantFrameChamp;
 
-    @OneToMany (cascade = CascadeType.ALL, mappedBy = "participant_frames")
-    private List<ParticipantFrameDamage> damageStats;
+    @OneToMany (cascade = CascadeType.ALL, mappedBy = "participantFrame")
+    private List<ParticipantFrameDamage> participantFrameDamage;
+
+    @ManyToOne
+    @JoinColumn(name = "participant_id", nullable = false)
+    private Participant participant;
 
 
     /*////////////////////////////////////////////////////////////////
@@ -46,7 +50,7 @@ public class ParticipantFrame {
     public ParticipantFrame() {
     }
 
-    public ParticipantFrame(int currentGold, int jungleMinionsKilled, int level, int minionsKilled, int timeEnemySpentControlled, int totalGold, int xp, List<ParticipantFrameChamp> champStats, List<ParticipantFrameDamage> damageStats) {
+    public ParticipantFrame(int currentGold, int jungleMinionsKilled, int level, int minionsKilled, int timeEnemySpentControlled, int totalGold, int xp, List<ParticipantFrameChamp> participantFrameChamp, List<ParticipantFrameDamage> participantFrameDamage, Participant participant) {
         this.currentGold = currentGold;
         this.jungleMinionsKilled = jungleMinionsKilled;
         this.level = level;
@@ -54,11 +58,12 @@ public class ParticipantFrame {
         this.timeEnemySpentControlled = timeEnemySpentControlled;
         this.totalGold = totalGold;
         this.xp = xp;
-        this.champStats = champStats;
-        this.damageStats = damageStats;
+        this.participantFrameChamp = participantFrameChamp;
+        this.participantFrameDamage = participantFrameDamage;
+        this.participant = participant;
     }
 
-    public ParticipantFrame(long id, int currentGold, int jungleMinionsKilled, int level, int minionsKilled, int timeEnemySpentControlled, int totalGold, int xp, List<ParticipantFrameChamp> champStats, List<ParticipantFrameDamage> damageStats) {
+    public ParticipantFrame(long id, int currentGold, int jungleMinionsKilled, int level, int minionsKilled, int timeEnemySpentControlled, int totalGold, int xp, List<ParticipantFrameChamp> participantFrameChamp, List<ParticipantFrameDamage> participantFrameDamage, Participant participant) {
         this.id = id;
         this.currentGold = currentGold;
         this.jungleMinionsKilled = jungleMinionsKilled;
@@ -67,14 +72,14 @@ public class ParticipantFrame {
         this.timeEnemySpentControlled = timeEnemySpentControlled;
         this.totalGold = totalGold;
         this.xp = xp;
-        this.champStats = champStats;
-        this.damageStats = damageStats;
+        this.participantFrameChamp = participantFrameChamp;
+        this.participantFrameDamage = participantFrameDamage;
+        this.participant = participant;
     }
 
-
     /*////////////////////////////////////////////////////////////////
-    GETTERS & SETTERS
-    ////////////////////////////////////////////////////////////////*/
+            GETTERS & SETTERS
+            ////////////////////////////////////////////////////////////////*/
     public long getId() {
         return id;
     }
@@ -139,19 +144,27 @@ public class ParticipantFrame {
         this.xp = xp;
     }
 
-    public List<ParticipantFrameChamp> getChampStats() {
-        return champStats;
+    public List<ParticipantFrameChamp> getParticipantFrameChamp() {
+        return participantFrameChamp;
     }
 
-    public void setChampStats(List<ParticipantFrameChamp> champStats) {
-        this.champStats = champStats;
+    public void setParticipantFrameChamp(List<ParticipantFrameChamp> participantFrameChamp) {
+        this.participantFrameChamp = participantFrameChamp;
     }
 
-    public List<ParticipantFrameDamage> getDamageStats() {
-        return damageStats;
+    public List<ParticipantFrameDamage> getParticipantFrameDamage() {
+        return participantFrameDamage;
     }
 
-    public void setDamageStats(List<ParticipantFrameDamage> damageStats) {
-        this.damageStats = damageStats;
+    public void setParticipantFrameDamage(List<ParticipantFrameDamage> participantFrameDamage) {
+        this.participantFrameDamage = participantFrameDamage;
+    }
+
+    public Participant getParticipant() {
+        return participant;
+    }
+
+    public void setParticipant(Participant participant) {
+        this.participant = participant;
     }
 }

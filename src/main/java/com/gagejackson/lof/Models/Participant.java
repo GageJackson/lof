@@ -327,6 +327,9 @@ public class Participant {
     @OneToMany (cascade = CascadeType.ALL, mappedBy = "participant")
     private List<Perk> perk;
 
+    @OneToMany (cascade = CascadeType.ALL, mappedBy = "participant")
+    private List<ParticipantFrame> participantFrame;
+
     @ManyToOne
     @JoinColumn(name = "match_id", nullable = false)
     private Match match;
@@ -337,7 +340,117 @@ public class Participant {
     ////////////////////////////////////////////////////////////////*/
     public Participant(){}
 
-    public Participant(long id, int assists, int baronKills, int bountyLevel, int champExperience, int champLevel, int championId, String championName, int championTransform, int consumablesPurchased, int damageDealtToBuildings, int damageDealtToObjectives, int damageDealtToTurrets, int damageSelfMitigated, int deaths, int detectorWardsPlaced, int doubleKills, int dragonKills, boolean firstBloodAssist, boolean firstBloodKill, boolean firstTowerAssist, boolean firstTowerKill, boolean gameEndedInEarlySurrender, boolean gameEndedInSurrender, int goldEarned, int goldSpent, String individualPosition, int inhibitorKills, int inhibitorTakedowns, int inhibitorsLost, int item0, int item1, int item2, int item3, int item4, int item5, int item6, int itemsPurchased, int killingSprees, int kills, String lane, int largestCriticalStrike, int largestKillingSpree, int largestMultiKill, int longestTimeSpentLiving, int magicDamageDealt, int magicDamageDealtToChampions, int magicDamageTaken, int neutralMinionsKilled, int nexusKills, int nexusTakedowns, int nexusLost, int objectivesStolen, int objectivesStolenAssists, int participantId, int pentaKills, int physicalDamageDealt, int physicalDamageDealtToChampions, int physicalDamageTaken, int profileIcon, String puuid, int quadraKills, String riotIdName, String riotIdTagline, String role, int sightWardsBoughtInGame, int spell1Casts, int spell2Casts, int spell3Casts, int spell4Casts, int summoner1Casts, int summoner1Id, int summoner2Casts, int summoner2Id, String summonerId, int summonerLevel, String summonerName, boolean teamEarlySurrendered, int teamId, String teamPosition, int timeCCingOthers, int timePlayed, int totalDamageDealt, int totalDamageDealtToChampions, int totalDamageShieldedOnTeammates, int totalDamageTaken, int totalHeal, int totalHealsOnTeammates, int totalMinionsKilled, int totalTimeCCDealt, int totalTimeSpentDead, int totalUnitsHealed, int tripleKills, int trueDamageDealt, int trueDamageDealtToChampions, int trueDamageTaken, int turretKills, int turretTakedowns, int turretsLost, int unrealKills, int visionScore, int visionWardsBoughtInGame, int wardsKilled, int wardsPlaced, boolean win, List<Perk> perk, Match match) {
+    public Participant(int assists, int baronKills, int bountyLevel, int champExperience, int champLevel, int championId, String championName, int championTransform, int consumablesPurchased, int damageDealtToBuildings, int damageDealtToObjectives, int damageDealtToTurrets, int damageSelfMitigated, int deaths, int detectorWardsPlaced, int doubleKills, int dragonKills, boolean firstBloodAssist, boolean firstBloodKill, boolean firstTowerAssist, boolean firstTowerKill, boolean gameEndedInEarlySurrender, boolean gameEndedInSurrender, int goldEarned, int goldSpent, String individualPosition, int inhibitorKills, int inhibitorTakedowns, int inhibitorsLost, int item0, int item1, int item2, int item3, int item4, int item5, int item6, int itemsPurchased, int killingSprees, int kills, String lane, int largestCriticalStrike, int largestKillingSpree, int largestMultiKill, int longestTimeSpentLiving, int magicDamageDealt, int magicDamageDealtToChampions, int magicDamageTaken, int neutralMinionsKilled, int nexusKills, int nexusTakedowns, int nexusLost, int objectivesStolen, int objectivesStolenAssists, int participantId, int pentaKills, int physicalDamageDealt, int physicalDamageDealtToChampions, int physicalDamageTaken, int profileIcon, String puuid, int quadraKills, String riotIdName, String riotIdTagline, String role, int sightWardsBoughtInGame, int spell1Casts, int spell2Casts, int spell3Casts, int spell4Casts, int summoner1Casts, int summoner1Id, int summoner2Casts, int summoner2Id, String summonerId, int summonerLevel, String summonerName, boolean teamEarlySurrendered, int teamId, String teamPosition, int timeCCingOthers, int timePlayed, int totalDamageDealt, int totalDamageDealtToChampions, int totalDamageShieldedOnTeammates, int totalDamageTaken, int totalHeal, int totalHealsOnTeammates, int totalMinionsKilled, int totalTimeCCDealt, int totalTimeSpentDead, int totalUnitsHealed, int tripleKills, int trueDamageDealt, int trueDamageDealtToChampions, int trueDamageTaken, int turretKills, int turretTakedowns, int turretsLost, int unrealKills, int visionScore, int visionWardsBoughtInGame, int wardsKilled, int wardsPlaced, boolean win, List<Perk> perk, List<ParticipantFrame> participantFrame, Match match) {
+        this.assists = assists;
+        this.baronKills = baronKills;
+        this.bountyLevel = bountyLevel;
+        this.champExperience = champExperience;
+        this.champLevel = champLevel;
+        this.championId = championId;
+        this.championName = championName;
+        this.championTransform = championTransform;
+        this.consumablesPurchased = consumablesPurchased;
+        this.damageDealtToBuildings = damageDealtToBuildings;
+        this.damageDealtToObjectives = damageDealtToObjectives;
+        this.damageDealtToTurrets = damageDealtToTurrets;
+        this.damageSelfMitigated = damageSelfMitigated;
+        this.deaths = deaths;
+        this.detectorWardsPlaced = detectorWardsPlaced;
+        this.doubleKills = doubleKills;
+        this.dragonKills = dragonKills;
+        this.firstBloodAssist = firstBloodAssist;
+        this.firstBloodKill = firstBloodKill;
+        this.firstTowerAssist = firstTowerAssist;
+        this.firstTowerKill = firstTowerKill;
+        this.gameEndedInEarlySurrender = gameEndedInEarlySurrender;
+        this.gameEndedInSurrender = gameEndedInSurrender;
+        this.goldEarned = goldEarned;
+        this.goldSpent = goldSpent;
+        this.individualPosition = individualPosition;
+        this.inhibitorKills = inhibitorKills;
+        this.inhibitorTakedowns = inhibitorTakedowns;
+        this.inhibitorsLost = inhibitorsLost;
+        this.item0 = item0;
+        this.item1 = item1;
+        this.item2 = item2;
+        this.item3 = item3;
+        this.item4 = item4;
+        this.item5 = item5;
+        this.item6 = item6;
+        this.itemsPurchased = itemsPurchased;
+        this.killingSprees = killingSprees;
+        this.kills = kills;
+        this.lane = lane;
+        this.largestCriticalStrike = largestCriticalStrike;
+        this.largestKillingSpree = largestKillingSpree;
+        this.largestMultiKill = largestMultiKill;
+        this.longestTimeSpentLiving = longestTimeSpentLiving;
+        this.magicDamageDealt = magicDamageDealt;
+        this.magicDamageDealtToChampions = magicDamageDealtToChampions;
+        this.magicDamageTaken = magicDamageTaken;
+        this.neutralMinionsKilled = neutralMinionsKilled;
+        this.nexusKills = nexusKills;
+        this.nexusTakedowns = nexusTakedowns;
+        this.nexusLost = nexusLost;
+        this.objectivesStolen = objectivesStolen;
+        this.objectivesStolenAssists = objectivesStolenAssists;
+        this.participantId = participantId;
+        this.pentaKills = pentaKills;
+        this.physicalDamageDealt = physicalDamageDealt;
+        this.physicalDamageDealtToChampions = physicalDamageDealtToChampions;
+        this.physicalDamageTaken = physicalDamageTaken;
+        this.profileIcon = profileIcon;
+        this.puuid = puuid;
+        this.quadraKills = quadraKills;
+        this.riotIdName = riotIdName;
+        this.riotIdTagline = riotIdTagline;
+        this.role = role;
+        this.sightWardsBoughtInGame = sightWardsBoughtInGame;
+        this.spell1Casts = spell1Casts;
+        this.spell2Casts = spell2Casts;
+        this.spell3Casts = spell3Casts;
+        this.spell4Casts = spell4Casts;
+        this.summoner1Casts = summoner1Casts;
+        this.summoner1Id = summoner1Id;
+        this.summoner2Casts = summoner2Casts;
+        this.summoner2Id = summoner2Id;
+        this.summonerId = summonerId;
+        this.summonerLevel = summonerLevel;
+        this.summonerName = summonerName;
+        this.teamEarlySurrendered = teamEarlySurrendered;
+        this.teamId = teamId;
+        this.teamPosition = teamPosition;
+        this.timeCCingOthers = timeCCingOthers;
+        this.timePlayed = timePlayed;
+        this.totalDamageDealt = totalDamageDealt;
+        this.totalDamageDealtToChampions = totalDamageDealtToChampions;
+        this.totalDamageShieldedOnTeammates = totalDamageShieldedOnTeammates;
+        this.totalDamageTaken = totalDamageTaken;
+        this.totalHeal = totalHeal;
+        this.totalHealsOnTeammates = totalHealsOnTeammates;
+        this.totalMinionsKilled = totalMinionsKilled;
+        this.totalTimeCCDealt = totalTimeCCDealt;
+        this.totalTimeSpentDead = totalTimeSpentDead;
+        this.totalUnitsHealed = totalUnitsHealed;
+        this.tripleKills = tripleKills;
+        this.trueDamageDealt = trueDamageDealt;
+        this.trueDamageDealtToChampions = trueDamageDealtToChampions;
+        this.trueDamageTaken = trueDamageTaken;
+        this.turretKills = turretKills;
+        this.turretTakedowns = turretTakedowns;
+        this.turretsLost = turretsLost;
+        this.unrealKills = unrealKills;
+        this.visionScore = visionScore;
+        this.visionWardsBoughtInGame = visionWardsBoughtInGame;
+        this.wardsKilled = wardsKilled;
+        this.wardsPlaced = wardsPlaced;
+        this.win = win;
+        this.perk = perk;
+        this.participantFrame = participantFrame;
+        this.match = match;
+    }
+
+    public Participant(long id, int assists, int baronKills, int bountyLevel, int champExperience, int champLevel, int championId, String championName, int championTransform, int consumablesPurchased, int damageDealtToBuildings, int damageDealtToObjectives, int damageDealtToTurrets, int damageSelfMitigated, int deaths, int detectorWardsPlaced, int doubleKills, int dragonKills, boolean firstBloodAssist, boolean firstBloodKill, boolean firstTowerAssist, boolean firstTowerKill, boolean gameEndedInEarlySurrender, boolean gameEndedInSurrender, int goldEarned, int goldSpent, String individualPosition, int inhibitorKills, int inhibitorTakedowns, int inhibitorsLost, int item0, int item1, int item2, int item3, int item4, int item5, int item6, int itemsPurchased, int killingSprees, int kills, String lane, int largestCriticalStrike, int largestKillingSpree, int largestMultiKill, int longestTimeSpentLiving, int magicDamageDealt, int magicDamageDealtToChampions, int magicDamageTaken, int neutralMinionsKilled, int nexusKills, int nexusTakedowns, int nexusLost, int objectivesStolen, int objectivesStolenAssists, int participantId, int pentaKills, int physicalDamageDealt, int physicalDamageDealtToChampions, int physicalDamageTaken, int profileIcon, String puuid, int quadraKills, String riotIdName, String riotIdTagline, String role, int sightWardsBoughtInGame, int spell1Casts, int spell2Casts, int spell3Casts, int spell4Casts, int summoner1Casts, int summoner1Id, int summoner2Casts, int summoner2Id, String summonerId, int summonerLevel, String summonerName, boolean teamEarlySurrendered, int teamId, String teamPosition, int timeCCingOthers, int timePlayed, int totalDamageDealt, int totalDamageDealtToChampions, int totalDamageShieldedOnTeammates, int totalDamageTaken, int totalHeal, int totalHealsOnTeammates, int totalMinionsKilled, int totalTimeCCDealt, int totalTimeSpentDead, int totalUnitsHealed, int tripleKills, int trueDamageDealt, int trueDamageDealtToChampions, int trueDamageTaken, int turretKills, int turretTakedowns, int turretsLost, int unrealKills, int visionScore, int visionWardsBoughtInGame, int wardsKilled, int wardsPlaced, boolean win, List<Perk> perk, List<ParticipantFrame> participantFrame, Match match) {
         this.id = id;
         this.assists = assists;
         this.baronKills = baronKills;
@@ -444,120 +557,14 @@ public class Participant {
         this.wardsPlaced = wardsPlaced;
         this.win = win;
         this.perk = perk;
-        this.match = match;
-    }
-    public Participant(int assists, int baronKills, int bountyLevel, int champExperience, int champLevel, int championId, String championName, int championTransform, int consumablesPurchased, int damageDealtToBuildings, int damageDealtToObjectives, int damageDealtToTurrets, int damageSelfMitigated, int deaths, int detectorWardsPlaced, int doubleKills, int dragonKills, boolean firstBloodAssist, boolean firstBloodKill, boolean firstTowerAssist, boolean firstTowerKill, boolean gameEndedInEarlySurrender, boolean gameEndedInSurrender, int goldEarned, int goldSpent, String individualPosition, int inhibitorKills, int inhibitorTakedowns, int inhibitorsLost, int item0, int item1, int item2, int item3, int item4, int item5, int item6, int itemsPurchased, int killingSprees, int kills, String lane, int largestCriticalStrike, int largestKillingSpree, int largestMultiKill, int longestTimeSpentLiving, int magicDamageDealt, int magicDamageDealtToChampions, int magicDamageTaken, int neutralMinionsKilled, int nexusKills, int nexusTakedowns, int nexusLost, int objectivesStolen, int objectivesStolenAssists, int participantId, int pentaKills, int physicalDamageDealt, int physicalDamageDealtToChampions, int physicalDamageTaken, int profileIcon, String puuid, int quadraKills, String riotIdName, String riotIdTagline, String role, int sightWardsBoughtInGame, int spell1Casts, int spell2Casts, int spell3Casts, int spell4Casts, int summoner1Casts, int summoner1Id, int summoner2Casts, int summoner2Id, String summonerId, int summonerLevel, String summonerName, boolean teamEarlySurrendered, int teamId, String teamPosition, int timeCCingOthers, int timePlayed, int totalDamageDealt, int totalDamageDealtToChampions, int totalDamageShieldedOnTeammates, int totalDamageTaken, int totalHeal, int totalHealsOnTeammates, int totalMinionsKilled, int totalTimeCCDealt, int totalTimeSpentDead, int totalUnitsHealed, int tripleKills, int trueDamageDealt, int trueDamageDealtToChampions, int trueDamageTaken, int turretKills, int turretTakedowns, int turretsLost, int unrealKills, int visionScore, int visionWardsBoughtInGame, int wardsKilled, int wardsPlaced, boolean win, List<Perk> perk, Match match) {
-        this.assists = assists;
-        this.baronKills = baronKills;
-        this.bountyLevel = bountyLevel;
-        this.champExperience = champExperience;
-        this.champLevel = champLevel;
-        this.championId = championId;
-        this.championName = championName;
-        this.championTransform = championTransform;
-        this.consumablesPurchased = consumablesPurchased;
-        this.damageDealtToBuildings = damageDealtToBuildings;
-        this.damageDealtToObjectives = damageDealtToObjectives;
-        this.damageDealtToTurrets = damageDealtToTurrets;
-        this.damageSelfMitigated = damageSelfMitigated;
-        this.deaths = deaths;
-        this.detectorWardsPlaced = detectorWardsPlaced;
-        this.doubleKills = doubleKills;
-        this.dragonKills = dragonKills;
-        this.firstBloodAssist = firstBloodAssist;
-        this.firstBloodKill = firstBloodKill;
-        this.firstTowerAssist = firstTowerAssist;
-        this.firstTowerKill = firstTowerKill;
-        this.gameEndedInEarlySurrender = gameEndedInEarlySurrender;
-        this.gameEndedInSurrender = gameEndedInSurrender;
-        this.goldEarned = goldEarned;
-        this.goldSpent = goldSpent;
-        this.individualPosition = individualPosition;
-        this.inhibitorKills = inhibitorKills;
-        this.inhibitorTakedowns = inhibitorTakedowns;
-        this.inhibitorsLost = inhibitorsLost;
-        this.item0 = item0;
-        this.item1 = item1;
-        this.item2 = item2;
-        this.item3 = item3;
-        this.item4 = item4;
-        this.item5 = item5;
-        this.item6 = item6;
-        this.itemsPurchased = itemsPurchased;
-        this.killingSprees = killingSprees;
-        this.kills = kills;
-        this.lane = lane;
-        this.largestCriticalStrike = largestCriticalStrike;
-        this.largestKillingSpree = largestKillingSpree;
-        this.largestMultiKill = largestMultiKill;
-        this.longestTimeSpentLiving = longestTimeSpentLiving;
-        this.magicDamageDealt = magicDamageDealt;
-        this.magicDamageDealtToChampions = magicDamageDealtToChampions;
-        this.magicDamageTaken = magicDamageTaken;
-        this.neutralMinionsKilled = neutralMinionsKilled;
-        this.nexusKills = nexusKills;
-        this.nexusTakedowns = nexusTakedowns;
-        this.nexusLost = nexusLost;
-        this.objectivesStolen = objectivesStolen;
-        this.objectivesStolenAssists = objectivesStolenAssists;
-        this.participantId = participantId;
-        this.pentaKills = pentaKills;
-        this.physicalDamageDealt = physicalDamageDealt;
-        this.physicalDamageDealtToChampions = physicalDamageDealtToChampions;
-        this.physicalDamageTaken = physicalDamageTaken;
-        this.profileIcon = profileIcon;
-        this.puuid = puuid;
-        this.quadraKills = quadraKills;
-        this.riotIdName = riotIdName;
-        this.riotIdTagline = riotIdTagline;
-        this.role = role;
-        this.sightWardsBoughtInGame = sightWardsBoughtInGame;
-        this.spell1Casts = spell1Casts;
-        this.spell2Casts = spell2Casts;
-        this.spell3Casts = spell3Casts;
-        this.spell4Casts = spell4Casts;
-        this.summoner1Casts = summoner1Casts;
-        this.summoner1Id = summoner1Id;
-        this.summoner2Casts = summoner2Casts;
-        this.summoner2Id = summoner2Id;
-        this.summonerId = summonerId;
-        this.summonerLevel = summonerLevel;
-        this.summonerName = summonerName;
-        this.teamEarlySurrendered = teamEarlySurrendered;
-        this.teamId = teamId;
-        this.teamPosition = teamPosition;
-        this.timeCCingOthers = timeCCingOthers;
-        this.timePlayed = timePlayed;
-        this.totalDamageDealt = totalDamageDealt;
-        this.totalDamageDealtToChampions = totalDamageDealtToChampions;
-        this.totalDamageShieldedOnTeammates = totalDamageShieldedOnTeammates;
-        this.totalDamageTaken = totalDamageTaken;
-        this.totalHeal = totalHeal;
-        this.totalHealsOnTeammates = totalHealsOnTeammates;
-        this.totalMinionsKilled = totalMinionsKilled;
-        this.totalTimeCCDealt = totalTimeCCDealt;
-        this.totalTimeSpentDead = totalTimeSpentDead;
-        this.totalUnitsHealed = totalUnitsHealed;
-        this.tripleKills = tripleKills;
-        this.trueDamageDealt = trueDamageDealt;
-        this.trueDamageDealtToChampions = trueDamageDealtToChampions;
-        this.trueDamageTaken = trueDamageTaken;
-        this.turretKills = turretKills;
-        this.turretTakedowns = turretTakedowns;
-        this.turretsLost = turretsLost;
-        this.unrealKills = unrealKills;
-        this.visionScore = visionScore;
-        this.visionWardsBoughtInGame = visionWardsBoughtInGame;
-        this.wardsKilled = wardsKilled;
-        this.wardsPlaced = wardsPlaced;
-        this.win = win;
-        this.perk = perk;
+        this.participantFrame = participantFrame;
         this.match = match;
     }
 
+
     /*////////////////////////////////////////////////////////////////
-    GETTERS & SETTERS
-    ////////////////////////////////////////////////////////////////*/
+        GETTERS & SETTERS
+        ////////////////////////////////////////////////////////////////*/
     public long getId() {
         return id;
     }
@@ -1412,5 +1419,13 @@ public class Participant {
 
     public void setMatch(Match match) {
         this.match = match;
+    }
+
+    public List<ParticipantFrame> getParticipantFrame() {
+        return participantFrame;
+    }
+
+    public void setParticipantFrame(List<ParticipantFrame> participantFrame) {
+        this.participantFrame = participantFrame;
     }
 }
