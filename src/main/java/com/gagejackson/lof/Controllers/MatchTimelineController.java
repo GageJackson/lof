@@ -73,7 +73,8 @@ public class MatchTimelineController {
     }
 
     private void saveParticipantFrame(Map<String, Object> participantFrames, Match newMatch, int i){
-        Map<String, Object> participantFrameData = (Map<String, Object>) participantFrames.get(i);
+        Map<String, Object> participantFrameData = (Map<String, Object>) participantFrames.get(String.valueOf(i));
+        System.out.println("participantFrameData = " + participantFrameData);
         ParticipantFrame participantFrame = new ParticipantFrame();
 
         Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, i);
@@ -95,32 +96,34 @@ public class MatchTimelineController {
 
     private void saveParticipantFrameChampData(Map<String, Object> participantFrameData, ParticipantFrame newParticipantFrame){
         ParticipantFrameChamp participantFrameChamp = new ParticipantFrameChamp();
+        Map<String, Object> participantFrameChampData = (Map<String, Object>) participantFrameData.get("championStats");
 
-        participantFrameChamp.setAbilityHaste((int) participantFrameData.get("abilityHaste"));
-        participantFrameChamp.setAbilityPower((int) participantFrameData.get("abilityPower"));
-        participantFrameChamp.setArmor((int) participantFrameData.get("armor"));
-        participantFrameChamp.setArmorPen((int) participantFrameData.get("armorPen"));
-        participantFrameChamp.setArmorPenPercent((int) participantFrameData.get("armorPenPercent"));
-        participantFrameChamp.setAttackDamage((int) participantFrameData.get("attackDamage"));
-        participantFrameChamp.setAttackSpeed((int) participantFrameData.get("attackSpeed"));
-        participantFrameChamp.setBonusArmorPenPercent((int) participantFrameData.get("bonusArmorPenPercent"));
-        participantFrameChamp.setBonusMagicPenPercent((int) participantFrameData.get("bonusMagicPenPercent"));
-        participantFrameChamp.setCcReduction((int) participantFrameData.get("ccReduction"));
-        participantFrameChamp.setCooldownReduction((int) participantFrameData.get("cooldownReduction"));
-        participantFrameChamp.setHealth((int) participantFrameData.get("health"));
-        participantFrameChamp.setHealthMax((int) participantFrameData.get("healthMax"));
-        participantFrameChamp.setHealthRegen((int) participantFrameData.get("healthRegen"));
-        participantFrameChamp.setLifesteal((int) participantFrameData.get("lifesteal"));
-        participantFrameChamp.setMagicPen((int) participantFrameData.get("magicPen"));
-        participantFrameChamp.setMagicPenPercent((int) participantFrameData.get("magicPenPercent"));
-        participantFrameChamp.setMagicResist((int) participantFrameData.get("magicResist"));
-        participantFrameChamp.setMovementSpeed((int) participantFrameData.get("movementSpeed"));
-        participantFrameChamp.setOmnivamp((int) participantFrameData.get("omnivamp"));
-        participantFrameChamp.setPhysicalVamp((int) participantFrameData.get("physicalVamp"));
-        participantFrameChamp.setPower((int) participantFrameData.get("power"));
-        participantFrameChamp.setPowerMax((int) participantFrameData.get("powerMax"));
-        participantFrameChamp.setPowerRegen((int) participantFrameData.get("powerRegen"));
-        participantFrameChamp.setSpellVamp((int) participantFrameData.get("spellVamp"));
+
+        participantFrameChamp.setAbilityHaste((int) participantFrameChampData.get("abilityHaste"));
+        participantFrameChamp.setAbilityPower((int) participantFrameChampData.get("abilityPower"));
+        participantFrameChamp.setArmor((int) participantFrameChampData.get("armor"));
+        participantFrameChamp.setArmorPen((int) participantFrameChampData.get("armorPen"));
+        participantFrameChamp.setArmorPenPercent((int) participantFrameChampData.get("armorPenPercent"));
+        participantFrameChamp.setAttackDamage((int) participantFrameChampData.get("attackDamage"));
+        participantFrameChamp.setAttackSpeed((int) participantFrameChampData.get("attackSpeed"));
+        participantFrameChamp.setBonusArmorPenPercent((int) participantFrameChampData.get("bonusArmorPenPercent"));
+        participantFrameChamp.setBonusMagicPenPercent((int) participantFrameChampData.get("bonusMagicPenPercent"));
+        participantFrameChamp.setCcReduction((int) participantFrameChampData.get("ccReduction"));
+        participantFrameChamp.setCooldownReduction((int) participantFrameChampData.get("cooldownReduction"));
+        participantFrameChamp.setHealth((int) participantFrameChampData.get("health"));
+        participantFrameChamp.setHealthMax((int) participantFrameChampData.get("healthMax"));
+        participantFrameChamp.setHealthRegen((int) participantFrameChampData.get("healthRegen"));
+        participantFrameChamp.setLifesteal((int) participantFrameChampData.get("lifesteal"));
+        participantFrameChamp.setMagicPen((int) participantFrameChampData.get("magicPen"));
+        participantFrameChamp.setMagicPenPercent((int) participantFrameChampData.get("magicPenPercent"));
+        participantFrameChamp.setMagicResist((int) participantFrameChampData.get("magicResist"));
+        participantFrameChamp.setMovementSpeed((int) participantFrameChampData.get("movementSpeed"));
+        participantFrameChamp.setOmnivamp((int) participantFrameChampData.get("omnivamp"));
+        participantFrameChamp.setPhysicalVamp((int) participantFrameChampData.get("physicalVamp"));
+        participantFrameChamp.setPower((int) participantFrameChampData.get("power"));
+        participantFrameChamp.setPowerMax((int) participantFrameChampData.get("powerMax"));
+        participantFrameChamp.setPowerRegen((int) participantFrameChampData.get("powerRegen"));
+        participantFrameChamp.setSpellVamp((int) participantFrameChampData.get("spellVamp"));
         participantFrameChamp.setParticipantFrame(newParticipantFrame);
 
         participantFrameChampRepositoryDao.save(participantFrameChamp);
@@ -128,20 +131,21 @@ public class MatchTimelineController {
 
     private void saveParticipantFrameDamageData(Map<String, Object> participantFrameData, ParticipantFrame newParticipantFrame){
         ParticipantFrameDamage participantFrameDamage = new ParticipantFrameDamage();
+        Map<String, Object> participantFrameDamageData = (Map<String, Object>) participantFrameData.get("damageStats");
 
-        participantFrameDamage.setMagicDamageDone((int) participantFrameData.get("magicDamageDone"));
-        participantFrameDamage.setMagicDamageDone((int) participantFrameData.get("magicDamageDone"));
-        participantFrameDamage.setMagicDamageDoneToChamps((int) participantFrameData.get("magicDamageDoneToChamps"));
-        participantFrameDamage.setMagicDamageTaken((int) participantFrameData.get("magicDamageTaken"));
-        participantFrameDamage.setPhysicalDamageDone((int) participantFrameData.get("physicalDamageDone"));
-        participantFrameDamage.setPhysicalDamageDoneToChamps((int) participantFrameData.get("physicalDamageDoneToChamps"));
-        participantFrameDamage.setPhysicalDamageTaken((int) participantFrameData.get("physicalDamageTaken"));
-        participantFrameDamage.setTotalDamageDone((int) participantFrameData.get("totalDamageDone"));
-        participantFrameDamage.setTotalDamageDoneToChamps((int) participantFrameData.get("totalDamageDoneToChamps"));
-        participantFrameDamage.setTotalDamageTaken((int) participantFrameData.get("totalDamageTaken"));
-        participantFrameDamage.setTrueDamageDone((int) participantFrameData.get("trueDamageDone"));
-        participantFrameDamage.setTrueDamageDoneToChamps((int) participantFrameData.get("trueDamageDoneToChamps"));
-        participantFrameDamage.setTrueDamageTaken((int) participantFrameData.get("trueDamageTaken"));
+        participantFrameDamage.setMagicDamageDone((int) participantFrameDamageData.get("magicDamageDone"));
+        participantFrameDamage.setMagicDamageDone((int) participantFrameDamageData.get("magicDamageDone"));
+        participantFrameDamage.setMagicDamageDoneToChamps((int) participantFrameDamageData.get("magicDamageDoneToChampions"));
+        participantFrameDamage.setMagicDamageTaken((int) participantFrameDamageData.get("magicDamageTaken"));
+        participantFrameDamage.setPhysicalDamageDone((int) participantFrameDamageData.get("physicalDamageDone"));
+        participantFrameDamage.setPhysicalDamageDoneToChamps((int) participantFrameDamageData.get("physicalDamageDoneToChampions"));
+        participantFrameDamage.setPhysicalDamageTaken((int) participantFrameDamageData.get("physicalDamageTaken"));
+        participantFrameDamage.setTotalDamageDone((int) participantFrameDamageData.get("totalDamageDone"));
+        participantFrameDamage.setTotalDamageDoneToChamps((int) participantFrameDamageData.get("totalDamageDoneToChampions"));
+        participantFrameDamage.setTotalDamageTaken((int) participantFrameDamageData.get("totalDamageTaken"));
+        participantFrameDamage.setTrueDamageDone((int) participantFrameDamageData.get("trueDamageDone"));
+        participantFrameDamage.setTrueDamageDoneToChamps((int) participantFrameDamageData.get("trueDamageDoneToChampions"));
+        participantFrameDamage.setTrueDamageTaken((int) participantFrameDamageData.get("trueDamageTaken"));
         participantFrameDamage.setParticipantFrame(newParticipantFrame);
 
         participantFrameDamageRepositoryDao.save(participantFrameDamage);
