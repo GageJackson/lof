@@ -58,7 +58,7 @@ public class Match {
     private List<Participant>participant;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "match")
-    List<FriendMatch> friendMatch;
+    private List<FriendMatch> friendMatch;
 
 
     /*////////////////////////////////////////////////////////////////

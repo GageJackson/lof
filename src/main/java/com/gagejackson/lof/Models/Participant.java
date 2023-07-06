@@ -330,6 +330,9 @@ public class Participant {
     @OneToMany (cascade = CascadeType.ALL, mappedBy = "participant")
     private List<ParticipantFrame> participantFrame;
 
+    @OneToMany (cascade = CascadeType.ALL, mappedBy = "participant")
+    private List<Event> event;
+
     @ManyToOne
     @JoinColumn(name = "match_id", nullable = false)
     private Match match;

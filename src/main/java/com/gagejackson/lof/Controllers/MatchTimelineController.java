@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -63,18 +64,51 @@ public class MatchTimelineController {
     }
 
     private void saveParticipantFramesData(List<Map<String, Object>> frames, Match newMatch){
-        for (Map<String, Object> frame:frames) {
+        int currentFrame = 0;
+        List<String> eventTypes = new ArrayList<>();
+
+        for (Map<String, Object> frame : frames) {
             Map<String, Object> participantFrames = (Map<String, Object>) frame.get("participantFrames");
 
-            for (int i = 1; i <= participantFrames.size(); i++) {
-                saveParticipantFrame(participantFrames, newMatch, i);
+            List<Map<String, Object>> events = (List<Map<String, Object>>) frame.get("events");
+            for (Map<String, Object> event : events) {
+
+                //finds unique event types
+//                if(!eventTypes.contains(event.get("type"))){
+//                    eventTypes.add((String) event.get("type"));
+//                } else {
+//                    System.out.println("(String) frame.get(\"type\") = " + (String) event.get("type"));
+//                }
+
+                //finds unique kill types
+//                if((event.get("type")).equals("CHAMPION_SPECIAL_KILL")){
+//                    eventTypes.add((String) event.get("killType"));
+//                } else {
+//                }
+
+                //finds unique kill types
+                if((event.get("type")).equals("SKILL_LEVEL_UP")){
+                    eventTypes.add((String) event.get("levelUpType"));
+                } else {
+                }
+
+                //finds timestamps for .equals(XXX)
+//                if((event.get("type")).equals("ITEM_UNDO")){
+//                    eventTypes.add(Integer.toString(((int) event.get("timestamp"))));
+//                } else {
+//                }
             }
+
+            for (int i = 1; i <= participantFrames.size(); i++) {
+                saveParticipantFrame(participantFrames, newMatch, currentFrame, i);
+            }
+            currentFrame++;
         }
+        System.out.println("eventTypes = " + eventTypes);
     }
 
-    private void saveParticipantFrame(Map<String, Object> participantFrames, Match newMatch, int i){
+    private void saveParticipantFrame(Map<String, Object> participantFrames, Match newMatch, int currentFrame, int i){
         Map<String, Object> participantFrameData = (Map<String, Object>) participantFrames.get(String.valueOf(i));
-        System.out.println("participantFrameData = " + participantFrameData);
         ParticipantFrame participantFrame = new ParticipantFrame();
 
         Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, i);
@@ -86,6 +120,7 @@ public class MatchTimelineController {
         participantFrame.setTimeEnemySpentControlled((int) participantFrameData.get("timeEnemySpentControlled"));
         participantFrame.setTotalGold((int) participantFrameData.get("totalGold"));
         participantFrame.setXp((int) participantFrameData.get("xp"));
+        participantFrame.setFrame(currentFrame);
         participantFrame.setParticipant(participant);
 
         ParticipantFrame newParticipantFrame = participantFrameRepositoryDao.save(participantFrame);
