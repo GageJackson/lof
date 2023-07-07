@@ -3,31 +3,24 @@ package com.gagejackson.lof.Models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "event_elite_monster_kill")
+@Table(name = "event_champ_special_kill")
 public class EventChampSpecialKill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private long id;
 
-    @Column(name = "bounty")
-    private int bounty;
+    @Column(name = "kill_type", length = 25)
+    private String killType;
 
-    @Column(name = "shutdown_bounty")
-    private int shutdownBounty;
-
-    @Column(name = "kill_streak_length")
-    private int killStreakLength;
+    @Column(name = "multi_kill_length")
+    private int multiKillLength;
 
     @Column(name = "position_x")
     private int positionX;
 
     @Column(name = "position_y")
     private int positionY;
-
-    @ManyToOne
-    @JoinColumn(name = "victim_id", nullable = false)
-    private Participant victim;
 
     @ManyToOne
     @JoinColumn(name = "event_id", nullable = false)
@@ -40,27 +33,22 @@ public class EventChampSpecialKill {
     public EventChampSpecialKill() {
     }
 
-    public EventChampSpecialKill(int bounty, int shutdownBounty, int killStreakLength, int positionX, int positionY, Participant victim, Event event) {
-        this.bounty = bounty;
-        this.shutdownBounty = shutdownBounty;
-        this.killStreakLength = killStreakLength;
+    public EventChampSpecialKill(String killType, int multiKillLength, int positionX, int positionY, Event event) {
+        this.killType = killType;
+        this.multiKillLength = multiKillLength;
         this.positionX = positionX;
         this.positionY = positionY;
-        this.victim = victim;
         this.event = event;
     }
 
-    public EventChampSpecialKill(long id, int bounty, int shutdownBounty, int killStreakLength, int positionX, int positionY, Participant victim, Event event) {
+    public EventChampSpecialKill(long id, String killType, int multiKillLength, int positionX, int positionY, Event event) {
         this.id = id;
-        this.bounty = bounty;
-        this.shutdownBounty = shutdownBounty;
-        this.killStreakLength = killStreakLength;
+        this.killType = killType;
+        this.multiKillLength = multiKillLength;
         this.positionX = positionX;
         this.positionY = positionY;
-        this.victim = victim;
         this.event = event;
     }
-
 
     /*////////////////////////////////////////////////////////////////
     GETTERS & SETTERS
@@ -73,28 +61,20 @@ public class EventChampSpecialKill {
         this.id = id;
     }
 
-    public int getBounty() {
-        return bounty;
+    public String getKillType() {
+        return killType;
     }
 
-    public void setBounty(int bounty) {
-        this.bounty = bounty;
+    public void setKillType(String killType) {
+        this.killType = killType;
     }
 
-    public int getShutdownBounty() {
-        return shutdownBounty;
+    public int getMultiKillLength() {
+        return multiKillLength;
     }
 
-    public void setShutdownBounty(int shutdownBounty) {
-        this.shutdownBounty = shutdownBounty;
-    }
-
-    public int getKillStreakLength() {
-        return killStreakLength;
-    }
-
-    public void setKillStreakLength(int killStreakLength) {
-        this.killStreakLength = killStreakLength;
+    public void setMultiKillLength(int multiKillLength) {
+        this.multiKillLength = multiKillLength;
     }
 
     public int getPositionX() {
@@ -111,14 +91,6 @@ public class EventChampSpecialKill {
 
     public void setPositionY(int positionY) {
         this.positionY = positionY;
-    }
-
-    public Participant getVictim() {
-        return victim;
-    }
-
-    public void setVictim(Participant victim) {
-        this.victim = victim;
     }
 
     public Event getEvent() {

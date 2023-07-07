@@ -16,6 +16,16 @@ public class MatchTimelineController {
     private final MatchRepository matchRepositoryDao;
     private final FriendMatchRepository friendMatchRepositoryDao;
     private final BanRepository banRepositoryDao;
+    private final EventRepository eventRepositoryDao;
+    private final EventBuildingKillRepository eventBuildingKillRepositoryDao;
+    private final EventChampKillRepository eventChampKillRepositoryDao;
+    private final EventChampKillVictimDamageDealtRepository eventChampKillVictimDamageDealtRepositoryDao;
+    private final EventChampKillVictimDamageReceivedRepository eventChampKillVictimDamageReceivedRepositoryDao;
+    private final EventChampSpecialKillRepository eventChampSpecialKillRepositoryDao;
+    private final EventEliteMonsterKillRepository eventEliteMonsterKillRepositoryDao;
+    private final EventItemRepository eventItemRepositoryDao;
+    private final EventLevelUpRepository eventLevelUpRepositoryDao;
+    private final EventSkillUpRepository eventSkillUpRepositoryDao;
     private final ObjectiveRepository objectiveRepositoryDao;
     private final ParticipantRepository participantRepositoryDao;
     private final ParticipantFrameRepository participantFrameRepositoryDao;
@@ -30,6 +40,16 @@ public class MatchTimelineController {
         MatchRepository matchRepositoryDao,
         FriendMatchRepository friendMatchRepositoryDao,
         BanRepository banRepositoryDao,
+        EventRepository eventRepositoryDao,
+        EventBuildingKillRepository eventBuildingKillRepositoryDao,
+        EventChampKillRepository eventChampKillRepositoryDao,
+        EventChampKillVictimDamageDealtRepository eventChampKillVictimDamageDealtRepositoryDao,
+        EventChampKillVictimDamageReceivedRepository eventChampKillVictimDamageReceivedRepositoryDao,
+        EventChampSpecialKillRepository eventChampSpecialKillRepositoryDao,
+        EventEliteMonsterKillRepository eventEliteMonsterKillRepositoryDao,
+        EventItemRepository eventItemRepositoryDao,
+        EventLevelUpRepository eventLevelUpRepositoryDao,
+        EventSkillUpRepository eventSkillUpRepositoryDao,
         ObjectiveRepository objectiveRepositoryDao,
         ParticipantRepository participantRepositoryDao,
         ParticipantFrameRepository participantFrameRepositoryDao,
@@ -42,6 +62,16 @@ public class MatchTimelineController {
         this.matchRepositoryDao = matchRepositoryDao;
         this.friendMatchRepositoryDao = friendMatchRepositoryDao;
         this.banRepositoryDao = banRepositoryDao;
+        this.eventRepositoryDao = eventRepositoryDao;
+        this.eventBuildingKillRepositoryDao = eventBuildingKillRepositoryDao;
+        this.eventChampKillRepositoryDao = eventChampKillRepositoryDao;
+        this.eventChampKillVictimDamageDealtRepositoryDao = eventChampKillVictimDamageDealtRepositoryDao;
+        this.eventChampKillVictimDamageReceivedRepositoryDao = eventChampKillVictimDamageReceivedRepositoryDao;
+        this.eventChampSpecialKillRepositoryDao = eventChampSpecialKillRepositoryDao;
+        this.eventEliteMonsterKillRepositoryDao = eventEliteMonsterKillRepositoryDao;
+        this.eventItemRepositoryDao = eventItemRepositoryDao;
+        this.eventLevelUpRepositoryDao = eventLevelUpRepositoryDao;
+        this.eventSkillUpRepositoryDao = eventSkillUpRepositoryDao;
         this.objectiveRepositoryDao = objectiveRepositoryDao;
         this.participantRepositoryDao = participantRepositoryDao;
         this.participantFrameRepositoryDao = participantFrameRepositoryDao;
@@ -71,8 +101,8 @@ public class MatchTimelineController {
 
             List<Map<String, Object>> events = (List<Map<String, Object>>) frame.get("events");
             for (Map<String, Object> event : events) {
-//                getEventInfo(event);
-                saveEvent(event);
+//                getEventInfo(event); //useful for probing for information about events
+                saveEvent(event, newMatch);
             }
 
             for (int i = 1; i <= participantFrames.size(); i++) {
@@ -192,36 +222,223 @@ public class MatchTimelineController {
         System.out.println("eventTypes = " + eventTypes);
     }
 
-    private void saveEvent(Map<String, Object> event){
-        findEventType((String)event.get("type"));
+    private void saveEvent(Map<String, Object> event, Match newMatch){
+        findEventType((String)event.get("type"), event, newMatch);
     }
 
-    private void findEventType(String eventType){
+    private void findEventType(String eventType, Map<String, Object> event, Match newMatch){
         switch (eventType){
             case "ITEM_PURCHASE":
+                saveItemEvent("ITEM_PURCHASE", event, newMatch);
                 break;
+
             case "ITEM_DESTROYED":
+                saveItemEvent("ITEM_DESTROYED", event, newMatch);
                 break;
+
             case "ITEM_SOLD":
+                saveItemEvent("ITEM_SOLD", event, newMatch);
                 break;
-            case "ITEM_UNDO":
-                break;
+
+//            case "ITEM_UNDO":
+//                saveItemEvent("ITEM_UNDO", event, newMatch);
+//                break;
+
             case "SKILL_LEVEL_UP":
+                saveSkillUp(event, newMatch);
                 break;
+
             case "LEVEL_UP":
+                saveLevelUp(event, newMatch);
                 break;
-            case "CHAMPION_KILL":
-                break;
+
             case "BUILDING_KILL":
+                saveBuildingKill("BUILDING_KILL", event, newMatch);
                 break;
-            case "ELITE_MONSTER_KILL":
-                break;
+
             case "TURRET_PLATE_DESTROYED":
+                saveBuildingKill("TURRET_PLATE_DESTROYED", event, newMatch);
                 break;
+
+            case "ELITE_MONSTER_KILL":
+                saveMonsterKill(event, newMatch);
+                break;
+
+            case "CHAMPION_KILL":
+                saveChampionKill(event, newMatch);
+                break;
+
             case "CHAMPION_SPECIAL_KILL":
+                saveSpecialKill(event, newMatch);
+                break;
+
+            default:
                 break;
         }
 
     }
 
+    private Event getNewEvent(Map<String, Object> eventData, Participant participant){
+        Event event = new Event();
+        event.setTimestamp((int)eventData.get("timestamp"));
+        event.setParticipant(participant);
+
+        return eventRepositoryDao.save(event);
     }
+
+    private void saveItemEvent(String itemType, Map<String, Object> eventData, Match newMatch){
+        Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)eventData.get("participantId")));
+        Event event = getNewEvent(eventData, participant);
+
+        EventItem eventItem = new EventItem();
+        eventItem.setItemType(itemType);
+        eventItem.setItemId((int)eventData.get("itemId"));
+        eventItem.setEvent(event);
+
+        eventItemRepositoryDao.save(eventItem);
+    }
+
+    private void saveSkillUp(Map<String, Object> eventData, Match newMatch){
+        Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)eventData.get("participantId")));
+        Event event = getNewEvent(eventData, participant);
+
+        EventSkillUp eventSkillUp = new EventSkillUp();
+        eventSkillUp.setLevelUpType((String) eventData.get("levelUpType"));
+        eventSkillUp.setSkillSlot((int) eventData.get("skillSlot"));
+        eventSkillUp.setEvent(event);
+
+        eventSkillUpRepositoryDao.save(eventSkillUp);
+    }
+
+    private void saveLevelUp(Map<String, Object> eventData, Match newMatch){
+        Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)eventData.get("participantId")));
+        Event event = getNewEvent(eventData, participant);
+
+        EventLevelUp eventLevelUp = new EventLevelUp();
+        eventLevelUp.setLevel((int) eventData.get("level"));
+        eventLevelUp.setEvent(event);
+
+        eventLevelUpRepositoryDao.save(eventLevelUp);
+    }
+
+    private void saveBuildingKill(String buildingType, Map<String, Object> eventData, Match newMatch){
+        Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)eventData.get("killerId")));
+        Event event = getNewEvent(eventData, participant);
+
+        EventBuildingKill buildingKill = new EventBuildingKill();
+        buildingKill.setBounty((int)eventData.get("bounty"));
+
+        if(((String)eventData.get("buildingType")).isEmpty()){
+            buildingKill.setBuildingType(buildingType);
+        } else {
+            buildingKill.setBuildingType((String)eventData.get("buildingType"));
+        }
+        buildingKill.setLaneType((String) eventData.get("laneType"));
+
+        Map<String, Object> position = (Map<String, Object>) eventData.get("position");
+        buildingKill.setPositionX((int)position.get("x"));
+        buildingKill.setPositionY((int)position.get("y"));
+
+        buildingKill.setEvent(event);
+
+        eventBuildingKillRepositoryDao.save(buildingKill);
+    }
+
+    private void saveMonsterKill(Map<String, Object> eventData, Match newMatch){
+        Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)eventData.get("killerId")));
+        Event event = getNewEvent(eventData, participant);
+
+        EventEliteMonsterKill monsterKill = new EventEliteMonsterKill();
+
+        monsterKill.setBounty((int)eventData.get("bounty"));
+        monsterKill.setMonsterType((String) eventData.get("monsterType"));
+        monsterKill.setMonsterSubtype((String) eventData.get("monsterSubType"));
+
+        Map<String, Object> position = (Map<String, Object>) eventData.get("position");
+        monsterKill.setPositionX((int)position.get("x"));
+        monsterKill.setPositionY((int)position.get("y"));
+
+        monsterKill.setEvent(event);
+
+        eventEliteMonsterKillRepositoryDao.save(monsterKill);
+    }
+
+    private void saveChampionKill(Map<String, Object> eventData, Match newMatch){
+        Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)eventData.get("killerId")));
+        Participant victim = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)eventData.get("victimId")));
+        Event event = getNewEvent(eventData, participant);
+
+        EventChampKill champKill = new EventChampKill();
+
+        champKill.setBounty((int)eventData.get("bounty"));
+        champKill.setKillStreakLength((int)eventData.get("killStreakLength"));
+        champKill.setShutdownBounty((int)eventData.get("shutdownBounty"));
+
+        Map<String, Object> position = (Map<String, Object>) eventData.get("position");
+        champKill.setPositionX((int)position.get("x"));
+        champKill.setPositionY((int)position.get("y"));
+
+        champKill.setVictim(victim);
+        champKill.setEvent(event);
+
+        EventChampKill champKillData = eventChampKillRepositoryDao.save(champKill);
+        saveDamageDealt(champKillData, (List<Map<String, Object>>)eventData.get("victimDamageDealt"));
+        saveDamageReceived(champKillData, (List<Map<String, Object>>)eventData.get("victimDamageReceived"), newMatch);
+    }
+
+    private void saveDamageDealt(EventChampKill champKillData, List<Map<String, Object>> attacks) {
+        for (Map<String,Object> attack : attacks) {
+            EventChampKillVictimDamageDealt damageDealt = new EventChampKillVictimDamageDealt();
+            damageDealt.setBasic((boolean) attack.get("basic"));
+            damageDealt.setType((String) attack.get("type"));
+            damageDealt.setSpellName((String) attack.get("spellName"));
+            damageDealt.setSpellSlot((int) attack.get("spellSlot"));
+            damageDealt.setMagicDamage((int) attack.get("magicDamage"));
+            damageDealt.setPhysicalDamage((int) attack.get("physicalDamage"));
+            damageDealt.setTrueDamage((int) attack.get("trueDamage"));
+            damageDealt.setEventChampKill(champKillData);
+
+            eventChampKillVictimDamageDealtRepositoryDao.save(damageDealt);
+        }
+    }
+
+    private void saveDamageReceived(EventChampKill champKillData, List<Map<String, Object>> attacks, Match newMatch) {
+        for (Map<String,Object> attack : attacks) {
+            EventChampKillVictimDamageReceived damageReceived = new EventChampKillVictimDamageReceived();
+
+            Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)attack.get("participantId")));
+
+            damageReceived.setBasic((boolean) attack.get("basic"));
+            damageReceived.setType((String) attack.get("type"));
+            damageReceived.setSpellName((String) attack.get("spellName"));
+            damageReceived.setSpellSlot((int) attack.get("spellSlot"));
+            damageReceived.setMagicDamage((int) attack.get("magicDamage"));
+            damageReceived.setPhysicalDamage((int) attack.get("physicalDamage"));
+            damageReceived.setTrueDamage((int) attack.get("trueDamage"));
+            damageReceived.setParticipant(participant);
+            damageReceived.setEventChampKill(champKillData);
+
+            eventChampKillVictimDamageReceivedRepositoryDao.save(damageReceived);
+        }
+    }
+
+    private void saveSpecialKill(Map<String, Object> eventData, Match newMatch){
+        Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)eventData.get("killerId")));
+        Event event = getNewEvent(eventData, participant);
+
+        EventChampSpecialKill specialKill = new EventChampSpecialKill();
+
+        specialKill.setKillType((String)eventData.get("killType"));
+        specialKill.setMultiKillLength((int)eventData.get("multiKillLength"));
+
+        Map<String, Object> position = (Map<String, Object>) eventData.get("position");
+        specialKill.setPositionX((int)position.get("x"));
+        specialKill.setPositionY((int)position.get("y"));
+
+        specialKill.setEvent(event);
+
+        eventChampSpecialKillRepositoryDao.save(specialKill);
+    }
+
+
+}
