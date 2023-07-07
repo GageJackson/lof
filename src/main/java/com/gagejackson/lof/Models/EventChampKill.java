@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "event_elite_monster_kill")
+@Table(name = "event_champ_kill")
 public class EventChampKill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

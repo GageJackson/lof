@@ -16,7 +16,7 @@ public class Event {
     private long timestamp;
 
     @ManyToOne
-    @JoinColumn(name = "participant_id", nullable = false)
+    @JoinColumn(name = "participant_id")
     private Participant participant;
 
     @OneToMany (cascade = CascadeType.ALL, mappedBy = "event")

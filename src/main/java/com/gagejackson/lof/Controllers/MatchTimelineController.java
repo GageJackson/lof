@@ -326,13 +326,8 @@ public class MatchTimelineController {
         Event event = getNewEvent(eventData, participant);
 
         EventBuildingKill buildingKill = new EventBuildingKill();
-        buildingKill.setBounty((int)eventData.get("bounty"));
-
-        if(((String)eventData.get("buildingType")).isEmpty()){
-            buildingKill.setBuildingType(buildingType);
-        } else {
-            buildingKill.setBuildingType((String)eventData.get("buildingType"));
-        }
+        buildingKill.setBounty((int)eventData.getOrDefault("bounty", 0));
+        buildingKill.setBuildingType((String)eventData.getOrDefault("buildingType", buildingType));
         buildingKill.setLaneType((String) eventData.get("laneType"));
 
         Map<String, Object> position = (Map<String, Object>) eventData.get("position");
@@ -382,8 +377,15 @@ public class MatchTimelineController {
         champKill.setEvent(event);
 
         EventChampKill champKillData = eventChampKillRepositoryDao.save(champKill);
-        saveDamageDealt(champKillData, (List<Map<String, Object>>)eventData.get("victimDamageDealt"));
-        saveDamageReceived(champKillData, (List<Map<String, Object>>)eventData.get("victimDamageReceived"), newMatch);
+
+        if((((List<Map<String, Object>>)eventData.get("victimDamageDealt")) != null )){
+            saveDamageDealt(champKillData, (List<Map<String, Object>>)eventData.get("victimDamageDealt"));
+        }
+
+        if(((List<Map<String, Object>>)eventData.get("victimDamageReceived") != null )){
+            saveDamageReceived(champKillData, (List<Map<String, Object>>)eventData.get("victimDamageReceived"), newMatch);
+        }
+
     }
 
     private void saveDamageDealt(EventChampKill champKillData, List<Map<String, Object>> attacks) {
@@ -429,7 +431,10 @@ public class MatchTimelineController {
         EventChampSpecialKill specialKill = new EventChampSpecialKill();
 
         specialKill.setKillType((String)eventData.get("killType"));
-        specialKill.setMultiKillLength((int)eventData.get("multiKillLength"));
+
+        if(((eventData.get("multiKillLength")) != null )){
+            specialKill.setMultiKillLength((int)eventData.get("multiKillLength"));
+        }
 
         Map<String, Object> position = (Map<String, Object>) eventData.get("position");
         specialKill.setPositionX((int)position.get("x"));

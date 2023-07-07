@@ -13,7 +13,7 @@ public class EventItem {
     @Column(name = "item_id")
     private int itemId;
 
-    @Column(name = "item_type", length = 10)
+    @Column(name = "item_type", length = 20)
     private String itemType;
 
     @ManyToOne
