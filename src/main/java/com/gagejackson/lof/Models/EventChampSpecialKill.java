@@ -2,11 +2,9 @@ package com.gagejackson.lof.Models;
 
 import jakarta.persistence.*;
 
-import java.util.List;
-
 @Entity
 @Table(name = "event_elite_monster_kill")
-public class EventChampKill {
+public class EventChampSpecialKill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -35,20 +33,14 @@ public class EventChampKill {
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 
-    @OneToMany (cascade = CascadeType.ALL, mappedBy = "eventChampKill")
-    private List<EventChampKillVictimDamageDealt> eventChampKillVictimDamageDealt;
-
-    @OneToMany (cascade = CascadeType.ALL, mappedBy = "eventChampKill")
-    private List<EventChampKillVictimDamageReceived> eventChampKillVictimDamageReceived;
-
 
     /*////////////////////////////////////////////////////////////////
     CONSTRUCTORS
     ////////////////////////////////////////////////////////////////*/
-    public EventChampKill() {
+    public EventChampSpecialKill() {
     }
 
-    public EventChampKill(int bounty, int shutdownBounty, int killStreakLength, int positionX, int positionY, Participant victim, Event event, List<EventChampKillVictimDamageDealt> eventChampKillVictimDamageDealt, List<EventChampKillVictimDamageReceived> eventChampKillVictimDamageReceived) {
+    public EventChampSpecialKill(int bounty, int shutdownBounty, int killStreakLength, int positionX, int positionY, Participant victim, Event event) {
         this.bounty = bounty;
         this.shutdownBounty = shutdownBounty;
         this.killStreakLength = killStreakLength;
@@ -56,11 +48,9 @@ public class EventChampKill {
         this.positionY = positionY;
         this.victim = victim;
         this.event = event;
-        this.eventChampKillVictimDamageDealt = eventChampKillVictimDamageDealt;
-        this.eventChampKillVictimDamageReceived = eventChampKillVictimDamageReceived;
     }
 
-    public EventChampKill(long id, int bounty, int shutdownBounty, int killStreakLength, int positionX, int positionY, Participant victim, Event event, List<EventChampKillVictimDamageDealt> eventChampKillVictimDamageDealt, List<EventChampKillVictimDamageReceived> eventChampKillVictimDamageReceived) {
+    public EventChampSpecialKill(long id, int bounty, int shutdownBounty, int killStreakLength, int positionX, int positionY, Participant victim, Event event) {
         this.id = id;
         this.bounty = bounty;
         this.shutdownBounty = shutdownBounty;
@@ -69,13 +59,12 @@ public class EventChampKill {
         this.positionY = positionY;
         this.victim = victim;
         this.event = event;
-        this.eventChampKillVictimDamageDealt = eventChampKillVictimDamageDealt;
-        this.eventChampKillVictimDamageReceived = eventChampKillVictimDamageReceived;
     }
 
+
     /*////////////////////////////////////////////////////////////////
-            GETTERS & SETTERS
-            ////////////////////////////////////////////////////////////////*/
+    GETTERS & SETTERS
+    ////////////////////////////////////////////////////////////////*/
     public long getId() {
         return id;
     }
@@ -138,21 +127,5 @@ public class EventChampKill {
 
     public void setEvent(Event event) {
         this.event = event;
-    }
-
-    public List<EventChampKillVictimDamageDealt> getEventChampKillVictimDamageDealt() {
-        return eventChampKillVictimDamageDealt;
-    }
-
-    public void setEventChampKillVictimDamageDealt(List<EventChampKillVictimDamageDealt> eventChampKillVictimDamageDealt) {
-        this.eventChampKillVictimDamageDealt = eventChampKillVictimDamageDealt;
-    }
-
-    public List<EventChampKillVictimDamageReceived> getEventChampKillVictimDamageReceived() {
-        return eventChampKillVictimDamageReceived;
-    }
-
-    public void setEventChampKillVictimDamageReceived(List<EventChampKillVictimDamageReceived> eventChampKillVictimDamageReceived) {
-        this.eventChampKillVictimDamageReceived = eventChampKillVictimDamageReceived;
     }
 }

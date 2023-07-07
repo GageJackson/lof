@@ -60,43 +60,19 @@ public class MatchTimelineController {
         long matchId = Long.parseLong(matchIdString.substring(matchIdString.indexOf("_") + 1));
         Match newMatch = matchRepositoryDao.findByGameId(matchId);
 
-        saveParticipantFramesData(frames, newMatch);
+        saveMatchTimeline(frames, newMatch);
     }
 
-    private void saveParticipantFramesData(List<Map<String, Object>> frames, Match newMatch){
+    private void saveMatchTimeline(List<Map<String, Object>> frames, Match newMatch){
         int currentFrame = 0;
-        List<String> eventTypes = new ArrayList<>();
 
         for (Map<String, Object> frame : frames) {
             Map<String, Object> participantFrames = (Map<String, Object>) frame.get("participantFrames");
 
             List<Map<String, Object>> events = (List<Map<String, Object>>) frame.get("events");
             for (Map<String, Object> event : events) {
-
-                //finds unique event types
-//                if(!eventTypes.contains(event.get("type"))){
-//                    eventTypes.add((String) event.get("type"));
-//                } else {
-//                    System.out.println("(String) frame.get(\"type\") = " + (String) event.get("type"));
-//                }
-
-                //finds unique kill types
-//                if((event.get("type")).equals("CHAMPION_SPECIAL_KILL")){
-//                    eventTypes.add((String) event.get("killType"));
-//                } else {
-//                }
-
-                //finds unique kill types
-//                if((event.get("type")).equals("SKILL_LEVEL_UP")){
-//                    eventTypes.add((String) event.get("levelUpType"));
-//                } else {
-//                }
-
-                //finds timestamps for .equals(XXX)
-                if((event.get("type")).equals("ELITE_MONSTER_KILL")){
-                    eventTypes.add(Integer.toString(((int) event.get("timestamp"))));
-                } else {
-                }
+//                getEventInfo(event);
+                saveEvent(event);
             }
 
             for (int i = 1; i <= participantFrames.size(); i++) {
@@ -104,7 +80,6 @@ public class MatchTimelineController {
             }
             currentFrame++;
         }
-        System.out.println("eventTypes = " + eventTypes);
     }
 
     private void saveParticipantFrame(Map<String, Object> participantFrames, Match newMatch, int currentFrame, int i){
@@ -186,5 +161,67 @@ public class MatchTimelineController {
         participantFrameDamageRepositoryDao.save(participantFrameDamage);
     }
 
+    private void getEventInfo(Map<String, Object> event){
+        List<String> eventTypes = new ArrayList<>();
+
+        //finds unique event types
+//                if(!eventTypes.contains(event.get("type"))){
+//                    eventTypes.add((String) event.get("type"));
+//                } else {
+//                    System.out.println("(String) frame.get(\"type\") = " + (String) event.get("type"));
+//                }
+
+        //finds unique kill types
+//                if((event.get("type")).equals("CHAMPION_SPECIAL_KILL")){
+//                    eventTypes.add((String) event.get("killType"));
+//                } else {
+//                }
+
+        //finds unique kill types
+//                if((event.get("type")).equals("SKILL_LEVEL_UP")){
+//                    eventTypes.add((String) event.get("levelUpType"));
+//                } else {
+//                }
+
+        //finds timestamps for .equals(XXX)
+        if((event.get("type")).equals("ELITE_MONSTER_KILL")){
+            eventTypes.add(Integer.toString(((int) event.get("timestamp"))));
+        } else {
+        }
+
+        System.out.println("eventTypes = " + eventTypes);
+    }
+
+    private void saveEvent(Map<String, Object> event){
+        findEventType((String)event.get("type"));
+    }
+
+    private void findEventType(String eventType){
+        switch (eventType){
+            case "ITEM_PURCHASE":
+                break;
+            case "ITEM_DESTROYED":
+                break;
+            case "ITEM_SOLD":
+                break;
+            case "ITEM_UNDO":
+                break;
+            case "SKILL_LEVEL_UP":
+                break;
+            case "LEVEL_UP":
+                break;
+            case "CHAMPION_KILL":
+                break;
+            case "BUILDING_KILL":
+                break;
+            case "ELITE_MONSTER_KILL":
+                break;
+            case "TURRET_PLATE_DESTROYED":
+                break;
+            case "CHAMPION_SPECIAL_KILL":
+                break;
+        }
+
+    }
 
     }
