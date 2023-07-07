@@ -87,16 +87,16 @@ public class MatchTimelineController {
 //                }
 
                 //finds unique kill types
-                if((event.get("type")).equals("SKILL_LEVEL_UP")){
-                    eventTypes.add((String) event.get("levelUpType"));
-                } else {
-                }
-
-                //finds timestamps for .equals(XXX)
-//                if((event.get("type")).equals("ITEM_UNDO")){
-//                    eventTypes.add(Integer.toString(((int) event.get("timestamp"))));
+//                if((event.get("type")).equals("SKILL_LEVEL_UP")){
+//                    eventTypes.add((String) event.get("levelUpType"));
 //                } else {
 //                }
+
+                //finds timestamps for .equals(XXX)
+                if((event.get("type")).equals("ELITE_MONSTER_KILL")){
+                    eventTypes.add(Integer.toString(((int) event.get("timestamp"))));
+                } else {
+                }
             }
 
             for (int i = 1; i <= participantFrames.size(); i++) {
