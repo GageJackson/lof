@@ -122,55 +122,39 @@
         });
     }
 
-    async function getMatchOverview(){
-        // let matchId = 'NA1_4699810363';//aram
-        let matchId = 'NA1_4698817890';//SR game
-        let response = await  fetch(`https://americas.api.riotgames.com/lol/match/v5/matches/${matchId}?api_key=${RIOT_KEY}`)
-        let data = await response.json();
+    //
 
-        console.log(data);
+    async function saveMatchData() {
+        const matchIds = ['NA1_4699810363', 'NA1_4698817890']; // Example match IDs
 
-        const match = {
-            matchId: data.metadata.matchId,
-            info: data.info
-        };
+        for (const matchId of matchIds) {
+            const overviewResponse = await fetch(`https://americas.api.riotgames.com/lol/match/v5/matches/${matchId}?api_key=${RIOT_KEY}`);
+            const overviewData = await overviewResponse.json();
+            const overviewMatch = {
+                matchId: overviewData.metadata.matchId,
+                info: overviewData.info
+            };
 
-        console.log(match);
+            const timelineResponse = await fetch(`https://americas.api.riotgames.com/lol/match/v5/matches/${matchId}/timeline?api_key=${RIOT_KEY}`);
+            const timelineData = await timelineResponse.json();
+            const timelineMatch = {
+                matchId: timelineData.metadata.matchId,
+                info: timelineData.info
+            };
 
-        //Send the extracted data to the backend
-        await fetch('/saveMatchOverviewData', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(match)
-        });
+            const matches = [overviewMatch, timelineMatch];
+
+            await fetch('/saveMatchData', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(matches)
+            });
+        }
     }
 
-    async function getMatchTimeline(){
-        // let matchId = 'NA1_4699810363';//aram
-        let matchId = 'NA1_4698817890';//SR game
-        let response = await fetch(`https://americas.api.riotgames.com/lol/match/v5/matches/${matchId}/timeline?api_key=${RIOT_KEY}`)
-        let data = await response.json();
 
-        console.log(data);
-
-        const match = {
-            matchId: data.metadata.matchId,
-            info: data.info
-        };
-
-        console.log(match);
-
-        //Send the extracted data to the backend
-        await fetch('/saveMatchTimelineData', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(match)
-        });
-    }
-
-    getMatchTimeline();
+    saveMatchData();
+    // getMatchTimeline();
 })();

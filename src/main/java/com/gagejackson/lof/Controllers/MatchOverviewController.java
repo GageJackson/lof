@@ -2,10 +2,12 @@ package com.gagejackson.lof.Controllers;
 
 import com.gagejackson.lof.Models.*;
 import com.gagejackson.lof.Repositories.*;
+//import jdk.nashorn.internal.runtime.ListAdapter;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,39 +17,84 @@ public class MatchOverviewController {
     private final MatchRepository matchRepositoryDao;
     private final FriendMatchRepository friendMatchRepositoryDao;
     private final BanRepository banRepositoryDao;
+    private final EventRepository eventRepositoryDao;
+    private final EventBuildingKillRepository eventBuildingKillRepositoryDao;
+    private final EventChampKillRepository eventChampKillRepositoryDao;
+    private final EventChampKillVictimDamageDealtRepository eventChampKillVictimDamageDealtRepositoryDao;
+    private final EventChampKillVictimDamageReceivedRepository eventChampKillVictimDamageReceivedRepositoryDao;
+    private final EventChampSpecialKillRepository eventChampSpecialKillRepositoryDao;
+    private final EventEliteMonsterKillRepository eventEliteMonsterKillRepositoryDao;
+    private final EventItemRepository eventItemRepositoryDao;
+    private final EventLevelUpRepository eventLevelUpRepositoryDao;
+    private final EventSkillUpRepository eventSkillUpRepositoryDao;
     private final ObjectiveRepository objectiveRepositoryDao;
     private final ParticipantRepository participantRepositoryDao;
+    private final ParticipantFrameRepository participantFrameRepositoryDao;
+    private final ParticipantFrameChampRepository participantFrameChampRepositoryDao;
+    private final ParticipantFrameDamageRepository participantFrameDamageRepositoryDao;
     private final PerkRepository perkRepositoryDao;
     private final TeamRepository teamRepositoryDao;
 
 
     public MatchOverviewController(
-        FriendRepository friendRepositoryDao,
-        MatchRepository matchRepositoryDao,
-        FriendMatchRepository friendMatchRepositoryDao,
-        BanRepository banRepositoryDao,
-        ObjectiveRepository objectiveRepositoryDao,
-        ParticipantRepository participantRepositoryDao,
-        PerkRepository perkRepositoryDao,
-        TeamRepository teamRepositoryDao
+            FriendRepository friendRepositoryDao,
+            MatchRepository matchRepositoryDao,
+            FriendMatchRepository friendMatchRepositoryDao,
+            BanRepository banRepositoryDao,
+            EventRepository eventRepositoryDao,
+            EventBuildingKillRepository eventBuildingKillRepositoryDao,
+            EventChampKillRepository eventChampKillRepositoryDao,
+            EventChampKillVictimDamageDealtRepository eventChampKillVictimDamageDealtRepositoryDao,
+            EventChampKillVictimDamageReceivedRepository eventChampKillVictimDamageReceivedRepositoryDao,
+            EventChampSpecialKillRepository eventChampSpecialKillRepositoryDao,
+            EventEliteMonsterKillRepository eventEliteMonsterKillRepositoryDao,
+            EventItemRepository eventItemRepositoryDao,
+            EventLevelUpRepository eventLevelUpRepositoryDao,
+            EventSkillUpRepository eventSkillUpRepositoryDao,
+            ObjectiveRepository objectiveRepositoryDao,
+            ParticipantRepository participantRepositoryDao,
+            ParticipantFrameRepository participantFrameRepositoryDao,
+            ParticipantFrameChampRepository participantFrameChampRepositoryDao,
+            ParticipantFrameDamageRepository participantFrameDamageRepositoryDao,
+            PerkRepository perkRepositoryDao,
+            TeamRepository teamRepositoryDao
     ) {
         this.friendRepositoryDao = friendRepositoryDao;
         this.matchRepositoryDao = matchRepositoryDao;
         this.friendMatchRepositoryDao = friendMatchRepositoryDao;
         this.banRepositoryDao = banRepositoryDao;
+        this.eventRepositoryDao = eventRepositoryDao;
+        this.eventBuildingKillRepositoryDao = eventBuildingKillRepositoryDao;
+        this.eventChampKillRepositoryDao = eventChampKillRepositoryDao;
+        this.eventChampKillVictimDamageDealtRepositoryDao = eventChampKillVictimDamageDealtRepositoryDao;
+        this.eventChampKillVictimDamageReceivedRepositoryDao = eventChampKillVictimDamageReceivedRepositoryDao;
+        this.eventChampSpecialKillRepositoryDao = eventChampSpecialKillRepositoryDao;
+        this.eventEliteMonsterKillRepositoryDao = eventEliteMonsterKillRepositoryDao;
+        this.eventItemRepositoryDao = eventItemRepositoryDao;
+        this.eventLevelUpRepositoryDao = eventLevelUpRepositoryDao;
+        this.eventSkillUpRepositoryDao = eventSkillUpRepositoryDao;
         this.objectiveRepositoryDao = objectiveRepositoryDao;
         this.participantRepositoryDao = participantRepositoryDao;
+        this.participantFrameRepositoryDao = participantFrameRepositoryDao;
+        this.participantFrameChampRepositoryDao = participantFrameChampRepositoryDao;
+        this.participantFrameDamageRepositoryDao = participantFrameDamageRepositoryDao;
         this.perkRepositoryDao = perkRepositoryDao;
         this.teamRepositoryDao = teamRepositoryDao;
     }
 
-    @PostMapping("/saveMatchOverviewData")
-    public void getMatchData(@RequestBody Map<String, Object> data) {
-        Map<String, Object> info = (Map<String, Object>) data.get("info");
+    @PostMapping("/saveMatchData")
+    public void saveMatchData(@RequestBody List<Map<String, Object>> matches) {
+        Map<String, Object> overviewMatch = (Map<String, Object>) matches.get(0);
+        Map<String, Object> overviewData = (Map<String, Object>) overviewMatch.get("info");
 
-        Match newMatch = saveMatchData(info);
-        saveParticipantData(info, newMatch);
-        saveTeamData(info, newMatch);
+        Map<String, Object> timelineMatch = (Map<String, Object>) matches.get(1);
+        Map<String, Object> timelineData = (Map<String, Object>) timelineMatch.get("info");
+        List<Map<String, Object>> timelineFrames = (List<Map<String, Object>>) timelineData.get("frames");
+
+        Match newMatch = saveMatchData(overviewData);
+        saveParticipantData(overviewData, newMatch);
+        saveTeamData(overviewData, newMatch);
+        saveMatchTimeline(timelineFrames, newMatch);
     }
 
     private Match saveMatchData(Map<String, Object> info){
@@ -82,8 +129,7 @@ public class MatchOverviewController {
         match.setTournamentCode(tournamentCode);
 
         if(matchRepositoryDao.findByGameId(gameId) == null){
-            Match savedMatch = matchRepositoryDao.save(match);
-            return savedMatch;
+            return matchRepositoryDao.save(match);
         }
 
        return matchRepositoryDao.findByGameId(gameId);
@@ -91,6 +137,7 @@ public class MatchOverviewController {
 
     private void saveParticipantData(Map<String, Object> info, Match newMatch) {
         List<Map<String, Object>> participants = (List<Map<String, Object>>) info.get("participants");
+        List<Participant> participantsToSave = new ArrayList<>();
 
         for (Map<String, Object> participant : participants) {
             Participant participantObject = new Participant();
@@ -201,15 +248,22 @@ public class MatchOverviewController {
             participantObject.setWin((boolean) participant.get("win"));
             participantObject.setMatch(newMatch);
 
-            Participant newParticipant = participantRepositoryDao.save(participantObject);
-            savePerkData(participant, newParticipant);
+//            Participant newParticipant = participantRepositoryDao.save(participantObject);
+//            savePerkData(participant, newParticipant);
+            participantsToSave.add(participantObject);
+        }
+
+        List<Participant> newParticipants = participantRepositoryDao.saveAll(participantsToSave);
+
+        for (int i = 0; i < newParticipants.size(); i++) {
+            savePerkData(participants.get(i), newParticipants.get(i));
         }
     }
 
     private void savePerkData(Map<String, Object> info, Participant newParticipant) {
         Map<String, Object> perks = (Map<String, Object>) info.get("perks");
         List<Map<String, Object>> styles = (List<Map<String, Object>>) perks.get("styles");
-        System.out.println("styles = " + styles);
+        List<Perk> perksToSave = new ArrayList<>();
 
         for (Map<String, Object> style : styles) {
             String description = (String) style.get("description");
@@ -236,20 +290,22 @@ public class MatchOverviewController {
                     perkData.setPrimary(false);
                 }
 
-                perkRepositoryDao.save(perkData);
+                perksToSave.add(perkData);
             }
         }
+        perkRepositoryDao.saveAll(perksToSave);
     }
 
     private void saveTeamData(Map<String, Object> info, Match newMatch) {
         List<Map<String, Object>> teams = (List<Map<String, Object>>) info.get("teams");
+        List<Team> teamObjects = new ArrayList<>();
 
         for (Map<String, Object> team : teams) {
             Team teamObject = new Team();
 
             int teamId = (int) team.get("teamId");
 
-            if ((team.get("win")).equals("true")){
+            if ((team.get("win")).equals("true")) {
                 teamObject.setWin(true);
             } else {
                 teamObject.setWin(false);
@@ -258,14 +314,20 @@ public class MatchOverviewController {
             teamObject.setTeamId(teamId);
             teamObject.setMatch(newMatch);
 
-            Team newTeam = teamRepositoryDao.save(teamObject);
-            saveBanData(team, newTeam);
-            saveObjectiveData(team, newTeam);
+            teamObjects.add(teamObject);
+        }
+
+        List<Team> newTeams = teamRepositoryDao.saveAll(teamObjects);
+
+        for (int i = 0; i < newTeams.size(); i++) {
+            saveBanData(teams.get(i), newTeams.get(i));
+            saveObjectiveData(teams.get(i), newTeams.get(i));
         }
     }
 
     private void saveBanData(Map<String, Object> info, Team newTeam) {
         List<Map<String, Object>> bans = (List<Map<String, Object>>) info.get("bans");
+        List<Ban> bansToSave = new ArrayList<>();
         if(bans.isEmpty()){
             return;
         }
@@ -278,75 +340,31 @@ public class MatchOverviewController {
             banData.setPickTurn(pickTurn);
             banData.setTeam(newTeam);
 
-            banRepositoryDao.save(banData);
+           bansToSave.add(banData);
         }
+        banRepositoryDao.saveAll(bansToSave);
     }
 
     private void saveObjectiveData(Map<String, Object> info, Team newTeam) {
         Map<String, Object> objectives = (Map<String, Object>) info.get("objectives");
+        List<Objective> objectivesToSave = new ArrayList<>();
+
         if(objectives.size() == 0){
             System.out.println("empty");
             return;
         }
 
-        saveObjective("baron", objectives, newTeam);
-        saveObjective("champion", objectives, newTeam);
-        saveObjective("dragon", objectives, newTeam);
-        saveObjective("inhibitor", objectives, newTeam);
-        saveObjective("riftHerald", objectives, newTeam);
-        saveObjective("tower", objectives, newTeam);
+        objectivesToSave.add(saveObjective("baron", objectives, newTeam));
+        objectivesToSave.add(saveObjective("champion", objectives, newTeam));
+        objectivesToSave.add(saveObjective("dragon", objectives, newTeam));
+        objectivesToSave.add(saveObjective("inhibitor", objectives, newTeam));
+        objectivesToSave.add(saveObjective("riftHerald", objectives, newTeam));
+        objectivesToSave.add(saveObjective("tower", objectives, newTeam));
 
-
-//        Map<String, Object> baron = (Map<String, Object>) objectives.get("baron");
-//        Objective baronObjectiveData = new Objective();
-//        baronObjectiveData.setName("baron");
-//        baronObjectiveData.setFirst((boolean) baron.get("first"));
-//        baronObjectiveData.setKills((int) baron.get("kills"));
-//        baronObjectiveData.setTeam(newTeam);
-//        objectiveRepositoryDao.save(baronObjectiveData);
-//
-//        Map<String, Object> champion = (Map<String, Object>) objectives.get("champion");
-//        Objective championObjectiveData = new Objective();
-//        championObjectiveData.setName("champion");
-//        championObjectiveData.setFirst((boolean) champion.get("first"));
-//        championObjectiveData.setKills((int) champion.get("kills"));
-//        championObjectiveData.setTeam(newTeam);
-//        objectiveRepositoryDao.save(championObjectiveData);
-//
-//        Map<String, Object> dragon = (Map<String, Object>) objectives.get("dragon");
-//        Objective dragonObjectiveData = new Objective();
-//        dragonObjectiveData.setName("dragon");
-//        dragonObjectiveData.setFirst((boolean) dragon.get("first"));
-//        dragonObjectiveData.setKills((int) dragon.get("kills"));
-//        dragonObjectiveData.setTeam(newTeam);
-//        objectiveRepositoryDao.save(dragonObjectiveData);
-//
-//        Map<String, Object> inhibitor = (Map<String, Object>) objectives.get("inhibitor");
-//        Objective inhibitorObjectiveData = new Objective();
-//        inhibitorObjectiveData.setName("inhibitor");
-//        inhibitorObjectiveData.setFirst((boolean) inhibitor.get("first"));
-//        inhibitorObjectiveData.setKills((int) inhibitor.get("kills"));
-//        inhibitorObjectiveData.setTeam(newTeam);
-//        objectiveRepositoryDao.save(inhibitorObjectiveData);
-//
-//        Map<String, Object> riftHerald = (Map<String, Object>) objectives.get("riftHerald");
-//        Objective riftHeraldObjectiveData = new Objective();
-//        riftHeraldObjectiveData.setName("riftHerald");
-//        riftHeraldObjectiveData.setFirst((boolean) riftHerald.get("first"));
-//        riftHeraldObjectiveData.setKills((int) riftHerald.get("kills"));
-//        riftHeraldObjectiveData.setTeam(newTeam);
-//        objectiveRepositoryDao.save(riftHeraldObjectiveData);
-//
-//        Map<String, Object> tower = (Map<String, Object>) objectives.get("tower");
-//        Objective towerObjectiveData = new Objective();
-//        towerObjectiveData.setName("tower");
-//        towerObjectiveData.setFirst((boolean) tower.get("first"));
-//        towerObjectiveData.setKills((int) tower.get("kills"));
-//        towerObjectiveData.setTeam(newTeam);
-//        objectiveRepositoryDao.save(towerObjectiveData);
+        objectiveRepositoryDao.saveAll(objectivesToSave);
     }
 
-    private void saveObjective (String objectiveName, Map<String, Object> objectives, Team newTeam){
+    private Objective saveObjective (String objectiveName, Map<String, Object> objectives, Team newTeam){
         Map<String, Object> objective = (Map<String, Object>) objectives.get(objectiveName);
         Objective objectiveData = new Objective();
 
@@ -355,6 +373,358 @@ public class MatchOverviewController {
         objectiveData.setKills((int) objective.get("kills"));
         objectiveData.setTeam(newTeam);
 
-        objectiveRepositoryDao.save(objectiveData);
+        return objectiveData;
+    }
+
+    private void saveMatchTimeline(List<Map<String, Object>> frames, Match newMatch){
+        int currentFrame = 0;
+
+        for (Map<String, Object> frame : frames) {
+            Map<String, Object> participantFrames = (Map<String, Object>) frame.get("participantFrames");
+
+            List<Map<String, Object>> events = (List<Map<String, Object>>) frame.get("events");
+            for (Map<String, Object> event : events) {
+//                getEventInfo(event); //useful for probing for information about events
+                saveEvent(event, newMatch);
+            }
+
+            for (int i = 1; i <= participantFrames.size(); i++) {
+                saveParticipantFrame(participantFrames, newMatch, currentFrame, i);
+            }
+            currentFrame++;
+        }
+    }
+
+    private void saveParticipantFrame(Map<String, Object> participantFrames, Match newMatch, int currentFrame, int i){
+        Map<String, Object> participantFrameData = (Map<String, Object>) participantFrames.get(String.valueOf(i));
+        ParticipantFrame participantFrame = new ParticipantFrame();
+
+        Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, i);
+
+        participantFrame.setCurrentGold((int) participantFrameData.get("currentGold"));
+        participantFrame.setJungleMinionsKilled((int) participantFrameData.get("jungleMinionsKilled"));
+        participantFrame.setLevel((int) participantFrameData.get("level"));
+        participantFrame.setMinionsKilled((int) participantFrameData.get("minionsKilled"));
+        participantFrame.setTimeEnemySpentControlled((int) participantFrameData.get("timeEnemySpentControlled"));
+        participantFrame.setTotalGold((int) participantFrameData.get("totalGold"));
+        participantFrame.setXp((int) participantFrameData.get("xp"));
+        participantFrame.setFrame(currentFrame);
+        participantFrame.setParticipant(participant);
+
+        ParticipantFrame newParticipantFrame = participantFrameRepositoryDao.save(participantFrame);
+
+        saveParticipantFrameChampData(participantFrameData, newParticipantFrame);
+        saveParticipantFrameDamageData(participantFrameData, newParticipantFrame);
+    }
+
+    private void saveParticipantFrameChampData(Map<String, Object> participantFrameData, ParticipantFrame newParticipantFrame){
+        ParticipantFrameChamp participantFrameChamp = new ParticipantFrameChamp();
+        Map<String, Object> participantFrameChampData = (Map<String, Object>) participantFrameData.get("championStats");
+
+
+        participantFrameChamp.setAbilityHaste((int) participantFrameChampData.get("abilityHaste"));
+        participantFrameChamp.setAbilityPower((int) participantFrameChampData.get("abilityPower"));
+        participantFrameChamp.setArmor((int) participantFrameChampData.get("armor"));
+        participantFrameChamp.setArmorPen((int) participantFrameChampData.get("armorPen"));
+        participantFrameChamp.setArmorPenPercent((int) participantFrameChampData.get("armorPenPercent"));
+        participantFrameChamp.setAttackDamage((int) participantFrameChampData.get("attackDamage"));
+        participantFrameChamp.setAttackSpeed((int) participantFrameChampData.get("attackSpeed"));
+        participantFrameChamp.setBonusArmorPenPercent((int) participantFrameChampData.get("bonusArmorPenPercent"));
+        participantFrameChamp.setBonusMagicPenPercent((int) participantFrameChampData.get("bonusMagicPenPercent"));
+        participantFrameChamp.setCcReduction((int) participantFrameChampData.get("ccReduction"));
+        participantFrameChamp.setCooldownReduction((int) participantFrameChampData.get("cooldownReduction"));
+        participantFrameChamp.setHealth((int) participantFrameChampData.get("health"));
+        participantFrameChamp.setHealthMax((int) participantFrameChampData.get("healthMax"));
+        participantFrameChamp.setHealthRegen((int) participantFrameChampData.get("healthRegen"));
+        participantFrameChamp.setLifesteal((int) participantFrameChampData.get("lifesteal"));
+        participantFrameChamp.setMagicPen((int) participantFrameChampData.get("magicPen"));
+        participantFrameChamp.setMagicPenPercent((int) participantFrameChampData.get("magicPenPercent"));
+        participantFrameChamp.setMagicResist((int) participantFrameChampData.get("magicResist"));
+        participantFrameChamp.setMovementSpeed((int) participantFrameChampData.get("movementSpeed"));
+        participantFrameChamp.setOmnivamp((int) participantFrameChampData.get("omnivamp"));
+        participantFrameChamp.setPhysicalVamp((int) participantFrameChampData.get("physicalVamp"));
+        participantFrameChamp.setPower((int) participantFrameChampData.get("power"));
+        participantFrameChamp.setPowerMax((int) participantFrameChampData.get("powerMax"));
+        participantFrameChamp.setPowerRegen((int) participantFrameChampData.get("powerRegen"));
+        participantFrameChamp.setSpellVamp((int) participantFrameChampData.get("spellVamp"));
+        participantFrameChamp.setParticipantFrame(newParticipantFrame);
+
+        participantFrameChampRepositoryDao.save(participantFrameChamp);
+    }
+
+    private void saveParticipantFrameDamageData(Map<String, Object> participantFrameData, ParticipantFrame newParticipantFrame){
+        ParticipantFrameDamage participantFrameDamage = new ParticipantFrameDamage();
+        Map<String, Object> participantFrameDamageData = (Map<String, Object>) participantFrameData.get("damageStats");
+
+        participantFrameDamage.setMagicDamageDone((int) participantFrameDamageData.get("magicDamageDone"));
+        participantFrameDamage.setMagicDamageDone((int) participantFrameDamageData.get("magicDamageDone"));
+        participantFrameDamage.setMagicDamageDoneToChamps((int) participantFrameDamageData.get("magicDamageDoneToChampions"));
+        participantFrameDamage.setMagicDamageTaken((int) participantFrameDamageData.get("magicDamageTaken"));
+        participantFrameDamage.setPhysicalDamageDone((int) participantFrameDamageData.get("physicalDamageDone"));
+        participantFrameDamage.setPhysicalDamageDoneToChamps((int) participantFrameDamageData.get("physicalDamageDoneToChampions"));
+        participantFrameDamage.setPhysicalDamageTaken((int) participantFrameDamageData.get("physicalDamageTaken"));
+        participantFrameDamage.setTotalDamageDone((int) participantFrameDamageData.get("totalDamageDone"));
+        participantFrameDamage.setTotalDamageDoneToChamps((int) participantFrameDamageData.get("totalDamageDoneToChampions"));
+        participantFrameDamage.setTotalDamageTaken((int) participantFrameDamageData.get("totalDamageTaken"));
+        participantFrameDamage.setTrueDamageDone((int) participantFrameDamageData.get("trueDamageDone"));
+        participantFrameDamage.setTrueDamageDoneToChamps((int) participantFrameDamageData.get("trueDamageDoneToChampions"));
+        participantFrameDamage.setTrueDamageTaken((int) participantFrameDamageData.get("trueDamageTaken"));
+        participantFrameDamage.setParticipantFrame(newParticipantFrame);
+
+        participantFrameDamageRepositoryDao.save(participantFrameDamage);
+    }
+
+    private void getEventInfo(Map<String, Object> event){
+        List<String> eventTypes = new ArrayList<>();
+
+        //finds unique event types
+//                if(!eventTypes.contains(event.get("type"))){
+//                    eventTypes.add((String) event.get("type"));
+//                } else {
+//                    System.out.println("(String) frame.get(\"type\") = " + (String) event.get("type"));
+//                }
+
+        //finds unique kill types
+//                if((event.get("type")).equals("CHAMPION_SPECIAL_KILL")){
+//                    eventTypes.add((String) event.get("killType"));
+//                } else {
+//                }
+
+        //finds unique kill types
+//                if((event.get("type")).equals("SKILL_LEVEL_UP")){
+//                    eventTypes.add((String) event.get("levelUpType"));
+//                } else {
+//                }
+
+        //finds timestamps for .equals(XXX)
+        if((event.get("type")).equals("ELITE_MONSTER_KILL")){
+            eventTypes.add(Integer.toString(((int) event.get("timestamp"))));
+        } else {
+        }
+
+        System.out.println("eventTypes = " + eventTypes);
+    }
+
+    private void saveEvent(Map<String, Object> event, Match newMatch){
+        findEventType((String)event.get("type"), event, newMatch);
+    }
+
+    private void findEventType(String eventType, Map<String, Object> event, Match newMatch){
+        switch (eventType){
+            case "ITEM_PURCHASE":
+                saveItemEvent("ITEM_PURCHASE", event, newMatch);
+                break;
+
+            case "ITEM_DESTROYED":
+                saveItemEvent("ITEM_DESTROYED", event, newMatch);
+                break;
+
+            case "ITEM_SOLD":
+                saveItemEvent("ITEM_SOLD", event, newMatch);
+                break;
+
+//            case "ITEM_UNDO":
+//                saveItemEvent("ITEM_UNDO", event, newMatch);
+//                break;
+
+            case "SKILL_LEVEL_UP":
+                saveSkillUp(event, newMatch);
+                break;
+
+            case "LEVEL_UP":
+                saveLevelUp(event, newMatch);
+                break;
+
+            case "BUILDING_KILL":
+                saveBuildingKill("BUILDING_KILL", event, newMatch);
+                break;
+
+            case "TURRET_PLATE_DESTROYED":
+                saveBuildingKill("TURRET_PLATE_DESTROYED", event, newMatch);
+                break;
+
+            case "ELITE_MONSTER_KILL":
+                saveMonsterKill(event, newMatch);
+                break;
+
+            case "CHAMPION_KILL":
+                saveChampionKill(event, newMatch);
+                break;
+
+            case "CHAMPION_SPECIAL_KILL":
+                saveSpecialKill(event, newMatch);
+                break;
+
+            default:
+                break;
+        }
+
+    }
+
+    private Event getNewEvent(Map<String, Object> eventData, Participant participant){
+        Event event = new Event();
+        event.setTimestamp((int)eventData.get("timestamp"));
+        event.setParticipant(participant);
+
+        return eventRepositoryDao.save(event);
+    }
+
+    private void saveItemEvent(String itemType, Map<String, Object> eventData, Match newMatch){
+        Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)eventData.get("participantId")));
+        Event event = getNewEvent(eventData, participant);
+
+        EventItem eventItem = new EventItem();
+        eventItem.setItemType(itemType);
+        eventItem.setItemId((int)eventData.get("itemId"));
+        eventItem.setEvent(event);
+
+        eventItemRepositoryDao.save(eventItem);
+    }
+
+    private void saveSkillUp(Map<String, Object> eventData, Match newMatch){
+        Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)eventData.get("participantId")));
+        Event event = getNewEvent(eventData, participant);
+
+        EventSkillUp eventSkillUp = new EventSkillUp();
+        eventSkillUp.setLevelUpType((String) eventData.get("levelUpType"));
+        eventSkillUp.setSkillSlot((int) eventData.get("skillSlot"));
+        eventSkillUp.setEvent(event);
+
+        eventSkillUpRepositoryDao.save(eventSkillUp);
+    }
+
+    private void saveLevelUp(Map<String, Object> eventData, Match newMatch){
+        Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)eventData.get("participantId")));
+        Event event = getNewEvent(eventData, participant);
+
+        EventLevelUp eventLevelUp = new EventLevelUp();
+        eventLevelUp.setLevel((int) eventData.get("level"));
+        eventLevelUp.setEvent(event);
+
+        eventLevelUpRepositoryDao.save(eventLevelUp);
+    }
+
+    private void saveBuildingKill(String buildingType, Map<String, Object> eventData, Match newMatch){
+        Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)eventData.get("killerId")));
+        Event event = getNewEvent(eventData, participant);
+
+        EventBuildingKill buildingKill = new EventBuildingKill();
+        buildingKill.setBounty((int)eventData.getOrDefault("bounty", 0));
+        buildingKill.setBuildingType((String)eventData.getOrDefault("buildingType", buildingType));
+        buildingKill.setLaneType((String) eventData.get("laneType"));
+
+        Map<String, Object> position = (Map<String, Object>) eventData.get("position");
+        buildingKill.setPositionX((int)position.get("x"));
+        buildingKill.setPositionY((int)position.get("y"));
+
+        buildingKill.setEvent(event);
+
+        eventBuildingKillRepositoryDao.save(buildingKill);
+    }
+
+    private void saveMonsterKill(Map<String, Object> eventData, Match newMatch){
+        Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)eventData.get("killerId")));
+        Event event = getNewEvent(eventData, participant);
+
+        EventEliteMonsterKill monsterKill = new EventEliteMonsterKill();
+
+        monsterKill.setBounty((int)eventData.get("bounty"));
+        monsterKill.setMonsterType((String) eventData.get("monsterType"));
+        monsterKill.setMonsterSubtype((String) eventData.get("monsterSubType"));
+
+        Map<String, Object> position = (Map<String, Object>) eventData.get("position");
+        monsterKill.setPositionX((int)position.get("x"));
+        monsterKill.setPositionY((int)position.get("y"));
+
+        monsterKill.setEvent(event);
+
+        eventEliteMonsterKillRepositoryDao.save(monsterKill);
+    }
+
+    private void saveChampionKill(Map<String, Object> eventData, Match newMatch){
+        Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)eventData.get("killerId")));
+        Participant victim = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)eventData.get("victimId")));
+        Event event = getNewEvent(eventData, participant);
+
+        EventChampKill champKill = new EventChampKill();
+
+        champKill.setBounty((int)eventData.get("bounty"));
+        champKill.setKillStreakLength((int)eventData.get("killStreakLength"));
+        champKill.setShutdownBounty((int)eventData.get("shutdownBounty"));
+
+        Map<String, Object> position = (Map<String, Object>) eventData.get("position");
+        champKill.setPositionX((int)position.get("x"));
+        champKill.setPositionY((int)position.get("y"));
+
+        champKill.setVictim(victim);
+        champKill.setEvent(event);
+
+        EventChampKill champKillData = eventChampKillRepositoryDao.save(champKill);
+
+        if((((List<Map<String, Object>>)eventData.get("victimDamageDealt")) != null )){
+            saveDamageDealt(champKillData, (List<Map<String, Object>>)eventData.get("victimDamageDealt"));
+        }
+
+        if(((List<Map<String, Object>>)eventData.get("victimDamageReceived") != null )){
+            saveDamageReceived(champKillData, (List<Map<String, Object>>)eventData.get("victimDamageReceived"), newMatch);
+        }
+
+    }
+
+    private void saveDamageDealt(EventChampKill champKillData, List<Map<String, Object>> attacks) {
+        for (Map<String,Object> attack : attacks) {
+            EventChampKillVictimDamageDealt damageDealt = new EventChampKillVictimDamageDealt();
+            damageDealt.setBasic((boolean) attack.get("basic"));
+            damageDealt.setType((String) attack.get("type"));
+            damageDealt.setSpellName((String) attack.get("spellName"));
+            damageDealt.setSpellSlot((int) attack.get("spellSlot"));
+            damageDealt.setMagicDamage((int) attack.get("magicDamage"));
+            damageDealt.setPhysicalDamage((int) attack.get("physicalDamage"));
+            damageDealt.setTrueDamage((int) attack.get("trueDamage"));
+            damageDealt.setEventChampKill(champKillData);
+
+            eventChampKillVictimDamageDealtRepositoryDao.save(damageDealt);
+        }
+    }
+
+    private void saveDamageReceived(EventChampKill champKillData, List<Map<String, Object>> attacks, Match newMatch) {
+        for (Map<String,Object> attack : attacks) {
+            EventChampKillVictimDamageReceived damageReceived = new EventChampKillVictimDamageReceived();
+
+            Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)attack.get("participantId")));
+
+            damageReceived.setBasic((boolean) attack.get("basic"));
+            damageReceived.setType((String) attack.get("type"));
+            damageReceived.setSpellName((String) attack.get("spellName"));
+            damageReceived.setSpellSlot((int) attack.get("spellSlot"));
+            damageReceived.setMagicDamage((int) attack.get("magicDamage"));
+            damageReceived.setPhysicalDamage((int) attack.get("physicalDamage"));
+            damageReceived.setTrueDamage((int) attack.get("trueDamage"));
+            damageReceived.setParticipant(participant);
+            damageReceived.setEventChampKill(champKillData);
+
+            eventChampKillVictimDamageReceivedRepositoryDao.save(damageReceived);
+        }
+    }
+
+    private void saveSpecialKill(Map<String, Object> eventData, Match newMatch){
+        Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)eventData.get("killerId")));
+        Event event = getNewEvent(eventData, participant);
+
+        EventChampSpecialKill specialKill = new EventChampSpecialKill();
+
+        specialKill.setKillType((String)eventData.get("killType"));
+
+        if(((eventData.get("multiKillLength")) != null )){
+            specialKill.setMultiKillLength((int)eventData.get("multiKillLength"));
+        }
+
+        Map<String, Object> position = (Map<String, Object>) eventData.get("position");
+        specialKill.setPositionX((int)position.get("x"));
+        specialKill.setPositionY((int)position.get("y"));
+
+        specialKill.setEvent(event);
+
+        eventChampSpecialKillRepositoryDao.save(specialKill);
     }
 }
