@@ -156,5 +156,4 @@
 
 
     saveMatchData();
-    // getMatchTimeline();
 })();
