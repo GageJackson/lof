@@ -3,15 +3,12 @@ package com.gagejackson.lof.Models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "event_champ_kill_victim_damage_received")
-public class EventChampKillVictimDamageReceived {
+@Table(name = "damage_dealt")
+public class DamageDealt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private long id;
-
-    @Column(name = "name", length = 50)
-    private String name;
 
     @Column(name = "basic")
     private boolean basic;
@@ -35,22 +32,17 @@ public class EventChampKillVictimDamageReceived {
     private String type;
 
     @ManyToOne
-    @JoinColumn(name = "participant_id")
-    private Participant participant;
-
-    @ManyToOne
-    @JoinColumn(name = "event_champ_kill_id", nullable = false)
-    private EventChampKill eventChampKill;
+    @JoinColumn(name = "champ_kill_id", nullable = false)
+    private ChampKill champKill;
 
 
     /*////////////////////////////////////////////////////////////////
     CONSTRUCTORS
     ////////////////////////////////////////////////////////////////*/
-    public EventChampKillVictimDamageReceived() {
+    public DamageDealt() {
     }
 
-    public EventChampKillVictimDamageReceived(String name, boolean basic, int magicDamage, int physicalDamage, int trueDamage, int spellSlot, String spellName, String type, Participant participant, EventChampKill eventChampKill) {
-        this.name = name;
+    public DamageDealt(boolean basic, int magicDamage, int physicalDamage, int trueDamage, int spellSlot, String spellName, String type, ChampKill champKill) {
         this.basic = basic;
         this.magicDamage = magicDamage;
         this.physicalDamage = physicalDamage;
@@ -58,13 +50,11 @@ public class EventChampKillVictimDamageReceived {
         this.spellSlot = spellSlot;
         this.spellName = spellName;
         this.type = type;
-        this.participant = participant;
-        this.eventChampKill = eventChampKill;
+        this.champKill = champKill;
     }
 
-    public EventChampKillVictimDamageReceived(long id, String name, boolean basic, int magicDamage, int physicalDamage, int trueDamage, int spellSlot, String spellName, String type, Participant participant, EventChampKill eventChampKill) {
+    public DamageDealt(long id, boolean basic, int magicDamage, int physicalDamage, int trueDamage, int spellSlot, String spellName, String type, ChampKill champKill) {
         this.id = id;
-        this.name = name;
         this.basic = basic;
         this.magicDamage = magicDamage;
         this.physicalDamage = physicalDamage;
@@ -72,9 +62,9 @@ public class EventChampKillVictimDamageReceived {
         this.spellSlot = spellSlot;
         this.spellName = spellName;
         this.type = type;
-        this.participant = participant;
-        this.eventChampKill = eventChampKill;
+        this.champKill = champKill;
     }
+
 
     /*////////////////////////////////////////////////////////////////
     GETTERS & SETTERS
@@ -85,14 +75,6 @@ public class EventChampKillVictimDamageReceived {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public boolean isBasic() {
@@ -151,19 +133,11 @@ public class EventChampKillVictimDamageReceived {
         this.type = type;
     }
 
-    public Participant getParticipant() {
-        return participant;
+    public ChampKill getEventChampKill() {
+        return champKill;
     }
 
-    public void setParticipant(Participant participant) {
-        this.participant = participant;
-    }
-
-    public EventChampKill getEventChampKill() {
-        return eventChampKill;
-    }
-
-    public void setEventChampKill(EventChampKill eventChampKill) {
-        this.eventChampKill = eventChampKill;
+    public void setEventChampKill(ChampKill champKill) {
+        this.champKill = champKill;
     }
 }

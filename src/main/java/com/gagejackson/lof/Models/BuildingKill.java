@@ -3,18 +3,21 @@ package com.gagejackson.lof.Models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "event_champ_special_kill")
-public class EventChampSpecialKill {
+@Table(name = "building_kill")
+public class BuildingKill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private long id;
 
-    @Column(name = "kill_type", length = 25)
-    private String killType;
+    @Column(name = "bounty")
+    private int bounty;
 
-    @Column(name = "multi_kill_length")
-    private int multiKillLength;
+    @Column(name = "lane_type", length = 12)
+    private String laneType;
+
+    @Column(name = "building_type", length = 25)
+    private String buildingType;
 
     @Column(name = "position_x")
     private int positionX;
@@ -30,25 +33,28 @@ public class EventChampSpecialKill {
     /*////////////////////////////////////////////////////////////////
     CONSTRUCTORS
     ////////////////////////////////////////////////////////////////*/
-    public EventChampSpecialKill() {
+    public BuildingKill() {
     }
 
-    public EventChampSpecialKill(String killType, int multiKillLength, int positionX, int positionY, Event event) {
-        this.killType = killType;
-        this.multiKillLength = multiKillLength;
+    public BuildingKill(int bounty, String laneType, String buildingType, int positionX, int positionY, Event event) {
+        this.bounty = bounty;
+        this.laneType = laneType;
+        this.buildingType = buildingType;
         this.positionX = positionX;
         this.positionY = positionY;
         this.event = event;
     }
 
-    public EventChampSpecialKill(long id, String killType, int multiKillLength, int positionX, int positionY, Event event) {
+    public BuildingKill(long id, int bounty, String laneType, String buildingType, int positionX, int positionY, Event event) {
         this.id = id;
-        this.killType = killType;
-        this.multiKillLength = multiKillLength;
+        this.bounty = bounty;
+        this.laneType = laneType;
+        this.buildingType = buildingType;
         this.positionX = positionX;
         this.positionY = positionY;
         this.event = event;
     }
+
 
     /*////////////////////////////////////////////////////////////////
     GETTERS & SETTERS
@@ -61,20 +67,28 @@ public class EventChampSpecialKill {
         this.id = id;
     }
 
-    public String getKillType() {
-        return killType;
+    public int getBounty() {
+        return bounty;
     }
 
-    public void setKillType(String killType) {
-        this.killType = killType;
+    public void setBounty(int bounty) {
+        this.bounty = bounty;
     }
 
-    public int getMultiKillLength() {
-        return multiKillLength;
+    public String getLaneType() {
+        return laneType;
     }
 
-    public void setMultiKillLength(int multiKillLength) {
-        this.multiKillLength = multiKillLength;
+    public void setLaneType(String laneType) {
+        this.laneType = laneType;
+    }
+
+    public String getBuildingType() {
+        return buildingType;
+    }
+
+    public void setBuildingType(String buildingType) {
+        this.buildingType = buildingType;
     }
 
     public int getPositionX() {

@@ -3,21 +3,18 @@ package com.gagejackson.lof.Models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "event_elite_monster_kill")
-public class EventEliteMonsterKill {
+@Table(name = "special_kill")
+public class SpecialKill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private long id;
 
-    @Column(name = "bounty")
-    private int bounty;
+    @Column(name = "kill_type", length = 25)
+    private String killType;
 
-    @Column(name = "monster_type", length = 12)
-    private String monsterType;
-
-    @Column(name = "monster_subtype", length = 25)
-    private String monsterSubtype;
+    @Column(name = "multi_kill_length")
+    private int multiKillLength;
 
     @Column(name = "position_x")
     private int positionX;
@@ -33,28 +30,25 @@ public class EventEliteMonsterKill {
     /*////////////////////////////////////////////////////////////////
     CONSTRUCTORS
     ////////////////////////////////////////////////////////////////*/
-    public EventEliteMonsterKill() {
+    public SpecialKill() {
     }
 
-    public EventEliteMonsterKill(int bounty, String monsterType, String monsterSubtype, int positionX, int positionY, Event event) {
-        this.bounty = bounty;
-        this.monsterType = monsterType;
-        this.monsterSubtype = monsterSubtype;
+    public SpecialKill(String killType, int multiKillLength, int positionX, int positionY, Event event) {
+        this.killType = killType;
+        this.multiKillLength = multiKillLength;
         this.positionX = positionX;
         this.positionY = positionY;
         this.event = event;
     }
 
-    public EventEliteMonsterKill(long id, int bounty, String monsterType, String monsterSubtype, int positionX, int positionY, Event event) {
+    public SpecialKill(long id, String killType, int multiKillLength, int positionX, int positionY, Event event) {
         this.id = id;
-        this.bounty = bounty;
-        this.monsterType = monsterType;
-        this.monsterSubtype = monsterSubtype;
+        this.killType = killType;
+        this.multiKillLength = multiKillLength;
         this.positionX = positionX;
         this.positionY = positionY;
         this.event = event;
     }
-
 
     /*////////////////////////////////////////////////////////////////
     GETTERS & SETTERS
@@ -67,28 +61,20 @@ public class EventEliteMonsterKill {
         this.id = id;
     }
 
-    public int getBounty() {
-        return bounty;
+    public String getKillType() {
+        return killType;
     }
 
-    public void setBounty(int bounty) {
-        this.bounty = bounty;
+    public void setKillType(String killType) {
+        this.killType = killType;
     }
 
-    public String getMonsterType() {
-        return monsterType;
+    public int getMultiKillLength() {
+        return multiKillLength;
     }
 
-    public void setMonsterType(String monsterType) {
-        this.monsterType = monsterType;
-    }
-
-    public String getMonsterSubtype() {
-        return monsterSubtype;
-    }
-
-    public void setMonsterSubtype(String monsterSubtype) {
-        this.monsterSubtype = monsterSubtype;
+    public void setMultiKillLength(int multiKillLength) {
+        this.multiKillLength = multiKillLength;
     }
 
     public int getPositionX() {

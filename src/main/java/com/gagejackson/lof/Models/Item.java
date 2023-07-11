@@ -3,15 +3,18 @@ package com.gagejackson.lof.Models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "event_level_up")
-public class EventLevelUp {
+@Table(name = "item")
+public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private long id;
 
-    @Column(name = "level")
-    private int level;
+    @Column(name = "item_num")
+    private int itemNum;
+
+    @Column(name = "item_type", length = 20)
+    private String itemType;
 
     @ManyToOne
     @JoinColumn(name = "event_id", nullable = false)
@@ -21,17 +24,19 @@ public class EventLevelUp {
     /*////////////////////////////////////////////////////////////////
     CONSTRUCTORS
     ////////////////////////////////////////////////////////////////*/
-    public EventLevelUp() {
+    public Item() {
     }
 
-    public EventLevelUp(int level, Event event) {
-        this.level = level;
+    public Item(int itemNum, String itemType, Event event) {
+        this.itemNum = itemNum;
+        this.itemType = itemType;
         this.event = event;
     }
 
-    public EventLevelUp(long id, int level, Event event) {
+    public Item(long id, int itemNum, String itemType, Event event) {
         this.id = id;
-        this.level = level;
+        this.itemNum = itemNum;
+        this.itemType = itemType;
         this.event = event;
     }
 
@@ -47,12 +52,20 @@ public class EventLevelUp {
         this.id = id;
     }
 
-    public int getLevel() {
-        return level;
+    public int getItemNum() {
+        return itemNum;
     }
 
-    public void setLevel(int level) {
-        this.level = level;
+    public void setItemNum(int itemId) {
+        this.itemNum = itemId;
+    }
+
+    public String getItemType() {
+        return itemType;
+    }
+
+    public void setItemType(String itemType) {
+        this.itemType = itemType;
     }
 
     public Event getEvent() {

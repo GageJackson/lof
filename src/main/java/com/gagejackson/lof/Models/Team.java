@@ -12,8 +12,8 @@ public class Team {
     @Column(name = "id", nullable = false)
     private long id;
 
-    @Column (name = "team_id")
-    private int teamId;
+    @Column (name = "team_num")
+    private int teamNum;
 
     @Column (name = "win")
     private boolean win;
@@ -34,17 +34,17 @@ public class Team {
     ////////////////////////////////////////////////////////////////*/
     public Team() {}
 
-    public Team(long id, int teamId, boolean win, List<Objective> objective, List<Ban> ban, Match match) {
+    public Team(long id, int teamNum, boolean win, List<Objective> objective, List<Ban> ban, Match match) {
         this.id = id;
-        this.teamId = teamId;
+        this.teamNum = teamNum;
         this.win = win;
         this.objective = objective;
         this.ban = ban;
         this.match = match;
     }
 
-    public Team(int teamId, boolean win, List<Objective> objective, List<Ban> ban, Match match) {
-        this.teamId = teamId;
+    public Team(int teamNum, boolean win, List<Objective> objective, List<Ban> ban, Match match) {
+        this.teamNum = teamNum;
         this.win = win;
         this.objective = objective;
         this.ban = ban;
@@ -63,12 +63,12 @@ public class Team {
         this.id = id;
     }
 
-    public int getTeamId() {
-        return teamId;
+    public int getTeamNum() {
+        return teamNum;
     }
 
-    public void setTeamId(int teamId) {
-        this.teamId = teamId;
+    public void setTeamNum(int teamId) {
+        this.teamNum = teamId;
     }
 
     public boolean isWin() {

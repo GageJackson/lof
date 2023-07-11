@@ -3,8 +3,8 @@ package com.gagejackson.lof.Models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "event_building_kill")
-public class EventBuildingKill {
+@Table(name = "monster_kill")
+public class MonsterKill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -13,11 +13,11 @@ public class EventBuildingKill {
     @Column(name = "bounty")
     private int bounty;
 
-    @Column(name = "lane_type", length = 12)
-    private String laneType;
+    @Column(name = "monster_type", length = 12)
+    private String monsterType;
 
-    @Column(name = "building_type", length = 25)
-    private String buildingType;
+    @Column(name = "monster_subtype", length = 25)
+    private String monsterSubtype;
 
     @Column(name = "position_x")
     private int positionX;
@@ -33,23 +33,23 @@ public class EventBuildingKill {
     /*////////////////////////////////////////////////////////////////
     CONSTRUCTORS
     ////////////////////////////////////////////////////////////////*/
-    public EventBuildingKill() {
+    public MonsterKill() {
     }
 
-    public EventBuildingKill(int bounty, String laneType, String buildingType, int positionX, int positionY, Event event) {
+    public MonsterKill(int bounty, String monsterType, String monsterSubtype, int positionX, int positionY, Event event) {
         this.bounty = bounty;
-        this.laneType = laneType;
-        this.buildingType = buildingType;
+        this.monsterType = monsterType;
+        this.monsterSubtype = monsterSubtype;
         this.positionX = positionX;
         this.positionY = positionY;
         this.event = event;
     }
 
-    public EventBuildingKill(long id, int bounty, String laneType, String buildingType, int positionX, int positionY, Event event) {
+    public MonsterKill(long id, int bounty, String monsterType, String monsterSubtype, int positionX, int positionY, Event event) {
         this.id = id;
         this.bounty = bounty;
-        this.laneType = laneType;
-        this.buildingType = buildingType;
+        this.monsterType = monsterType;
+        this.monsterSubtype = monsterSubtype;
         this.positionX = positionX;
         this.positionY = positionY;
         this.event = event;
@@ -75,20 +75,20 @@ public class EventBuildingKill {
         this.bounty = bounty;
     }
 
-    public String getLaneType() {
-        return laneType;
+    public String getMonsterType() {
+        return monsterType;
     }
 
-    public void setLaneType(String laneType) {
-        this.laneType = laneType;
+    public void setMonsterType(String monsterType) {
+        this.monsterType = monsterType;
     }
 
-    public String getBuildingType() {
-        return buildingType;
+    public String getMonsterSubtype() {
+        return monsterSubtype;
     }
 
-    public void setBuildingType(String buildingType) {
-        this.buildingType = buildingType;
+    public void setMonsterSubtype(String monsterSubtype) {
+        this.monsterSubtype = monsterSubtype;
     }
 
     public int getPositionX() {

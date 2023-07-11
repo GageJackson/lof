@@ -18,15 +18,15 @@ public class MatchOverviewController {
     private final FriendMatchRepository friendMatchRepositoryDao;
     private final BanRepository banRepositoryDao;
     private final EventRepository eventRepositoryDao;
-    private final EventBuildingKillRepository eventBuildingKillRepositoryDao;
-    private final EventChampKillRepository eventChampKillRepositoryDao;
-    private final EventChampKillVictimDamageDealtRepository eventChampKillVictimDamageDealtRepositoryDao;
-    private final EventChampKillVictimDamageReceivedRepository eventChampKillVictimDamageReceivedRepositoryDao;
-    private final EventChampSpecialKillRepository eventChampSpecialKillRepositoryDao;
-    private final EventEliteMonsterKillRepository eventEliteMonsterKillRepositoryDao;
-    private final EventItemRepository eventItemRepositoryDao;
-    private final EventLevelUpRepository eventLevelUpRepositoryDao;
-    private final EventSkillUpRepository eventSkillUpRepositoryDao;
+    private final BuildingKillRepository buildingKillRepositoryDao;
+    private final ChampKillRepository champKillRepositoryDao;
+    private final DamageDealtRepository damageDealtRepositoryDao;
+    private final DamageReceivedRepository damageReceivedRepositoryDao;
+    private final SpecialKillRepository specialKillRepositoryDao;
+    private final MonsterKillRepository monsterKillRepositoryDao;
+    private final ItemRepository itemRepositoryDao;
+    private final LevelUpRepository levelUpRepositoryDao;
+    private final SkillUpRepository skillUpRepositoryDao;
     private final ObjectiveRepository objectiveRepositoryDao;
     private final ParticipantRepository participantRepositoryDao;
     private final ParticipantFrameRepository participantFrameRepositoryDao;
@@ -35,6 +35,20 @@ public class MatchOverviewController {
     private final PerkRepository perkRepositoryDao;
     private final TeamRepository teamRepositoryDao;
 
+    private List<Event> events = new ArrayList<>();
+    private List<Item> items = new ArrayList<>();
+    private List<ParticipantFrame> participantFrames = new ArrayList<>();
+    private List<ParticipantFrameChamp> participantFrameChamps = new ArrayList<>();
+    private List<ParticipantFrameDamage> participantFrameDamages = new ArrayList<>();
+    private List<SkillUp> skillUps = new ArrayList<>();
+    private List<LevelUp> levelUps = new ArrayList<>();
+    private List<BuildingKill> buildingKills = new ArrayList<>();
+    private List<MonsterKill> monsterKills = new ArrayList<>();
+    private List<ChampKill> champKills = new ArrayList<>();
+    private List<DamageDealt> damageDealtList = new ArrayList<>();
+    private List<DamageReceived> damageReceivedList = new ArrayList<>();
+    private List<SpecialKill> specialKills = new ArrayList<>();
+
 
     public MatchOverviewController(
             FriendRepository friendRepositoryDao,
@@ -42,15 +56,15 @@ public class MatchOverviewController {
             FriendMatchRepository friendMatchRepositoryDao,
             BanRepository banRepositoryDao,
             EventRepository eventRepositoryDao,
-            EventBuildingKillRepository eventBuildingKillRepositoryDao,
-            EventChampKillRepository eventChampKillRepositoryDao,
-            EventChampKillVictimDamageDealtRepository eventChampKillVictimDamageDealtRepositoryDao,
-            EventChampKillVictimDamageReceivedRepository eventChampKillVictimDamageReceivedRepositoryDao,
-            EventChampSpecialKillRepository eventChampSpecialKillRepositoryDao,
-            EventEliteMonsterKillRepository eventEliteMonsterKillRepositoryDao,
-            EventItemRepository eventItemRepositoryDao,
-            EventLevelUpRepository eventLevelUpRepositoryDao,
-            EventSkillUpRepository eventSkillUpRepositoryDao,
+            BuildingKillRepository buildingKillRepositoryDao,
+            ChampKillRepository champKillRepositoryDao,
+            DamageDealtRepository damageDealtRepositoryDao,
+            DamageReceivedRepository damageReceivedRepositoryDao,
+            SpecialKillRepository specialKillRepositoryDao,
+            MonsterKillRepository monsterKillRepositoryDao,
+            ItemRepository itemRepositoryDao,
+            LevelUpRepository levelUpRepositoryDao,
+            SkillUpRepository skillUpRepositoryDao,
             ObjectiveRepository objectiveRepositoryDao,
             ParticipantRepository participantRepositoryDao,
             ParticipantFrameRepository participantFrameRepositoryDao,
@@ -64,15 +78,15 @@ public class MatchOverviewController {
         this.friendMatchRepositoryDao = friendMatchRepositoryDao;
         this.banRepositoryDao = banRepositoryDao;
         this.eventRepositoryDao = eventRepositoryDao;
-        this.eventBuildingKillRepositoryDao = eventBuildingKillRepositoryDao;
-        this.eventChampKillRepositoryDao = eventChampKillRepositoryDao;
-        this.eventChampKillVictimDamageDealtRepositoryDao = eventChampKillVictimDamageDealtRepositoryDao;
-        this.eventChampKillVictimDamageReceivedRepositoryDao = eventChampKillVictimDamageReceivedRepositoryDao;
-        this.eventChampSpecialKillRepositoryDao = eventChampSpecialKillRepositoryDao;
-        this.eventEliteMonsterKillRepositoryDao = eventEliteMonsterKillRepositoryDao;
-        this.eventItemRepositoryDao = eventItemRepositoryDao;
-        this.eventLevelUpRepositoryDao = eventLevelUpRepositoryDao;
-        this.eventSkillUpRepositoryDao = eventSkillUpRepositoryDao;
+        this.buildingKillRepositoryDao = buildingKillRepositoryDao;
+        this.champKillRepositoryDao = champKillRepositoryDao;
+        this.damageDealtRepositoryDao = damageDealtRepositoryDao;
+        this.damageReceivedRepositoryDao = damageReceivedRepositoryDao;
+        this.specialKillRepositoryDao = specialKillRepositoryDao;
+        this.monsterKillRepositoryDao = monsterKillRepositoryDao;
+        this.itemRepositoryDao = itemRepositoryDao;
+        this.levelUpRepositoryDao = levelUpRepositoryDao;
+        this.skillUpRepositoryDao = skillUpRepositoryDao;
         this.objectiveRepositoryDao = objectiveRepositoryDao;
         this.participantRepositoryDao = participantRepositoryDao;
         this.participantFrameRepositoryDao = participantFrameRepositoryDao;
@@ -195,7 +209,7 @@ public class MatchOverviewController {
             participantObject.setNexusLost((int) participant.get("nexusLost"));
             participantObject.setObjectivesStolen((int) participant.get("objectivesStolen"));
             participantObject.setObjectivesStolenAssists((int) participant.get("objectivesStolenAssists"));
-            participantObject.setParticipantId((int) participant.get("participantId"));
+            participantObject.setParticipantNum((int) participant.get("participantId"));
             participantObject.setPentaKills((int) participant.get("pentaKills"));
             participantObject.setPhysicalDamageDealt((int) participant.get("physicalDamageDealt"));
             participantObject.setPhysicalDamageDealtToChampions((int) participant.get("physicalDamageDealtToChampions"));
@@ -248,8 +262,6 @@ public class MatchOverviewController {
             participantObject.setWin((boolean) participant.get("win"));
             participantObject.setMatch(newMatch);
 
-//            Participant newParticipant = participantRepositoryDao.save(participantObject);
-//            savePerkData(participant, newParticipant);
             participantsToSave.add(participantObject);
         }
 
@@ -277,7 +289,7 @@ public class MatchOverviewController {
                 int var3 = (int) selection.get("var3");
 
                 Perk perkData = new Perk();
-                perkData.setPerkId(perkNumber);
+                perkData.setPerkNum(perkNumber);
                 perkData.setStyle(styleNumber);
                 perkData.setPerkStat1(var1);
                 perkData.setPerkStat2(var2);
@@ -311,7 +323,7 @@ public class MatchOverviewController {
                 teamObject.setWin(false);
             }
 
-            teamObject.setTeamId(teamId);
+            teamObject.setTeamNum(teamId);
             teamObject.setMatch(newMatch);
 
             teamObjects.add(teamObject);
@@ -393,6 +405,8 @@ public class MatchOverviewController {
             }
             currentFrame++;
         }
+
+        insertBatchData();
     }
 
     private void saveParticipantFrame(Map<String, Object> participantFrames, Match newMatch, int currentFrame, int i){
@@ -449,7 +463,7 @@ public class MatchOverviewController {
         participantFrameChamp.setSpellVamp((int) participantFrameChampData.get("spellVamp"));
         participantFrameChamp.setParticipantFrame(newParticipantFrame);
 
-        participantFrameChampRepositoryDao.save(participantFrameChamp);
+        participantFrameChamps.add(participantFrameChamp);
     }
 
     private void saveParticipantFrameDamageData(Map<String, Object> participantFrameData, ParticipantFrame newParticipantFrame){
@@ -471,38 +485,7 @@ public class MatchOverviewController {
         participantFrameDamage.setTrueDamageTaken((int) participantFrameDamageData.get("trueDamageTaken"));
         participantFrameDamage.setParticipantFrame(newParticipantFrame);
 
-        participantFrameDamageRepositoryDao.save(participantFrameDamage);
-    }
-
-    private void getEventInfo(Map<String, Object> event){
-        List<String> eventTypes = new ArrayList<>();
-
-        //finds unique event types
-//                if(!eventTypes.contains(event.get("type"))){
-//                    eventTypes.add((String) event.get("type"));
-//                } else {
-//                    System.out.println("(String) frame.get(\"type\") = " + (String) event.get("type"));
-//                }
-
-        //finds unique kill types
-//                if((event.get("type")).equals("CHAMPION_SPECIAL_KILL")){
-//                    eventTypes.add((String) event.get("killType"));
-//                } else {
-//                }
-
-        //finds unique kill types
-//                if((event.get("type")).equals("SKILL_LEVEL_UP")){
-//                    eventTypes.add((String) event.get("levelUpType"));
-//                } else {
-//                }
-
-        //finds timestamps for .equals(XXX)
-        if((event.get("type")).equals("ELITE_MONSTER_KILL")){
-            eventTypes.add(Integer.toString(((int) event.get("timestamp"))));
-        } else {
-        }
-
-        System.out.println("eventTypes = " + eventTypes);
+        participantFrameDamages.add(participantFrameDamage);
     }
 
     private void saveEvent(Map<String, Object> event, Match newMatch){
@@ -522,10 +505,6 @@ public class MatchOverviewController {
             case "ITEM_SOLD":
                 saveItemEvent("ITEM_SOLD", event, newMatch);
                 break;
-
-//            case "ITEM_UNDO":
-//                saveItemEvent("ITEM_UNDO", event, newMatch);
-//                break;
 
             case "SKILL_LEVEL_UP":
                 saveSkillUp(event, newMatch);
@@ -573,42 +552,42 @@ public class MatchOverviewController {
         Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)eventData.get("participantId")));
         Event event = getNewEvent(eventData, participant);
 
-        EventItem eventItem = new EventItem();
-        eventItem.setItemType(itemType);
-        eventItem.setItemId((int)eventData.get("itemId"));
-        eventItem.setEvent(event);
+        Item item = new Item();
+        item.setItemType(itemType);
+        item.setItemNum((int)eventData.get("itemId"));
+        item.setEvent(event);
 
-        eventItemRepositoryDao.save(eventItem);
+        items.add(item);
     }
 
     private void saveSkillUp(Map<String, Object> eventData, Match newMatch){
         Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)eventData.get("participantId")));
         Event event = getNewEvent(eventData, participant);
 
-        EventSkillUp eventSkillUp = new EventSkillUp();
-        eventSkillUp.setLevelUpType((String) eventData.get("levelUpType"));
-        eventSkillUp.setSkillSlot((int) eventData.get("skillSlot"));
-        eventSkillUp.setEvent(event);
+        SkillUp skillUp = new SkillUp();
+        skillUp.setLevelUpType((String) eventData.get("levelUpType"));
+        skillUp.setSkillSlot((int) eventData.get("skillSlot"));
+        skillUp.setEvent(event);
 
-        eventSkillUpRepositoryDao.save(eventSkillUp);
+        skillUps.add(skillUp);
     }
 
     private void saveLevelUp(Map<String, Object> eventData, Match newMatch){
         Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)eventData.get("participantId")));
         Event event = getNewEvent(eventData, participant);
 
-        EventLevelUp eventLevelUp = new EventLevelUp();
-        eventLevelUp.setLevel((int) eventData.get("level"));
-        eventLevelUp.setEvent(event);
+        LevelUp levelUp = new LevelUp();
+        levelUp.setLevel((int) eventData.get("level"));
+        levelUp.setEvent(event);
 
-        eventLevelUpRepositoryDao.save(eventLevelUp);
+        levelUps.add(levelUp);
     }
 
     private void saveBuildingKill(String buildingType, Map<String, Object> eventData, Match newMatch){
         Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)eventData.get("killerId")));
         Event event = getNewEvent(eventData, participant);
 
-        EventBuildingKill buildingKill = new EventBuildingKill();
+        BuildingKill buildingKill = new BuildingKill();
         buildingKill.setBounty((int)eventData.getOrDefault("bounty", 0));
         buildingKill.setBuildingType((String)eventData.getOrDefault("buildingType", buildingType));
         buildingKill.setLaneType((String) eventData.get("laneType"));
@@ -619,14 +598,14 @@ public class MatchOverviewController {
 
         buildingKill.setEvent(event);
 
-        eventBuildingKillRepositoryDao.save(buildingKill);
+        buildingKills.add(buildingKill);
     }
 
     private void saveMonsterKill(Map<String, Object> eventData, Match newMatch){
         Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)eventData.get("killerId")));
         Event event = getNewEvent(eventData, participant);
 
-        EventEliteMonsterKill monsterKill = new EventEliteMonsterKill();
+        MonsterKill monsterKill = new MonsterKill();
 
         monsterKill.setBounty((int)eventData.get("bounty"));
         monsterKill.setMonsterType((String) eventData.get("monsterType"));
@@ -638,7 +617,7 @@ public class MatchOverviewController {
 
         monsterKill.setEvent(event);
 
-        eventEliteMonsterKillRepositoryDao.save(monsterKill);
+        monsterKills.add(monsterKill);
     }
 
     private void saveChampionKill(Map<String, Object> eventData, Match newMatch){
@@ -646,7 +625,7 @@ public class MatchOverviewController {
         Participant victim = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)eventData.get("victimId")));
         Event event = getNewEvent(eventData, participant);
 
-        EventChampKill champKill = new EventChampKill();
+        ChampKill champKill = new ChampKill();
 
         champKill.setBounty((int)eventData.get("bounty"));
         champKill.setKillStreakLength((int)eventData.get("killStreakLength"));
@@ -659,7 +638,7 @@ public class MatchOverviewController {
         champKill.setVictim(victim);
         champKill.setEvent(event);
 
-        EventChampKill champKillData = eventChampKillRepositoryDao.save(champKill);
+        ChampKill champKillData = champKillRepositoryDao.save(champKill);
 
         if((((List<Map<String, Object>>)eventData.get("victimDamageDealt")) != null )){
             saveDamageDealt(champKillData, (List<Map<String, Object>>)eventData.get("victimDamageDealt"));
@@ -671,9 +650,9 @@ public class MatchOverviewController {
 
     }
 
-    private void saveDamageDealt(EventChampKill champKillData, List<Map<String, Object>> attacks) {
+    private void saveDamageDealt(ChampKill champKillData, List<Map<String, Object>> attacks) {
         for (Map<String,Object> attack : attacks) {
-            EventChampKillVictimDamageDealt damageDealt = new EventChampKillVictimDamageDealt();
+            DamageDealt damageDealt = new DamageDealt();
             damageDealt.setBasic((boolean) attack.get("basic"));
             damageDealt.setType((String) attack.get("type"));
             damageDealt.setSpellName((String) attack.get("spellName"));
@@ -683,13 +662,13 @@ public class MatchOverviewController {
             damageDealt.setTrueDamage((int) attack.get("trueDamage"));
             damageDealt.setEventChampKill(champKillData);
 
-            eventChampKillVictimDamageDealtRepositoryDao.save(damageDealt);
+            damageDealtList.add(damageDealt);
         }
     }
 
-    private void saveDamageReceived(EventChampKill champKillData, List<Map<String, Object>> attacks, Match newMatch) {
+    private void saveDamageReceived(ChampKill champKillData, List<Map<String, Object>> attacks, Match newMatch) {
         for (Map<String,Object> attack : attacks) {
-            EventChampKillVictimDamageReceived damageReceived = new EventChampKillVictimDamageReceived();
+            DamageReceived damageReceived = new DamageReceived();
 
             Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)attack.get("participantId")));
 
@@ -703,7 +682,7 @@ public class MatchOverviewController {
             damageReceived.setParticipant(participant);
             damageReceived.setEventChampKill(champKillData);
 
-            eventChampKillVictimDamageReceivedRepositoryDao.save(damageReceived);
+            damageReceivedList.add(damageReceived);
         }
     }
 
@@ -711,7 +690,7 @@ public class MatchOverviewController {
         Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)eventData.get("killerId")));
         Event event = getNewEvent(eventData, participant);
 
-        EventChampSpecialKill specialKill = new EventChampSpecialKill();
+        SpecialKill specialKill = new SpecialKill();
 
         specialKill.setKillType((String)eventData.get("killType"));
 
@@ -725,6 +704,53 @@ public class MatchOverviewController {
 
         specialKill.setEvent(event);
 
-        eventChampSpecialKillRepositoryDao.save(specialKill);
+        specialKills.add(specialKill);
+    }
+
+    private void insertBatchData(){
+        //eventRepositoryDao.saveAll(events);
+        itemRepositoryDao.saveAll(items);
+        //participantFrameRepositoryDao.saveAll(participantFrames);
+        participantFrameChampRepositoryDao.saveAll(participantFrameChamps);
+        participantFrameDamageRepositoryDao.saveAll(participantFrameDamages);
+        skillUpRepositoryDao.saveAll(skillUps);
+        levelUpRepositoryDao.saveAll(levelUps);
+        buildingKillRepositoryDao.saveAll(buildingKills);
+        monsterKillRepositoryDao.saveAll(monsterKills);
+        //champKillRepositoryDao.saveAll(champKills);
+        damageDealtRepositoryDao.saveAll(damageDealtList);
+        damageReceivedRepositoryDao.saveAll(damageReceivedList);
+        specialKillRepositoryDao.saveAll(specialKills);
+    }
+
+    private void getEventInfo(Map<String, Object> event){
+        List<String> eventTypes = new ArrayList<>();
+
+        //finds unique event types
+//                if(!eventTypes.contains(event.get("type"))){
+//                    eventTypes.add((String) event.get("type"));
+//                } else {
+//                    System.out.println("(String) frame.get(\"type\") = " + (String) event.get("type"));
+//                }
+
+        //finds unique kill types
+//                if((event.get("type")).equals("CHAMPION_SPECIAL_KILL")){
+//                    eventTypes.add((String) event.get("killType"));
+//                } else {
+//                }
+
+        //finds unique kill types
+//                if((event.get("type")).equals("SKILL_LEVEL_UP")){
+//                    eventTypes.add((String) event.get("levelUpType"));
+//                } else {
+//                }
+
+        //finds timestamps for .equals(XXX)
+        if((event.get("type")).equals("ELITE_MONSTER_KILL")){
+            eventTypes.add(Integer.toString(((int) event.get("timestamp"))));
+        } else {
+        }
+
+        System.out.println("eventTypes = " + eventTypes);
     }
 }

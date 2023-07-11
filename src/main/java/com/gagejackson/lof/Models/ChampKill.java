@@ -5,8 +5,8 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "event_champ_kill")
-public class EventChampKill {
+@Table(name = "champ_kill")
+public class ChampKill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -35,20 +35,20 @@ public class EventChampKill {
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 
-    @OneToMany (cascade = CascadeType.ALL, mappedBy = "eventChampKill")
-    private List<EventChampKillVictimDamageDealt> eventChampKillVictimDamageDealt;
+    @OneToMany (cascade = CascadeType.ALL, mappedBy = "champKill")
+    private List<DamageDealt> damageDealt;
 
-    @OneToMany (cascade = CascadeType.ALL, mappedBy = "eventChampKill")
-    private List<EventChampKillVictimDamageReceived> eventChampKillVictimDamageReceived;
+    @OneToMany (cascade = CascadeType.ALL, mappedBy = "champKill")
+    private List<DamageReceived> damageReceived;
 
 
     /*////////////////////////////////////////////////////////////////
     CONSTRUCTORS
     ////////////////////////////////////////////////////////////////*/
-    public EventChampKill() {
+    public ChampKill() {
     }
 
-    public EventChampKill(int bounty, int shutdownBounty, int killStreakLength, int positionX, int positionY, Participant victim, Event event, List<EventChampKillVictimDamageDealt> eventChampKillVictimDamageDealt, List<EventChampKillVictimDamageReceived> eventChampKillVictimDamageReceived) {
+    public ChampKill(int bounty, int shutdownBounty, int killStreakLength, int positionX, int positionY, Participant victim, Event event, List<DamageDealt> damageDealt, List<DamageReceived> damageReceived) {
         this.bounty = bounty;
         this.shutdownBounty = shutdownBounty;
         this.killStreakLength = killStreakLength;
@@ -56,11 +56,11 @@ public class EventChampKill {
         this.positionY = positionY;
         this.victim = victim;
         this.event = event;
-        this.eventChampKillVictimDamageDealt = eventChampKillVictimDamageDealt;
-        this.eventChampKillVictimDamageReceived = eventChampKillVictimDamageReceived;
+        this.damageDealt = damageDealt;
+        this.damageReceived = damageReceived;
     }
 
-    public EventChampKill(long id, int bounty, int shutdownBounty, int killStreakLength, int positionX, int positionY, Participant victim, Event event, List<EventChampKillVictimDamageDealt> eventChampKillVictimDamageDealt, List<EventChampKillVictimDamageReceived> eventChampKillVictimDamageReceived) {
+    public ChampKill(long id, int bounty, int shutdownBounty, int killStreakLength, int positionX, int positionY, Participant victim, Event event, List<DamageDealt> damageDealt, List<DamageReceived> damageReceived) {
         this.id = id;
         this.bounty = bounty;
         this.shutdownBounty = shutdownBounty;
@@ -69,8 +69,8 @@ public class EventChampKill {
         this.positionY = positionY;
         this.victim = victim;
         this.event = event;
-        this.eventChampKillVictimDamageDealt = eventChampKillVictimDamageDealt;
-        this.eventChampKillVictimDamageReceived = eventChampKillVictimDamageReceived;
+        this.damageDealt = damageDealt;
+        this.damageReceived = damageReceived;
     }
 
     /*////////////////////////////////////////////////////////////////
@@ -140,19 +140,19 @@ public class EventChampKill {
         this.event = event;
     }
 
-    public List<EventChampKillVictimDamageDealt> getEventChampKillVictimDamageDealt() {
-        return eventChampKillVictimDamageDealt;
+    public List<DamageDealt> getEventChampKillVictimDamageDealt() {
+        return damageDealt;
     }
 
-    public void setEventChampKillVictimDamageDealt(List<EventChampKillVictimDamageDealt> eventChampKillVictimDamageDealt) {
-        this.eventChampKillVictimDamageDealt = eventChampKillVictimDamageDealt;
+    public void setEventChampKillVictimDamageDealt(List<DamageDealt> damageDealt) {
+        this.damageDealt = damageDealt;
     }
 
-    public List<EventChampKillVictimDamageReceived> getEventChampKillVictimDamageReceived() {
-        return eventChampKillVictimDamageReceived;
+    public List<DamageReceived> getEventChampKillVictimDamageReceived() {
+        return damageReceived;
     }
 
-    public void setEventChampKillVictimDamageReceived(List<EventChampKillVictimDamageReceived> eventChampKillVictimDamageReceived) {
-        this.eventChampKillVictimDamageReceived = eventChampKillVictimDamageReceived;
+    public void setEventChampKillVictimDamageReceived(List<DamageReceived> damageReceived) {
+        this.damageReceived = damageReceived;
     }
 }

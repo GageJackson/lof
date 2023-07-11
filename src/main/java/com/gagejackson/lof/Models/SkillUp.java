@@ -3,18 +3,18 @@ package com.gagejackson.lof.Models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "event_item")
-public class EventItem {
+@Table(name = "skill_up")
+public class SkillUp {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private long id;
 
-    @Column(name = "item_id")
-    private int itemId;
+    @Column(name = "skill_slot")
+    private int skillSlot;
 
-    @Column(name = "item_type", length = 20)
-    private String itemType;
+    @Column(name = "level_up_type", length = 15)
+    private String levelUpType;
 
     @ManyToOne
     @JoinColumn(name = "event_id", nullable = false)
@@ -24,19 +24,19 @@ public class EventItem {
     /*////////////////////////////////////////////////////////////////
     CONSTRUCTORS
     ////////////////////////////////////////////////////////////////*/
-    public EventItem() {
+    public SkillUp() {
     }
 
-    public EventItem(int itemId, String itemType, Event event) {
-        this.itemId = itemId;
-        this.itemType = itemType;
+    public SkillUp(int skillSlot, String levelUpType, Event event) {
+        this.skillSlot = skillSlot;
+        this.levelUpType = levelUpType;
         this.event = event;
     }
 
-    public EventItem(long id, int itemId, String itemType, Event event) {
+    public SkillUp(long id, int skillSlot, String levelUpType, Event event) {
         this.id = id;
-        this.itemId = itemId;
-        this.itemType = itemType;
+        this.skillSlot = skillSlot;
+        this.levelUpType = levelUpType;
         this.event = event;
     }
 
@@ -44,6 +44,7 @@ public class EventItem {
     /*////////////////////////////////////////////////////////////////
     GETTERS & SETTERS
     ////////////////////////////////////////////////////////////////*/
+
     public long getId() {
         return id;
     }
@@ -52,20 +53,20 @@ public class EventItem {
         this.id = id;
     }
 
-    public int getItemId() {
-        return itemId;
+    public int getSkillSlot() {
+        return skillSlot;
     }
 
-    public void setItemId(int itemId) {
-        this.itemId = itemId;
+    public void setSkillSlot(int skillSlot) {
+        this.skillSlot = skillSlot;
     }
 
-    public String getItemType() {
-        return itemType;
+    public String getLevelUpType() {
+        return levelUpType;
     }
 
-    public void setItemType(String itemType) {
-        this.itemType = itemType;
+    public void setLevelUpType(String levelUpType) {
+        this.levelUpType = levelUpType;
     }
 
     public Event getEvent() {
