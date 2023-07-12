@@ -116,7 +116,7 @@ public class MatchTimelineController {
         Map<String, Object> participantFrameData = (Map<String, Object>) participantFrames.get(String.valueOf(i));
         ParticipantFrame participantFrame = new ParticipantFrame();
 
-        Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, i);
+        Participant participant = participantRepositoryDao.findByMatchAndParticipantNum(newMatch, i);
 
         participantFrame.setCurrentGold((int) participantFrameData.get("currentGold"));
         participantFrame.setJungleMinionsKilled((int) participantFrameData.get("jungleMinionsKilled"));
@@ -287,7 +287,7 @@ public class MatchTimelineController {
     }
 
     private void saveItemEvent(String itemType, Map<String, Object> eventData, Match newMatch){
-        Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)eventData.get("participantId")));
+        Participant participant = participantRepositoryDao.findByMatchAndParticipantNum(newMatch, ((int)eventData.get("participantId")));
         Event event = getNewEvent(eventData, participant);
 
         Item item = new Item();
@@ -299,7 +299,7 @@ public class MatchTimelineController {
     }
 
     private void saveSkillUp(Map<String, Object> eventData, Match newMatch){
-        Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)eventData.get("participantId")));
+        Participant participant = participantRepositoryDao.findByMatchAndParticipantNum(newMatch, ((int)eventData.get("participantId")));
         Event event = getNewEvent(eventData, participant);
 
         SkillUp skillUp = new SkillUp();
@@ -311,7 +311,7 @@ public class MatchTimelineController {
     }
 
     private void saveLevelUp(Map<String, Object> eventData, Match newMatch){
-        Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)eventData.get("participantId")));
+        Participant participant = participantRepositoryDao.findByMatchAndParticipantNum(newMatch, ((int)eventData.get("participantId")));
         Event event = getNewEvent(eventData, participant);
 
         LevelUp levelUp = new LevelUp();
@@ -322,7 +322,7 @@ public class MatchTimelineController {
     }
 
     private void saveBuildingKill(String buildingType, Map<String, Object> eventData, Match newMatch){
-        Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)eventData.get("killerId")));
+        Participant participant = participantRepositoryDao.findByMatchAndParticipantNum(newMatch, ((int)eventData.get("killerId")));
         Event event = getNewEvent(eventData, participant);
 
         BuildingKill buildingKill = new BuildingKill();
@@ -340,7 +340,7 @@ public class MatchTimelineController {
     }
 
     private void saveMonsterKill(Map<String, Object> eventData, Match newMatch){
-        Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)eventData.get("killerId")));
+        Participant participant = participantRepositoryDao.findByMatchAndParticipantNum(newMatch, ((int)eventData.get("killerId")));
         Event event = getNewEvent(eventData, participant);
 
         MonsterKill monsterKill = new MonsterKill();
@@ -359,8 +359,8 @@ public class MatchTimelineController {
     }
 
     private void saveChampionKill(Map<String, Object> eventData, Match newMatch){
-        Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)eventData.get("killerId")));
-        Participant victim = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)eventData.get("victimId")));
+        Participant participant = participantRepositoryDao.findByMatchAndParticipantNum(newMatch, ((int)eventData.get("killerId")));
+        Participant victim = participantRepositoryDao.findByMatchAndParticipantNum(newMatch, ((int)eventData.get("victimId")));
         Event event = getNewEvent(eventData, participant);
 
         ChampKill champKill = new ChampKill();
@@ -408,7 +408,7 @@ public class MatchTimelineController {
         for (Map<String,Object> attack : attacks) {
             DamageReceived damageReceived = new DamageReceived();
 
-            Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)attack.get("participantId")));
+            Participant participant = participantRepositoryDao.findByMatchAndParticipantNum(newMatch, ((int)attack.get("participantId")));
 
             damageReceived.setBasic((boolean) attack.get("basic"));
             damageReceived.setType((String) attack.get("type"));
@@ -425,7 +425,7 @@ public class MatchTimelineController {
     }
 
     private void saveSpecialKill(Map<String, Object> eventData, Match newMatch){
-        Participant participant = participantRepositoryDao.findByMatchAndParticipantId(newMatch, ((int)eventData.get("killerId")));
+        Participant participant = participantRepositoryDao.findByMatchAndParticipantNum(newMatch, ((int)eventData.get("killerId")));
         Event event = getNewEvent(eventData, participant);
 
         SpecialKill specialKill = new SpecialKill();

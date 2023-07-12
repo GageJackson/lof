@@ -15,7 +15,7 @@ public class FriendMatch {
     private Friend friend;
 
     @ManyToOne
-    @JoinColumn(name = "match_id")
+    @JoinColumn(name = "matches_id")
     private Match match;
 
 

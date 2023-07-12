@@ -337,7 +337,7 @@ public class Participant {
     private List<ChampKill> champKill;
 
     @ManyToOne
-    @JoinColumn(name = "match_id", nullable = false)
+    @JoinColumn(name = "matches_id", nullable = false)
     private Match match;
 
 
