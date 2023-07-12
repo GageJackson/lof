@@ -36,9 +36,9 @@ public class MatchOverviewController {
     private final PerkRepository perkRepositoryDao;
     private final TeamRepository teamRepositoryDao;
 
-    private List<Event> events = new ArrayList<>();
+    private List<Event> eventCache = new ArrayList<>();
     private List<Item> items = new ArrayList<>();
-    private List<ParticipantFrame> participantFrames = new ArrayList<>();
+    private List<ParticipantFrame> participantFramesCache = new ArrayList<>();
     private List<ParticipantFrameChamp> participantFrameChamps = new ArrayList<>();
     private List<ParticipantFrameDamage> participantFrameDamages = new ArrayList<>();
     private List<SkillUp> skillUps = new ArrayList<>();
@@ -50,7 +50,12 @@ public class MatchOverviewController {
     private List<DamageReceived> damageReceivedList = new ArrayList<>();
     private List<SpecialKill> specialKills = new ArrayList<>();
 
-    //private Map<Integer, Participant> participantCache = new HashMap<>();
+    private List<Participant> participantsToSave = new ArrayList<>();
+    private List<Perk> perksToSave = new ArrayList<>();
+    private List<Team> teamObjects = new ArrayList<>();
+    private List<Ban> bansToSave = new ArrayList<>();
+    private List<Objective> objectivesToSave = new ArrayList<>();
+
 
     private Map<Integer, Participant> participants = new HashMap<>();
 
@@ -114,39 +119,28 @@ public class MatchOverviewController {
         Match newMatch = saveMatchData(overviewData);
         saveParticipantData(overviewData, newMatch);
         saveTeamData(overviewData, newMatch);
+        insertBatchOverviewData();
         saveMatchTimeline(timelineFrames, newMatch);
     }
 
     private Match saveMatchData(Map<String, Object> info){
         Match match = new Match();
 
-        long gameCreation = (long) info.get("gameCreation");
-        long gameDuration = (long) (int) info.get("gameDuration");
-        long gameEnd = (long) info.get("gameEndTimestamp");
         long gameId = (long) info.get("gameId");
-        String gameMode = (String) info.get("gameMode");
-        String gameName = (String) info.get("gameName");
-        long gameStart = (long) info.get("gameStartTimestamp");
-        String gameType = (String) info.get("gameType");
-        String gameVersion = (String) info.get("gameVersion");
-        int mapId = (int) info.get("mapId");
-        String platformId = (String) info.get("platformId");
-        int queueId = (int) info.get("queueId");
-        String tournamentCode = (String) info.get("tournamentCode");
 
-        match.setGameCreation(gameCreation);
-        match.setGameDuration(gameDuration);
-        match.setGameEnd(gameEnd);
+        match.setGameCreation((long) info.get("gameCreation"));
+        match.setGameDuration((long) (int) info.get("gameDuration"));
+        match.setGameEnd((long) info.get("gameEndTimestamp"));
         match.setGameId(gameId);
-        match.setGameMode(gameMode);
-        match.setGameName(gameName);
-        match.setGameStart(gameStart);
-        match.setGameType(gameType);
-        match.setGameVersion(gameVersion);
-        match.setMapId(mapId);
-        match.setPlatformId(platformId);
-        match.setQueueId(queueId);
-        match.setTournamentCode(tournamentCode);
+        match.setGameMode((String) info.get("gameMode"));
+        match.setGameName((String) info.get("gameName"));
+        match.setGameStart((long) info.get("gameStartTimestamp"));
+        match.setGameType((String) info.get("gameType"));
+        match.setGameVersion((String) info.get("gameVersion"));
+        match.setMapId((int) info.get("mapId"));
+        match.setPlatformId((String) info.get("platformId"));
+        match.setQueueId((int) info.get("queueId"));
+        match.setTournamentCode((String) info.get("tournamentCode"));
 
         if(matchRepositoryDao.findByGameId(gameId) == null){
             return matchRepositoryDao.save(match);
@@ -157,7 +151,6 @@ public class MatchOverviewController {
 
     private void saveParticipantData(Map<String, Object> info, Match newMatch) {
         List<Map<String, Object>> participants = (List<Map<String, Object>>) info.get("participants");
-        List<Participant> participantsToSave = new ArrayList<>();
 
         for (Map<String, Object> participant : participants) {
             Participant participantObject = new Participant();
@@ -269,19 +262,15 @@ public class MatchOverviewController {
             participantObject.setMatch(newMatch);
 
             participantsToSave.add(participantObject);
+
+            savePerkData(participant, participantObject);
         }
 
-        List<Participant> newParticipants = participantRepositoryDao.saveAll(participantsToSave);
-
-        for (int i = 0; i < newParticipants.size(); i++) {
-            savePerkData(participants.get(i), newParticipants.get(i));
-        }
     }
 
     private void savePerkData(Map<String, Object> info, Participant newParticipant) {
         Map<String, Object> perks = (Map<String, Object>) info.get("perks");
         List<Map<String, Object>> styles = (List<Map<String, Object>>) perks.get("styles");
-        List<Perk> perksToSave = new ArrayList<>();
 
         for (Map<String, Object> style : styles) {
             String description = (String) style.get("description");
@@ -289,17 +278,12 @@ public class MatchOverviewController {
             int styleNumber = (int) style.get("style");
 
             for (Map<String, Object> selection : selections) {
-                int perkNumber = (int) selection.get("perk");
-                int var1 = (int) selection.get("var1");
-                int var2 = (int) selection.get("var2");
-                int var3 = (int) selection.get("var3");
-
                 Perk perkData = new Perk();
-                perkData.setPerkNum(perkNumber);
+                perkData.setPerkNum((int) selection.get("perk"));
                 perkData.setStyle(styleNumber);
-                perkData.setPerkStat1(var1);
-                perkData.setPerkStat2(var2);
-                perkData.setPerkStat3(var3);
+                perkData.setPerkStat1((int) selection.get("var1"));
+                perkData.setPerkStat2((int) selection.get("var2"));
+                perkData.setPerkStat3((int) selection.get("var3"));
                 perkData.setParticipant(newParticipant);
 
                 if (description.equals("primaryStyle")){
@@ -311,13 +295,10 @@ public class MatchOverviewController {
                 perksToSave.add(perkData);
             }
         }
-        perkRepositoryDao.saveAll(perksToSave);
     }
 
     private void saveTeamData(Map<String, Object> info, Match newMatch) {
         List<Map<String, Object>> teams = (List<Map<String, Object>>) info.get("teams");
-        List<Team> teamObjects = new ArrayList<>();
-
         for (Map<String, Object> team : teams) {
             Team teamObject = new Team();
 
@@ -333,19 +314,14 @@ public class MatchOverviewController {
             teamObject.setMatch(newMatch);
 
             teamObjects.add(teamObject);
-        }
 
-        List<Team> newTeams = teamRepositoryDao.saveAll(teamObjects);
-
-        for (int i = 0; i < newTeams.size(); i++) {
-            saveBanData(teams.get(i), newTeams.get(i));
-            saveObjectiveData(teams.get(i), newTeams.get(i));
+            saveBanData(team, teamObject);
+            saveObjectiveData(team, teamObject);
         }
     }
 
     private void saveBanData(Map<String, Object> info, Team newTeam) {
         List<Map<String, Object>> bans = (List<Map<String, Object>>) info.get("bans");
-        List<Ban> bansToSave = new ArrayList<>();
         if(bans.isEmpty()){
             return;
         }
@@ -360,12 +336,10 @@ public class MatchOverviewController {
 
            bansToSave.add(banData);
         }
-        banRepositoryDao.saveAll(bansToSave);
     }
 
     private void saveObjectiveData(Map<String, Object> info, Team newTeam) {
         Map<String, Object> objectives = (Map<String, Object>) info.get("objectives");
-        List<Objective> objectivesToSave = new ArrayList<>();
 
         if(objectives.size() == 0){
             System.out.println("empty");
@@ -379,7 +353,6 @@ public class MatchOverviewController {
         objectivesToSave.add(saveObjective("riftHerald", objectives, newTeam));
         objectivesToSave.add(saveObjective("tower", objectives, newTeam));
 
-        objectiveRepositoryDao.saveAll(objectivesToSave);
     }
 
     private Objective saveObjective (String objectiveName, Map<String, Object> objectives, Team newTeam){
@@ -401,10 +374,11 @@ public class MatchOverviewController {
         for (Map<String, Object> frame : frames) {
             Map<String, Object> participantFrames = (Map<String, Object>) frame.get("participantFrames");
 
-            List<Map<String, Object>> events = (List<Map<String, Object>>) frame.get("events");
-            for (Map<String, Object> event : events) {
+            List<Map<String, Object>> eventsData = (List<Map<String, Object>>) frame.get("events");
+            for (Map<String, Object> eventData : eventsData) {
 //                getEventInfo(event); //useful for probing for information about events
-                saveEvent(event, newMatch);
+
+                saveEvent(eventData);
             }
 
             for (int i = 1; i <= participantFrames.size(); i++) {
@@ -414,7 +388,15 @@ public class MatchOverviewController {
             currentFrame++;
         }
 
-        insertBatchData();
+        insertBatchTimelineData();
+    }
+
+    private Event createEvent(Map<String, Object> eventData, Participant participant){
+        Event event = new Event();
+        event.setTimestamp((int)eventData.get("timestamp"));
+        event.setParticipant(participant);
+        eventCache.add(event);
+        return event;
     }
 
     private void saveParticipantFrame(Map<String, Object> participantFrames, Match newMatch, int currentFrame, int i, Participant participant){
@@ -431,10 +413,10 @@ public class MatchOverviewController {
         participantFrame.setFrame(currentFrame);
         participantFrame.setParticipant(participant);
 
-        ParticipantFrame newParticipantFrame = participantFrameRepositoryDao.save(participantFrame);
+        participantFramesCache.add(participantFrame);
 
-        saveParticipantFrameChampData(participantFrameData, newParticipantFrame);
-        saveParticipantFrameDamageData(participantFrameData, newParticipantFrame);
+        saveParticipantFrameChampData(participantFrameData, participantFrame);
+        saveParticipantFrameDamageData(participantFrameData, participantFrame);
     }
 
     private Map<Integer, Participant> getParticipantsByMatch(Match newMatch) {
@@ -503,50 +485,47 @@ public class MatchOverviewController {
         participantFrameDamages.add(participantFrameDamage);
     }
 
-    private void saveEvent(Map<String, Object> event, Match newMatch){
-        findEventType((String)event.get("type"), event, newMatch);
-    }
-
-    private void findEventType(String eventType, Map<String, Object> event, Match newMatch){
+    private void saveEvent(Map<String, Object> eventData){
+        String eventType = (String) eventData.get("type");
         switch (eventType){
             case "ITEM_PURCHASE":
-                saveItemEvent("ITEM_PURCHASE", event, newMatch);
+                saveItemEvent("ITEM_PURCHASE", eventData);
                 break;
 
             case "ITEM_DESTROYED":
-                saveItemEvent("ITEM_DESTROYED", event, newMatch);
+                saveItemEvent("ITEM_DESTROYED", eventData);
                 break;
 
             case "ITEM_SOLD":
-                saveItemEvent("ITEM_SOLD", event, newMatch);
+                saveItemEvent("ITEM_SOLD", eventData);
                 break;
 
             case "SKILL_LEVEL_UP":
-                saveSkillUp(event, newMatch);
+                saveSkillUp(eventData);
                 break;
 
             case "LEVEL_UP":
-                saveLevelUp(event, newMatch);
+                saveLevelUp(eventData);
                 break;
 
             case "BUILDING_KILL":
-                saveBuildingKill("BUILDING_KILL", event, newMatch);
+                saveBuildingKill("BUILDING_KILL", eventData);
                 break;
 
             case "TURRET_PLATE_DESTROYED":
-                saveBuildingKill("TURRET_PLATE_DESTROYED", event, newMatch);
+                saveBuildingKill("TURRET_PLATE_DESTROYED", eventData);
                 break;
 
             case "ELITE_MONSTER_KILL":
-                saveMonsterKill(event, newMatch);
+                saveMonsterKill(eventData);
                 break;
 
             case "CHAMPION_KILL":
-                saveChampionKill(event, newMatch);
+                saveChampionKill(eventData);
                 break;
 
             case "CHAMPION_SPECIAL_KILL":
-                saveSpecialKill(event, newMatch);
+                saveSpecialKill(eventData);
                 break;
 
             default:
@@ -555,17 +534,9 @@ public class MatchOverviewController {
 
     }
 
-    private Event getNewEvent(Map<String, Object> eventData, Participant participant){
-        Event event = new Event();
-        event.setTimestamp((int)eventData.get("timestamp"));
-        event.setParticipant(participant);
-
-        return eventRepositoryDao.save(event);
-    }
-
-    private void saveItemEvent(String itemType, Map<String, Object> eventData, Match newMatch){
+    private void saveItemEvent(String itemType, Map<String, Object> eventData){
         Participant participant = participants.get((int)eventData.get("participantId"));
-        Event event = getNewEvent(eventData, participant);
+        Event event = createEvent(eventData, participant);
 
         Item item = new Item();
         item.setItemType(itemType);
@@ -575,9 +546,9 @@ public class MatchOverviewController {
         items.add(item);
     }
 
-    private void saveSkillUp(Map<String, Object> eventData, Match newMatch){
+    private void saveSkillUp(Map<String, Object> eventData){
         Participant participant = participants.get((int)eventData.get("participantId"));
-        Event event = getNewEvent(eventData, participant);
+        Event event = createEvent(eventData, participant);
 
         SkillUp skillUp = new SkillUp();
         skillUp.setLevelUpType((String) eventData.get("levelUpType"));
@@ -587,9 +558,9 @@ public class MatchOverviewController {
         skillUps.add(skillUp);
     }
 
-    private void saveLevelUp(Map<String, Object> eventData, Match newMatch){
+    private void saveLevelUp(Map<String, Object> eventData){
         Participant participant = participants.get((int)eventData.get("participantId"));
-        Event event = getNewEvent(eventData, participant);
+        Event event = createEvent(eventData, participant);
 
         LevelUp levelUp = new LevelUp();
         levelUp.setLevel((int) eventData.get("level"));
@@ -598,9 +569,9 @@ public class MatchOverviewController {
         levelUps.add(levelUp);
     }
 
-    private void saveBuildingKill(String buildingType, Map<String, Object> eventData, Match newMatch){
+    private void saveBuildingKill(String buildingType, Map<String, Object> eventData){
         Participant participant = participants.get((int)eventData.get("killerId"));
-        Event event = getNewEvent(eventData, participant);
+        Event event = createEvent(eventData, participant);
 
         BuildingKill buildingKill = new BuildingKill();
         buildingKill.setBounty((int)eventData.getOrDefault("bounty", 0));
@@ -616,9 +587,9 @@ public class MatchOverviewController {
         buildingKills.add(buildingKill);
     }
 
-    private void saveMonsterKill(Map<String, Object> eventData, Match newMatch){
+    private void saveMonsterKill(Map<String, Object> eventData){
         Participant participant = participants.get((int)eventData.get("killerId"));
-        Event event = getNewEvent(eventData, participant);
+        Event event = createEvent(eventData, participant);
 
         MonsterKill monsterKill = new MonsterKill();
 
@@ -635,10 +606,10 @@ public class MatchOverviewController {
         monsterKills.add(monsterKill);
     }
 
-    private void saveChampionKill(Map<String, Object> eventData, Match newMatch){
+    private void saveChampionKill(Map<String, Object> eventData){
         Participant participant = participants.get((int)eventData.get("killerId"));
         Participant victim = participants.get((int)eventData.get("victimId"));
-        Event event = getNewEvent(eventData, participant);
+        Event event = createEvent(eventData, participant);
 
         ChampKill champKill = new ChampKill();
 
@@ -653,14 +624,14 @@ public class MatchOverviewController {
         champKill.setVictim(victim);
         champKill.setEvent(event);
 
-        ChampKill champKillData = champKillRepositoryDao.save(champKill);
+        champKills.add(champKill);
 
         if((((List<Map<String, Object>>)eventData.get("victimDamageDealt")) != null )){
-            saveDamageDealt(champKillData, (List<Map<String, Object>>)eventData.get("victimDamageDealt"));
+            saveDamageDealt(champKill, (List<Map<String, Object>>)eventData.get("victimDamageDealt"));
         }
 
         if(((List<Map<String, Object>>)eventData.get("victimDamageReceived") != null )){
-            saveDamageReceived(champKillData, (List<Map<String, Object>>)eventData.get("victimDamageReceived"), newMatch);
+            saveDamageReceived(champKill, (List<Map<String, Object>>)eventData.get("victimDamageReceived"));
         }
 
     }
@@ -681,13 +652,11 @@ public class MatchOverviewController {
         }
     }
 
-    private void saveDamageReceived(ChampKill champKillData, List<Map<String, Object>> attacks, Match newMatch) {
+    private void saveDamageReceived(ChampKill champKillData, List<Map<String, Object>> attacks) {
         for (Map<String,Object> attack : attacks) {
             DamageReceived damageReceived = new DamageReceived();
 
             Participant participant = participants.get((int)attack.get("participantId"));
-
-            //Participant participant = participantRepositoryDao.findByMatchAndParticipantNum(newMatch, ((int)attack.get("participantId")));
 
             damageReceived.setBasic((boolean) attack.get("basic"));
             damageReceived.setType((String) attack.get("type"));
@@ -703,10 +672,9 @@ public class MatchOverviewController {
         }
     }
 
-    private void saveSpecialKill(Map<String, Object> eventData, Match newMatch){
+    private void saveSpecialKill(Map<String, Object> eventData){
         Participant participant = participants.get((int)eventData.get("killerId"));
-        //Participant participant = participantRepositoryDao.findByMatchAndParticipantNum(newMatch, ((int)eventData.get("killerId")));
-        Event event = getNewEvent(eventData, participant);
+        Event event = createEvent(eventData, participant);
 
         SpecialKill specialKill = new SpecialKill();
 
@@ -725,20 +693,33 @@ public class MatchOverviewController {
         specialKills.add(specialKill);
     }
 
-    private void insertBatchData(){
-        //eventRepositoryDao.saveAll(events);
+    private void insertBatchOverviewData(){
+        participantRepositoryDao.saveAll(participantsToSave);
+
+        perkRepositoryDao.saveAll(perksToSave);
+        teamRepositoryDao.saveAll(teamObjects);
+        banRepositoryDao.saveAll(bansToSave);
+        objectiveRepositoryDao.saveAll(objectivesToSave);
+    }
+
+    private void insertBatchTimelineData(){
+        eventRepositoryDao.saveAll(eventCache);
+
         itemRepositoryDao.saveAll(items);
-        //participantFrameRepositoryDao.saveAll(participantFrames);
-        participantFrameChampRepositoryDao.saveAll(participantFrameChamps);
-        participantFrameDamageRepositoryDao.saveAll(participantFrameDamages);
         skillUpRepositoryDao.saveAll(skillUps);
         levelUpRepositoryDao.saveAll(levelUps);
         buildingKillRepositoryDao.saveAll(buildingKills);
         monsterKillRepositoryDao.saveAll(monsterKills);
-        //champKillRepositoryDao.saveAll(champKills);
+        specialKillRepositoryDao.saveAll(specialKills);
+
+        champKillRepositoryDao.saveAll(champKills);
         damageDealtRepositoryDao.saveAll(damageDealtList);
         damageReceivedRepositoryDao.saveAll(damageReceivedList);
-        specialKillRepositoryDao.saveAll(specialKills);
+
+
+        participantFrameRepositoryDao.saveAll(participantFramesCache);
+        participantFrameChampRepositoryDao.saveAll(participantFrameChamps);
+        participantFrameDamageRepositoryDao.saveAll(participantFrameDamages);
     }
 
     private void getEventInfo(Map<String, Object> event){
