@@ -3,6 +3,7 @@ package com.gagejackson.lof.Controllers;
 import com.gagejackson.lof.Models.*;
 import com.gagejackson.lof.Repositories.*;
 //import jdk.nashorn.internal.runtime.ListAdapter;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -115,10 +116,9 @@ public class MatchController {
         List<Map<String, Object>> timelineFrames = (List<Map<String, Object>>) timelineData.get("frames");
 
         Match newMatch = saveMatchData(overviewData);
+        
         if (newMatch != null){
-            saveParticipantData(overviewData, newMatch);
-            saveTeamData(overviewData, newMatch);
-            insertBatchOverviewData();
+            saveMatchOverview(overviewData, newMatch);
             saveMatchTimeline(timelineFrames, newMatch);
         } else{
             return;
@@ -126,31 +126,38 @@ public class MatchController {
     }
 
     private Match saveMatchData(Map<String, Object> matchData){
-        Match match = new Match();
-
         long gameId = (long) matchData.get("gameId");
+        Match match = matchRepositoryDao.findByGameId(gameId);
 
-        match.setGameCreation((long) matchData.get("gameCreation"));
-        match.setGameDuration((long) (int) matchData.get("gameDuration"));
-        match.setGameEnd((long) matchData.get("gameEndTimestamp"));
-        match.setGameId(gameId);
-        match.setGameMode((String) matchData.get("gameMode"));
-        match.setGameName((String) matchData.get("gameName"));
-        match.setGameStart((long) matchData.get("gameStartTimestamp"));
-        match.setGameType((String) matchData.get("gameType"));
-        match.setGameVersion((String) matchData.get("gameVersion"));
-        match.setMapId((int) matchData.get("mapId"));
-        match.setPlatformId((String) matchData.get("platformId"));
-        match.setQueueId((int) matchData.get("queueId"));
-        match.setTournamentCode((String) matchData.get("tournamentCode"));
+        if(!match.isSaved()){
+            match.setSaved(true);
+            match.setGameCreation((long) matchData.get("gameCreation"));
+            match.setGameDuration((long) (int) matchData.get("gameDuration"));
+            match.setGameEnd((long) matchData.get("gameEndTimestamp"));
+            match.setGameId(gameId);
+            match.setGameMode((String) matchData.get("gameMode"));
+            match.setGameName((String) matchData.get("gameName"));
+            match.setGameStart((long) matchData.get("gameStartTimestamp"));
+            match.setGameType((String) matchData.get("gameType"));
+            match.setGameVersion((String) matchData.get("gameVersion"));
+            match.setMapId((int) matchData.get("mapId"));
+            match.setPlatformId((String) matchData.get("platformId"));
+            match.setQueueId((int) matchData.get("queueId"));
+            match.setTournamentCode((String) matchData.get("tournamentCode"));
 
-        if(matchRepositoryDao.findByGameId(gameId) == null){
             return matchRepositoryDao.save(match);
+        } else {
+            return null;
         }
-
-       return null;
     }
-
+    /*//////////////////////////////////////////////////////////////////////////////////
+        Section - Match Overview
+    //////////////////////////////////////////////////////////////////////////////////*/
+    protected void saveMatchOverview(Map<String, Object> overviewData, Match newMatch){
+        saveParticipantData(overviewData, newMatch);
+        saveTeamData(overviewData, newMatch);
+        insertBatchOverviewData();
+    }
     private void saveParticipantData(Map<String, Object> matchData, Match newMatch) {
         List<Map<String, Object>> participantsData = (List<Map<String, Object>>) matchData.get("participants");
 
@@ -325,13 +332,12 @@ public class MatchController {
         if(bansData.isEmpty()){
             return;
         }
-        for (Map<String, Object> banData : bansData) {
-            int champId = (int) banData.get("championId");
-            int pickTurn = (int) banData.get("pickTurn");
 
+        for (Map<String, Object> banData : bansData) {
             Ban ban = new Ban();
-            ban.setChampId(champId);
-            ban.setPickTurn(pickTurn);
+
+            ban.setChampId((int) banData.get("championId"));
+            ban.setPickTurn((int) banData.get("pickTurn"));
             ban.setTeam(newTeam);
 
            bans.add(ban);
@@ -366,18 +372,20 @@ public class MatchController {
         return objective;
     }
 
-    private void saveMatchTimeline(List<Map<String, Object>> framesData, Match newMatch){
+
+    /*//////////////////////////////////////////////////////////////////////////////////
+    Section - Match TimeLine
+     //////////////////////////////////////////////////////////////////////////////////*/
+    protected void saveMatchTimeline(List<Map<String, Object>> framesData, Match newMatch){
         int currentFrame = 0;
         participantsData = getParticipantsByMatch(newMatch);
 
         for (Map<String, Object> frameData : framesData) {
-
             saveEvents(frameData);
             saveParticipantFrames(frameData, currentFrame);
 
             currentFrame++;
         }
-
         insertBatchTimelineData();
     }
 
@@ -402,7 +410,6 @@ public class MatchController {
         List<Map<String, Object>> eventsData = (List<Map<String, Object>>) frameData.get("events");
 
         for (Map<String, Object> eventData : eventsData) {
-//                getEventInfo(event); //useful for probing for information about events
             saveEvent(eventData);
         }
     }
@@ -440,7 +447,6 @@ public class MatchController {
     private void saveChampData(Map<String, Object> participantFrameData, ParticipantFrame newParticipantFrame){
         ParticipantFrameChamp participantFrameChamp = new ParticipantFrameChamp();
         Map<String, Object> champData = (Map<String, Object>) participantFrameData.get("championStats");
-
 
         participantFrameChamp.setAbilityHaste((int) champData.get("abilityHaste"));
         participantFrameChamp.setAbilityPower((int) champData.get("abilityPower"));
@@ -497,7 +503,7 @@ public class MatchController {
     private void saveEvent(Map<String, Object> eventData){
         String eventType = (String) eventData.get("type");
         switch (eventType) {
-            case "ITEM_PURCHASE" -> saveItemEvent("ITEM_PURCHASE", eventData);
+            case "ITEM_PURCHASED" -> saveItemEvent("ITEM_PURCHASED", eventData);
             case "ITEM_DESTROYED" -> saveItemEvent("ITEM_DESTROYED", eventData);
             case "ITEM_SOLD" -> saveItemEvent("ITEM_SOLD", eventData);
             case "SKILL_LEVEL_UP" -> saveSkillUp(eventData);
@@ -658,7 +664,6 @@ public class MatchController {
         SpecialKill specialKill = new SpecialKill();
 
         specialKill.setKillType((String)eventData.get("killType"));
-
         if(((eventData.get("multiKillLength")) != null )){
             specialKill.setMultiKillLength((int)eventData.get("multiKillLength"));
         }
@@ -672,6 +677,9 @@ public class MatchController {
         specialKills.add(specialKill);
     }
 
+    /*//////////////////////////////////////////////////////////////////////////////////
+    Section - Batch Inserts
+    //////////////////////////////////////////////////////////////////////////////////*/
     private void insertBatchOverviewData(){
         participantRepositoryDao.saveAll(participants);
 

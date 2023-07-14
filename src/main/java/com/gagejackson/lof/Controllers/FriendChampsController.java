@@ -47,7 +47,7 @@ public class FriendChampsController {
             System.out.println("champLevel = " + champLevel);
             System.out.println("champPoints = " + champPoints);
 
-            //friendChampsRepositoryDao.save(friendChamp);
+            friendChampsRepositoryDao.save(friendChamp);
         }
     }
 }

@@ -105,7 +105,7 @@ public class MatchBasicInfo {
         this.teamRepositoryDao = teamRepositoryDao;
     }
 
-    @PostMapping("/burgle")
+    @PostMapping("/match")
     public void saveMatchData(@RequestBody List<Map<String, Object>> matches) {
         Map<String, Object> overviewMatch = (Map<String, Object>) matches.get(0);
         Map<String, Object> overviewData = (Map<String, Object>) overviewMatch.get("info");

@@ -11,11 +11,11 @@ public class FriendMatch {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "friend_id")
+    @JoinColumn(name = "friend_id", nullable = false)
     private Friend friend;
 
     @ManyToOne
-    @JoinColumn(name = "matches_id")
+    @JoinColumn(name = "matches_id", nullable = false)
     private Match match;
 
 
