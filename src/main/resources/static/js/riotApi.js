@@ -44,7 +44,7 @@
                 summonerId: data[i].summonerId
             };
 
-            //console.log(champ);
+            console.log(champ);
             champs.push(champ);
         }
 
