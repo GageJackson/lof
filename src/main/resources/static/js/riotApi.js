@@ -75,12 +75,14 @@
         let response = await  fetch(`https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuID}/ids?start=${start}&count=${count}&api_key=${RIOT_KEY}`)
         let data = await response.json();
 
+        let matches = []
+
         // console.log(data);
 
-        for (var i = 0; i < data.length; i++){
+        for (let i = 0; i < data.length; i++){
             const match = {
                 matchId: data[i],
-                summonerId: puuID
+                puuId: puuID
             };
 
             // console.log(match);
@@ -90,8 +92,6 @@
         await postData('/saveFriendMatches', matches)
         //saveMatchData(matches);
     }
-
-    //
 
     async function saveMatchData(matches) {
 
@@ -140,22 +140,23 @@
         return await response.json();
     }
 
-    let matches = new Array();
-
-    async function pageLoad(){
+    async function pageLoad() {
         let friends = await getData('/testing');
         console.log(friends);
         for (const friend of friends) {
+            let promises = [];
             console.log(friend.name);
-            getFriendData(friend.summonerId);
-            getRankData(friend.summonerId);
-            getChampsData(friend.summonerId);
-            getFriendMatches(friend.puuId);
+            promises.push(getFriendData(friend.summonerId));
+            promises.push(getRankData(friend.summonerId));
+            promises.push(getChampsData(friend.summonerId));
+            promises.push(getFriendMatches(friend.puuId));
 
             // Wait for 0.25 seconds to prevent exceeding 20 calls per second
             await delay(250);
+            await Promise.all(promises);
         }
     }
+
 
     function delay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));

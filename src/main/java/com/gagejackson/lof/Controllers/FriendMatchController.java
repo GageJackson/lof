@@ -37,17 +37,20 @@ public class FriendMatchController {
     public void saveChampsData(@RequestBody Map<String, Object>[] matchesData) {
         List<FriendMatch> friendMatches = new ArrayList<>();
         List<Match> matches = new ArrayList<>();
+        Friend friend = null;
 
         for (Map<String, Object> matchData : matchesData) {
             FriendMatch friendMatch = new FriendMatch();
 
-            String summonerId = (String) matchData.get("summonerId");
-            Friend friend = friendRepositoryDao.findByPuuId(summonerId);
+            String puuId = (String) matchData.get("puuId");
+            if(friend == null){
+                friend = friendRepositoryDao.findByPuuId(puuId);
+            }
 
             String matchIdString = (String) matchData.get("matchId");
             long matchId = Long.parseLong(matchIdString.substring(matchIdString.indexOf("_") + 1));
-            Match oldMatch = matchRepositoryDao.findByGameId(matchId);
 
+            Match oldMatch = matchRepositoryDao.findByGameId(matchId);
             if(oldMatch != null){
                 if(friendMatchRepositoryDao.findFriendMatchByFriendAndMatch(friend, oldMatch) == null){
                     friendMatch.setMatch(oldMatch);
@@ -60,6 +63,7 @@ public class FriendMatchController {
                 newMatch.setSaved(false);
                 newMatch.setGameId(matchId);
                 matches.add(newMatch);
+
                 friendMatch.setMatch(newMatch);
                 friendMatch.setFriend(friend);
                 friendMatches.add(friendMatch);

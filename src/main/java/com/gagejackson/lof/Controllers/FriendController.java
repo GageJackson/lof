@@ -45,8 +45,7 @@ public class FriendController {
     @GetMapping("/testing")
     @ResponseBody
     public List<Friend> test(Model model) {
-        List<Friend> data = friendRepositoryDao.findAll();
-        return data;
+        return friendRepositoryDao.findAll();
     }
 
 }
