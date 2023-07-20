@@ -1,11 +1,38 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns="http://www.w3.org/1999/html">
-<head th:replace="~{partials/head.html :: head('Home')}"></head>
-<body>
+      xmlns="http://www.w3.org/1999/html" lang="en">
+<head th:replace="~{partials/head.html :: head('Home')}"><title>title</title></head>
+<body class="bg-color-neutral-main">
 <header th:replace="~{partials/header.html :: header}"></header>
-<main>
+
+<main class="container">
+    <div class="row row-cols-2 gx-3">
+        <section class="col-9">
+            <div th:each="match : ${matches}"
+                    class="card bg-color-neutral-main border border-primary border-2 mb-3"
+            >
+                <div class="card-body d-flex">
+                    <th:block th:each="friendMatch : ${friendMatches}">
+                        <th:block th:if="${friendMatch.getMatch().getGameId() == match.getGameId()}">
+                            <p th:text="${friendMatch.getFriend().getName()}"></p>
+                        </th:block>
+                    </th:block>
+                </div>
+            </div>
+        </section>
+
+        <aside class="col-3">
+            <div th:each="friend : ${friends}"
+                    class="border border-primary border-2 d-flex mb-3"
+            >
+                <p th:text="${friend.getIcon()}"></p>
+                <p th:text="${friend.getName()}"></p>
+            </div>
+        </aside>
+    </div>
+
 </main>
+
 <footer th:replace="~{partials/footer.html :: footer}"></footer>
 </body>
 </html>
