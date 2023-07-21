@@ -2,33 +2,46 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns="http://www.w3.org/1999/html" lang="en">
 <head th:replace="~{partials/head.html :: head('Home')}"><title>title</title></head>
-<body class="bg-color-neutral-main">
+<body class="bg-color-neutral-dark">
 <header th:replace="~{partials/header.html :: header}"></header>
 
 <main class="container">
-    <div class="row row-cols-2 gx-3">
-        <section class="col-9">
+    <div class="row row-cols-2 gx-5">
+        <section class="col-8">
             <div th:each="match : ${matches}"
-                    class="card bg-color-neutral-main border border-primary border-2 mb-3"
+                    class="card card-bg border-0 mb-3 ps-3 p-0"
             >
-                <div class="card-body d-flex">
-                    <th:block th:each="friendMatch : ${friendMatches}">
-                        <th:block th:if="${friendMatch.getMatch().getGameId() == match.getGameId()}">
-                            <p th:text="${friendMatch.getFriend().getName()}"></p>
+                <div class="card-body border-0 d-flex justify-content-between align-items-center p-0">
+                    <div>
+                        <p class="color-neutral-light fs-400 my-0">Click to load match</p>
+                    </div>
+
+                    <div>
+                        <th:block th:each="friendMatch : ${friendMatches}">
+                            <th:block th:if="${friendMatch.getMatch().getGameId() == match.getGameId()}">
+                                <img th:src="@{${'/dragon_tail/13.14.1/img/profileicon/' + friendMatch.getFriend().getIcon() + '.png'}}"
+                                     alt="player icon" class="friend-mask"
+                                >
+                            </th:block>
                         </th:block>
-                    </th:block>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <aside class="col-3">
+        <aside class="col-4">
+            <p>Friends</p>
+            <hr>
             <div th:each="friend : ${friends}"
-                    class="border border-primary border-2 d-flex mb-3"
+                    class="border-0 d-flex mb-3"
             >
                 <img th:src="@{${'/dragon_tail/13.14.1/img/profileicon/' + friend.getIcon() + '.png'}}"
-                     alt="player icon" class="friend-icon me-3"
+                     alt="player icon" class="friend-icon me-3 mb-0"
                 >
-                <p th:text="${friend.getName()}"></p>
+                <div>
+                    <p th:text="${friend.getName()}" class="to-lower bold color-neutral-light mb-0"></p>
+                    <p th:text="${friend.getSummonerLevel()}" class="color-primary-main fs-200"></p>
+                </div>
             </div>
         </aside>
     </div>
