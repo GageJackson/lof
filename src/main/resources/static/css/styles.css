@@ -32,4 +32,8 @@ UTILITY CLASSES
 /*//////////////////////////////
 VISUAL FRAMEWORK
 //////////////////////////////*/
-
+.friend-icon {
+    height: 45px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+}

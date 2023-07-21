@@ -25,7 +25,9 @@
             <div th:each="friend : ${friends}"
                     class="border border-primary border-2 d-flex mb-3"
             >
-                <p th:text="${friend.getIcon()}"></p>
+                <img th:src="@{${'/dragon_tail/13.14.1/img/profileicon/' + friend.getIcon() + '.png'}}"
+                     alt="player icon" class="friend-icon me-3"
+                >
                 <p th:text="${friend.getName()}"></p>
             </div>
         </aside>
