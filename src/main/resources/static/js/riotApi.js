@@ -96,7 +96,8 @@
     async function saveMatchData(matches) {
 
         for (const match of matches) {
-            const overviewResponse = await fetch(`https://americas.api.riotgames.com/lol/match/v5/matches/${match.matchId}?api_key=${RIOT_KEY}`);
+            const overviewResponse = await fetch(`https://americas.api.riotgames.com/lol/match/v5/matches/NA1_${match}?api_key=${RIOT_KEY}`);
+            // const overviewResponse = await fetch(`https://americas.api.riotgames.com/lol/match/v5/matches/${match.matchId}?api_key=${RIOT_KEY}`);
             const overviewData = await overviewResponse.json();
             const overviewMatch = {
                 matchId: overviewData.metadata.matchId,
@@ -104,7 +105,8 @@
             };
             console.log(overviewMatch);
 
-            const timelineResponse = await fetch(`https://americas.api.riotgames.com/lol/match/v5/matches/${match.matchId}/timeline?api_key=${RIOT_KEY}`);
+            const timelineResponse = await fetch(`https://americas.api.riotgames.com/lol/match/v5/matches/NA1_${match}/timeline?api_key=${RIOT_KEY}`);
+            // const timelineResponse = await fetch(`https://americas.api.riotgames.com/lol/match/v5/matches/${match.matchId}/timeline?api_key=${RIOT_KEY}`);
             const timelineData = await timelineResponse.json();
             const timelineMatch = {
                 matchId: timelineData.metadata.matchId,
@@ -165,7 +167,7 @@
     //pageLoad();
 
 
-
-    // saveMatchData(matches);
+    let matches = [4713039841,4712997908,4712936002,4712891138,4712872161]
+    //saveMatchData(matches);
     //saveMatchData();
 })();

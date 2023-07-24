@@ -8,39 +8,71 @@
 <main class="container">
     <div class="row row-cols-2 gx-5">
         <section class="col-8">
-            <div th:each="match : ${matches}"
-                    class="card card-bg border-0 mb-3 ps-3 p-0"
+            <button th:each="match : ${matches}" th:id="${match.getGameId()}"
+                    class="card card-bg w-100 border-0 mb-3 ps-3 p-0"
             >
-                <div class="card-body border-0 d-flex justify-content-between align-items-center p-0">
-                    <div>
-                        <p class="color-neutral-light fs-400 my-0">Click to load match</p>
-                    </div>
 
-                    <div>
-                        <th:block th:each="friendMatch : ${friendMatches}">
-                            <th:block th:if="${friendMatch.getMatch().getGameId() == match.getGameId()}">
-                                <img th:src="@{${'/dragon_tail/13.14.1/img/profileicon/' + friendMatch.getFriend().getIcon() + '.png'}}"
-                                     alt="player icon" class="friend-mask"
-                                >
-                            </th:block>
-                        </th:block>
+                <th:block th:if="${match.isSaved()}">
+                    <div class="card-body border-0 d-flex justify-content-end align-items-center p-0">
+                        <div>
+                            <div class="mb-2">
+                                <th:block th:each="participant : ${match.getParticipant()}">
+                                    <th:block th:if="${participant.getTeamId() == 100}">
+                                        <img th:src="@{${'/dragon_tail/13.14.1/img/champion/' + participant.getChampionName() + '.png'}}"
+                                             alt="player icon" class="friend-icon non-selectable"
+                                             th:classappend="${#lists.contains(friends.![puuId], participant.getPuuid())} ? 'border border-2 border-warning' : 'border border-2 border-primary'"
+                                        >
+                                    </th:block>
+                                </th:block>
+                            </div>
+
+                            <div class="">
+                                <th:block th:each="participant : ${match.getParticipant()}">
+                                    <th:block th:unless="${participant.getTeamId() == 100}">
+                                        <img th:src="@{${'/dragon_tail/13.14.1/img/champion/' + participant.getChampionName() + '.png'}}"
+                                             alt="player icon" class="friend-icon non-selectable"
+                                             th:classappend="${#lists.contains(friends.![puuId], participant.getPuuid())} ? 'border border-2 border-warning' : 'border border-2 border-danger'"
+                                        >
+                                    </th:block>
+                                </th:block>
+                            </div>
+                        </div>
+
                     </div>
-                </div>
-            </div>
+                </th:block>
+
+                <th:block th:unless="${match.isSaved()}">
+                    <div class="card-body border-0 d-flex justify-content-between align-items-center p-0">
+                        <div>
+                            <p class="color-neutral-light fs-400 my-0 non-selectable">Click to load match</p>
+                        </div>
+
+                        <div>
+                            <th:block th:each="friendMatch : ${friendMatches}">
+                                <th:block th:if="${friendMatch.getMatch().getGameId() == match.getGameId()}">
+                                    <img th:src="@{${'/dragon_tail/13.14.1/img/profileicon/' + friendMatch.getFriend().getIcon() + '.png'}}"
+                                         alt="player icon" class="friend-icon non-selectable"
+                                    >
+                                </th:block>
+                            </th:block>
+                        </div>
+                    </div>
+                </th:block>
+            </button>
         </section>
 
         <aside class="col-4">
-            <p>Friends</p>
-            <hr>
+            <p class="color-primary-main fs-500">Friends</p>
+            <hr class="color-primary-main">
             <div th:each="friend : ${friends}"
                     class="border-0 d-flex mb-3"
             >
                 <img th:src="@{${'/dragon_tail/13.14.1/img/profileicon/' + friend.getIcon() + '.png'}}"
-                     alt="player icon" class="friend-icon me-3 mb-0"
+                     alt="player icon" class="friend-icon me-3 mb-0 non-selectable"
                 >
                 <div>
-                    <p th:text="${friend.getName()}" class="to-lower bold color-neutral-light mb-0"></p>
-                    <p th:text="${friend.getSummonerLevel()}" class="color-primary-main fs-200"></p>
+                    <p th:text="${friend.getName()}" class="to-lower bold color-neutral-light mb-0 non-selectable"></p>
+                    <p th:text="${friend.getSummonerLevel()}" class="color-primary-main fs-200 non-selectable"></p>
                 </div>
             </div>
         </aside>

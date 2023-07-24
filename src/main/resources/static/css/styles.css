@@ -64,6 +64,10 @@ UTILITY CLASSES
     background: linear-gradient(90deg, var(--color-neutral-main) 0%, var(--color-neutral-dark) 100%);
 }
 
+.non-selectable {
+    user-select: none;
+}
+
 /*//////////////////////////////
 VISUAL FRAMEWORK
 //////////////////////////////*/
