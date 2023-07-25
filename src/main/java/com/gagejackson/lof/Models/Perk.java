@@ -16,8 +16,8 @@ public class Perk {
     @Column (name = "style_id")
     private int style;
 
-    @Column (name = "perk_id")
-    private int perkId;
+    @Column (name = "perk_num")
+    private int perkNum;
 
     @Column (name = "perk_stat1")
     private int perkStat1;
@@ -38,21 +38,21 @@ public class Perk {
     ////////////////////////////////////////////////////////////////*/
     public Perk(){}
 
-    public Perk(long id, boolean isPrimary, int style, int perkId, int perkStat1, int perkStat2, int perkStat3, Participant participant) {
+    public Perk(long id, boolean isPrimary, int style, int perkNum, int perkStat1, int perkStat2, int perkStat3, Participant participant) {
         this.id = id;
         this.isPrimary = isPrimary;
         this.style = style;
-        this.perkId = perkId;
+        this.perkNum = perkNum;
         this.perkStat1 = perkStat1;
         this.perkStat2 = perkStat2;
         this.perkStat3 = perkStat3;
         this.participant = participant;
     }
 
-    public Perk(boolean isPrimary, int style, int perkId, int perkStat1, int perkStat2, int perkStat3, Participant participant) {
+    public Perk(boolean isPrimary, int style, int perkNum, int perkStat1, int perkStat2, int perkStat3, Participant participant) {
         this.isPrimary = isPrimary;
         this.style = style;
-        this.perkId = perkId;
+        this.perkNum = perkNum;
         this.perkStat1 = perkStat1;
         this.perkStat2 = perkStat2;
         this.perkStat3 = perkStat3;
@@ -87,12 +87,12 @@ public class Perk {
         this.style = style;
     }
 
-    public int getPerkId() {
-        return perkId;
+    public int getPerkNum() {
+        return perkNum;
     }
 
-    public void setPerkId(int perkId) {
-        this.perkId = perkId;
+    public void setPerkNum(int perkId) {
+        this.perkNum = perkId;
     }
 
     public int getPerkStat1() {

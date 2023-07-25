@@ -12,6 +12,9 @@ public class Match {
     @Column (name = "id", nullable = false)
     private long id;
 
+    @Column (name = "is_saved", nullable = false)
+    private boolean isSaved;
+
     @Column (name = "game_creation")
     private long gameCreation;
 
@@ -66,8 +69,9 @@ public class Match {
     ////////////////////////////////////////////////////////////////*/
     public Match() {}
 
-    public Match(long id, long gameCreation, long gameDuration, long gameEnd, long gameId, String gameMode, String gameName, long gameStart, String gameType, String gameVersion, int mapId, String platformId, int queueId, String tournamentCode, List<Team> team, List<Participant> participant, List<FriendMatch> friendMatch) {
+    public Match(long id, boolean isSaved, long gameCreation, long gameDuration, long gameEnd, long gameId, String gameMode, String gameName, long gameStart, String gameType, String gameVersion, int mapId, String platformId, int queueId, String tournamentCode, List<Team> team, List<Participant> participant, List<FriendMatch> friendMatch) {
         this.id = id;
+        this.isSaved = isSaved;
         this.gameCreation = gameCreation;
         this.gameDuration = gameDuration;
         this.gameEnd = gameEnd;
@@ -86,7 +90,8 @@ public class Match {
         this.friendMatch = friendMatch;
     }
 
-    public Match(long gameCreation, long gameDuration, long gameEnd, long gameId, String gameMode, String gameName, long gameStart, String gameType, String gameVersion, int mapId, String platformId, int queueId, String tournamentCode, List<Team> team, List<Participant> participant, List<FriendMatch> friendMatch) {
+    public Match(boolean isSaved, long gameCreation, long gameDuration, long gameEnd, long gameId, String gameMode, String gameName, long gameStart, String gameType, String gameVersion, int mapId, String platformId, int queueId, String tournamentCode, List<Team> team, List<Participant> participant, List<FriendMatch> friendMatch) {
+        this.isSaved = isSaved;
         this.gameCreation = gameCreation;
         this.gameDuration = gameDuration;
         this.gameEnd = gameEnd;
@@ -115,6 +120,14 @@ public class Match {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public boolean isSaved() {
+        return isSaved;
+    }
+
+    public void setSaved(boolean saved) {
+        isSaved = saved;
     }
 
     public long getGameCreation() {

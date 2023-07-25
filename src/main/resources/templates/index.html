@@ -1,11 +1,111 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns="http://www.w3.org/1999/html">
-<head th:replace="~{partials/head.html :: head('Home')}"></head>
-<body>
+      xmlns="http://www.w3.org/1999/html" lang="en">
+<head th:replace="~{partials/head.html :: head('Home')}"><title>title</title></head>
+<body class="bg-color-neutral-dark">
 <header th:replace="~{partials/header.html :: header}"></header>
-<main>
+
+<main class="container">
+    <div class="row row-cols-2 gx-5">
+        <section class="col-10">
+            <th:block th:each="matchInfo : ${matchInfos}">
+
+                <button class="card card-bg w-100 mb-3 ps-3" th:id="${matchInfo.getMatch().getGameId()}"
+                        th:classappend="${matchInfo.isFriendWin()} ? 'border border-2 border-primary' : 'border border-2 border-danger'"
+                >
+                    <th:block th:if="${matchInfo.getMatch().isSaved()}">
+                        <div class="card-body border-0 d-flex justify-content-between align-items-center"
+
+                        >
+                            <div>
+                                <h3 class="bold color-neutral-light" th:text="${matchInfo.getMatch().getGameMode()}"></h3>
+                                <p class="color-neutral-light" th:text="${#strings.substring(matchInfo.getMatch().getGameVersion(), 0, 5)}"></p>
+                                <p class="color-neutral-light" th:text="${#temporals.format(T(java.time.Instant).ofEpochMilli(matchInfo.getMatch().getGameCreation()), 'MM-dd')}"></p>
+                                <p class="color-neutral-light" th:text="${matchInfo.getMatch().getGameDuration() / 60 + ':' + matchInfo.getMatch().getGameDuration() % 60}"></p>
+                            </div>
+
+                            <div>
+                                <div class="mb-2 d-flex justify-content-between gap-3">
+                                    <th:block th:each="participant : ${matchInfo.getMatch().getParticipant()}">
+                                        <th:block th:if="${participant.getTeamId() == 100}">
+                                            <img th:src="@{${'/dragon_tail/13.14.1/img/champion/' + participant.getChampionName() + '.png'}}"
+                                                 alt="player icon" class="friend-icon non-selectable opacity-75"
+                                                 th:classappend="${#lists.contains(friends.![puuId], participant.getPuuid())} ? 'border border-2 border-warning' : 'border border-2 border-primary'"
+                                            >
+                                        </th:block>
+                                    </th:block>
+                                </div>
+
+                                <div class="mb-2 d-flex justify-content-between px-2">
+                                    <img th:src="@{${'/img/top.png'}}"
+                                         alt="player position" class="position-icon non-selectable opacity-75"
+                                    >
+                                    <img th:src="@{${'/img/jgl.png'}}"
+                                         alt="player position" class="position-icon non-selectable opacity-75"
+                                    >
+                                    <img th:src="@{${'/img/mid.png'}}"
+                                         alt="player position" class="position-icon non-selectable opacity-75"
+                                    >
+                                    <img th:src="@{${'/img/bot.png'}}"
+                                         alt="player position" class="position-icon non-selectable opacity-75"
+                                    >
+                                    <img th:src="@{${'/img/sup.png'}}"
+                                         alt="player position" class="position-icon non-selectable opacity-75"
+                                    >
+                                </div>
+
+                                <div class=" d-flex justify-content-between gap-3">
+                                    <th:block th:each="participant : ${matchInfo.getMatch().getParticipant()}">
+                                        <th:block th:unless="${participant.getTeamId() == 100}">
+                                            <img th:src="@{${'/dragon_tail/13.14.1/img/champion/' + participant.getChampionName() + '.png'}}"
+                                                 alt="player icon" class="friend-icon non-selectable opacity-75"
+                                                 th:classappend="${#lists.contains(friends.![puuId], participant.getPuuid())} ? 'border border-2 border-warning' : 'border border-2 border-danger'"
+                                            >
+                                        </th:block>
+                                    </th:block>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+
+                    <th:block th:unless="${matchInfo.getMatch().isSaved()}">
+                        <div class="card-body border-0 d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="color-neutral-light fs-400 my-0 non-selectable">Click to load match</p>
+                            </div>
+
+                            <div>
+                                <th:block th:each="friend : ${matchInfo.getFriends()}">
+                                    <img th:src="@{${'/dragon_tail/13.14.1/img/profileicon/' + friend.getIcon() + '.png'}}"
+                                         alt="player icon" class="friend-icon non-selectable opacity-75"
+                                    >
+                                </th:block>
+                            </div>
+                        </div>
+                    </th:block>
+                </button>
+            </th:block>
+        </section>
+
+        <aside class="col-2">
+            <p class="color-primary-main fs-500">Friends</p>
+            <hr class="color-primary-main">
+            <div th:each="friend : ${friends}"
+                    class="border-0 d-flex mb-3"
+            >
+                <img th:src="@{${'/dragon_tail/13.14.1/img/profileicon/' + friend.getIcon() + '.png'}}"
+                     alt="player icon" class="friend-icon me-3 mb-0 non-selectable"
+                >
+                <div>
+                    <p th:text="${friend.getName()}" class="to-lower bold color-neutral-light mb-0 non-selectable"></p>
+                    <p th:text="${friend.getSummonerLevel()}" class="color-primary-main fs-200 non-selectable"></p>
+                </div>
+            </div>
+        </aside>
+    </div>
+
 </main>
+
 <footer th:replace="~{partials/footer.html :: footer}"></footer>
 </body>
 </html>

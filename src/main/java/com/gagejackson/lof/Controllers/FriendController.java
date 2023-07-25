@@ -4,10 +4,10 @@ import com.gagejackson.lof.Models.Friend;
 import com.gagejackson.lof.Models.FriendRank;
 import com.gagejackson.lof.Repositories.FriendRankRepository;
 import com.gagejackson.lof.Repositories.FriendRepository;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -38,7 +38,14 @@ public class FriendController {
         System.out.println("icon = " + icon);
         System.out.println("summonerLevel = " + summonerLevel);
 
-        //friendRepositoryDao.save(friend);
+        friendRepositoryDao.save(friend);
+    }
+
+
+    @GetMapping("/testing")
+    @ResponseBody
+    public List<Friend> test(Model model) {
+        return friendRepositoryDao.findAll();
     }
 
 }

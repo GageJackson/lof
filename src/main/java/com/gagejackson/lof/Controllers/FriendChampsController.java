@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -27,27 +29,41 @@ public class FriendChampsController {
 
     @PostMapping("/saveChampsData")
     public void saveChampsData(@RequestBody Map<String, Object>[] champsArray) {
+        List<FriendChamps> updatedFriendChamps = new ArrayList<>();
+        int listCounter = 0;
+        Friend friend = null;
+        List<FriendChamps> friendChampList = null;
+
 
         for (Map<String, Object> champ : champsArray) {
-            FriendChamps friendChamp = new FriendChamps();
-
             int champId = (int) champ.get("champId");
             int champLevel = (int) champ.get("champLevel");
             int champPoints = (int) champ.get("champPoints");
-
             String summonerId = (String) champ.get("summonerId");
-            Friend friend = friendRepositoryDao.findBySummonerId(summonerId);
 
-            friendChamp.setChampId(champId);
-            friendChamp.setChampLevel(champLevel);
-            friendChamp.setChampPoints(champPoints);
-            friendChamp.setFriend(friend);
+            if(friend == null){
+                friend = friendRepositoryDao.findBySummonerId(summonerId);
+                friendChampList = friendChampsRepositoryDao.findFriendChampsByFriend(friend);
+            }
 
-            System.out.println("champId = " + champId);
-            System.out.println("champLevel = " + champLevel);
-            System.out.println("champPoints = " + champPoints);
+            if (friendChampList.size() < updatedFriendChamps.size() + 1){
+                FriendChamps friendChamp = new FriendChamps();
+                friendChamp.setChampId(champId);
+                friendChamp.setChampLevel(champLevel);
+                friendChamp.setChampPoints(champPoints);
+                friendChamp.setFriend(friend);
 
-            //friendChampsRepositoryDao.save(friendChamp);
+                updatedFriendChamps.add(friendChamp);
+
+            } else {
+                FriendChamps friendChamp = friendChampList.get(updatedFriendChamps.size());
+                friendChamp.setChampId(champId);
+                friendChamp.setChampLevel(champLevel);
+                friendChamp.setChampPoints(champPoints);
+
+                updatedFriendChamps.add(friendChamp);
+            }
         }
+        friendChampsRepositoryDao.saveAll(updatedFriendChamps);
     }
 }

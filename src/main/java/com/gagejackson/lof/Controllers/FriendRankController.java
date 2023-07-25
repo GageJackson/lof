@@ -26,17 +26,20 @@ public class FriendRankController {
 
     @PostMapping("/saveRankData")
     public void saveRankData(@RequestBody Map<String, Object> data) {
-        FriendRank friendRank = new FriendRank();
-
-        String tier = (String) data.get("tier");
-        String ranking = (String) data.get("ranking");
-        int leaguePoints = (int) data.get("leaguePoints");
-        int rankWins = (int) data.get("rankWins");
-        int rankLosses = (int) data.get("rankLosses");
-        boolean onHotStreak = (boolean) data.get("onHotStreak");
+        String tier = (String) data.getOrDefault("tier", "iron");
+        String ranking = (String) data.getOrDefault("ranking", "i");
+        int leaguePoints = (int) data.getOrDefault("leaguePoints", 0);
+        int rankWins = (int) data.getOrDefault("rankWins", 0);
+        int rankLosses = (int) data.getOrDefault("rankLosses", 0);
+        boolean onHotStreak = (boolean) data.getOrDefault("onHotStreak", false);
 
         String summonerId = (String) data.get("summonerId");
         Friend friend = friendRepositoryDao.findBySummonerId(summonerId);
+        FriendRank friendRank = friendRankRepositoryDao.findByFriend(friend);
+
+        if (friendRank == null) {
+            friendRank = new FriendRank();
+        }
 
         friendRank.setTier(tier);
         friendRank.setRanking(ranking);
@@ -46,12 +49,7 @@ public class FriendRankController {
         friendRank.setOnHotStreak(onHotStreak);
         friendRank.setFriend(friend);
 
-        System.out.println("friendRank.getTier() = " + friendRank.getTier());
-        System.out.println("friendRank.getRanking() = " + friendRank.getRanking());
-        System.out.println("friendRank.getLeaguePoints() = " + friendRank.getLeaguePoints());
-        System.out.println("friendID = " + friend.getId());
-        
-        //friendRankRepositoryDao.save(friendRank);
+        friendRankRepositoryDao.save(friendRank);
     }
 }
 

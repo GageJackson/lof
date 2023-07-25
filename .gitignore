@@ -37,3 +37,6 @@ src/main/resources/application.properties
 
 ### API Keys in JS ###
 src/main/resources/static/js/keys.js
+
+### League Data ###
+src/main/resources/static/dragon_tail/*

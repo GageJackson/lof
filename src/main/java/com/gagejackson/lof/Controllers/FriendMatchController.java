@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -32,25 +34,42 @@ public class FriendMatchController {
     }
 
     @PostMapping("/saveFriendMatches")
-    public void saveChampsData(@RequestBody Map<String, Object>[] matchesArray) {
+    public void saveChampsData(@RequestBody Map<String, Object>[] matchesData) {
+        List<FriendMatch> friendMatches = new ArrayList<>();
+        List<Match> matches = new ArrayList<>();
+        Friend friend = null;
 
-        for (Map<String, Object> match : matchesArray) {
+        for (Map<String, Object> matchData : matchesData) {
             FriendMatch friendMatch = new FriendMatch();
 
-            String matchIdString = (String) match.get("matchId");
+            String puuId = (String) matchData.get("puuId");
+            if(friend == null){
+                friend = friendRepositoryDao.findByPuuId(puuId);
+            }
+
+            String matchIdString = (String) matchData.get("matchId");
             long matchId = Long.parseLong(matchIdString.substring(matchIdString.indexOf("_") + 1));
-            Match newMatch = matchRepositoryDao.findByGameId(matchId);
 
-            String summonerId = (String) match.get("summonerId");
-            Friend friend = friendRepositoryDao.findByPuuId(summonerId);
+            Match oldMatch = matchRepositoryDao.findByGameId(matchId);
+            if(oldMatch != null){
+                if(friendMatchRepositoryDao.findFriendMatchByFriendAndMatch(friend, oldMatch) == null){
+                    friendMatch.setMatch(oldMatch);
+                    friendMatch.setFriend(friend);
+                    friendMatches.add(friendMatch);
+                }
 
-            friendMatch.setMatch(newMatch);
-            friendMatch.setFriend(friend);
+            } else {
+                Match newMatch = new Match();
+                newMatch.setSaved(false);
+                newMatch.setGameId(matchId);
+                matches.add(newMatch);
 
-            System.out.println("friend.getId() = " + friend.getId());
-            System.out.println("matchId = " + newMatch.getId());
-
-            //friendMatchRepositoryDao.save(friendMatch);
+                friendMatch.setMatch(newMatch);
+                friendMatch.setFriend(friend);
+                friendMatches.add(friendMatch);
+            }
         }
+        matchRepositoryDao.saveAll(matches);
+        friendMatchRepositoryDao.saveAll(friendMatches);
     }
 }
