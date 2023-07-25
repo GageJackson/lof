@@ -60,6 +60,7 @@ public class IndexController {
             for (FriendMatch friendMatch : friendMatches) {
                 Friend friend = friendMatch.getFriend();
 
+
                 if(!friendWinIsSet && match.isSaved()){
                     friendWinIsSet = true;
                     Participant participant = participantRepositoryDao.findByMatchAndPuuid(match,friend.getPuuId());
