@@ -8,21 +8,21 @@
 <main class="container">
     <div class="row row-cols-2 gx-5">
         <section class="col-10">
-            <th:block th:each="match : ${matches}">
+            <th:block th:each="matchInfo : ${matchInfos}">
 
-                <button class="card card-bg w-100 border-0 mb-3 ps-3" th:id="${match.getGameId()}">
-                    <th:block th:if="${match.isSaved()}">
+                <button class="card card-bg w-100 border-0 mb-3 ps-3" th:id="${matchInfo.getMatch().getGameId()}">
+                    <th:block th:if="${matchInfo.getMatch().isSaved()}">
                         <div class="card-body border-0 d-flex justify-content-between align-items-center">
                             <div>
-                                <h3 class="bold color-neutral-light" th:text="${match.getGameMode()}"></h3>
-                                <p class="color-neutral-light" th:text="${#strings.substring(match.getGameVersion(), 0, 5)}"></p>
-                                <p class="color-neutral-light" th:text="${#temporals.format(T(java.time.Instant).ofEpochMilli(match.getGameCreation()), 'MM-dd')}"></p>
-                                <p class="color-neutral-light" th:text="${match.getGameDuration() / 60 + ':' + match.getGameDuration() % 60}"></p>
+                                <h3 class="bold color-neutral-light" th:text="${matchInfo.getMatch().getGameMode()}"></h3>
+                                <p class="color-neutral-light" th:text="${#strings.substring(matchInfo.getMatch().getGameVersion(), 0, 5)}"></p>
+                                <p class="color-neutral-light" th:text="${#temporals.format(T(java.time.Instant).ofEpochMilli(matchInfo.getMatch().getGameCreation()), 'MM-dd')}"></p>
+                                <p class="color-neutral-light" th:text="${matchInfo.getMatch().getGameDuration() / 60 + ':' + matchInfo.getMatch().getGameDuration() % 60}"></p>
                             </div>
 
                             <div>
                                 <div class="mb-2 d-flex justify-content-between gap-3">
-                                    <th:block th:each="participant : ${match.getParticipant()}">
+                                    <th:block th:each="participant : ${matchInfo.getMatch().getParticipant()}">
                                         <th:block th:if="${participant.getTeamId() == 100}">
                                             <img th:src="@{${'/dragon_tail/13.14.1/img/champion/' + participant.getChampionName() + '.png'}}"
                                                  alt="player icon" class="friend-icon non-selectable opacity-75"
@@ -51,7 +51,7 @@
                                 </div>
 
                                 <div class=" d-flex justify-content-between gap-3">
-                                    <th:block th:each="participant : ${match.getParticipant()}">
+                                    <th:block th:each="participant : ${matchInfo.getMatch().getParticipant()}">
                                         <th:block th:unless="${participant.getTeamId() == 100}">
                                             <img th:src="@{${'/dragon_tail/13.14.1/img/champion/' + participant.getChampionName() + '.png'}}"
                                                  alt="player icon" class="friend-icon non-selectable opacity-75"
@@ -64,7 +64,7 @@
                         </div>
                     </th:block>
 
-                    <th:block th:unless="${match.isSaved()}">
+                    <th:block th:unless="${matchInfo.getMatch().isSaved()}">
                         <div class="card-body border-0 d-flex justify-content-between align-items-center">
                             <div>
                                 <p class="color-neutral-light fs-400 my-0 non-selectable">Click to load match</p>
@@ -72,11 +72,11 @@
 
                             <div>
                                 <th:block th:each="friendMatch : ${friendMatches}">
-                                    <th:block th:if="${friendMatch.getMatch().getGameId() == match.getGameId()}">
-                                        <img th:src="@{${'/dragon_tail/13.14.1/img/profileicon/' + friendMatch.getFriend().getIcon() + '.png'}}"
-                                             alt="player icon" class="friend-icon non-selectable opacity-75"
-                                        >
-                                    </th:block>
+<!--                                    <th:block th:if="${friendMatch.getMatch().getGameId() == match.getGameId()}">-->
+<!--                                        <img th:src="@{${'/dragon_tail/13.14.1/img/profileicon/' + friendMatch.getFriend().getIcon() + '.png'}}"-->
+<!--                                             alt="player icon" class="friend-icon non-selectable opacity-75"-->
+<!--                                        >-->
+<!--                                    </th:block>-->
                                 </th:block>
                             </div>
                         </div>

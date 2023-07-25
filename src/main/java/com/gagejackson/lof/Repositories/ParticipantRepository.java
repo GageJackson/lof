@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface ParticipantRepository  extends JpaRepository<Participant, Long> {
     Participant findByMatchAndParticipantNum(Match match, int participantId);
+    Participant findByMatchAndPuuid(Match match, String puuid);
     List<Participant>findByMatch(Match match);
 }
