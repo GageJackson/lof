@@ -10,7 +10,7 @@
         <section class="col-10">
             <th:block th:each="matchInfo : ${matchInfos}">
 
-                <button class="card card-bg w-100 mb-3 ps-3" th:id="${matchInfo.getMatch().getGameId()}"
+                <button class="card card-bg w-100 mb-3 ps-3 match" th:id="${matchInfo.getMatch().getGameId()}"
                         th:classappend="${matchInfo.isFriendWin()} ? 'border border-2 border-primary' : 'border border-2 border-danger'"
                 >
                     <th:block th:if="${matchInfo.getMatch().isSaved()}">
@@ -25,6 +25,21 @@
                             </div>
 
                             <div>
+                                <div th:each="team : ${matchInfo.getMatch().getTeam()}">
+                                    <h3 class="bold color-neutral-light" th:text="${team.isWin()}"></h3>
+                                    <p class="color-neutral-light" th:text="${team.getKills() + '/' + team.getDeaths() + '/' + team.getAssists()}"></p>
+                                    <p class="color-neutral-light" th:text="${team.getGold()}"></p>
+                                    <p>
+                                        <span class="color-neutral-light" th:text="${team.getTotalDamage()}"></span>
+                                        <span class="color-neutral-light" th:text="${team.getMagicDamage()}"></span>
+                                        <span class="color-neutral-light" th:text="${team.getPhysicalDamage()}"></span>
+                                        <span class="color-neutral-light" th:text="${team.getTrueDamage()}"></span>
+                                    </p>
+
+                                </div>
+                            </div>
+
+                            <div>
                                 <div class="mb-2 d-flex justify-content-between gap-3">
                                     <th:block th:each="participant : ${matchInfo.getMatch().getParticipant()}">
                                         <th:block th:if="${participant.getTeamId() == 100}">
@@ -36,23 +51,46 @@
                                     </th:block>
                                 </div>
 
-                                <div class="mb-2 d-flex justify-content-between px-2">
-                                    <img th:src="@{${'/img/top.png'}}"
-                                         alt="player position" class="position-icon non-selectable opacity-75"
-                                    >
-                                    <img th:src="@{${'/img/jgl.png'}}"
-                                         alt="player position" class="position-icon non-selectable opacity-75"
-                                    >
-                                    <img th:src="@{${'/img/mid.png'}}"
-                                         alt="player position" class="position-icon non-selectable opacity-75"
-                                    >
-                                    <img th:src="@{${'/img/bot.png'}}"
-                                         alt="player position" class="position-icon non-selectable opacity-75"
-                                    >
-                                    <img th:src="@{${'/img/sup.png'}}"
-                                         alt="player position" class="position-icon non-selectable opacity-75"
-                                    >
-                                </div>
+                                <th:block th:if="${matchInfo.getMatch().getGameMode().equals('CLASSIC')}">
+                                    <div class="mb-2 d-flex justify-content-between px-2">
+                                        <img th:src="@{${'/img/top.png'}}"
+                                             alt="player position" class="position-icon non-selectable opacity-75"
+                                        >
+                                        <img th:src="@{${'/img/jgl.png'}}"
+                                             alt="player position" class="position-icon non-selectable opacity-75"
+                                        >
+                                        <img th:src="@{${'/img/mid.png'}}"
+                                             alt="player position" class="position-icon non-selectable opacity-75"
+                                        >
+                                        <img th:src="@{${'/img/bot.png'}}"
+                                             alt="player position" class="position-icon non-selectable opacity-75"
+                                        >
+                                        <img th:src="@{${'/img/sup.png'}}"
+                                             alt="player position" class="position-icon non-selectable opacity-75"
+                                        >
+                                    </div>
+                                </th:block>
+
+                                <th:block th:if="${matchInfo.getMatch().getGameMode().equals('ARAM')}">
+                                    <div class="mb-2 d-flex justify-content-between px-2">
+                                        <img th:src="@{${'/img/mid.png'}}"
+                                             alt="player position" class="position-icon non-selectable opacity-75"
+                                        >
+                                        <img th:src="@{${'/img/mid.png'}}"
+                                             alt="player position" class="position-icon non-selectable opacity-75"
+                                        >
+                                        <img th:src="@{${'/img/mid.png'}}"
+                                             alt="player position" class="position-icon non-selectable opacity-75"
+                                        >
+                                        <img th:src="@{${'/img/mid.png'}}"
+                                             alt="player position" class="position-icon non-selectable opacity-75"
+                                        >
+                                        <img th:src="@{${'/img/mid.png'}}"
+                                             alt="player position" class="position-icon non-selectable opacity-75"
+                                        >
+                                    </div>
+                                </th:block>
+
 
                                 <div class=" d-flex justify-content-between gap-3">
                                     <th:block th:each="participant : ${matchInfo.getMatch().getParticipant()}">

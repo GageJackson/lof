@@ -48,7 +48,7 @@ public class IndexController {
         List<MatchInfo> matchInfos = new ArrayList<>();
 
         Sort sort = Sort.by(Sort.Direction.DESC, "gameId");
-        Pageable pageable = PageRequest.of(0, 20, sort);
+        Pageable pageable = PageRequest.of(0, 50, sort);
         List<Match> matches = matchRepositoryDao.findAll(pageable).getContent();
 
         for (Match match : matches) {
@@ -64,7 +64,6 @@ public class IndexController {
                 if(!friendWinIsSet && match.isSaved()){
                     friendWinIsSet = true;
                     Participant participant = participantRepositoryDao.findByMatchAndPuuid(match,friend.getPuuId());
-                    System.out.println("participant.getRiotIdName() = " + participant.getRiotIdName());
                     friendWon = participant.isWin();
                 }
 
