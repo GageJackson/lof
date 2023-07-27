@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "tailwindcss": "^3.3.3"
+  },
+  "dependencies": {
+    "chart.js": "^4.3.2"
   }
 }

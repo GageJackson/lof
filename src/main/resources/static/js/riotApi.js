@@ -103,7 +103,8 @@
                 matchId: overviewData.metadata.matchId,
                 info: overviewData.info
             };
-            console.log(overviewMatch);
+            console.log(overviewData);
+            // console.log(overviewMatch);
 
             const timelineResponse = await fetch(`https://americas.api.riotgames.com/lol/match/v5/matches/NA1_${match}/timeline?api_key=${RIOT_KEY}`);
             // const timelineResponse = await fetch(`https://americas.api.riotgames.com/lol/match/v5/matches/${match.matchId}/timeline?api_key=${RIOT_KEY}`);
@@ -112,7 +113,8 @@
                 matchId: timelineData.metadata.matchId,
                 info: timelineData.info
             };
-            console.log(timelineMatch);
+            console.log(timelineData);
+            // console.log(timelineMatch);
 
             const matches = [overviewMatch, timelineMatch];
 
@@ -164,10 +166,23 @@
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    //pageLoad();
+    function handleButtonClick(event) {
+        const button = event.target.closest('.match');
+        const matchId = button.id
+        console.log(button.id)
+        saveMatchData([matchId]);
+    }
+
+    const matchButtons = document.querySelectorAll('.match');
+
+    matchButtons.forEach(button => {
+        button.addEventListener('click', handleButtonClick);
+    });
 
 
-    let matches = [4713039841,4712997908,4712936002,4712891138,4712872161]
-    //saveMatchData(matches);
+    pageLoad();
+
+    // let matches = [4713039841,4712997908,4712936002,4712891138,4712872161]
+    // saveMatchData(matches);
     //saveMatchData();
 })();

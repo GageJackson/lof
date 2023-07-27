@@ -120,8 +120,6 @@ public class MatchController {
         if (newMatch != null){
             saveMatchOverview(overviewData, newMatch);
             saveMatchTimeline(timelineFrames, newMatch);
-        } else{
-            return;
         }
     }
 
@@ -311,13 +309,48 @@ public class MatchController {
             Team team = new Team();
 
             int teamId = (int) teamData.get("teamId");
-            if ((teamData.get("win")).equals("true")) {
+            if ((teamData.get("win")).equals("true") || (teamData.get("win")).equals(true)) {
                 team.setWin(true);
             } else {
                 team.setWin(false);
             }
 
+            int teamKills = 0;
+            int teamDeaths = 0;
+            int teamAssists = 0;
+            int teamGold = 0;
+            int teamTotalDamage = 0;
+            int teamMagicDamage = 0;
+            int teamPhysicalDamage = 0;
+            int teamTrueDamage = 0;
+
+
+//            Map<Integer, Participant> participantz = participantsData;
+            for (Participant participant : participants) {
+                int participantTeamId = participant.getTeamId();
+
+                if (participantTeamId == teamId && participant.getMatch() == newMatch) {
+                    teamKills += participant.getKills();
+                    teamDeaths += participant.getDeaths();
+                    teamAssists += participant.getAssists();
+                    teamGold += participant.getGoldEarned();
+                    teamTotalDamage += participant.getTotalDamageDealtToChampions();
+                    teamMagicDamage += participant.getMagicDamageDealtToChampions();
+                    teamPhysicalDamage += participant.getPhysicalDamageDealtToChampions();
+                    teamTrueDamage += participant.getTrueDamageDealtToChampions();
+                }
+            }
+
+            team.setKills(teamKills);
+            team.setDeaths(teamDeaths);
+            team.setAssists(teamAssists);
+            team.setGold(teamGold);
+            team.setTotalDamage(teamTotalDamage);
+            team.setMagicDamage(teamMagicDamage);
+            team.setPhysicalDamage(teamPhysicalDamage);
+            team.setTrueDamage(teamTrueDamage);
             team.setTeamNum(teamId);
+
             team.setMatch(newMatch);
 
             teams.add(team);
@@ -386,6 +419,7 @@ public class MatchController {
 
             currentFrame++;
         }
+
         insertBatchTimelineData();
     }
 
@@ -425,8 +459,6 @@ public class MatchController {
     private void saveParticipantFrame(Map<String, Object> participantFramesData, int currentFrame, int i, Participant participant){
         Map<String, Object> participantFrameData = (Map<String, Object>) participantFramesData.get(String.valueOf(i));
         ParticipantFrame participantFrame = new ParticipantFrame();
-
-        System.out.println("currentFrame = " + currentFrame + " i = " + i + " line 409");
 
         participantFrame.setCurrentGold((int) participantFrameData.get("currentGold"));
         participantFrame.setJungleMinionsKilled((int) participantFrameData.get("jungleMinionsKilled"));
