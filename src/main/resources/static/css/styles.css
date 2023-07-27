@@ -61,7 +61,15 @@ UTILITY CLASSES
 }
 
 .card-bg {
-    background: linear-gradient(90deg, var(--color-neutral-main) 0%, var(--color-neutral-dark) 100%);
+    background: linear-gradient(90deg, var(--color-neutral-main) 0%, rgba(33, 37, 42, 0.5) 100%);
+}
+
+.card-bg-win {
+    background: linear-gradient(90deg, rgba(71, 117, 180, 0.5) 0%, rgba(33, 37, 42, 0.5) 100%);
+}
+
+.card-bg-loss {
+    background: linear-gradient(90deg, rgba(162, 67, 78, 0.5) 0%, rgba(33, 37, 42, 0.5) 100%);
 }
 
 .non-selectable {

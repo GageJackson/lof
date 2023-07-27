@@ -120,8 +120,6 @@ public class MatchController {
         if (newMatch != null){
             saveMatchOverview(overviewData, newMatch);
             saveMatchTimeline(timelineFrames, newMatch);
-        } else{
-            return;
         }
     }
 

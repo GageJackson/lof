@@ -10,13 +10,12 @@
         <section class="col-10">
             <th:block th:each="matchInfo : ${matchInfos}">
 
-                <button class="card card-bg w-100 mb-3 ps-3 match" th:id="${matchInfo.getMatch().getGameId()}"
-                        th:classappend="${matchInfo.isFriendWin()} ? 'border border-2 border-primary' : 'border border-2 border-danger'"
+                <button class="card w-100 mb-3 ps-3 match border-0" th:id="${matchInfo.getMatch().getGameId()}"
+                        th:classappend="${matchInfo.isFriendWin() ? 'card-bg-win' : (matchInfo.getMatch().isSaved() ? 'card-bg-loss' : 'card-bg')}"
+
                 >
                     <th:block th:if="${matchInfo.getMatch().isSaved()}">
-                        <div class="card-body border-0 d-flex justify-content-between align-items-center"
-
-                        >
+                        <div class="card-body border-0 d-flex justify-content-between align-items-center">
                             <div>
                                 <h3 class="bold color-neutral-light" th:text="${matchInfo.getMatch().getGameMode()}"></h3>
                                 <p class="color-neutral-light" th:text="${#strings.substring(matchInfo.getMatch().getGameVersion(), 0, 5)}"></p>
@@ -24,18 +23,51 @@
                                 <p class="color-neutral-light" th:text="${matchInfo.getMatch().getGameDuration() / 60 + ':' + matchInfo.getMatch().getGameDuration() % 60}"></p>
                             </div>
 
-                            <div>
-                                <div th:each="team : ${matchInfo.getMatch().getTeam()}">
-                                    <h3 class="bold color-neutral-light" th:text="${team.isWin()}"></h3>
-                                    <p class="color-neutral-light" th:text="${team.getKills() + '/' + team.getDeaths() + '/' + team.getAssists()}"></p>
-                                    <p class="color-neutral-light" th:text="${team.getGold()}"></p>
-                                    <p>
-                                        <span class="color-neutral-light" th:text="${team.getTotalDamage()}"></span>
-                                        <span class="color-neutral-light" th:text="${team.getMagicDamage()}"></span>
-                                        <span class="color-neutral-light" th:text="${team.getPhysicalDamage()}"></span>
-                                        <span class="color-neutral-light" th:text="${team.getTrueDamage()}"></span>
-                                    </p>
+                            <div class="">
+                                <th:block th:each="team : ${matchInfo.getMatch().getTeam()}">
+                                    <div th:if="${team.isWin()}">
+                                        <th:block th:if="${team.getTeamNum() == 100}">
+                                            <p>Blue Team Win</p>
+                                        </th:block>
+                                        <th:block th:unless="${team.getTeamNum() == 100}">
+                                            <p>Red Team Win</p>
+                                        </th:block>
 
+                                        <p class="color-neutral-light" th:text="${team.getKills() + '/' + team.getDeaths() + '/' + team.getAssists()}"></p>
+                                    </div>
+
+                                    <div th:unless="${team.isWin()}">
+                                        <th:block th:if="${team.getTeamNum() == 100}">
+                                            <p>Blue Team Loss</p>
+                                        </th:block>
+                                        <th:block th:unless="${team.getTeamNum() == 100}">
+                                            <p>Red Team Loss</p>
+                                        </th:block>
+
+                                        <p class="color-neutral-light" th:text="${team.getKills() + '/' + team.getDeaths() + '/' + team.getAssists()}"></p>
+                                    </div>
+                                </th:block>
+
+                                <div class="d-flex align-items-center">
+                                    <div class="damageChart-container d-flex justify-content-center"
+                                         th:attr="data-match-id=${matchInfo.getMatch().getGameId()},
+                                          data-team1-damage=${matchInfo.getMatch().getTeam()[0].getTotalDamage()},
+                                          data-team2-damage=${matchInfo.getMatch().getTeam()[1].getTotalDamage()}"
+                                    >
+                                        <div th:id="'damageChart-' + ${matchInfo.getMatch().getGameId()}"
+                                             class="chart w-100" style="height: 100px; aspect-ratio: 1">
+                                        </div>
+                                    </div>
+
+                                    <div class="goldChart-container d-flex justify-content-center"
+                                         th:attr="data-match-id=${matchInfo.getMatch().getGameId()},
+                                         data-team1-gold=${matchInfo.getMatch().getTeam()[0].getGold()},
+                                         data-team2-gold=${matchInfo.getMatch().getTeam()[1].getGold()}"
+                                    >
+                                        <div th:id="'goldChart-' + ${matchInfo.getMatch().getGameId()}"
+                                             class="chart w-100" style="height: 100px; aspect-ratio: 1">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -145,5 +177,76 @@
 </main>
 
 <footer th:replace="~{partials/footer.html :: footer}"></footer>
+
+<script type="text/javascript">
+    function drawTeamDamageChart(matchId, team1Damage, team2Damage) {
+        google.charts.load("current", { packages: ["corechart"] });
+        google.charts.setOnLoadCallback(function () {
+            var data = google.visualization.arrayToDataTable([
+                ['Team', 'Damage'],
+                ['Blue Team', team1Damage],
+                ['Red Team',  team2Damage]
+            ]);
+
+            var options = {
+                pieHole: 0.7,
+                backgroundColor: 'transparent',
+                pieSliceBorderColor: 'transparent',
+                legend: 'none',
+                pieSliceText: 'none',
+                tooltip: {
+                    textStyle: {color: '#252525', fontSize: 12},
+                    trigger: 'selection'
+                }
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('damageChart-' + matchId));
+            chart.draw(data, options);
+        });
+    }
+
+    function drawTeamGoldChart(matchId, team1Gold, team2Gold) {
+        google.charts.load("current", { packages: ["corechart"] });
+        google.charts.setOnLoadCallback(function () {
+            var data = google.visualization.arrayToDataTable([
+                ['Team', 'Gold'],
+                ['Blue Team', team1Gold],
+                ['Red Team',  team2Gold]
+            ]);
+
+            var options = {
+                pieHole: 0.7,
+                backgroundColor: 'transparent',
+                pieSliceBorderColor: 'transparent',
+                legend: 'none',
+                pieSliceText: 'none',
+                tooltip:
+                    {textStyle: {color: '#252525', fontSize: 12},
+                        trigger: 'selection'}
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('goldChart-' + matchId));
+            chart.draw(data, options);
+        });
+    }
+
+    var damageContainers = document.getElementsByClassName("damageChart-container");
+    for (var i = 0; i < damageContainers.length; i++) {
+        var container = damageContainers[i];
+        var matchId = container.getAttribute("data-match-id");
+        var team1Damage = parseInt(container.getAttribute("data-team1-damage"));
+        var team2Damage = parseInt(container.getAttribute("data-team2-damage"));
+        drawTeamDamageChart(matchId, team1Damage, team2Damage);
+    }
+
+    var goldContainers = document.getElementsByClassName("goldChart-container");
+    for (var i = 0; i < goldContainers.length; i++) {
+        var container = goldContainers[i];
+        var matchId = container.getAttribute("data-match-id");
+        var team1Gold = parseInt(container.getAttribute("data-team1-gold"));
+        var team2Gold = parseInt(container.getAttribute("data-team2-gold"));
+        drawTeamGoldChart(matchId, team1Gold, team2Gold);
+    }
+</script>
 </body>
 </html>
