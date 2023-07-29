@@ -89,3 +89,53 @@ VISUAL FRAMEWORK
     height: 24px;
     aspect-ratio: 1;
 }
+
+.accordion {
+    border: none;
+    --bs-accordion-border-width:0;
+    --bs-accordion-btn-color: #ff0000;
+}
+
+/*.accordion-item {*/
+/*    background-color: rgba(33, 37, 42, 0);*/
+/*    border: none;*/
+/*    outline: none;*/
+/*    overflow: hidden;*/
+/*}*/
+
+.accordion-body {
+    border: none;
+    /*--bs-accordion-border-width:0;*/
+
+    /*--bs-accordion-btn-focus-border-color: #ff6200;*/
+}
+
+.accordion-button::after {
+    height: 60px;
+    width: 60px;
+    aspect-ratio: 1;
+    background-size: 60px;
+    background-image: url("../img/arrow.png");
+    /*background-image: var(--bs-accordion-btn-active-icon);*/
+    margin-inline-start: 0;
+}
+
+.accordion-button:not(.collapsed)::after {
+    /*background-size: 20px;*/
+    background-image: url("../img/arrow.png");
+}
+
+.accordion-button[aria-expanded="true"] {
+    background-color: rgba(33, 37, 42, 0);
+}
+
+.accordion-button[aria-expanded="false"] {
+    background-color: rgba(33, 37, 42, 0);
+}
+
+/*.accordion-button:focus {*/
+/*    background-color: rgba(33, 37, 42, 0);*/
+/*    border: none;*/
+/*    outline: none;*/
+/*    overflow: hidden;*/
+/*}*/
