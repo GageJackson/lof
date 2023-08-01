@@ -17,7 +17,8 @@
 
                             <button class="accordion-button d-flex justify-content-between collapsed" type="button" data-bs-toggle="collapse" aria-expanded="false"
                                     th:attr="data-bs-target=${'#accordion-' + matchInfo.getMatch().getGameId()},
-                                    aria-controls=${'#accordion-' + matchInfo.getMatch().getGameId()}">
+                                    aria-controls=${'#accordion-' + matchInfo.getMatch().getGameId()}"
+                            >
 
                                 <div>
                                     <h3 class="bold color-neutral-light" th:text="${matchInfo.getMatch().getGameMode()}"></h3>
@@ -155,15 +156,15 @@
                                  th:attr="data-bs-parent=${'#accordion' + matchInfo.getMatch().getGameId()}"
                             >
                                 <div class="accordion-body">
-                                    <div class="card">
-                                        <div class="card-header card-bg border-0">
+                                    <div class="card border-0">
+                                        <div class="card-header border-0">
                                             <div class="row row-cols-4 g-3">
                                                 <div class="col">
                                                     <th:block th:if="${matchInfo.getMatch().getTeam()[0].isWin()}">
-                                                        <p class="text-primary">Blue Team <span class="text-bg-primary">Won</span></p>
+                                                        <p class="text-primary">Blue Team <span class="badge bg-primary">Won</span></p>
                                                     </th:block>
                                                     <th:block th:unless="${matchInfo.getMatch().getTeam()[0].isWin()}">
-                                                        <p class="text-primary">Blue Team <span class="text-bg-primary">Won</span></p>
+                                                        <p class="text-primary">Blue Team <span class="badge bg-primary">Lost</span></p>
                                                     </th:block>
                                                 </div>
                                                 <div class="col">
@@ -176,10 +177,10 @@
                                                 </div>
                                                 <div class="col">
                                                     <th:block th:if="${matchInfo.getMatch().getTeam()[1].isWin()}">
-                                                        <p class="text-danger">Red Team <span class="text-bg-danger">Won</span></p>
+                                                        <p class="text-danger">Red Team <span class="badge bg-danger">Won</span></p>
                                                     </th:block>
                                                     <th:block th:unless="${matchInfo.getMatch().getTeam()[1].isWin()}">
-                                                        <p class="text-danger">Red Team <span class="text-bg-danger">Won</span></p>
+                                                        <p class="text-danger">Red Team <span class="badge bg-danger">Lost</span></p>
                                                     </th:block>
                                                 </div>
                                                 <div class="col">
@@ -193,25 +194,166 @@
                                             </div>
                                         </div>
                                         <div class="card-body card-bg border-0">
-                                            <p>Body</p>
                                             <div>
-                                                <th:block th:each="participant : ${matchInfo.getMatch().getParticipant()}">
+                                                <div class="d-flex justify-content-between w-100" th:each="participant : ${matchInfo.getMatch().getParticipant()}">
                                                     <div>
                                                         <img th:src="@{${'/dragon_tail/13.14.1/img/champion/' + participant.getChampionName() + '.png'}}"
                                                              alt="player icon" class="friend-icon non-selectable opacity-75"
                                                              th:classappend="${#lists.contains(friends.![puuId], participant.getPuuid())} ? 'border border-2 border-warning' : 'border border-2 border-danger'"
                                                         >
-                                                        <p th:text="${'Name: ' + participant.getRiotIdName()}"></p>
-                                                        <p th:text="${'CS: ' + participant.getTotalMinionsKilled() + participant.getNeutralMinionsKilled()}"></p>
+                                                        <p th:text="${participant.getSummonerName()}"></p>
+                                                    </div>
+                                                    <div>
                                                         <p class="color-neutral-light"
-                                                           th:text="${'K/D/A' +
+                                                           th:text="${
                                                        participant.getKills() + '/' +
                                                        participant.getDeaths() + '/' +
-                                                       participant.getAssists()}">
+                                                       participant.getAssists()}"
+                                                        >
                                                         </p>
+                                                        <p th:if="${participant.getDeaths() == 0}"
+                                                           class="color-neutral-light"
+                                                           th:text="${'Perfect'}"
+                                                        ></p>
+                                                        <p th:unless="${participant.getDeaths() == 0}"
+                                                           class="color-neutral-light"
+                                                           th:text="${#numbers.formatDecimal((
+                                                           (participant.getKills() + participant.getAssists()) /
+                                                           (participant.getDeaths())
+                                                           ), 0, 'COMMA', 2, 'POINT') + 'KDA'}"
+                                                        ></p>
                                                     </div>
 
-                                                </th:block>
+                                                    <div>
+                                                        <th:block th:if="${(participant.getTotalMinionsKilled() + participant.getNeutralMinionsKilled()) == 0}">
+                                                            <p th:text="${'0 CS'}"></p>
+                                                        </th:block>
+
+                                                        <th:block th:unless="${(participant.getTotalMinionsKilled() + participant.getNeutralMinionsKilled()) == 0}">
+                                                            <p th:text="${(participant.getTotalMinionsKilled() + participant.getNeutralMinionsKilled()) + ' CS'}"></p>
+                                                            <p th:text="${#numbers.formatDecimal((
+                                                            (participant.getTotalMinionsKilled() + participant.getNeutralMinionsKilled()) /
+                                                            ((matchInfo.getMatch().getGameDuration() - 60) / 60)
+                                                            ), 0, 1) + ' CS/min'}"
+                                                            ></p>
+                                                        </th:block>
+
+                                                        <th:block th:if="${participant.getTeamId() == 100}">
+                                                            <th:block th:if="${matchInfo.getMatch().getTeam()[0].getKills() == 0}">
+                                                                <p th:text="${'Oof...'}"></p>
+                                                            </th:block>
+                                                            <th:block th:unless="${matchInfo.getMatch().getTeam()[0].getKills() == 0}">
+                                                                <p th:text="${#numbers.formatDecimal((
+                                                                100 * (participant.getKills() + participant.getAssists()) /
+                                                                (matchInfo.getMatch().getTeam()[0].getKills())
+                                                                ), 0, 1) + '% KP'}"
+                                                                ></p>
+                                                            </th:block>
+                                                        </th:block>
+
+                                                        <th:block th:if="${participant.getTeamId() == 200}">
+                                                            <th:block th:if="${matchInfo.getMatch().getTeam()[1].getKills() == 0}">
+                                                                <p th:text="${'Oof...'}"></p>
+                                                            </th:block>
+                                                            <th:block th:unless="${matchInfo.getMatch().getTeam()[1].getKills() == 0}">
+                                                                <p th:text="${#numbers.formatDecimal((
+                                                                100 * (participant.getKills() + participant.getAssists()) /
+                                                                (matchInfo.getMatch().getTeam()[1].getKills())
+                                                                ), 0, 1) + '% KP'}"
+                                                                ></p>
+                                                            </th:block>
+                                                        </th:block>
+                                                    </div>
+
+                                                    <div class="d-flex">
+                                                        <th:block th:if="${participant.getItem0() == 0}">
+                                                            <div class="item-icon non-selectable opacity-75 bg-dark"></div>
+                                                        </th:block>
+                                                        <th:block th:unless="${participant.getItem0() == 0}">
+                                                            <img th:src="@{${'/dragon_tail/13.14.1/img/item/' + participant.getItem0() + '.png'}}"
+                                                                 alt="player icon" class="item-icon non-selectable opacity-75"
+                                                            >
+                                                        </th:block>
+
+                                                        <th:block th:if="${participant.getItem1() == 0}">
+                                                            <div class="item-icon non-selectable opacity-75 bg-dark"></div>
+                                                        </th:block>
+                                                        <th:block th:unless="${participant.getItem1() == 0}">
+                                                            <img th:src="@{${'/dragon_tail/13.14.1/img/item/' + participant.getItem1() + '.png'}}"
+                                                                 alt="player icon" class="item-icon non-selectable opacity-75"
+                                                            >
+                                                        </th:block>
+
+                                                        <th:block th:if="${participant.getItem2() == 0}">
+                                                            <div class="item-icon non-selectable opacity-75 bg-dark"></div>
+                                                        </th:block>
+                                                        <th:block th:unless="${participant.getItem2() == 0}">
+                                                            <img th:src="@{${'/dragon_tail/13.14.1/img/item/' + participant.getItem2() + '.png'}}"
+                                                                 alt="player icon" class="item-icon non-selectable opacity-75"
+                                                            >
+                                                        </th:block>
+
+                                                        <th:block th:if="${participant.getItem3() == 0}">
+                                                            <div class="item-icon non-selectable opacity-75 bg-dark"></div>
+                                                        </th:block>
+                                                        <th:block th:unless="${participant.getItem3() == 0}">
+                                                            <img th:src="@{${'/dragon_tail/13.14.1/img/item/' + participant.getItem3() + '.png'}}"
+                                                                 alt="player icon" class="item-icon non-selectable opacity-75"
+                                                            >
+                                                        </th:block>
+
+                                                        <th:block th:if="${participant.getItem4() == 0}">
+                                                            <div class="item-icon non-selectable opacity-75 bg-dark"></div>
+                                                        </th:block>
+                                                        <th:block th:unless="${participant.getItem4() == 0}">
+                                                            <img th:src="@{${'/dragon_tail/13.14.1/img/item/' + participant.getItem4() + '.png'}}"
+                                                                 alt="player icon" class="item-icon non-selectable opacity-75"
+                                                            >
+                                                        </th:block>
+
+                                                        <th:block th:if="${participant.getItem5() == 0}">
+                                                            <div class="item-icon non-selectable opacity-75 bg-dark"></div>
+                                                        </th:block>
+                                                        <th:block th:unless="${participant.getItem5() == 0}">
+                                                            <img th:src="@{${'/dragon_tail/13.14.1/img/item/' + participant.getItem5() + '.png'}}"
+                                                                 alt="player icon" class="item-icon non-selectable opacity-75"
+                                                            >
+                                                        </th:block>
+
+                                                        <th:block th:if="${participant.getItem6() == 0}">
+                                                            <div class="item-icon non-selectable opacity-75 bg-dark"></div>
+                                                        </th:block>
+                                                        <th:block th:unless="${participant.getItem6() == 0}">
+                                                            <img th:src="@{${'/dragon_tail/13.14.1/img/item/' + participant.getItem6() + '.png'}}"
+                                                                 alt="player icon" class="item-icon non-selectable opacity-75"
+                                                            >
+                                                        </th:block>
+                                                    </div>
+
+                                                    <div
+                                                            th:with="maxDamage=${T(java.lang.Math).max(matchInfo.getMatch().getTeam()[0].getTotalDamage(), matchInfo.getMatch().getTeam()[1].getTotalDamage())}"
+                                                    >
+                                                        <p th:text="${participant.getTotalDamageDealt()}"></p>
+                                                        <div class="progress-stacked">
+                                                            <div class="progress" role="progressbar" aria-label="Segment one" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"
+                                                                 th:style="'width:'+${#numbers.formatDecimal((100 * participant.getPhysicalDamageDealt()/(maxDamage)), 0, 0) + '%'}"
+                                                            >
+                                                                <div class="progress-bar"></div>
+                                                            </div>
+                                                            <div class="progress" role="progressbar" aria-label="Segment two" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"
+                                                                 th:style="'width:'+${#numbers.formatDecimal((100 * participant.getMagicDamageDealt()/(maxDamage)), 0, 0) + '%'}"
+                                                            >
+                                                                <div class="progress-bar bg-success"></div>
+                                                            </div>
+                                                            <div class="progress" role="progressbar" aria-label="Segment three" aria-valuenow="20" aria-valuemin="0"aria-valuemax="100"
+                                                                 th:style="'width:'+${#numbers.formatDecimal((100 * participant.getTrueDamageDealt()/participant.getTotalDamageDealt()), 0, 0) + '%'}"
+                                                            >
+                                                                <div class="progress-bar bg-info"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="card-footer card-bg border-0">
