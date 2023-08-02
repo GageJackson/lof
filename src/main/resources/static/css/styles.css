@@ -65,11 +65,19 @@ UTILITY CLASSES
 }
 
 .card-bg-win {
-    background: linear-gradient(90deg, rgba(71, 117, 180, 0.5) 0%, rgba(33, 37, 42, 0.5) 100%);
+    background: linear-gradient(0deg, rgba(71, 117, 180, 0.5) 0%, rgba(33, 37, 42, 0.5) 100%);
 }
 
 .card-bg-loss {
-    background: linear-gradient(90deg, rgba(162, 67, 78, 0.5) 0%, rgba(33, 37, 42, 0.5) 100%);
+    background: linear-gradient(0deg, rgba(162, 67, 78, 0.5) 0%, rgba(33, 37, 42, 0.5) 100%);
+}
+
+.blue-team-bg {
+    background: linear-gradient(90deg, rgba(71, 117, 180, 0.5) 0%, rgba(33, 37, 42, 0.5) 100%);
+}
+
+.red-team-bg {
+    background: linear-gradient(270deg, rgba(162, 67, 78, 0.5) 0%, rgba(33, 37, 42, 0.5) 100%);
 }
 
 .non-selectable {
@@ -93,6 +101,11 @@ VISUAL FRAMEWORK
 
 .position-icon {
     height: 24px;
+    aspect-ratio: 1;
+}
+
+.position-icon-lg {
+    height: 48px;
     aspect-ratio: 1;
 }
 
