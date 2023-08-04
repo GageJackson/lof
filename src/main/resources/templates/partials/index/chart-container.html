@@ -1,0 +1,63 @@
+<div  th:fragment="kill-chart"
+      class="chart-container d-flex flex-column justify-content-center align-items-center"
+      th:attr="data-match-id=${matchInfo.getMatch().getGameId()},
+               data-chart-type='kill',
+               data-team1=${matchInfo.getMatch().getTeam()[0].getKills()},
+               data-team2=${matchInfo.getMatch().getTeam()[1].getKills()}"
+>
+    <div th:id="'killChart-' + ${matchInfo.getMatch().getGameId()}"
+         class="chart w-100" style="height: 100px; aspect-ratio: 1">
+    </div>
+    <h5 class="text-light">Kills</h5>
+    <p>
+        <span th:text="${matchInfo.getMatch().getTeam()[1].getKills()}"
+              class="text-danger"
+        >
+        </span>
+        <span th:text="${matchInfo.getMatch().getTeam()[0].getKills()}"
+              class="text-primary"
+        ></span>
+    </p>
+</div>
+
+<div th:fragment="damage-chart"
+     class="chart-container d-flex flex-column justify-content-center align-items-center"
+     th:attr="data-match-id=${matchInfo.getMatch().getGameId()},
+              data-chart-type='damage',
+              data-team1=${matchInfo.getMatch().getTeam()[0].getTotalDamage()},
+              data-team2=${matchInfo.getMatch().getTeam()[1].getTotalDamage()}"
+>
+    <div th:id="'damageChart-' + ${matchInfo.getMatch().getGameId()}"
+         class="chart w-100" style="height: 100px; aspect-ratio: 1">
+    </div>
+    <h5 class="text-light">Damage</h5>
+    <p>
+        <span th:text="${matchInfo.getMatch().getTeam()[1].getTotalDamage()}"
+              class="text-danger"
+        ></span>
+        <span th:text="${matchInfo.getMatch().getTeam()[0].getTotalDamage()}"
+              class="text-primary"
+        ></span>
+    </p>
+</div>
+
+<div th:fragment="gold-chart"
+     class="chart-container d-flex flex-column justify-content-center align-items-center"
+     th:attr="data-match-id=${matchInfo.getMatch().getGameId()},
+                                         data-chart-type='gold',
+                                         data-team1=${matchInfo.getMatch().getTeam()[0].getGold()},
+                                         data-team2=${matchInfo.getMatch().getTeam()[1].getGold()}"
+>
+    <div th:id="'goldChart-' + ${matchInfo.getMatch().getGameId()}"
+         class="chart w-100" style="height: 100px; aspect-ratio: 1">
+    </div>
+    <h5 class="text-light">Gold</h5>
+    <p>
+        <span th:text="${matchInfo.getMatch().getTeam()[1].getGold()}"
+              class="text-danger"
+        ></span>
+        <span th:text="${matchInfo.getMatch().getTeam()[0].getGold()}"
+              class="text-primary"
+        ></span>
+    </p>
+</div>

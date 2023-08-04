@@ -28,62 +28,9 @@
                                 </div>
 
                                 <div class="d-flex justify-content-center align-items-center">
-                                    <div class="killChart-container d-flex flex-column justify-content-center align-items-center"
-                                         th:attr="data-match-id=${matchInfo.getMatch().getGameId()},
-                                              data-team1-kill=${matchInfo.getMatch().getTeam()[0].getKills()},
-                                              data-team2-kill=${matchInfo.getMatch().getTeam()[1].getKills()}"
-                                    >
-                                        <div th:id="'killChart-' + ${matchInfo.getMatch().getGameId()}"
-                                             class="chart w-100" style="height: 100px; aspect-ratio: 1">
-                                        </div>
-                                        <h5 class="text-light">Kills</h5>
-                                        <p>
-                                            <span th:text="${matchInfo.getMatch().getTeam()[1].getKills()}"
-                                                  class="text-danger">
-                                            </span>
-                                            <span th:text="${matchInfo.getMatch().getTeam()[0].getKills()}"
-                                                  class="text-primary">
-                                            </span>
-                                        </p>
-                                    </div>
-
-                                    <div class="damageChart-container d-flex flex-column justify-content-center align-items-center"
-                                         th:attr="data-match-id=${matchInfo.getMatch().getGameId()},
-                                              data-team1-damage=${matchInfo.getMatch().getTeam()[0].getTotalDamage()},
-                                              data-team2-damage=${matchInfo.getMatch().getTeam()[1].getTotalDamage()}"
-                                    >
-                                        <div th:id="'damageChart-' + ${matchInfo.getMatch().getGameId()}"
-                                             class="chart w-100" style="height: 100px; aspect-ratio: 1">
-                                        </div>
-                                        <h5 class="text-light">Damage</h5>
-                                        <p>
-                                            <span th:text="${matchInfo.getMatch().getTeam()[1].getTotalDamage()}"
-                                                  class="text-danger">
-                                            </span>
-                                            <span th:text="${matchInfo.getMatch().getTeam()[0].getTotalDamage()}"
-                                            class="text-primary">
-                                            </span>
-                                        </p>
-                                    </div>
-
-                                    <div class="goldChart-container d-flex flex-column justify-content-center align-items-center"
-                                         th:attr="data-match-id=${matchInfo.getMatch().getGameId()},
-                                             data-team1-gold=${matchInfo.getMatch().getTeam()[0].getGold()},
-                                             data-team2-gold=${matchInfo.getMatch().getTeam()[1].getGold()}"
-                                    >
-                                        <div th:id="'goldChart-' + ${matchInfo.getMatch().getGameId()}"
-                                             class="chart w-100" style="height: 100px; aspect-ratio: 1">
-                                        </div>
-                                        <h5 class="text-light">Gold</h5>
-                                        <p>
-                                            <span th:text="${matchInfo.getMatch().getTeam()[1].getGold()}"
-                                                  class="text-danger">
-                                            </span>
-                                            <span th:text="${matchInfo.getMatch().getTeam()[0].getGold()}"
-                                                  class="text-primary">
-                                            </span>
-                                        </p>
-                                    </div>
+                                    <div  th:replace="~{partials/index/chart-container.html :: gold-chart}"></div>
+                                    <div  th:replace="~{partials/index/chart-container.html :: kill-chart}"></div>
+                                    <div  th:replace="~{partials/index/chart-container.html :: damage-chart}"></div>
                                 </div>
 
                                 <div class="">
@@ -98,45 +45,15 @@
                                         </th:block>
                                     </div>
 
-                                    <th:block th:if="${matchInfo.getMatch().getGameMode().equals('CLASSIC')}">
-                                        <div class="mb-2 d-flex justify-content-between px-2">
-                                            <img th:src="@{${'/img/top.png'}}"
-                                                 alt="player position" class="position-icon non-selectable opacity-75"
-                                            >
-                                            <img th:src="@{${'/img/jgl.png'}}"
-                                                 alt="player position" class="position-icon non-selectable opacity-75"
-                                            >
-                                            <img th:src="@{${'/img/mid.png'}}"
-                                                 alt="player position" class="position-icon non-selectable opacity-75"
-                                            >
-                                            <img th:src="@{${'/img/bot.png'}}"
-                                                 alt="player position" class="position-icon non-selectable opacity-75"
-                                            >
-                                            <img th:src="@{${'/img/sup.png'}}"
-                                                 alt="player position" class="position-icon non-selectable opacity-75"
-                                            >
-                                        </div>
-                                    </th:block>
+                                    <div  th:switch="${matchInfo.getMatch().getGameMode()}">
+                                        <th:block th:case="CLASSIC">
+                                            <div th:replace="~{partials/index/position-icons.html :: classic('')}"></div>
+                                        </th:block>
 
-                                    <th:block th:if="${matchInfo.getMatch().getGameMode().equals('ARAM')}">
-                                        <div class="mb-2 d-flex justify-content-between px-2">
-                                            <img th:src="@{${'/img/mid.png'}}"
-                                                 alt="player position" class="position-icon non-selectable opacity-75"
-                                            >
-                                            <img th:src="@{${'/img/mid.png'}}"
-                                                 alt="player position" class="position-icon non-selectable opacity-75"
-                                            >
-                                            <img th:src="@{${'/img/mid.png'}}"
-                                                 alt="player position" class="position-icon non-selectable opacity-75"
-                                            >
-                                            <img th:src="@{${'/img/mid.png'}}"
-                                                 alt="player position" class="position-icon non-selectable opacity-75"
-                                            >
-                                            <img th:src="@{${'/img/mid.png'}}"
-                                                 alt="player position" class="position-icon non-selectable opacity-75"
-                                            >
-                                        </div>
-                                    </th:block>
+                                        <th:block th:case="ARAM">
+                                            <div th:replace="~{partials/index/position-icons.html :: aram('')}"></div>
+                                        </th:block>
+                                    </div>
 
                                     <div class=" d-flex justify-content-between gap-3">
                                         <th:block th:each="participant : ${matchInfo.getMatch().getParticipant()}">
@@ -205,174 +122,65 @@
                                                         >
                                                         <p th:text="${participant.getSummonerName()}"></p>
                                                     </div>
-                                                    <div>
+                                                    <div th:with="kills=${participant.getKills()},
+                                                                  deaths=${participant.getDeaths()},
+                                                                  assists=${participant.getAssists()}"
+                                                    >
                                                         <p class="color-neutral-light"
-                                                           th:text="${
-                                                       participant.getKills() + '/' +
-                                                       participant.getDeaths() + '/' +
-                                                       participant.getAssists()}"
+                                                           th:text="${kills + '/' + deaths + '/' + assists}"
                                                         >
                                                         </p>
-                                                        <p th:if="${participant.getDeaths() == 0}"
+                                                        <p th:if="${deaths == 0}"
                                                            class="color-neutral-light"
                                                            th:text="${'Perfect'}"
                                                         ></p>
-                                                        <p th:unless="${participant.getDeaths() == 0}"
+                                                        <p th:unless="${deaths == 0}"
                                                            class="color-neutral-light"
                                                            th:text="${#numbers.formatDecimal((
-                                                           (participant.getKills() + participant.getAssists()) /
-                                                           (participant.getDeaths())
-                                                           ), 0, 'COMMA', 1, 'POINT') + 'KDA'}"
+                                                                   (kills + assists) / (deaths)
+                                                                   ), 0, 'COMMA', 1, 'POINT') + 'KDA'}"
                                                         ></p>
                                                     </div>
 
-                                                    <div>
-                                                        <th:block th:if="${(participant.getTotalMinionsKilled() + participant.getNeutralMinionsKilled()) == 0}">
-                                                            <p th:text="${'0 CS'}"></p>
-                                                        </th:block>
+                                                    <div th:with="minionKills=${participant.getTotalMinionsKilled() + participant.getNeutralMinionsKilled()},
+                                                                  matchDuration=${((matchInfo.getMatch().getGameDuration() - 60) / 60)}"
+                                                    >
+                                                        <p th:if="${minionKills == 0}">
+                                                            <span th:text="${'0 CS'}"></span>
+                                                        </p>
 
-                                                        <th:block th:unless="${(participant.getTotalMinionsKilled() + participant.getNeutralMinionsKilled()) == 0}">
-                                                            <p th:text="${(participant.getTotalMinionsKilled() + participant.getNeutralMinionsKilled()) + ' CS'}"></p>
-                                                            <p th:text="${#numbers.formatDecimal((
-                                                            (participant.getTotalMinionsKilled() + participant.getNeutralMinionsKilled()) /
-                                                            ((matchInfo.getMatch().getGameDuration() - 60) / 60)
-                                                            ), 0, 1) + ' CS/min'}"
+                                                        <p th:unless="${minionKills == 0}">
+                                                            <span th:text="${minionKills}"></span>
+                                                            <span th:text="${#numbers.formatDecimal((
+                                                                            minionKills / matchDuration
+                                                                            ), 0, 1) + ' CS'}"
+                                                            ></span>
+                                                        </p>
+
+                                                        <th:block th:with="killsCount=${matchInfo.getMatch().getTeam()[0].getKills()},
+                                                                            killParticipation=${100 * (participant.getKills() + participant.getAssists()) / killsCount}
+                                                        ">
+                                                            <p th:if="${killsCount == 0}" th:text="Oof..."></p>
+                                                            <p th:unless="${killsCount == 0}"
+                                                               th:text="${#numbers.formatDecimal(killParticipation, 0, 1) + '% KP'}"
                                                             ></p>
                                                         </th:block>
-
-                                                        <th:block th:if="${participant.getTeamId() == 100}">
-                                                            <th:block th:if="${matchInfo.getMatch().getTeam()[0].getKills() == 0}">
-                                                                <p th:text="${'Oof...'}"></p>
-                                                            </th:block>
-                                                            <th:block th:unless="${matchInfo.getMatch().getTeam()[0].getKills() == 0}">
-                                                                <p th:text="${#numbers.formatDecimal((
-                                                                100 * (participant.getKills() + participant.getAssists()) /
-                                                                (matchInfo.getMatch().getTeam()[0].getKills())
-                                                                ), 0, 1) + '% KP'}"
-                                                                ></p>
-                                                            </th:block>
-                                                        </th:block>
-
-                                                        <th:block th:if="${participant.getTeamId() == 200}">
-                                                            <th:block th:if="${matchInfo.getMatch().getTeam()[1].getKills() == 0}">
-                                                                <p th:text="${'Oof...'}"></p>
-                                                            </th:block>
-                                                            <th:block th:unless="${matchInfo.getMatch().getTeam()[1].getKills() == 0}">
-                                                                <p th:text="${#numbers.formatDecimal((
-                                                                100 * (participant.getKills() + participant.getAssists()) /
-                                                                (matchInfo.getMatch().getTeam()[1].getKills())
-                                                                ), 0, 1) + '% KP'}"
-                                                                ></p>
-                                                            </th:block>
-                                                        </th:block>
                                                     </div>
 
-                                                    <div class="d-flex">
-                                                        <th:block th:if="${participant.getItem0() == 0}">
-                                                            <div class="item-icon non-selectable opacity-75 bg-dark"></div>
-                                                        </th:block>
-                                                        <th:block th:unless="${participant.getItem0() == 0}">
-                                                            <img th:src="@{${'/dragon_tail/13.14.1/img/item/' + participant.getItem0() + '.png'}}"
-                                                                 alt="player icon" class="item-icon non-selectable opacity-75"
-                                                            >
-                                                        </th:block>
-
-                                                        <th:block th:if="${participant.getItem1() == 0}">
-                                                            <div class="item-icon non-selectable opacity-75 bg-dark"></div>
-                                                        </th:block>
-                                                        <th:block th:unless="${participant.getItem1() == 0}">
-                                                            <img th:src="@{${'/dragon_tail/13.14.1/img/item/' + participant.getItem1() + '.png'}}"
-                                                                 alt="player icon" class="item-icon non-selectable opacity-75"
-                                                            >
-                                                        </th:block>
-
-                                                        <th:block th:if="${participant.getItem2() == 0}">
-                                                            <div class="item-icon non-selectable opacity-75 bg-dark"></div>
-                                                        </th:block>
-                                                        <th:block th:unless="${participant.getItem2() == 0}">
-                                                            <img th:src="@{${'/dragon_tail/13.14.1/img/item/' + participant.getItem2() + '.png'}}"
-                                                                 alt="player icon" class="item-icon non-selectable opacity-75"
-                                                            >
-                                                        </th:block>
-
-                                                        <th:block th:if="${participant.getItem3() == 0}">
-                                                            <div class="item-icon non-selectable opacity-75 bg-dark"></div>
-                                                        </th:block>
-                                                        <th:block th:unless="${participant.getItem3() == 0}">
-                                                            <img th:src="@{${'/dragon_tail/13.14.1/img/item/' + participant.getItem3() + '.png'}}"
-                                                                 alt="player icon" class="item-icon non-selectable opacity-75"
-                                                            >
-                                                        </th:block>
-
-                                                        <th:block th:if="${participant.getItem4() == 0}">
-                                                            <div class="item-icon non-selectable opacity-75 bg-dark"></div>
-                                                        </th:block>
-                                                        <th:block th:unless="${participant.getItem4() == 0}">
-                                                            <img th:src="@{${'/dragon_tail/13.14.1/img/item/' + participant.getItem4() + '.png'}}"
-                                                                 alt="player icon" class="item-icon non-selectable opacity-75"
-                                                            >
-                                                        </th:block>
-
-                                                        <th:block th:if="${participant.getItem5() == 0}">
-                                                            <div class="item-icon non-selectable opacity-75 bg-dark"></div>
-                                                        </th:block>
-                                                        <th:block th:unless="${participant.getItem5() == 0}">
-                                                            <img th:src="@{${'/dragon_tail/13.14.1/img/item/' + participant.getItem5() + '.png'}}"
-                                                                 alt="player icon" class="item-icon non-selectable opacity-75"
-                                                            >
-                                                        </th:block>
-
-                                                        <th:block th:if="${participant.getItem6() == 0}">
-                                                            <div class="item-icon non-selectable opacity-75 bg-dark"></div>
-                                                        </th:block>
-                                                        <th:block th:unless="${participant.getItem6() == 0}">
-                                                            <img th:src="@{${'/dragon_tail/13.14.1/img/item/' + participant.getItem6() + '.png'}}"
-                                                                 alt="player icon" class="item-icon non-selectable opacity-75"
-                                                            >
-                                                        </th:block>
-                                                    </div>
+                                                    <div th:replace="~{partials/index/item-icons.html :: items('')}"></div>
                                                 </div>
                                             </div>
 
-                                            <div class="bg-color-neutral-dark p-2">
-                                                <th:block th:if="${matchInfo.getMatch().getGameMode().equals('CLASSIC')}">
-                                                    <div class="d-flex flex-column mb-2">
-                                                        <img th:src="@{${'/img/top.png'}}"
-                                                             alt="player position" class="position-icon-lg non-selectable opacity-75"
-                                                        >
-                                                        <img th:src="@{${'/img/jgl.png'}}"
-                                                             alt="player position" class="position-icon-lg non-selectable opacity-75"
-                                                        >
-                                                        <img th:src="@{${'/img/mid.png'}}"
-                                                             alt="player position" class="position-icon-lg non-selectable opacity-75"
-                                                        >
-                                                        <img th:src="@{${'/img/bot.png'}}"
-                                                             alt="player position" class="position-icon-lg non-selectable opacity-75"
-                                                        >
-                                                        <img th:src="@{${'/img/sup.png'}}"
-                                                             alt="player position" class="position-icon-lg non-selectable opacity-75"
-                                                        >
-                                                    </div>
+<!--VERTICAL POSITION ICONS-->
+                                            <div  th:switch="${matchInfo.getMatch().getGameMode()}"
+                                                  class="bg-color-neutral-dark p-2"
+                                            >
+                                                <th:block th:case="CLASSIC">
+                                                    <div th:replace="~{partials/index/position-icons.html :: classic-vertical('')}"></div>
                                                 </th:block>
 
-                                                <th:block th:if="${matchInfo.getMatch().getGameMode().equals('ARAM')}">
-                                                    <div class="d-flex flex-column mb-2">
-                                                        <img th:src="@{${'/img/mid.png'}}"
-                                                             alt="player position" class="position-icon-lg non-selectable opacity-75"
-                                                        >
-                                                        <img th:src="@{${'/img/mid.png'}}"
-                                                             alt="player position" class="position-icon-lg non-selectable opacity-75"
-                                                        >
-                                                        <img th:src="@{${'/img/mid.png'}}"
-                                                             alt="player position" class="position-icon-lg non-selectable opacity-75"
-                                                        >
-                                                        <img th:src="@{${'/img/mid.png'}}"
-                                                             alt="player position" class="position-icon-lg non-selectable opacity-75"
-                                                        >
-                                                        <img th:src="@{${'/img/mid.png'}}"
-                                                             alt="player position" class="position-icon-lg non-selectable opacity-75"
-                                                        >
-                                                    </div>
+                                                <th:block th:case="ARAM">
+                                                    <div th:replace="~{partials/index/position-icons.html :: aram-vertical('')}"></div>
                                                 </th:block>
                                             </div>
 
@@ -416,97 +224,15 @@
                                                             ></p>
                                                         </th:block>
 
-                                                        <th:block th:if="${participant.getTeamId() == 100}">
-                                                            <th:block th:if="${matchInfo.getMatch().getTeam()[0].getKills() == 0}">
-                                                                <p th:text="${'Oof...'}"></p>
-                                                            </th:block>
-                                                            <th:block th:unless="${matchInfo.getMatch().getTeam()[0].getKills() == 0}">
-                                                                <p th:text="${#numbers.formatDecimal((
-                                                                100 * (participant.getKills() + participant.getAssists()) /
-                                                                (matchInfo.getMatch().getTeam()[0].getKills())
-                                                                ), 0, 1) + '% KP'}"
-                                                                ></p>
-                                                            </th:block>
-                                                        </th:block>
-
-                                                        <th:block th:if="${participant.getTeamId() == 200}">
-                                                            <th:block th:if="${matchInfo.getMatch().getTeam()[1].getKills() == 0}">
-                                                                <p th:text="${'Oof...'}"></p>
-                                                            </th:block>
-                                                            <th:block th:unless="${matchInfo.getMatch().getTeam()[1].getKills() == 0}">
-                                                                <p th:text="${#numbers.formatDecimal((
-                                                                100 * (participant.getKills() + participant.getAssists()) /
-                                                                (matchInfo.getMatch().getTeam()[1].getKills())
-                                                                ), 0, 1) + '% KP'}"
-                                                                ></p>
-                                                            </th:block>
+                                                        <th:block th:with="killsCount=${matchInfo.getMatch().getTeam()[1].getKills()}">
+                                                            <p th:if="${killsCount == 0}" th:text="Oof..."></p>
+                                                            <p th:unless="${killsCount == 0}"
+                                                               th:text="${#numbers.formatDecimal((100 * (participant.getKills() + participant.getAssists()) / killsCount), 0, 1) + '% KP'}"
+                                                            ></p>
                                                         </th:block>
                                                     </div>
 
-                                                    <div class="d-flex">
-                                                        <th:block th:if="${participant.getItem0() == 0}">
-                                                            <div class="item-icon non-selectable opacity-75 bg-dark"></div>
-                                                        </th:block>
-                                                        <th:block th:unless="${participant.getItem0() == 0}">
-                                                            <img th:src="@{${'/dragon_tail/13.14.1/img/item/' + participant.getItem0() + '.png'}}"
-                                                                 alt="player icon" class="item-icon non-selectable opacity-75"
-                                                            >
-                                                        </th:block>
-
-                                                        <th:block th:if="${participant.getItem1() == 0}">
-                                                            <div class="item-icon non-selectable opacity-75 bg-dark"></div>
-                                                        </th:block>
-                                                        <th:block th:unless="${participant.getItem1() == 0}">
-                                                            <img th:src="@{${'/dragon_tail/13.14.1/img/item/' + participant.getItem1() + '.png'}}"
-                                                                 alt="player icon" class="item-icon non-selectable opacity-75"
-                                                            >
-                                                        </th:block>
-
-                                                        <th:block th:if="${participant.getItem2() == 0}">
-                                                            <div class="item-icon non-selectable opacity-75 bg-dark"></div>
-                                                        </th:block>
-                                                        <th:block th:unless="${participant.getItem2() == 0}">
-                                                            <img th:src="@{${'/dragon_tail/13.14.1/img/item/' + participant.getItem2() + '.png'}}"
-                                                                 alt="player icon" class="item-icon non-selectable opacity-75"
-                                                            >
-                                                        </th:block>
-
-                                                        <th:block th:if="${participant.getItem3() == 0}">
-                                                            <div class="item-icon non-selectable opacity-75 bg-dark"></div>
-                                                        </th:block>
-                                                        <th:block th:unless="${participant.getItem3() == 0}">
-                                                            <img th:src="@{${'/dragon_tail/13.14.1/img/item/' + participant.getItem3() + '.png'}}"
-                                                                 alt="player icon" class="item-icon non-selectable opacity-75"
-                                                            >
-                                                        </th:block>
-
-                                                        <th:block th:if="${participant.getItem4() == 0}">
-                                                            <div class="item-icon non-selectable opacity-75 bg-dark"></div>
-                                                        </th:block>
-                                                        <th:block th:unless="${participant.getItem4() == 0}">
-                                                            <img th:src="@{${'/dragon_tail/13.14.1/img/item/' + participant.getItem4() + '.png'}}"
-                                                                 alt="player icon" class="item-icon non-selectable opacity-75"
-                                                            >
-                                                        </th:block>
-
-                                                        <th:block th:if="${participant.getItem5() == 0}">
-                                                            <div class="item-icon non-selectable opacity-75 bg-dark"></div>
-                                                        </th:block>
-                                                        <th:block th:unless="${participant.getItem5() == 0}">
-                                                            <img th:src="@{${'/dragon_tail/13.14.1/img/item/' + participant.getItem5() + '.png'}}"
-                                                                 alt="player icon" class="item-icon non-selectable opacity-75"
-                                                            >
-                                                        </th:block>
-
-                                                        <th:block th:if="${participant.getItem6() == 0}">
-                                                            <div class="item-icon non-selectable opacity-75 bg-dark"></div>
-                                                        </th:block>
-                                                        <th:block th:unless="${participant.getItem6() == 0}">
-                                                            <img th:src="@{${'/dragon_tail/13.14.1/img/item/' + participant.getItem6() + '.png'}}"
-                                                                 alt="player icon" class="item-icon non-selectable opacity-75"
-                                                            >
-                                                        </th:block>
-                                                    </div>
+                                                    <div th:replace="~{partials/index/item-icons.html :: items('')}"></div>
 
                                                     <div>
                                                         <img th:src="@{${'/dragon_tail/13.14.1/img/champion/' + participant.getChampionName() + '.png'}}"
@@ -572,13 +298,13 @@
 <footer th:replace="~{partials/footer.html :: footer}"></footer>
 
 <script type="text/javascript">
-    function drawTeamKillChart(matchId, team1Kill, team2Kill) {
+    function drawChart(chartType, matchId, team1Data, team2Data) {
         google.charts.load("current", { packages: ["corechart"] });
         google.charts.setOnLoadCallback(function () {
             var data = google.visualization.arrayToDataTable([
-                ['Team', 'Damage'],
-                ['Blue Team', team1Kill],
-                ['Red Team',  team2Kill]
+                ['Team', chartType],
+                ['Blue Team', team1Data],
+                ['Red Team', team2Data]
             ]);
 
             var options = {
@@ -593,87 +319,19 @@
                 }
             };
 
-            var chart = new google.visualization.PieChart(document.getElementById('killChart-' + matchId));
+            var chart = new google.visualization.PieChart(document.getElementById(chartType + 'Chart-' + matchId));
             chart.draw(data, options);
         });
     }
 
-    function drawTeamDamageChart(matchId, team1Damage, team2Damage) {
-        google.charts.load("current", { packages: ["corechart"] });
-        google.charts.setOnLoadCallback(function () {
-            var data = google.visualization.arrayToDataTable([
-                ['Team', 'Damage'],
-                ['Blue Team', team1Damage],
-                ['Red Team',  team2Damage]
-            ]);
-
-            var options = {
-                pieHole: 0.7,
-                backgroundColor: 'transparent',
-                pieSliceBorderColor: 'transparent',
-                legend: 'none',
-                pieSliceText: 'none',
-                tooltip: {
-                    textStyle: {color: '#252525', fontSize: 12},
-                    trigger: 'selection'
-                }
-            };
-
-            var chart = new google.visualization.PieChart(document.getElementById('damageChart-' + matchId));
-            chart.draw(data, options);
-        });
-    }
-
-    function drawTeamGoldChart(matchId, team1Gold, team2Gold) {
-        google.charts.load("current", { packages: ["corechart"] });
-        google.charts.setOnLoadCallback(function () {
-            var data = google.visualization.arrayToDataTable([
-                ['Team', 'Gold'],
-                ['Blue Team', team1Gold],
-                ['Red Team',  team2Gold]
-            ]);
-
-            var options = {
-                pieHole: 0.7,
-                backgroundColor: 'transparent',
-                pieSliceBorderColor: 'transparent',
-                legend: 'none',
-                pieSliceText: 'none',
-                tooltip:
-                    {textStyle: {color: '#252525', fontSize: 12},
-                        trigger: 'selection'}
-            };
-
-            var chart = new google.visualization.PieChart(document.getElementById('goldChart-' + matchId));
-            chart.draw(data, options);
-        });
-    }
-
-    var killContainers = document.getElementsByClassName("killChart-container");
-    for (var i = 0; i < killContainers.length; i++) {
-        var container = killContainers[i];
+    var chartContainers = document.getElementsByClassName("chart-container");
+    for (var i = 0; i < chartContainers.length; i++) {
+        var container = chartContainers[i];
+        var chartType = container.getAttribute("data-chart-type");
         var matchId = container.getAttribute("data-match-id");
-        var team1Kill = parseInt(container.getAttribute("data-team1-kill"));
-        var team2Kill = parseInt(container.getAttribute("data-team2-kill"));
-        drawTeamKillChart(matchId, team1Kill, team2Kill);
-    }
-
-    var damageContainers = document.getElementsByClassName("damageChart-container");
-    for (var i = 0; i < damageContainers.length; i++) {
-        var container = damageContainers[i];
-        var matchId = container.getAttribute("data-match-id");
-        var team1Damage = parseInt(container.getAttribute("data-team1-damage"));
-        var team2Damage = parseInt(container.getAttribute("data-team2-damage"));
-        drawTeamDamageChart(matchId, team1Damage, team2Damage);
-    }
-
-    var goldContainers = document.getElementsByClassName("goldChart-container");
-    for (var i = 0; i < goldContainers.length; i++) {
-        var container = goldContainers[i];
-        var matchId = container.getAttribute("data-match-id");
-        var team1Gold = parseInt(container.getAttribute("data-team1-gold"));
-        var team2Gold = parseInt(container.getAttribute("data-team2-gold"));
-        drawTeamGoldChart(matchId, team1Gold, team2Gold);
+        var team1Data = parseInt(container.getAttribute("data-team1"));
+        var team2Data = parseInt(container.getAttribute("data-team2"));
+        drawChart(chartType, matchId, team1Data, team2Data);
     }
 </script>
 </body>

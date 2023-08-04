@@ -1,0 +1,66 @@
+<div th:fragment="items(title)"
+     class="d-flex"
+>
+  <th:block th:if="${participant.getItem0() == 0}">
+    <div class="item-icon non-selectable opacity-75 bg-dark"></div>
+  </th:block>
+  <th:block th:unless="${participant.getItem0() == 0}">
+    <img th:src="@{${'/dragon_tail/13.14.1/img/item/' + participant.getItem0() + '.png'}}"
+         alt="player icon" class="item-icon non-selectable opacity-75"
+    >
+  </th:block>
+
+  <th:block th:if="${participant.getItem1() == 0}">
+    <div class="item-icon non-selectable opacity-75 bg-dark"></div>
+  </th:block>
+  <th:block th:unless="${participant.getItem1() == 0}">
+    <img th:src="@{${'/dragon_tail/13.14.1/img/item/' + participant.getItem1() + '.png'}}"
+         alt="player icon" class="item-icon non-selectable opacity-75"
+    >
+  </th:block>
+
+  <th:block th:if="${participant.getItem2() == 0}">
+    <div class="item-icon non-selectable opacity-75 bg-dark"></div>
+  </th:block>
+  <th:block th:unless="${participant.getItem2() == 0}">
+    <img th:src="@{${'/dragon_tail/13.14.1/img/item/' + participant.getItem2() + '.png'}}"
+         alt="player icon" class="item-icon non-selectable opacity-75"
+    >
+  </th:block>
+
+  <th:block th:if="${participant.getItem3() == 0}">
+    <div class="item-icon non-selectable opacity-75 bg-dark"></div>
+  </th:block>
+  <th:block th:unless="${participant.getItem3() == 0}">
+    <img th:src="@{${'/dragon_tail/13.14.1/img/item/' + participant.getItem3() + '.png'}}"
+         alt="player icon" class="item-icon non-selectable opacity-75"
+    >
+  </th:block>
+
+  <th:block th:if="${participant.getItem4() == 0}">
+    <div class="item-icon non-selectable opacity-75 bg-dark"></div>
+  </th:block>
+  <th:block th:unless="${participant.getItem4() == 0}">
+    <img th:src="@{${'/dragon_tail/13.14.1/img/item/' + participant.getItem4() + '.png'}}"
+         alt="player icon" class="item-icon non-selectable opacity-75"
+    >
+  </th:block>
+
+  <th:block th:if="${participant.getItem5() == 0}">
+    <div class="item-icon non-selectable opacity-75 bg-dark"></div>
+  </th:block>
+  <th:block th:unless="${participant.getItem5() == 0}">
+    <img th:src="@{${'/dragon_tail/13.14.1/img/item/' + participant.getItem5() + '.png'}}"
+         alt="player icon" class="item-icon non-selectable opacity-75"
+    >
+  </th:block>
+
+  <th:block th:if="${participant.getItem6() == 0}">
+    <div class="item-icon non-selectable opacity-75 bg-dark"></div>
+  </th:block>
+  <th:block th:unless="${participant.getItem6() == 0}">
+    <img th:src="@{${'/dragon_tail/13.14.1/img/item/' + participant.getItem6() + '.png'}}"
+         alt="player icon" class="item-icon non-selectable opacity-75"
+    >
+  </th:block>
+</div>
