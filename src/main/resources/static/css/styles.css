@@ -89,7 +89,7 @@ VISUAL FRAMEWORK
 //////////////////////////////*/
 .friend-icon {
     height: 48px;
-    aspect-ratio: 1;
+    width: 48px;
     border-radius: 50%;
 }
 
@@ -106,13 +106,20 @@ VISUAL FRAMEWORK
 
 .position-icon-lg {
     height: 48px;
-    aspect-ratio: 1;
+    width: 48px;
+}
+
+.position-icon-lg-box {
+    height: 76px;
+    width: 76px;
 }
 
 .accordion {
     border: none;
     --bs-accordion-border-width:0;
     --bs-accordion-btn-color: #ff0000;
+    --bs-accordion-body-padding-x: .5rem;
+    --bs-accordion-body-padding-y: 2rem;
 }
 
 /*.accordion-item {*/

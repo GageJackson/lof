@@ -19,7 +19,6 @@
                                     th:attr="data-bs-target=${'#accordion-' + matchInfo.getMatch().getGameId()},
                                     aria-controls=${'#accordion-' + matchInfo.getMatch().getGameId()}"
                             >
-
                                 <div>
                                     <h3 class="bold color-neutral-light" th:text="${matchInfo.getMatch().getGameMode()}"></h3>
                                     <p class="color-neutral-light" th:text="${#strings.substring(matchInfo.getMatch().getGameVersion(), 0, 5)}"></p>
@@ -28,43 +27,25 @@
                                 </div>
 
                                 <div class="d-flex justify-content-center align-items-center">
+                                    <!--BLUE VS RED GOLD COMPARISON CHART-->
                                     <div  th:replace="~{partials/index/chart-container.html :: gold-chart}"></div>
+
+                                    <!--BLUE VS RED KILL COMPARISON CHART-->
                                     <div  th:replace="~{partials/index/chart-container.html :: kill-chart}"></div>
+
+                                    <!--BLUE VS RED DAMAGE COMPARISON CHART-->
                                     <div  th:replace="~{partials/index/chart-container.html :: damage-chart}"></div>
                                 </div>
 
                                 <div class="">
-                                    <div class="mb-2 d-flex justify-content-between gap-3">
-                                        <th:block th:each="participant : ${matchInfo.getMatch().getParticipant()}">
-                                            <th:block th:if="${participant.getTeamId() == 100}">
-                                                <img th:src="@{${'/dragon_tail/13.14.1/img/champion/' + participant.getChampionName() + '.png'}}"
-                                                     alt="player icon" class="friend-icon non-selectable opacity-75"
-                                                     th:classappend="${#lists.contains(friends.![puuId], participant.getPuuid())} ? 'border border-2 border-warning' : 'border border-2 border-primary'"
-                                                >
-                                            </th:block>
-                                        </th:block>
-                                    </div>
+                                    <!--BLUE TEAM CHAMPIONS-->
+                                    <div th:replace="~{partials/index/champion-icon.html :: champion(100)}"></div>
 
-                                    <div  th:switch="${matchInfo.getMatch().getGameMode()}">
-                                        <th:block th:case="CLASSIC">
-                                            <div th:replace="~{partials/index/position-icons.html :: classic('')}"></div>
-                                        </th:block>
+                                    <!--VERTICAL POSITION ICONS-->
+                                    <div th:replace="~{partials/index/position-icons.html :: horizontal('')}"></div>
 
-                                        <th:block th:case="ARAM">
-                                            <div th:replace="~{partials/index/position-icons.html :: aram('')}"></div>
-                                        </th:block>
-                                    </div>
-
-                                    <div class=" d-flex justify-content-between gap-3">
-                                        <th:block th:each="participant : ${matchInfo.getMatch().getParticipant()}">
-                                            <th:block th:unless="${participant.getTeamId() == 100}">
-                                                <img th:src="@{${'/dragon_tail/13.14.1/img/champion/' + participant.getChampionName() + '.png'}}"
-                                                     alt="player icon" class="friend-icon non-selectable opacity-75"
-                                                     th:classappend="${#lists.contains(friends.![puuId], participant.getPuuid())} ? 'border border-2 border-warning' : 'border border-2 border-danger'"
-                                                >
-                                            </th:block>
-                                        </th:block>
-                                    </div>
+                                    <!--RED TEAM CHAMPIONS-->
+                                    <div th:replace="~{partials/index/champion-icon.html :: champion(200)}"></div>
                                 </div>
                             </button>
 
@@ -72,182 +53,38 @@
                                  th:attr="data-bs-parent=${'#accordion' + matchInfo.getMatch().getGameId()}"
                             >
                                 <div class="accordion-body bg-color-neutral-dark">
-                                    <div class="card bg-transparent border-0 p-0 w-100">
+                                    <div class="card bg-transparent border-0 w-100">
                                         <div class="card-header bg-transparent border-0">
-                                            <div class="row row-cols-4 g-3">
-                                                <div class="col">
-                                                    <th:block th:if="${matchInfo.getMatch().getTeam()[0].isWin()}">
-                                                        <p class="text-primary">Blue Team <span class="badge bg-primary">Won</span></p>
-                                                    </th:block>
-                                                    <th:block th:unless="${matchInfo.getMatch().getTeam()[0].isWin()}">
-                                                        <p class="text-primary">Blue Team <span class="badge bg-primary">Lost</span></p>
-                                                    </th:block>
-                                                </div>
-                                                <div class="col">
-                                                    <p class="color-neutral-light"
-                                                       th:text="${
-                                                       matchInfo.getMatch().getTeam()[0].getKills() + '/' +
-                                                       matchInfo.getMatch().getTeam()[0].getDeaths() + '/' +
-                                                       matchInfo.getMatch().getTeam()[0].getAssists()}">
-                                                    </p>
-                                                </div>
-                                                <div class="col">
-                                                    <th:block th:if="${matchInfo.getMatch().getTeam()[1].isWin()}">
-                                                        <p class="text-danger">Red Team <span class="badge bg-danger">Won</span></p>
-                                                    </th:block>
-                                                    <th:block th:unless="${matchInfo.getMatch().getTeam()[1].isWin()}">
-                                                        <p class="text-danger">Red Team <span class="badge bg-danger">Lost</span></p>
-                                                    </th:block>
-                                                </div>
-                                                <div class="col">
-                                                    <p class="color-neutral-light"
-                                                       th:text="${
-                                                       matchInfo.getMatch().getTeam()[1].getKills() + '/' +
-                                                       matchInfo.getMatch().getTeam()[1].getDeaths() + '/' +
-                                                       matchInfo.getMatch().getTeam()[1].getAssists()}">
-                                                    </p>
+                                            <div class="container">
+                                                <div class="row row-cols-3">
+                                                    <!--BLUE TEAM INFO-->
+                                                    <div th:replace="~{partials/index/team-header.html :: team('Blue', 0)}"></div>
+
+                                                    <div class="col-2"></div>
+
+                                                    <!--RED TEAM INFO-->
+                                                    <div th:replace="~{partials/index/team-header.html :: team('Red', 1)}"></div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="card-body border-0 bg-transparent d-flex justify-content-between p-0">
-                                            <div class="blue-team-bg p-2">
-                                                <div th:each="participant : ${matchInfo.getMatch().getParticipant()}"
-                                                        th:if="${participant.getTeamId()} == 100"
-                                                        class="d-flex justify-content-between w-100"
-                                                >
-                                                    <div>
-                                                        <img th:src="@{${'/dragon_tail/13.14.1/img/champion/' + participant.getChampionName() + '.png'}}"
-                                                             alt="player icon" class="friend-icon non-selectable opacity-75"
-                                                             th:classappend="${#lists.contains(friends.![puuId], participant.getPuuid())} ? 'border border-2 border-warning' : 'border border-2 border-primary'"
-                                                        >
-                                                        <p th:text="${participant.getSummonerName()}"></p>
-                                                    </div>
-                                                    <div th:with="kills=${participant.getKills()},
-                                                                  deaths=${participant.getDeaths()},
-                                                                  assists=${participant.getAssists()}"
-                                                    >
-                                                        <p class="color-neutral-light"
-                                                           th:text="${kills + '/' + deaths + '/' + assists}"
-                                                        >
-                                                        </p>
-                                                        <p th:if="${deaths == 0}"
-                                                           class="color-neutral-light"
-                                                           th:text="${'Perfect'}"
-                                                        ></p>
-                                                        <p th:unless="${deaths == 0}"
-                                                           class="color-neutral-light"
-                                                           th:text="${#numbers.formatDecimal((
-                                                                   (kills + assists) / (deaths)
-                                                                   ), 0, 'COMMA', 1, 'POINT') + 'KDA'}"
-                                                        ></p>
-                                                    </div>
+                                        <div class="card-body border-0 bg-transparent">
+                                            <div class="container">
+                                                <div class="row row-cols-3">
+                                                    <!--BLUE TEAM INFO-->
+                                                    <div  th:replace="~{partials/index/team-body.html :: blueTeam('')}"></div>
 
-                                                    <div th:with="minionKills=${participant.getTotalMinionsKilled() + participant.getNeutralMinionsKilled()},
-                                                                  matchDuration=${((matchInfo.getMatch().getGameDuration() - 60) / 60)}"
-                                                    >
-                                                        <p th:if="${minionKills == 0}">
-                                                            <span th:text="${'0 CS'}"></span>
-                                                        </p>
+                                                    <!--VERTICAL POSITION ICONS-->
+                                                    <div  th:replace="~{partials/index/position-icons.html :: vertical('')}"></div>
 
-                                                        <p th:unless="${minionKills == 0}">
-                                                            <span th:text="${minionKills}"></span>
-                                                            <span th:text="${#numbers.formatDecimal((
-                                                                            minionKills / matchDuration
-                                                                            ), 0, 1) + ' CS'}"
-                                                            ></span>
-                                                        </p>
-
-                                                        <th:block th:with="killsCount=${matchInfo.getMatch().getTeam()[0].getKills()},
-                                                                            killParticipation=${100 * (participant.getKills() + participant.getAssists()) / killsCount}
-                                                        ">
-                                                            <p th:if="${killsCount == 0}" th:text="Oof..."></p>
-                                                            <p th:unless="${killsCount == 0}"
-                                                               th:text="${#numbers.formatDecimal(killParticipation, 0, 1) + '% KP'}"
-                                                            ></p>
-                                                        </th:block>
-                                                    </div>
-
-                                                    <div th:replace="~{partials/index/item-icons.html :: items('')}"></div>
+                                                    <!--RED TEAM INFO-->
+                                                    <div  th:replace="~{partials/index/team-body.html :: redTeam('')}"></div>
                                                 </div>
                                             </div>
-
-<!--VERTICAL POSITION ICONS-->
-                                            <div  th:switch="${matchInfo.getMatch().getGameMode()}"
-                                                  class="bg-color-neutral-dark p-2"
-                                            >
-                                                <th:block th:case="CLASSIC">
-                                                    <div th:replace="~{partials/index/position-icons.html :: classic-vertical('')}"></div>
-                                                </th:block>
-
-                                                <th:block th:case="ARAM">
-                                                    <div th:replace="~{partials/index/position-icons.html :: aram-vertical('')}"></div>
-                                                </th:block>
-                                            </div>
-
-                                            <div class="red-team-bg p-2">
-                                                <div th:each="participant : ${matchInfo.getMatch().getParticipant()}"
-                                                        th:if="${participant.getTeamId()} == 200"
-                                                        class="d-flex justify-content-between w-100"
-                                                >
-                                                    <div>
-                                                        <p class="color-neutral-light"
-                                                           th:text="${
-                                                       participant.getKills() + '/' +
-                                                       participant.getDeaths() + '/' +
-                                                       participant.getAssists()}"
-                                                        >
-                                                        </p>
-                                                        <p th:if="${participant.getDeaths() == 0}"
-                                                           class="color-neutral-light"
-                                                           th:text="${'Perfect'}"
-                                                        ></p>
-                                                        <p th:unless="${participant.getDeaths() == 0}"
-                                                           class="color-neutral-light"
-                                                           th:text="${#numbers.formatDecimal((
-                                                           (participant.getKills() + participant.getAssists()) /
-                                                           (participant.getDeaths())
-                                                           ), 0, 'COMMA', 1, 'POINT') + 'KDA'}"
-                                                        ></p>
-                                                    </div>
-
-                                                    <div>
-                                                        <th:block th:if="${(participant.getTotalMinionsKilled() + participant.getNeutralMinionsKilled()) == 0}">
-                                                            <p th:text="${'0 CS'}"></p>
-                                                        </th:block>
-
-                                                        <th:block th:unless="${(participant.getTotalMinionsKilled() + participant.getNeutralMinionsKilled()) == 0}">
-                                                            <p th:text="${(participant.getTotalMinionsKilled() + participant.getNeutralMinionsKilled()) + ' CS'}"></p>
-                                                            <p th:text="${#numbers.formatDecimal((
-                                                            (participant.getTotalMinionsKilled() + participant.getNeutralMinionsKilled()) /
-                                                            ((matchInfo.getMatch().getGameDuration() - 60) / 60)
-                                                            ), 0, 1) + ' CS/min'}"
-                                                            ></p>
-                                                        </th:block>
-
-                                                        <th:block th:with="killsCount=${matchInfo.getMatch().getTeam()[1].getKills()}">
-                                                            <p th:if="${killsCount == 0}" th:text="Oof..."></p>
-                                                            <p th:unless="${killsCount == 0}"
-                                                               th:text="${#numbers.formatDecimal((100 * (participant.getKills() + participant.getAssists()) / killsCount), 0, 1) + '% KP'}"
-                                                            ></p>
-                                                        </th:block>
-                                                    </div>
-
-                                                    <div th:replace="~{partials/index/item-icons.html :: items('')}"></div>
-
-                                                    <div>
-                                                        <img th:src="@{${'/dragon_tail/13.14.1/img/champion/' + participant.getChampionName() + '.png'}}"
-                                                             alt="player icon" class="friend-icon non-selectable opacity-75"
-                                                             th:classappend="${#lists.contains(friends.![puuId], participant.getPuuid())} ? 'border border-2 border-warning' : 'border border-2 border-danger'"
-                                                        >
-                                                        <p th:text="${participant.getSummonerName()}"></p>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
                                         </div>
-                                        <div class="card-footer card-bg border-0">
-                                            <p>Footer</p>
+                                        <div class="card-footer bg-transparent border-0">
+                                            <div class="container">
+
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -296,44 +133,6 @@
 </main>
 
 <footer th:replace="~{partials/footer.html :: footer}"></footer>
-
-<script type="text/javascript">
-    function drawChart(chartType, matchId, team1Data, team2Data) {
-        google.charts.load("current", { packages: ["corechart"] });
-        google.charts.setOnLoadCallback(function () {
-            var data = google.visualization.arrayToDataTable([
-                ['Team', chartType],
-                ['Blue Team', team1Data],
-                ['Red Team', team2Data]
-            ]);
-
-            var options = {
-                pieHole: 0.7,
-                backgroundColor: 'transparent',
-                pieSliceBorderColor: 'transparent',
-                legend: 'none',
-                pieSliceText: 'none',
-                tooltip: {
-                    textStyle: {color: '#252525', fontSize: 12},
-                    trigger: 'selection'
-                }
-            };
-
-            var chart = new google.visualization.PieChart(document.getElementById(chartType + 'Chart-' + matchId));
-            chart.draw(data, options);
-        });
-    }
-
-    var chartContainers = document.getElementsByClassName("chart-container");
-    for (var i = 0; i < chartContainers.length; i++) {
-        var container = chartContainers[i];
-        var chartType = container.getAttribute("data-chart-type");
-        var matchId = container.getAttribute("data-match-id");
-        var team1Data = parseInt(container.getAttribute("data-team1"));
-        var team2Data = parseInt(container.getAttribute("data-team2"));
-        drawChart(chartType, matchId, team1Data, team2Data);
-    }
-</script>
 </body>
 </html>
 

@@ -1,0 +1,35 @@
+<div th:fragment="team(teamColor, teamNumber)"
+     th:with="teamWin=${matchInfo.getMatch().getTeam()[teamNumber].isWin()},
+              teamKills=${matchInfo.getMatch().getTeam()[teamNumber].getKills()},
+              teamAssists=${matchInfo.getMatch().getTeam()[teamNumber].getDeaths()},
+              teamDeaths=${matchInfo.getMatch().getTeam()[teamNumber].getAssists()},
+              teamGold=${matchInfo.getMatch().getTeam()[teamNumber].getGold()}"
+     class="col-5"
+>
+  <div class="d-flex justify-content-between">
+    <div class="">
+      <p>
+        <span class="color-neutral-light" th:text="${teamColor + ' Team'}"></span>
+        <span th:if="${teamWin}"
+              class="badge bg-warning"
+        >Won</span>
+        <span th:unless="${teamWin}"
+              class="badge bg-danger"
+        >Lost</span>
+      </p>
+    </div>
+
+    <div class="">
+      <p class="color-neutral-light"
+         th:text="${teamKills + '/' + teamAssists + '/' + teamDeaths}">
+      </p>
+    </div>
+
+    <div class="">
+      <p class="color-neutral-light"
+         th:text="${teamGold}">
+      </p>
+    </div>
+  </div>
+
+</div>

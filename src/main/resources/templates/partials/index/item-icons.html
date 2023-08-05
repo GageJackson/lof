@@ -1,5 +1,5 @@
 <div th:fragment="items(title)"
-     class="d-flex"
+     class="d-flex justify-content-between mt-1 gap-0 column-gap-1"
 >
   <th:block th:if="${participant.getItem0() == 0}">
     <div class="item-icon non-selectable opacity-75 bg-dark"></div>
@@ -64,3 +64,4 @@
     >
   </th:block>
 </div>
+

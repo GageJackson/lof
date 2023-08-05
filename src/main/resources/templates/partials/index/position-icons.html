@@ -1,4 +1,16 @@
-<div th:fragment="aram(title)"
+<!--HORIZONTAL POSITION ICON SECTION-->
+<div th:fragment="horizontal(title)"
+        th:switch="${matchInfo.getMatch().getGameMode()}">
+    <th:block th:case="CLASSIC">
+        <div th:replace="~{partials/index/position-icons.html :: classic-horizontal('')}"></div>
+    </th:block>
+
+    <th:block th:case="ARAM">
+        <div th:replace="~{partials/index/position-icons.html :: aram-horizontal('')}"></div>
+    </th:block>
+</div>
+
+<div th:fragment="aram-horizontal(title)"
      class="d-flex justify-content-between px-2 mb-2"
 >
   <img th:src="@{${'/img/mid.png'}}"
@@ -18,62 +30,97 @@
   >
 </div>
 
-<div th:fragment="classic(title)"
+<div th:fragment="classic-horizontal(title)"
      class="d-flex justify-content-between px-2 mb-2"
 >
     <img th:src="@{${'/img/top.png'}}"
-         alt="player position" class="position-icon non-selectable opacity-75"
+         alt="player position top" class="position-icon non-selectable opacity-75"
     >
     <img th:src="@{${'/img/jgl.png'}}"
-         alt="player position" class="position-icon non-selectable opacity-75"
+         alt="player position jungle" class="position-icon non-selectable opacity-75"
     >
     <img th:src="@{${'/img/mid.png'}}"
-         alt="player position" class="position-icon non-selectable opacity-75"
+         alt="player position mid" class="position-icon non-selectable opacity-75"
     >
     <img th:src="@{${'/img/bot.png'}}"
-         alt="player position" class="position-icon non-selectable opacity-75"
+         alt="player position bot" class="position-icon non-selectable opacity-75"
     >
     <img th:src="@{${'/img/sup.png'}}"
-         alt="player position" class="position-icon non-selectable opacity-75"
+         alt="player position support" class="position-icon non-selectable opacity-75"
     >
+</div>
+
+<!--VERTICAL POSITION ICON SECTION-->
+<div  th:fragment="vertical(title)"
+      th:switch="${matchInfo.getMatch().getGameMode()}"
+      class="bg-color-neutral-dark col-2 p-3"
+>
+    <th:block th:case="CLASSIC">
+        <div th:replace="~{partials/index/position-icons.html :: classic-vertical('')}"></div>
+    </th:block>
+
+    <th:block th:case="ARAM">
+        <div th:replace="~{partials/index/position-icons.html :: aram-vertical('')}"></div>
+    </th:block>
 </div>
 
 <div th:fragment="classic-vertical(title)"
-     class="d-flex flex-column justify-content-between mb-2"
+     class="d-flex flex-column justify-content-between align-items-center h-100"
 >
-    <img th:src="@{${'/img/top.png'}}"
-         alt="player position" class="position-icon-lg non-selectable opacity-75"
-    >
-    <img th:src="@{${'/img/jgl.png'}}"
-         alt="player position" class="position-icon-lg non-selectable opacity-75"
-    >
-    <img th:src="@{${'/img/mid.png'}}"
-         alt="player position" class="position-icon-lg non-selectable opacity-75"
-    >
-    <img th:src="@{${'/img/bot.png'}}"
-         alt="player position" class="position-icon-lg non-selectable opacity-75"
-    >
-    <img th:src="@{${'/img/sup.png'}}"
-         alt="player position" class="position-icon-lg non-selectable opacity-75"
-    >
+    <div class="position-icon-lg-box d-flex justify-content-center align-items-center mb-3">
+        <img th:src="@{${'/img/top.png'}}"
+             alt="player position top" class="position-icon-lg non-selectable opacity-75"
+        >
+    </div>
+    <div class="position-icon-lg-box d-flex justify-content-center align-items-center mb-3">
+        <img th:src="@{${'/img/jgl.png'}}"
+             alt="player position jungle" class="position-icon-lg non-selectable opacity-75"
+        >
+    </div>
+    <div class="position-icon-lg-box d-flex justify-content-center align-items-center mb-3">
+        <img th:src="@{${'/img/mid.png'}}"
+             alt="player position mid" class="position-icon-lg non-selectable opacity-75"
+        >
+    </div>
+    <div class="position-icon-lg-box d-flex justify-content-center align-items-center mb-3">
+        <img th:src="@{${'/img/bot.png'}}"
+             alt="player position bot" class="position-icon-lg non-selectable opacity-75"
+        >
+    </div>
+    <div class="position-icon-lg-box d-flex justify-content-center align-items-center mb-3">
+        <img th:src="@{${'/img/sup.png'}}"
+             alt="player position support" class="position-icon-lg non-selectable opacity-75"
+        >
+    </div>
 </div>
 
 <div th:fragment="aram-vertical(title)"
-     class="d-flex flex-column justify-content-end mb-2"
+     class="d-flex flex-column justify-content-between align-items-center h-100"
 >
-    <img th:src="@{${'/img/mid.png'}}"
-         alt="player position" class="position-icon-lg non-selectable opacity-75"
-    >
-    <img th:src="@{${'/img/mid.png'}}"
-         alt="player position" class="position-icon-lg non-selectable opacity-75"
-    >
-    <img th:src="@{${'/img/mid.png'}}"
-         alt="player position" class="position-icon-lg non-selectable opacity-75"
-    >
-    <img th:src="@{${'/img/mid.png'}}"
-         alt="player position" class="position-icon-lg non-selectable opacity-75"
-    >
-    <img th:src="@{${'/img/mid.png'}}"
-         alt="player position" class="position-icon-lg non-selectable opacity-75"
-    >
+    <div class="position-icon-lg-box d-flex justify-content-center align-items-center mb-3">
+        <img th:src="@{${'/img/mid.png'}}"
+             alt="player position" class="position-icon-lg non-selectable opacity-75"
+        >
+    </div>
+
+    <div class="position-icon-lg-box d-flex justify-content-center align-items-center mb-3">
+        <img th:src="@{${'/img/mid.png'}}"
+             alt="player position" class="position-icon-lg non-selectable opacity-75"
+        >
+    </div>
+    <div class="position-icon-lg-box d-flex justify-content-center align-items-center mb-3">
+        <img th:src="@{${'/img/mid.png'}}"
+             alt="player position" class="position-icon-lg non-selectable opacity-75"
+        >
+    </div>
+    <div class="position-icon-lg-box d-flex justify-content-center align-items-center mb-3">
+        <img th:src="@{${'/img/mid.png'}}"
+             alt="player position" class="position-icon-lg non-selectable opacity-75"
+        >
+    </div>
+    <div class="position-icon-lg-box d-flex justify-content-center align-items-center mb-3">
+        <img th:src="@{${'/img/mid.png'}}"
+             alt="player position" class="position-icon-lg non-selectable opacity-75"
+        >
+    </div>
 </div>
