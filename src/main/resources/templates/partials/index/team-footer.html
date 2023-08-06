@@ -1,0 +1,26 @@
+<div th:fragment="team(teamColor, teamNumber)"
+     th:with="teamBans=${matchInfo.getMatch().getTeam()[teamNumber].getBan()},
+              teamObjectives=${matchInfo.getMatch().getTeam()[teamNumber].getObjective()}
+              "
+     class="col-5"
+>
+  <div class="d-flex justify-content-between">
+    <div th:if="${teamBans.size() >= 1}">
+      <th:block th:each="ban : ${teamBans}">
+        <img th:src="@{${'/dragon_tail/13.14.1/img/champion/' + ban.getChampId() + '.png'}}"
+             alt="champion icon" class="friend-icon non-selectable opacity-75"
+        >
+      </th:block>
+    </div>
+
+    <div  th:if="${teamObjectives.size() >= 1}">
+      <p class="color-neutral-light fs-200">
+        <th:block th:each="objective : ${teamObjectives}">
+          <span th:text="${objective.getName()}"></span>
+          <span th:text="${objective.getKills()}"></span>
+        </th:block>
+      </p>
+    </div>
+  </div>
+
+</div>

@@ -1,7 +1,10 @@
 :root {
-    --color-primary-light: #D0AB8A;
-    --color-primary-main: #BF8C5F;
-    --color-primary-dark: #754F2F;
+    --color-primary-light: #eecc8a;
+    --color-primary-main: #9c865c;
+    --color-primary-dark: #504229;
+
+    --color-primary-red: #a2434e;
+    --color-primary-blue: #4775b4;
 
     --color-neutral-light: #f6f1e5;
     --color-neutral-main: #4b4b56;
@@ -34,6 +37,8 @@ UTILITY CLASSES
 .color-primary-light {color: var(--color-primary-light);}
 .color-primary-main {color: var(--color-primary-main);}
 .color-primary-dark {color: var(--color-primary-dark);}
+.color-primary-red {color: var(--color-primary-red);}
+.color-primary-blue {color: var(--color-primary-blue);}
 .color-neutral-light {color: var(--color-neutral-light);}
 .color-neutral-main {color: var(--color-neutral-main);}
 .color-neutral-dark {color: var(--color-neutral-dark);}
@@ -105,13 +110,13 @@ VISUAL FRAMEWORK
 }
 
 .position-icon-lg {
-    height: 48px;
-    width: 48px;
+    height: 32px;
+    width: 32px;
 }
 
 .position-icon-lg-box {
-    height: 76px;
-    width: 76px;
+    height: 72px;
+    width: 72px;
 }
 
 .accordion {

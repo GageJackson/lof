@@ -3,7 +3,7 @@
   <th:block th:each="participant : ${matchInfo.getMatch().getParticipant()}">
     <th:block th:if="${participant.getTeamId() == teamId}">
       <img th:src="@{${'/dragon_tail/13.14.1/img/champion/' + participant.getChampionName() + '.png'}}"
-           alt="player icon" class="friend-icon non-selectable opacity-75"
+           alt="champion icon" class="friend-icon non-selectable opacity-75"
            th:classappend="${#lists.contains(friends.![puuId], participant.getPuuid())} ? 'border border-2 border-warning' : 'border border-2 border-secondary'"
       >
     </th:block>

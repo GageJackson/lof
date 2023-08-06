@@ -16,7 +16,8 @@ function drawChart(chartType, matchId, team1Data, team2Data) {
             tooltip: {
                 textStyle: {color: '#252525', fontSize: 12},
                 trigger: 'selection'
-            }
+            },
+            colors: ['#4775b4', '#a2434e', '#9c865c', '#4b4b56']
         };
 
         var chart = new google.visualization.PieChart(document.getElementById(chartType + 'Chart-' + matchId));

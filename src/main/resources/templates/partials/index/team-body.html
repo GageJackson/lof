@@ -1,10 +1,11 @@
 <div  th:fragment="blueTeam(teamNumber)"
-        class="blue-team-bg col-5">
+        class="blue-team-bg col p-3">
   <div th:each="participant : ${matchInfo.getMatch().getParticipant()}"
        th:if="${participant.getTeamId()} == 100"
-       class="d-flex justify-content-between mb-3 w-100"
+       class="d-flex justify-content-between mb-3"
   >
     <div th:replace="~{partials/index/team-body.html :: participant('align-items-start')}"></div>
+    <div th:replace="~{partials/index/team-body.html :: runes('')}"></div>
     <div class="">
       <div class="d-flex justify-content-between">
         <div th:replace="~{partials/index/team-body.html :: kda('')}"></div>
@@ -19,11 +20,11 @@
 
 
 <div th:fragment="redTeam(teamNumber)"
-     class="red-team-bg col-5"
+     class="red-team-bg col p-3 ms"
 >
   <div th:each="participant : ${matchInfo.getMatch().getParticipant()}"
        th:if="${participant.getTeamId()} == 200"
-       class="d-flex justify-content-between mb-3 w-100"
+       class="d-flex justify-content-between mb-3"
   >
     <div class="">
       <div class="d-flex justify-content-between">
@@ -35,11 +36,12 @@
       <div th:replace="~{partials/index/item-icons.html :: items('')}"></div>
     </div>
     <div th:replace="~{partials/index/team-body.html :: participant('align-items-end')}"></div>
+    <div th:replace="~{partials/index/team-body.html :: runes('')}"></div>
   </div>
 </div>
 
 <div th:fragment="participant(alignItemsPosition)"
-      class="h-100"
+     class="h-100"
 >
   <div class="d-flex flex-column justify-content-between"
        th:classappend="${alignItemsPosition}"
@@ -49,8 +51,36 @@
          th:classappend="${#lists.contains(friends.![puuId], participant.getPuuid())} ? 'border-warning' : 'border-secondary'"
     >
     <p th:text="${participant.getSummonerName()}"
-        class="color-primary-main fw-semibold mb-0"
+       class="color-primary-main fw-semibold mb-0"
     ></p>
+  </div>
+</div>
+
+<div th:fragment="runes(alignItemsPosition)"
+     class="h-100"
+>
+  <div class="">
+    <div class="d-flex justify-content-between">
+      <img th:src="@{${'/img/summoner_runes/' + participant.getPerk()[0].getPerkNum() + '.png'}}"
+           alt="player icon" class="item-icon non-selectable opacity-75 border border-1 border-secondary"
+      >
+
+      <img th:src="@{${'/img/summoner_runes/' + participant.getPerk()[4].getStyle() + '.png'}}"
+           alt="player icon" class="item-icon non-selectable opacity-75 border border-1 border-secondary"
+      >
+    </div>
+
+    <div class="d-flex justify-content-between">
+      <img th:src="@{${'/img/summoner_spells/' + participant.getSummoner1Id() + '.png'}}"
+           alt="player icon" class="item-icon non-selectable opacity-75 border border-1 border-secondary"
+      >
+
+      <img th:src="@{${'/img/summoner_spells/' + participant.getSummoner2Id() + '.png'}}"
+           alt="player icon" class="item-icon non-selectable opacity-75 border border-1 border-secondary"
+      >
+    </div>
+
+
   </div>
 </div>
 
@@ -60,17 +90,17 @@
               assists=${participant.getAssists()},
               kda=${deaths > 0 ? #numbers.formatDecimal(( (kills + assists) / deaths), 0, 'COMMA', 1, 'POINT') : 0}"
 >
-  <p class="color-neutral-light mb-0"
+  <p class="color-neutral-light mb-0 fw-semibold"
      th:text="${kills + '/' + deaths + '/' + assists}"
   >
   </p>
   <p th:if="${kda == 0}"
-     class="color-neutral-light mb-0"
+     class="color-neutral-light mb-0 fst-italic fs-200 text-secondary"
      th:text="${'Perfect'}"
   ></p>
   <p th:unless="${kda == 0}"
-     class="color-neutral-light mb-0"
-     th:text="${kda + 'KDA'}"
+     class="color-neutral-light mb-0 fst-italic fs-200 text-secondary"
+     th:text="${kda + ' KDA'}"
   ></p>
 </div>
 
@@ -82,14 +112,15 @@
   <p th:if="${minionKills == 0}"
      class="color-neutral-light mb-0"
   >
-    <span th:text="${'0 CS'}"></span>
+    <span th:text="${'0 CS'}" class="fw-semibold"></span>
   </p>
 
   <p th:unless="${minionKills == 0}"
      class="color-neutral-light mb-0"
   >
-    <span th:text="${minionKills}"></span>
-    <span th:text="${'(' + minionKillspMin + ') CS'}"></span>
+    <span th:text="${minionKills}" class="fw-semibold"></span>
+    <span th:text="${'(' + minionKillspMin + ')'}" class="fst-italic"></span>
+    <span th:text="${' CS'}" class="fw-semibold"></span>
   </p>
 
   <th:block th:with="killsCount=${matchInfo.getMatch().getTeam()[0].getKills()},
@@ -97,11 +128,11 @@
   >
     <p th:if="${killsCount == 0}"
        th:text="Oof..."
-       class="color-neutral-light mb-0"
+       class="color-neutral-light mb-0 fst-italic fs-200 text-secondary"
     ></p>
     <p th:unless="${killsCount == 0}"
        th:text="${#numbers.formatDecimal(killParticipation, 0, 1) + '% KP'}"
-       class="color-neutral-light mb-0"
+       class="color-neutral-light mb-0 fst-italic fs-200 text-secondary"
     ></p>
   </th:block>
 </div>

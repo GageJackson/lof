@@ -21,9 +21,16 @@
                             >
                                 <div>
                                     <h3 class="bold color-neutral-light" th:text="${matchInfo.getMatch().getGameMode()}"></h3>
-                                    <p class="color-neutral-light" th:text="${#strings.substring(matchInfo.getMatch().getGameVersion(), 0, 5)}"></p>
-                                    <p class="color-neutral-light" th:text="${#temporals.format(T(java.time.Instant).ofEpochMilli(matchInfo.getMatch().getGameCreation()), 'MM-dd')}"></p>
-                                    <p class="color-neutral-light" th:text="${matchInfo.getMatch().getGameDuration() / 60 + ':' + matchInfo.getMatch().getGameDuration() % 60}"></p>
+<!--                                    <p class="color-neutral-light" th:text="${#strings.substring(matchInfo.getMatch().getGameVersion(), 0, 5)}"></p>-->
+                                    <p th:with="gameDuration=${matchInfo.getMatch().getGameDuration()}">
+                                        <span class="text-secondary fs-200"
+                                              th:text="${#temporals.format(T(java.time.Instant).ofEpochMilli(matchInfo.getMatch().getGameCreation()), 'MMM-dd')}"
+                                        ></span>
+                                        <span> </span>
+                                        <span class="text-secondary fs-200"
+                                              th:text="${(gameDuration / 60) + 'm ' + (gameDuration % 60) + 's'}"
+                                        ></span>
+                                    </p>
                                 </div>
 
                                 <div class="d-flex justify-content-center align-items-center">
@@ -69,7 +76,7 @@
                                         </div>
                                         <div class="card-body border-0 bg-transparent">
                                             <div class="container">
-                                                <div class="row row-cols-3">
+                                                <div class="row">
                                                     <!--BLUE TEAM INFO-->
                                                     <div  th:replace="~{partials/index/team-body.html :: blueTeam('')}"></div>
 
@@ -83,7 +90,15 @@
                                         </div>
                                         <div class="card-footer bg-transparent border-0">
                                             <div class="container">
+                                                <div class="row">
+                                                    <!--BLUE TEAM INFO-->
+                                                    <div th:replace="~{partials/index/team-footer.html :: team('Blue', 0)}"></div>
 
+                                                    <div class="col-2"></div>
+
+                                                    <!--RED TEAM INFO-->
+                                                    <div th:replace="~{partials/index/team-footer.html :: team('Red', 1)}"></div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
