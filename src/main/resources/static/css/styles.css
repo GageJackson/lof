@@ -109,6 +109,11 @@ VISUAL FRAMEWORK
     aspect-ratio: 1;
 }
 
+.objective-icon {
+    height: 16px;
+    aspect-ratio: 1;
+}
+
 .position-icon-lg {
     height: 32px;
     width: 32px;

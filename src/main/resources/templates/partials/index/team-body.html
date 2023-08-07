@@ -139,7 +139,7 @@
               kda=${deaths > 0 ? #numbers.formatDecimal(( (kills + assists) / deaths), 0, 'COMMA', 1, 'POINT') : 0}"
 >
   <p class="color-neutral-light mb-0 fw-semibold"
-     th:text="${kills + '/' + deaths + '/' + assists}"
+     th:text="${kills + ' / ' + deaths + ' / ' + assists}"
   >
   </p>
   <p th:if="${kda == 0}"
