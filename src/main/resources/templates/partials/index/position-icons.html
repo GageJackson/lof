@@ -53,7 +53,7 @@
 <!--VERTICAL POSITION ICON SECTION-->
 <div  th:fragment="vertical(title)"
       th:switch="${matchInfo.getMatch().getGameMode()}"
-      class="bg-color-neutral-dark col-auto p-3"
+      class="bg-color-neutral-dark col-auto py-3 px-0"
 >
     <th:block th:case="CLASSIC">
         <div th:replace="~{partials/index/position-icons.html :: classic-vertical('')}"></div>

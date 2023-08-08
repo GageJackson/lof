@@ -114,6 +114,21 @@ VISUAL FRAMEWORK
     aspect-ratio: 1;
 }
 
+.rune-container {
+    height: 48px;
+    width: 48px;
+}
+
+.perk-icon-lg {
+    height: 36px;
+    aspect-ratio: 1;
+}
+
+.perk-icon-sm {
+    height: 16px;
+    aspect-ratio: 1;
+}
+
 .position-icon-lg {
     height: 32px;
     width: 32px;

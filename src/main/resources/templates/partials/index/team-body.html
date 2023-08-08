@@ -2,7 +2,7 @@
         class="blue-team-bg col p-3">
   <div th:each="participant : ${matchInfo.getMatch().getParticipant()}"
        th:if="${participant.getTeamId()} == 100"
-       class="d-flex justify-content-between mb-3"
+       class="d-flex justify-content-between mb-3 pe-4"
   >
     <div th:replace="~{partials/index/team-body.html :: participant('align-items-start', true)}"></div>
     <div class="">
@@ -23,7 +23,7 @@
 >
   <div th:each="participant : ${matchInfo.getMatch().getParticipant()}"
        th:if="${participant.getTeamId()} == 200"
-       class="d-flex justify-content-between mb-3"
+       class="d-flex justify-content-between mb-3 ps-4"
   >
     <div class="">
       <div class="d-flex justify-content-between">
@@ -50,49 +50,8 @@
            alt="player icon" class="friend-icon non-selectable opacity-75 border border-2 me-2"
            th:classappend="${#lists.contains(friends.![puuId], participant.getPuuid())} ? 'border-warning' : 'border-secondary'"
       >
-      <div>
-        <div class="d-flex justify-content-between">
-          <img th:src="@{${'/img/summoner_runes/' + participant.getPerk()[0].getPerkNum() + '.png'}}"
-               alt="player icon" class="item-icon non-selectable opacity-75 border border-1 border-secondary"
-          >
 
-          <img th:src="@{${'/img/summoner_runes/' + participant.getPerk()[4].getStyle() + '.png'}}"
-               alt="player icon" class="item-icon non-selectable opacity-75 border border-1 border-secondary"
-          >
-        </div>
-
-        <div class="d-flex justify-content-between">
-          <img th:src="@{${'/img/summoner_spells/' + participant.getSummoner1Id() + '.png'}}"
-               alt="player icon" class="item-icon non-selectable opacity-75 border border-1 border-secondary"
-          >
-
-          <img th:src="@{${'/img/summoner_spells/' + participant.getSummoner2Id() + '.png'}}"
-               alt="player icon" class="item-icon non-selectable opacity-75 border border-1 border-secondary"
-          >
-        </div>
-      </div>
-
-      <div>
-        <div class="d-flex justify-content-between">
-          <img th:src="@{${'/img/summoner_runes/' + participant.getPerk()[0].getPerkNum() + '.png'}}"
-               alt="player icon" class="item-icon non-selectable opacity-75 border border-1 border-secondary"
-          >
-
-          <img th:src="@{${'/img/summoner_runes/' + participant.getPerk()[4].getStyle() + '.png'}}"
-               alt="player icon" class="item-icon non-selectable opacity-75 border border-1 border-secondary"
-          >
-        </div>
-
-        <div class="d-flex justify-content-between">
-          <img th:src="@{${'/img/summoner_spells/' + participant.getSummoner1Id() + '.png'}}"
-               alt="player icon" class="item-icon non-selectable opacity-75 border border-1 border-secondary"
-          >
-
-          <img th:src="@{${'/img/summoner_spells/' + participant.getSummoner2Id() + '.png'}}"
-               alt="player icon" class="item-icon non-selectable opacity-75 border border-1 border-secondary"
-          >
-        </div>
-      </div>
+      <div th:replace="~{partials/index/team-body.html :: runes(${isBlueTeam})}"></div>
 
       <img th:unless="${isBlueTeam}"
            th:src="@{${'/dragon_tail/13.14.1/img/champion/' + participant.getChampionName() + '.png'}}"
@@ -106,19 +65,31 @@
   </div>
 </div>
 
-<div th:fragment="runes(alignItemsPosition)">
-  <div class="">
-    <div class="d-flex justify-content-between">
+<div th:fragment="runes(isBlueTeam)">
+  <div class="d-flex" th:if="${isBlueTeam}">
+    <div class="rune-container position-relative me-2">
       <img th:src="@{${'/img/summoner_runes/' + participant.getPerk()[0].getPerkNum() + '.png'}}"
-           alt="player icon" class="item-icon non-selectable opacity-75 border border-1 border-secondary"
+           alt="player icon" class="perk-icon-lg non-selectable opacity-75"
       >
 
       <img th:src="@{${'/img/summoner_runes/' + participant.getPerk()[4].getStyle() + '.png'}}"
-           alt="player icon" class="item-icon non-selectable opacity-75 border border-1 border-secondary"
+           alt="player icon" class="perk-icon-sm non-selectable opacity-75 position-absolute bottom-0 end-0"
       >
     </div>
 
-    <div class="d-flex justify-content-between">
+    <div class="d-flex flex-column">
+      <img th:src="@{${'/img/summoner_spells/' + participant.getSummoner1Id() + '.png'}}"
+           alt="player icon" class="item-icon non-selectable opacity-75 border border-1 border-secondary"
+      >
+
+      <img th:src="@{${'/img/summoner_spells/' + participant.getSummoner2Id() + '.png'}}"
+           alt="player icon" class="item-icon non-selectable opacity-75 border border-1 border-secondary"
+      >
+    </div>
+  </div>
+
+  <div class="d-flex" th:unless="${isBlueTeam}">
+    <div class="d-flex flex-column">
       <img th:src="@{${'/img/summoner_spells/' + participant.getSummoner1Id() + '.png'}}"
            alt="player icon" class="item-icon non-selectable opacity-75 border border-1 border-secondary"
       >
@@ -128,7 +99,15 @@
       >
     </div>
 
+    <div class="rune-container position-relative ms-2">
+      <img th:src="@{${'/img/summoner_runes/' + participant.getPerk()[0].getPerkNum() + '.png'}}"
+           alt="player icon" class="perk-icon-lg non-selectable opacity-75"
+      >
 
+      <img th:src="@{${'/img/summoner_runes/' + participant.getPerk()[4].getStyle() + '.png'}}"
+           alt="player icon" class="perk-icon-sm non-selectable opacity-75 position-absolute bottom-0 end-0"
+      >
+    </div>
   </div>
 </div>
 
@@ -136,7 +115,7 @@
      th:with="kills=${participant.getKills()},
               deaths=${participant.getDeaths()},
               assists=${participant.getAssists()},
-              kda=${deaths > 0 ? #numbers.formatDecimal(( (kills + assists) / deaths), 0, 'COMMA', 1, 'POINT') : 0}"
+              kda=${deaths > 0 ? #numbers.formatDecimal((1.00 * (kills + assists) / deaths), 1, 'COMMA', 2, 'POINT') : 0}"
 >
   <p class="color-neutral-light mb-0 fw-semibold"
      th:text="${kills + ' / ' + deaths + ' / ' + assists}"
@@ -155,7 +134,7 @@
 <div th:fragment="minion(teamId)"
      th:with="minionKills=${participant.getTotalMinionsKilled() + participant.getNeutralMinionsKilled()},
               matchDuration=${((matchInfo.getMatch().getGameDuration() - 60) / 60)},
-              minionKillspMin=${#numbers.formatDecimal((minionKills / matchDuration), 0, 1)}"
+              minionKillspMin=${#numbers.formatDecimal((1.00 * minionKills / matchDuration), 0, 1)}"
 >
   <p th:if="${minionKills == 0}"
      class="color-neutral-light mb-0"
@@ -172,7 +151,7 @@
   </p>
 
   <th:block th:with="killsCount=${matchInfo.getMatch().getTeam()[0].getKills()},
-                     killParticipation=${100 * (participant.getKills() + participant.getAssists()) / killsCount}"
+                     killParticipation=${100.00 * (participant.getKills() + participant.getAssists()) / killsCount}"
   >
     <p th:if="${killsCount == 0}"
        th:text="Oof..."
