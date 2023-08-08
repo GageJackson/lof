@@ -1,15 +1,13 @@
 package com.gagejackson.lof.Controllers;
 
-import com.gagejackson.lof.Models.Friend;
-import com.gagejackson.lof.Models.FriendChamps;
-import com.gagejackson.lof.Models.FriendRank;
-import com.gagejackson.lof.Repositories.FriendChampsRepository;
-import com.gagejackson.lof.Repositories.FriendRepository;
+import com.gagejackson.lof.Models.Friend.Friend;
+import com.gagejackson.lof.Models.Friend.FriendChamps;
+import com.gagejackson.lof.Repositories.Friend.FriendChampsRepository;
+import com.gagejackson.lof.Repositories.Friend.FriendRepository;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

@@ -12,7 +12,7 @@
                 <th:block th:if="${matchInfo.getMatch().isSaved()}">
                     <div class="accordion mb-3" th:id="${'accordion' + matchInfo.getMatch().getGameId()}">
 
-                        <div class="accordion-item"
+                        <div class="accordion-eventItem"
                              th:classappend="${matchInfo.isFriendWin() ? 'card-bg-win' : 'card-bg-loss'}">
 
                             <button class="accordion-button d-flex justify-content-between collapsed" type="button" data-bs-toggle="collapse" aria-expanded="false"

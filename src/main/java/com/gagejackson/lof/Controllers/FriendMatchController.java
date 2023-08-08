@@ -1,13 +1,11 @@
 package com.gagejackson.lof.Controllers;
 
-import com.gagejackson.lof.Models.Friend;
-import com.gagejackson.lof.Models.FriendChamps;
-import com.gagejackson.lof.Models.FriendMatch;
-import com.gagejackson.lof.Models.Match;
-import com.gagejackson.lof.Repositories.FriendChampsRepository;
-import com.gagejackson.lof.Repositories.FriendMatchRepository;
-import com.gagejackson.lof.Repositories.FriendRepository;
-import com.gagejackson.lof.Repositories.MatchRepository;
+import com.gagejackson.lof.Models.Friend.Friend;
+import com.gagejackson.lof.Models.Friend.FriendMatch;
+import com.gagejackson.lof.Models.MatchOverview.Match;
+import com.gagejackson.lof.Repositories.Friend.FriendMatchRepository;
+import com.gagejackson.lof.Repositories.Friend.FriendRepository;
+import com.gagejackson.lof.Repositories.MatchEvent.MatchRepository;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 public class FriendMatchController {

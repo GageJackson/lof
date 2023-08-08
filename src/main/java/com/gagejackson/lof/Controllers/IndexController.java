@@ -1,18 +1,22 @@
 package com.gagejackson.lof.Controllers;
 
 import com.gagejackson.lof.DTOs.MatchInfo;
-import com.gagejackson.lof.Models.*;
-import com.gagejackson.lof.Repositories.*;
+import com.gagejackson.lof.Models.Friend.Friend;
+import com.gagejackson.lof.Models.Friend.FriendMatch;
+import com.gagejackson.lof.Models.MatchOverview.Match;
+import com.gagejackson.lof.Models.MatchOverview.Participant;
+import com.gagejackson.lof.Repositories.Friend.FriendChampsRepository;
+import com.gagejackson.lof.Repositories.Friend.FriendMatchRepository;
+import com.gagejackson.lof.Repositories.Friend.FriendRankRepository;
+import com.gagejackson.lof.Repositories.Friend.FriendRepository;
+import com.gagejackson.lof.Repositories.MatchEvent.MatchRepository;
+import com.gagejackson.lof.Repositories.MatchOverview.ParticipantRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;

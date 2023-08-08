@@ -1,7 +1,7 @@
 package com.gagejackson.lof.DTOs;
 
-import com.gagejackson.lof.Models.Friend;
-import com.gagejackson.lof.Models.Match;
+import com.gagejackson.lof.Models.Friend.Friend;
+import com.gagejackson.lof.Models.MatchOverview.Match;
 
 import java.util.List;
 

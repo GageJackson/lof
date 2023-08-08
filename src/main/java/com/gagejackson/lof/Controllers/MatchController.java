@@ -1,9 +1,10 @@
 package com.gagejackson.lof.Controllers;
 
-import com.gagejackson.lof.Models.*;
-import com.gagejackson.lof.Repositories.*;
+import com.gagejackson.lof.Models.MatchEvent.*;
+import com.gagejackson.lof.Models.MatchOverview.*;
 //import jdk.nashorn.internal.runtime.ListAdapter;
-import org.springframework.scheduling.annotation.Async;
+import com.gagejackson.lof.Repositories.MatchEvent.*;
+import com.gagejackson.lof.Repositories.MatchOverview.*;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +25,7 @@ public class MatchController {
     private final DamageReceivedRepository damageReceivedRepositoryDao;
     private final SpecialKillRepository specialKillRepositoryDao;
     private final MonsterKillRepository monsterKillRepositoryDao;
-    private final ItemRepository itemRepositoryDao;
+    private final EventItemRepository eventItemRepositoryDao;
     private final LevelUpRepository levelUpRepositoryDao;
     private final SkillUpRepository skillUpRepositoryDao;
     private final ObjectiveRepository objectiveRepositoryDao;
@@ -39,7 +40,7 @@ public class MatchController {
     Batch Save Arrays
      */
     private List<Event> events = new ArrayList<>();
-    private List<Item> items = new ArrayList<>();
+    private List<EventItem> eventItems = new ArrayList<>();
     private List<ParticipantFrame> participantFrames = new ArrayList<>();
     private List<ParticipantFrameChamp> participantFrameChamps = new ArrayList<>();
     private List<ParticipantFrameDamage> participantFrameDamages = new ArrayList<>();
@@ -74,7 +75,7 @@ public class MatchController {
             DamageReceivedRepository damageReceivedRepositoryDao,
             SpecialKillRepository specialKillRepositoryDao,
             MonsterKillRepository monsterKillRepositoryDao,
-            ItemRepository itemRepositoryDao,
+            EventItemRepository eventItemRepositoryDao,
             LevelUpRepository levelUpRepositoryDao,
             SkillUpRepository skillUpRepositoryDao,
             ObjectiveRepository objectiveRepositoryDao,
@@ -94,7 +95,7 @@ public class MatchController {
         this.damageReceivedRepositoryDao = damageReceivedRepositoryDao;
         this.specialKillRepositoryDao = specialKillRepositoryDao;
         this.monsterKillRepositoryDao = monsterKillRepositoryDao;
-        this.itemRepositoryDao = itemRepositoryDao;
+        this.eventItemRepositoryDao = eventItemRepositoryDao;
         this.levelUpRepositoryDao = levelUpRepositoryDao;
         this.skillUpRepositoryDao = skillUpRepositoryDao;
         this.objectiveRepositoryDao = objectiveRepositoryDao;
@@ -554,12 +555,12 @@ public class MatchController {
         Participant participant = participantsData.get((int)eventData.get("participantId"));
         Event event = createEvent(eventData, participant);
 
-        Item item = new Item();
-        item.setItemType(itemType);
-        item.setItemNum((int)eventData.get("itemId"));
-        item.setEvent(event);
+        EventItem eventItem = new EventItem();
+        eventItem.setItemType(itemType);
+        eventItem.setItemNum((int)eventData.get("itemId"));
+        eventItem.setEvent(event);
 
-        items.add(item);
+        eventItems.add(eventItem);
     }
 
     private void saveSkillUp(Map<String, Object> eventData){
@@ -724,7 +725,7 @@ public class MatchController {
     private void insertBatchTimelineData(){
         eventRepositoryDao.saveAll(events);
 
-        itemRepositoryDao.saveAll(items);
+        eventItemRepositoryDao.saveAll(eventItems);
         skillUpRepositoryDao.saveAll(skillUps);
         levelUpRepositoryDao.saveAll(levelUps);
         buildingKillRepositoryDao.saveAll(buildingKills);

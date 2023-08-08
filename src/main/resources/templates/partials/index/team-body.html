@@ -12,7 +12,7 @@
         <div th:replace="~{partials/index/team-body.html :: minion('')}"></div>
       </div>
 
-      <div th:replace="~{partials/index/item-icons.html :: items('')}"></div>
+      <div th:replace="~{partials/index/eventItem-icons.html :: items('')}"></div>
     </div>
   </div>
 </div>
@@ -32,7 +32,7 @@
         <div th:replace="~{partials/index/team-body.html :: minion('')}"></div>
       </div>
 
-      <div th:replace="~{partials/index/item-icons.html :: items('')}"></div>
+      <div th:replace="~{partials/index/eventItem-icons.html :: items('')}"></div>
     </div>
     <div th:replace="~{partials/index/team-body.html :: participant('align-items-end', false)}"></div>
   </div>
@@ -79,11 +79,11 @@
 
     <div class="d-flex flex-column">
       <img th:src="@{${'/img/summoner_spells/' + participant.getSummoner1Id() + '.png'}}"
-           alt="player icon" class="item-icon non-selectable opacity-75 border border-1 border-secondary"
+           alt="player icon" class="eventItem-icon non-selectable opacity-75 border border-1 border-secondary"
       >
 
       <img th:src="@{${'/img/summoner_spells/' + participant.getSummoner2Id() + '.png'}}"
-           alt="player icon" class="item-icon non-selectable opacity-75 border border-1 border-secondary"
+           alt="player icon" class="eventItem-icon non-selectable opacity-75 border border-1 border-secondary"
       >
     </div>
   </div>
@@ -91,11 +91,11 @@
   <div class="d-flex" th:unless="${isBlueTeam}">
     <div class="d-flex flex-column">
       <img th:src="@{${'/img/summoner_spells/' + participant.getSummoner1Id() + '.png'}}"
-           alt="player icon" class="item-icon non-selectable opacity-75 border border-1 border-secondary"
+           alt="player icon" class="eventItem-icon non-selectable opacity-75 border border-1 border-secondary"
       >
 
       <img th:src="@{${'/img/summoner_spells/' + participant.getSummoner2Id() + '.png'}}"
-           alt="player icon" class="item-icon non-selectable opacity-75 border border-1 border-secondary"
+           alt="player icon" class="eventItem-icon non-selectable opacity-75 border border-1 border-secondary"
       >
     </div>
 
