@@ -132,15 +132,17 @@
             <p class="color-primary-main fs-500">Friends</p>
             <hr class="color-primary-main">
             <div th:each="friend : ${friends}"
-                    class="border-0 d-flex mb-3"
+                    class="border-0mb-3"
             >
-                <img th:src="@{${'/dragon_tail/13.14.1/img/profileicon/' + friend.getIcon() + '.png'}}"
-                     alt="player icon" class="friend-icon me-3 mb-0 non-selectable"
-                >
-                <div>
-                    <p th:text="${friend.getName()}" class="to-lower bold color-neutral-light mb-0 non-selectable"></p>
-                    <p th:text="${friend.getSummonerLevel()}" class="color-primary-main fs-200 non-selectable"></p>
-                </div>
+                <button th:id="${'friendBtn-' + friend.getId()}" class="friend-btns bg-transparent border-0 d-flex justify-content-start">
+                    <img th:src="@{${'/dragon_tail/13.14.1/img/profileicon/' + friend.getIcon() + '.png'}}"
+                         alt="player icon" class="friend-icon me-3 mb-0 non-selectable"
+                    >
+                    <div>
+                        <p th:text="${friend.getName()}" class="to-lower bold color-neutral-light mb-0 non-selectable"></p>
+                        <p th:text="${friend.getSummonerLevel()}" class="color-primary-main fs-200 text-start non-selectable"></p>
+                    </div>
+                </button>
             </div>
         </aside>
     </div>

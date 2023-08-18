@@ -122,28 +122,6 @@
         }
     }
 
-    async function postData(postLocation, postInfo){
-        await fetch(postLocation, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(postInfo)
-        });
-    }
-
-    async function getData(getLocation){
-        let response = await fetch(getLocation, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        });
-
-        //console.log(data);
-        return await response.json();
-    }
-
     async function pageLoad() {
         let friends = await getData('/testing');
         console.log(friends);
@@ -160,7 +138,6 @@
             await Promise.all(promises);
         }
     }
-
 
     function delay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
@@ -186,3 +163,25 @@
     // saveMatchData(matches);
     //saveMatchData();
 })();
+
+async function postData(postLocation, postInfo){
+    await fetch(postLocation, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(postInfo)
+    });
+}
+
+async function getData(getLocation){
+    let response = await fetch(getLocation, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    });
+
+    //console.log(data);
+    return await response.json();
+}

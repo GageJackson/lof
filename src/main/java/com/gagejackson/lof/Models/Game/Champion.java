@@ -15,8 +15,8 @@ public class Champion {
     @Column(name = "name_id", nullable = false)
     private String nameId;
 
-    @Column(name = "key", nullable = false)
-    private int key;
+    @Column(name = "key_id", nullable = false)
+    private int keyId;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -73,9 +73,9 @@ public class Champion {
     public Champion() {
     }
 
-    public Champion(String nameId, int key, String name, String title, String imageFull, String imageSprite, String imageGroup, int imageX, int imageY, int imageW, int imageH, String lore, String blurb, List<ChampAllyTips> champAllyTips, List<ChampEnemyTips> champEnemyTips, List<ChampTags> champTags, List<ChampStats> champStats, List<ChampSpells> champSpells) {
+    public Champion(String nameId, int keyId, String name, String title, String imageFull, String imageSprite, String imageGroup, int imageX, int imageY, int imageW, int imageH, String lore, String blurb, List<ChampAllyTips> champAllyTips, List<ChampEnemyTips> champEnemyTips, List<ChampTags> champTags, List<ChampStats> champStats, List<ChampSpells> champSpells) {
         this.nameId = nameId;
-        this.key = key;
+        this.keyId = keyId;
         this.name = name;
         this.title = title;
         this.imageFull = imageFull;
@@ -94,10 +94,10 @@ public class Champion {
         this.champSpells = champSpells;
     }
 
-    public Champion(long id, String nameId, int key, String name, String title, String imageFull, String imageSprite, String imageGroup, int imageX, int imageY, int imageW, int imageH, String lore, String blurb, List<ChampAllyTips> champAllyTips, List<ChampEnemyTips> champEnemyTips, List<ChampTags> champTags, List<ChampStats> champStats, List<ChampSpells> champSpells) {
+    public Champion(long id, String nameId, int keyId, String name, String title, String imageFull, String imageSprite, String imageGroup, int imageX, int imageY, int imageW, int imageH, String lore, String blurb, List<ChampAllyTips> champAllyTips, List<ChampEnemyTips> champEnemyTips, List<ChampTags> champTags, List<ChampStats> champStats, List<ChampSpells> champSpells) {
         this.id = id;
         this.nameId = nameId;
-        this.key = key;
+        this.keyId = keyId;
         this.name = name;
         this.title = title;
         this.imageFull = imageFull;
@@ -136,12 +136,12 @@ public class Champion {
         this.nameId = nameId;
     }
 
-    public int getKey() {
-        return key;
+    public int getKeyId() {
+        return keyId;
     }
 
-    public void setKey(int key) {
-        this.key = key;
+    public void setKeyId(int keyId) {
+        this.keyId = keyId;
     }
 
     public String getName() {
