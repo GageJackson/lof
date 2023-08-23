@@ -70,11 +70,11 @@ UTILITY CLASSES
 }
 
 .card-bg-win {
-    background: linear-gradient(0deg, rgba(71, 117, 180, 0.5) 0%, rgba(33, 37, 42, 0.5) 100%);
+    background: linear-gradient(90deg, rgba(71, 117, 180, 0.5) 0%, rgba(33, 37, 42, 0.5) 100%);
 }
 
 .card-bg-loss {
-    background: linear-gradient(0deg, rgba(162, 67, 78, 0.5) 0%, rgba(33, 37, 42, 0.5) 100%);
+    background: linear-gradient(90deg, rgba(162, 67, 78, 0.5) 0%, rgba(33, 37, 42, 0.5) 100%);
 }
 
 .blue-team-bg {
@@ -190,3 +190,44 @@ VISUAL FRAMEWORK
 /*    outline: none;*/
 /*    overflow: hidden;*/
 /*}*/
+
+.selected {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: .5rem;
+}
+
+.nav-pills {
+    --bs-nav-pills-border-radius: 0;
+    --bs-nav-pills-link-active-color: var(--color-primary-light);
+    --bs-nav-pills-link-active-bg: none;
+}
+
+.nav {
+    --bs-nav-link-padding-x: 1rem;
+    --bs-nav-link-padding-y: 0.5rem;
+    --bs-nav-link-font-weight: ;
+    --bs-nav-link-color: var(--color-primary-main);
+    --bs-nav-link-hover-color: var(--color-primary-light);
+    --bs-nav-link-disabled-color: var(--color-primary-dark);
+    list-style: none;
+}
+
+.nav .active{
+    border-bottom: solid 1px var(--color-primary-light);
+}
+
+.fixed-left {
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.fixed-right {
+    position: fixed;
+    top: 0;
+    right: 0;
+}
+
+nav {
+    height: 100vh;
+}

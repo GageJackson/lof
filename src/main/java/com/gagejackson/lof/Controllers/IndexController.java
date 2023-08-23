@@ -1,5 +1,6 @@
 package com.gagejackson.lof.Controllers;
 
+import com.gagejackson.lof.DTOs.FriendSelection;
 import com.gagejackson.lof.DTOs.MatchInfo;
 import com.gagejackson.lof.Models.Friend.Friend;
 import com.gagejackson.lof.Models.Friend.FriendMatch;
@@ -19,10 +20,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class IndexController {
@@ -88,32 +88,39 @@ public class IndexController {
 
         model.addAttribute("matchInfos", matchInfos);
 
-        List<Friend> friends = friendRepositoryDao.findAll();
+        List<Long> selection = new ArrayList<Long>();
+        selection.add((long)0);
+        List<FriendSelection> friends = getFriends(selection);
         model.addAttribute("friends", friends);
 
         return "index";
     }
 
-    @GetMapping("/sort/{friendId}")
-    public String homeSort(Model model, @PathVariable int friendId) {
+    @GetMapping("/sort")
+    public String homeSort(Model model, @RequestParam("friendIds") List<Long> friendIds) {
         List<MatchInfo> matchInfos = new ArrayList<>();
 
-        Sort sort = Sort.by(Sort.Direction.DESC, "gameId");
-        Pageable pageable = PageRequest.of(0, 50, sort);
+        // Fetch matches
+        String sortBy = "gameId";
+        int page = 0;
+        int matchCount = 50;
+        Sort sort = Sort.by(Sort.Direction.DESC, sortBy);
+        Pageable pageable = PageRequest.of(page, matchCount, sort);
         List<Match> matches = matchRepositoryDao.findAll(pageable).getContent();
 
-        Optional<Friend> friendObject = friendRepositoryDao.findById((long)friendId);
-        Friend friend = friendObject.get();
+        // Find the selected friends
+        List<FriendSelection> friends = getFriends(friendIds);
 
+        // Filter matches based on selected friends
         for (Match match : matches) {
+            List<FriendMatch> friendMatches = match.getFriendMatch();
+            Set<Long> matchedFriendIds = new HashSet<>();
 
-            List<FriendMatch> friendMatchez = match.getFriendMatch();
-            for (FriendMatch friendMatchz : friendMatchez) {
-                if (friendMatchz.getFriend().getId() == friendId){
+            for (FriendMatch friendMatch : friendMatches) {
+                matchedFriendIds.add(friendMatch.getFriend().getId());
+            }
 
-                    List<FriendMatch> friendMatches = friendMatchRepositoryDao.findAllByMatch(match);
-//            FriendMatch friendMatch = friendMatchRepositoryDao.findFriendMatchByFriendAndMatch(friend, match);
-
+            if (matchedFriendIds.containsAll(friendIds)) {
 
                     boolean friendWinIsSet = false;
                     boolean friendWon = false;
@@ -138,17 +145,35 @@ public class IndexController {
                     matchInfo.setFriendWin(friendWon);
 
                     matchInfos.add(matchInfo);
-
-                }
             }
         }
 
         model.addAttribute("matchInfos", matchInfos);
 
-        List<Friend> friends = friendRepositoryDao.findAll();
         model.addAttribute("friends", friends);
 
         return "index";
     }
 
+    private List<FriendSelection> getFriends(List<Long> selection){
+        List<FriendSelection> selectedFriends = new ArrayList<>();
+        List<Friend> friends = friendRepositoryDao.findAll();
+
+        for (Friend friend : friends) {
+            FriendSelection selectedFriend = new FriendSelection();
+            selectedFriend.setId(friend.getId());
+            selectedFriend.setPuuId(friend.getPuuId());
+            selectedFriend.setName(friend.getName());
+            selectedFriend.setIcon(friend.getIcon());
+            selectedFriend.setSummonerLevel(friend.getSummonerLevel());
+
+            selectedFriend.setSelected(selection.contains(friend.getId()));
+
+            selectedFriends.add(selectedFriend);
+        }
+
+        return selectedFriends;
+    }
 }
+
+

@@ -1,0 +1,161 @@
+<div th:fragment="match-all">
+  <th:block th:if="${matchInfo.getMatch().isSaved()}">
+    <div th:replace="~{partials/index/match.html :: saved-match}"></div>
+  </th:block>
+
+  <th:block th:unless="${matchInfo.getMatch().isSaved()}">
+    <button th:replace="~{partials/index/match.html :: new-match}"></button>
+  </th:block>
+</div>
+
+<div th:fragment="match-new">
+  <th:block th:if="${!matchInfo.getMatch().isSaved()}">
+    <button th:replace="~{partials/index/match.html :: new-match}"></button>
+  </th:block>
+</div>
+
+<div th:fragment="match-aram">
+  <th:block th:if="${matchInfo.getMatch().isSaved()}">
+    <th:block th:if="${matchInfo.getMatch().getGameMode.equals('ARAM')}">
+      <button th:replace="~{partials/index/match.html :: saved-match}"></button>
+    </th:block>
+  </th:block>
+</div>
+
+<div th:fragment="match-rift">
+  <th:block th:if="${matchInfo.getMatch().isSaved()}">
+    <th:block th:if="${matchInfo.getMatch().getGameMode.equals('CLASSIC')}">
+      <button th:replace="~{partials/index/match.html :: saved-match}"></button>
+    </th:block>
+  </th:block>
+</div>
+
+<div th:fragment="match-arena">
+  <th:block th:if="${matchInfo.getMatch().isSaved()}">
+    <th:block th:if="${matchInfo.getMatch().getGameMode.equals('CHERRY')}">
+      <button th:replace="~{partials/index/match.html :: saved-match}"></button>
+    </th:block>
+  </th:block>
+</div>
+
+<div th:fragment="saved-match"
+     th:id="${'accordion' + matchInfo.getMatch().getGameId()}"
+     class="accordion mb-3"
+>
+  <div class="accordion-eventItem rounded"
+       th:classappend="${matchInfo.isFriendWin() ? 'card-bg-win' : 'card-bg-loss'}"
+  >
+    <button th:replace="~{partials/index/match.html :: accordion-button}"></button>
+    <div th:replace="~{partials/index/match.html :: accordion-body}"></div>
+  </div>
+</div>
+
+<button th:fragment="new-match"
+        th:id="${matchInfo.getMatch().getGameId()}"
+        class="card card-bg w-100 mb-3 ps-3 match border-0"
+>
+  <div class="card-body border-0 d-flex justify-content-between align-items-center">
+    <div>
+      <p class="color-neutral-light fs-400 my-0 non-selectable">Click to load match</p>
+    </div>
+
+    <div>
+      <th:block th:each="friend : ${matchInfo.getFriends()}">
+        <img th:src="@{${'/dragon_tail/13.14.1/img/profileicon/' + friend.getIcon() + '.png'}}"
+             alt="player icon" class="friend-icon non-selectable opacity-75"
+        >
+      </th:block>
+    </div>
+  </div>
+</button>
+
+<button  th:fragment="accordion-button"
+         class="accordion-button d-flex justify-content-between collapsed" type="button" data-bs-toggle="collapse" aria-expanded="false"
+         th:attr="data-bs-target=${'#accordion-' + matchInfo.getMatch().getGameId()},
+                  aria-controls=${'#accordion-' + matchInfo.getMatch().getGameId()}"
+>
+    <div>
+      <h3 class="bold color-neutral-light" th:text="${matchInfo.getMatch().getGameMode()}"></h3>
+      <p th:with="gameDuration=${matchInfo.getMatch().getGameDuration()}">
+        <span class="text-secondary fs-200"
+              th:text="${#temporals.format(T(java.time.Instant).ofEpochMilli(matchInfo.getMatch().getGameCreation()), 'MMM-dd')}"
+        ></span>
+        <span> </span>
+        <span class="text-secondary fs-200"
+              th:text="${(gameDuration / 60) + 'm ' + (gameDuration % 60) + 's'}"
+        ></span>
+      </p>
+    </div>
+
+    <div class="d-flex justify-content-center align-items-center">
+      <!--BLUE VS RED GOLD COMPARISON CHART-->
+      <div  th:replace="~{partials/index/chart-container.html :: gold-chart}"></div>
+
+      <!--BLUE VS RED KILL COMPARISON CHART-->
+      <div  th:replace="~{partials/index/chart-container.html :: kill-chart}"></div>
+
+      <!--BLUE VS RED DAMAGE COMPARISON CHART-->
+      <div  th:replace="~{partials/index/chart-container.html :: damage-chart}"></div>
+    </div>
+
+    <div>
+      <!--BLUE TEAM CHAMPIONS-->
+      <div th:replace="~{partials/index/champion-icon.html :: champion(100)}"></div>
+
+      <!--VERTICAL POSITION ICONS-->
+      <div th:replace="~{partials/index/position-icons.html :: horizontal('')}"></div>
+
+      <!--RED TEAM CHAMPIONS-->
+      <div th:replace="~{partials/index/champion-icon.html :: champion(200)}"></div>
+    </div>
+</button>
+
+<div  th:fragment="accordion-body"
+      th:id="${'accordion-' + matchInfo.getMatch().getGameId()}" class="accordion-collapse collapse"
+      th:attr="data-bs-parent=${'#accordion' + matchInfo.getMatch().getGameId()}"
+>
+    <div class="accordion-body bg-color-neutral-dark">
+      <div class="card bg-transparent border-0 w-100">
+        <div class="card-header bg-transparent border-0">
+          <div class="container">
+            <div class="row row-cols-3">
+              <!--BLUE TEAM INFO-->
+              <div th:replace="~{partials/index/team-header.html :: team('Blue', 0)}"></div>
+
+              <div class="col-2"></div>
+
+              <!--RED TEAM INFO-->
+              <div th:replace="~{partials/index/team-header.html :: team('Red', 1)}"></div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body border-0 bg-transparent py-0">
+          <div class="container">
+            <div class="row">
+              <!--BLUE TEAM INFO-->
+              <div  th:replace="~{partials/index/team-body.html :: blueTeam('')}"></div>
+
+              <!--VERTICAL POSITION ICONS-->
+              <div  th:replace="~{partials/index/position-icons.html :: vertical('')}"></div>
+
+              <!--RED TEAM INFO-->
+              <div  th:replace="~{partials/index/team-body.html :: redTeam('')}"></div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer bg-transparent border-0">
+          <div class="container">
+            <div class="row">
+              <!--BLUE TEAM INFO-->
+              <div th:replace="~{partials/index/team-footer.html :: team('Blue', 0)}"></div>
+
+              <div class="col-2"></div>
+
+              <!--RED TEAM INFO-->
+              <div th:replace="~{partials/index/team-footer.html :: team('Red', 1)}"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>

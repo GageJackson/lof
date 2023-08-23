@@ -3,148 +3,65 @@
       xmlns="http://www.w3.org/1999/html" lang="en">
 <head th:replace="~{partials/head.html :: head('Home')}"><title>title</title></head>
 <body class="bg-color-neutral-dark">
-<header th:replace="~{partials/header.html :: header}"></header>
+<!--<header th:replace="~{partials/header.html :: header}"></header>-->
 
-<main class="container">
-    <div class="row row-cols-2 gx-5">
-        <section class="col-10">
-            <th:block th:each="matchInfo : ${matchInfos}">
-                <th:block th:if="${matchInfo.getMatch().isSaved()}">
-                    <div class="accordion mb-3" th:id="${'accordion' + matchInfo.getMatch().getGameId()}">
-
-                        <div class="accordion-eventItem"
-                             th:classappend="${matchInfo.isFriendWin() ? 'card-bg-win' : 'card-bg-loss'}">
-
-                            <button class="accordion-button d-flex justify-content-between collapsed" type="button" data-bs-toggle="collapse" aria-expanded="false"
-                                    th:attr="data-bs-target=${'#accordion-' + matchInfo.getMatch().getGameId()},
-                                    aria-controls=${'#accordion-' + matchInfo.getMatch().getGameId()}"
-                            >
-                                <div>
-                                    <h3 class="bold color-neutral-light" th:text="${matchInfo.getMatch().getGameMode()}"></h3>
-<!--                                    <p class="color-neutral-light" th:text="${#strings.substring(matchInfo.getMatch().getGameVersion(), 0, 5)}"></p>-->
-                                    <p th:with="gameDuration=${matchInfo.getMatch().getGameDuration()}">
-                                        <span class="text-secondary fs-200"
-                                              th:text="${#temporals.format(T(java.time.Instant).ofEpochMilli(matchInfo.getMatch().getGameCreation()), 'MMM-dd')}"
-                                        ></span>
-                                        <span> </span>
-                                        <span class="text-secondary fs-200"
-                                              th:text="${(gameDuration / 60) + 'm ' + (gameDuration % 60) + 's'}"
-                                        ></span>
-                                    </p>
-                                </div>
-
-                                <div class="d-flex justify-content-center align-items-center">
-                                    <!--BLUE VS RED GOLD COMPARISON CHART-->
-                                    <div  th:replace="~{partials/index/chart-container.html :: gold-chart}"></div>
-
-                                    <!--BLUE VS RED KILL COMPARISON CHART-->
-                                    <div  th:replace="~{partials/index/chart-container.html :: kill-chart}"></div>
-
-                                    <!--BLUE VS RED DAMAGE COMPARISON CHART-->
-                                    <div  th:replace="~{partials/index/chart-container.html :: damage-chart}"></div>
-                                </div>
-
-                                <div class="">
-                                    <!--BLUE TEAM CHAMPIONS-->
-                                    <div th:replace="~{partials/index/champion-icon.html :: champion(100)}"></div>
-
-                                    <!--VERTICAL POSITION ICONS-->
-                                    <div th:replace="~{partials/index/position-icons.html :: horizontal('')}"></div>
-
-                                    <!--RED TEAM CHAMPIONS-->
-                                    <div th:replace="~{partials/index/champion-icon.html :: champion(200)}"></div>
-                                </div>
-                            </button>
-
-                            <div th:id="${'accordion-' + matchInfo.getMatch().getGameId()}" class="accordion-collapse collapse"
-                                 th:attr="data-bs-parent=${'#accordion' + matchInfo.getMatch().getGameId()}"
-                            >
-                                <div class="accordion-body bg-color-neutral-dark">
-                                    <div class="card bg-transparent border-0 w-100">
-                                        <div class="card-header bg-transparent border-0">
-                                            <div class="container">
-                                                <div class="row row-cols-3">
-                                                    <!--BLUE TEAM INFO-->
-                                                    <div th:replace="~{partials/index/team-header.html :: team('Blue', 0)}"></div>
-
-                                                    <div class="col-2"></div>
-
-                                                    <!--RED TEAM INFO-->
-                                                    <div th:replace="~{partials/index/team-header.html :: team('Red', 1)}"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="card-body border-0 bg-transparent py-0">
-                                            <div class="container">
-                                                <div class="row">
-                                                    <!--BLUE TEAM INFO-->
-                                                    <div  th:replace="~{partials/index/team-body.html :: blueTeam('')}"></div>
-
-                                                    <!--VERTICAL POSITION ICONS-->
-                                                    <div  th:replace="~{partials/index/position-icons.html :: vertical('')}"></div>
-
-                                                    <!--RED TEAM INFO-->
-                                                    <div  th:replace="~{partials/index/team-body.html :: redTeam('')}"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="card-footer bg-transparent border-0">
-                                            <div class="container">
-                                                <div class="row">
-                                                    <!--BLUE TEAM INFO-->
-                                                    <div th:replace="~{partials/index/team-footer.html :: team('Blue', 0)}"></div>
-
-                                                    <div class="col-2"></div>
-
-                                                    <!--RED TEAM INFO-->
-                                                    <div th:replace="~{partials/index/team-footer.html :: team('Red', 1)}"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </th:block>
-
-                <th:block th:unless="${matchInfo.getMatch().isSaved()}">
-                    <button class="card card-bg w-100 mb-3 ps-3 match border-0" th:id="${matchInfo.getMatch().getGameId()}">
-                        <div class="card-body border-0 d-flex justify-content-between align-items-center">
-                            <div>
-                                <p class="color-neutral-light fs-400 my-0 non-selectable">Click to load match</p>
-                            </div>
-
-                            <div>
-                                <th:block th:each="friend : ${matchInfo.getFriends()}">
-                                    <img th:src="@{${'/dragon_tail/13.14.1/img/profileicon/' + friend.getIcon() + '.png'}}"
-                                         alt="player icon" class="friend-icon non-selectable opacity-75"
-                                    >
-                                </th:block>
-                            </div>
-                        </div>
-                    </button>
-                </th:block>
-            </th:block>
+<main class="container ms-0">
+    <div class="row gx-5">
+        <nav class="col-auto nav nav-pills d-flex flex-column bg-color-neutral-main px-4 py-5">
+            <a class="nav-link active" aria-current="page" href="#">Active</a>
+            <a class="nav-link" href="#">Link</a>
+            <a class="nav-link" href="#">Link</a>
+            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+        </nav>
+        <section class="col">
+            <h1 class="font-bold color-neutral-light my-3">Recent matches</h1>
+            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">All</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-aram-tab" data-bs-toggle="pill" data-bs-target="#pills-aram" type="button" role="tab" aria-controls="pills-aram" aria-selected="false">Aram</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-rift-tab" data-bs-toggle="pill" data-bs-target="#pills-rift" type="button" role="tab" aria-controls="pills-rift" aria-selected="false">Rift</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-arena-tab" data-bs-toggle="pill" data-bs-target="#pills-arena" type="button" role="tab" aria-controls="pills-arena" aria-selected="false">Arena</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-new-tab" data-bs-toggle="pill" data-bs-target="#pills-new" type="button" role="tab" aria-controls="pills-new" aria-selected="false">New</button>
+                </li>
+            </ul>
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
+                    <th:block th:each="matchInfo : ${matchInfos}">
+                        <div th:replace="~{partials/index/match.html :: match-all}"></div>
+                    </th:block>
+                </div>
+                <div class="tab-pane fade" id="pills-aram" role="tabpanel" aria-labelledby="pills-aram-tab" tabindex="0">
+                    <th:block th:each="matchInfo : ${matchInfos}">
+                        <div th:replace="~{partials/index/match.html :: match-aram}"></div>
+                    </th:block>
+                </div>
+                <div class="tab-pane fade" id="pills-rift" role="tabpanel" aria-labelledby="pills-rift-tab" tabindex="0">
+                    <th:block th:each="matchInfo : ${matchInfos}">
+                        <div th:replace="~{partials/index/match.html :: match-rift}"></div>
+                    </th:block>
+                </div>
+                <div class="tab-pane fade" id="pills-arena" role="tabpanel" aria-labelledby="pills-arena-tab" tabindex="0">
+                    <th:block th:each="matchInfo : ${matchInfos}">
+                        <div th:replace="~{partials/index/match.html :: match-arena}"></div>
+                    </th:block>
+                </div>
+                <div class="tab-pane fade" id="pills-new" role="tabpanel" aria-labelledby="pills-new-tab" tabindex="0">
+                    <th:block th:each="matchInfo : ${matchInfos}">
+                        <div th:replace="~{partials/index/match.html :: match-new}"></div>
+                    </th:block>
+                </div>
+            </div>
         </section>
 
-        <aside class="col-2">
-            <p class="color-primary-main fs-500">Friends</p>
-            <hr class="color-primary-main">
-            <div th:each="friend : ${friends}"
-                    class="border-0mb-3"
-            >
-                <button th:id="${'friendBtn-' + friend.getId()}" class="friend-btns bg-transparent border-0 d-flex justify-content-start">
-                    <img th:src="@{${'/dragon_tail/13.14.1/img/profileicon/' + friend.getIcon() + '.png'}}"
-                         alt="player icon" class="friend-icon me-3 mb-0 non-selectable"
-                    >
-                    <div>
-                        <p th:text="${friend.getName()}" class="to-lower bold color-neutral-light mb-0 non-selectable"></p>
-                        <p th:text="${friend.getSummonerLevel()}" class="color-primary-main fs-200 text-start non-selectable"></p>
-                    </div>
-                </button>
-            </div>
-        </aside>
+        <aside th:replace="~{partials/index/friends-aside.html :: aside}"></aside>
     </div>
 
 </main>
