@@ -9,6 +9,7 @@
     --color-neutral-light: #f6f1e5;
     --color-neutral-main: #4b4b56;
     --color-neutral-dark: #21252a;
+    --color-neutral-black: #171a1f;
 
     --fs-900: 4rem;
     --fs-800: 3rem;
@@ -32,6 +33,7 @@ UTILITY CLASSES
 .bg-color-neutral-light {background-color: var(--color-neutral-light);}
 .bg-color-neutral-main {background-color: var(--color-neutral-main);}
 .bg-color-neutral-dark {background-color: var(--color-neutral-dark);}
+.bg-color-neutral-black {background-color: var(--color-neutral-black);}
 
 /* Colors */
 .color-primary-light {color: var(--color-primary-light);}
@@ -42,6 +44,7 @@ UTILITY CLASSES
 .color-neutral-light {color: var(--color-neutral-light);}
 .color-neutral-main {color: var(--color-neutral-main);}
 .color-neutral-dark {color: var(--color-neutral-dark);}
+.color-neutral-black {color: var(--color-neutral-black);}
 
 /* Font Sizes */
 .fs-900 {font-size: var(--fs-900);}
@@ -93,8 +96,8 @@ UTILITY CLASSES
 VISUAL FRAMEWORK
 //////////////////////////////*/
 .friend-icon {
-    height: 48px;
-    width: 48px;
+    height: 42px;
+    width: 42px;
     border-radius: 50%;
 }
 
@@ -196,6 +199,11 @@ VISUAL FRAMEWORK
     border-radius: .5rem;
 }
 
+.friend-btns:hover {
+    background: rgba(255, 255, 255, 0.05); !important;
+    border-radius: .5rem;
+}
+
 .nav-pills {
     --bs-nav-pills-border-radius: 0;
     --bs-nav-pills-link-active-color: var(--color-primary-light);
@@ -228,6 +236,48 @@ VISUAL FRAMEWORK
     right: 0;
 }
 
-nav {
+nav, aside {
     height: 100vh;
+}
+
+aside {
+    padding-block-start: 3rem;
+    margin-inline-end: 3rem;
+}
+
+.content {
+    height: 100vh;
+    overflow-y: auto;
+    margin-inline: auto;
+}
+.menu-btns {
+    width: 32px;
+    height: 40px;
+    background-position: top;
+    background-size: 32px 32px;
+    background-repeat: no-repeat;
+}
+
+#challenges-btn {
+    background-image: url('../img/challenges-neutral.png');
+}
+
+#challenges-btn:hover, #challenges-btn.active {
+    background-image: url('../img/challenges-active.png');
+}
+
+#friend-btn {
+    background-image: url('../img/friend-neutral.png');
+}
+
+#friend-btn:hover, #friend-btn.active {
+    background-image: url('../img/friend-active.png');
+}
+
+#matches-btn {
+    background-image: url('../img/matches-neutral.png');
+}
+
+#matches-btn:hover, #matches-btn.active {
+    background-image: url('../img/matches-active.png');
 }

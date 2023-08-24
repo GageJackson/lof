@@ -1,4 +1,4 @@
-package com.gagejackson.lof.Controllers;
+package com.gagejackson.lof.Controllers.SaveData;
 
 import com.gagejackson.lof.Models.Friend.Friend;
 import com.gagejackson.lof.Models.Friend.FriendChamps;

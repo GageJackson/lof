@@ -45,20 +45,17 @@
        th:classappend="${alignItemsPosition}"
   >
     <div class="d-flex justify-content-between">
-      <img th:if="${isBlueTeam}"
-           th:src="@{${'/dragon_tail/13.14.1/img/champion/' + participant.getChampionName() + '.png'}}"
-           alt="player icon" class="friend-icon non-selectable opacity-75 border border-2 me-2"
-           th:classappend="${#lists.contains(friends.![puuId], participant.getPuuid())} ? 'border-warning' : 'border-secondary'"
-      >
+      <th:block th:if="${isBlueTeam}">
+        <img th:replace="~{partials/index/champion-icon.html :: image(teamId)}">
+      </th:block>
 
       <div th:replace="~{partials/index/team-body.html :: runes(${isBlueTeam})}"></div>
 
-      <img th:unless="${isBlueTeam}"
-           th:src="@{${'/dragon_tail/13.14.1/img/champion/' + participant.getChampionName() + '.png'}}"
-           alt="player icon" class="friend-icon non-selectable opacity-75 border border-2 ms-2"
-           th:classappend="${#lists.contains(friends.![puuId], participant.getPuuid())} ? 'border-warning' : 'border-secondary'"
-      >
+      <th:block th:unless="${isBlueTeam}">
+        <img th:replace="~{partials/index/champion-icon.html :: image(teamId)}">
+      </th:block>
     </div>
+
     <p th:text="${participant.getSummonerName()}"
        class="color-primary-main fw-semibold mb-0"
     ></p>
@@ -67,47 +64,13 @@
 
 <div th:fragment="runes(isBlueTeam)">
   <div class="d-flex" th:if="${isBlueTeam}">
-    <div class="rune-container position-relative me-2">
-      <img th:src="@{${'/img/summoner_runes/' + participant.getPerk()[0].getPerkNum() + '.png'}}"
-           alt="player icon" class="perk-icon-lg non-selectable opacity-75"
-      >
-
-      <img th:src="@{${'/img/summoner_runes/' + participant.getPerk()[4].getStyle() + '.png'}}"
-           alt="player icon" class="perk-icon-sm non-selectable opacity-75 position-absolute bottom-0 end-0"
-      >
-    </div>
-
-    <div class="d-flex flex-column">
-      <img th:src="@{${'/img/summoner_spells/' + participant.getSummoner1Id() + '.png'}}"
-           alt="player icon" class="item-icon non-selectable opacity-75 border border-1 border-secondary"
-      >
-
-      <img th:src="@{${'/img/summoner_spells/' + participant.getSummoner2Id() + '.png'}}"
-           alt="player icon" class="item-icon non-selectable opacity-75 border border-1 border-secondary"
-      >
-    </div>
+    <div th:replace="~{partials/index/team-body.html :: perks}"></div>
+    <div th:replace="~{partials/index/team-body.html :: spells}"></div>
   </div>
 
   <div class="d-flex" th:unless="${isBlueTeam}">
-    <div class="d-flex flex-column">
-      <img th:src="@{${'/img/summoner_spells/' + participant.getSummoner1Id() + '.png'}}"
-           alt="player icon" class="item-icon non-selectable opacity-75 border border-1 border-secondary"
-      >
-
-      <img th:src="@{${'/img/summoner_spells/' + participant.getSummoner2Id() + '.png'}}"
-           alt="player icon" class="item-icon non-selectable opacity-75 border border-1 border-secondary"
-      >
-    </div>
-
-    <div class="rune-container position-relative ms-2">
-      <img th:src="@{${'/img/summoner_runes/' + participant.getPerk()[0].getPerkNum() + '.png'}}"
-           alt="player icon" class="perk-icon-lg non-selectable opacity-75"
-      >
-
-      <img th:src="@{${'/img/summoner_runes/' + participant.getPerk()[4].getStyle() + '.png'}}"
-           alt="player icon" class="perk-icon-sm non-selectable opacity-75 position-absolute bottom-0 end-0"
-      >
-    </div>
+    <div th:replace="~{partials/index/team-body.html :: spells}"></div>
+    <div th:replace="~{partials/index/team-body.html :: perks}"></div>
   </div>
 </div>
 
@@ -163,3 +126,34 @@
     ></p>
   </th:block>
 </div>
+
+<div th:fragment="perks"
+     class="rune-container position-relative ms-2"
+     th:with="primaryRune=${participant.getPerk()[0].getPerkNum()},
+              secondaryRunes=${participant.getPerk()[4].getStyle()}"
+>
+  <img th:replace="~{partials/index/team-body.html :: perk(${primaryRune}, true)}">
+  <img th:replace="~{partials/index/team-body.html :: perk(${secondaryRunes}, false)}">
+</div>
+
+<img th:fragment="perk(perk, isPrimary)"
+     th:src="@{${'/img/summoner_runes/' + perk + '.png'}}"
+     th:alt="${'player rune'}"
+     class="non-selectable opacity-75"
+     th:classappend="${isPrimary} ? 'perk-icon-lg' : 'perk-icon-sm position-absolute bottom-0 end-0'"
+>
+
+<div th:fragment="spells"
+     class="d-flex flex-column"
+     th:with="spell1=${participant.getSummoner1Id()},
+              spell2=${participant.getSummoner2Id()}"
+>
+  <img th:replace="~{partials/index/team-body.html :: spell(${spell1})}">
+  <img th:replace="~{partials/index/team-body.html :: spell(${spell2})}">
+</div>
+
+<img th:fragment="spell(spell)"
+     th:src="@{${'/img/summoner_spells/' + spell + '.png'}}"
+     th:alt="${'player spell'}"
+     class="item-icon non-selectable opacity-75 border border-1 border-secondary"
+>

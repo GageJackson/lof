@@ -54,29 +54,13 @@ public class IndexController {
     public String goHome(Model model) {
         List<MatchInfo> matchInfos = new ArrayList<>();
 
-        Sort sort = Sort.by(Sort.Direction.DESC, "gameId");
-        Pageable pageable = PageRequest.of(0, 50, sort);
-        List<Match> matches = matchRepositoryDao.findAll(pageable).getContent();
+        List<Match> matches = findAllMatches();
+        List<FriendSelection> friends = getFriends(Collections.singletonList(0L));
 
         for (Match match : matches) {
-            List<FriendMatch> friendMatches = friendMatchRepositoryDao.findAllByMatch(match);
-
-            boolean friendWinIsSet = false;
-            boolean friendWon = false;
-
-            List<Friend> friendsInMatch = new ArrayList<>();
-            for (FriendMatch friendMatch : friendMatches) {
-                Friend friend = friendMatch.getFriend();
-
-
-                if(!friendWinIsSet && match.isSaved()){
-                    friendWinIsSet = true;
-                    Participant participant = participantRepositoryDao.findByMatchAndPuuid(match,friend.getPuuId());
-                    friendWon = participant.isWin();
-                }
-
-                friendsInMatch.add(friend);
-            }
+            List<FriendMatch> friendMatches = match.getFriendMatch();
+            List<Friend> friendsInMatch = findFriendsInMatch(friendMatches);
+            boolean friendWon = didFriendWin(match, friendsInMatch.get(0));
 
             MatchInfo matchInfo = new MatchInfo();
             matchInfo.setMatch(match);
@@ -87,10 +71,6 @@ public class IndexController {
         }
 
         model.addAttribute("matchInfos", matchInfos);
-
-        List<Long> selection = new ArrayList<Long>();
-        selection.add((long)0);
-        List<FriendSelection> friends = getFriends(selection);
         model.addAttribute("friends", friends);
 
         return "index";
@@ -100,56 +80,30 @@ public class IndexController {
     public String homeSort(Model model, @RequestParam("friendIds") List<Long> friendIds) {
         List<MatchInfo> matchInfos = new ArrayList<>();
 
-        // Fetch matches
-        String sortBy = "gameId";
-        int page = 0;
-        int matchCount = 50;
-        Sort sort = Sort.by(Sort.Direction.DESC, sortBy);
-        Pageable pageable = PageRequest.of(page, matchCount, sort);
-        List<Match> matches = matchRepositoryDao.findAll(pageable).getContent();
-
-        // Find the selected friends
+        List<Match> matches = findAllMatches();
         List<FriendSelection> friends = getFriends(friendIds);
 
-        // Filter matches based on selected friends
         for (Match match : matches) {
             List<FriendMatch> friendMatches = match.getFriendMatch();
-            Set<Long> matchedFriendIds = new HashSet<>();
+            List<Friend> friendsInMatch = findFriendsInMatch(friendMatches);
+            boolean friendWon = didFriendWin(match, friendsInMatch.get(0));
 
+            Set<Long> matchedFriendIds = new HashSet<>();
             for (FriendMatch friendMatch : friendMatches) {
                 matchedFriendIds.add(friendMatch.getFriend().getId());
             }
 
             if (matchedFriendIds.containsAll(friendIds)) {
+                MatchInfo matchInfo = new MatchInfo();
+                matchInfo.setMatch(match);
+                matchInfo.setFriends(friendsInMatch);
+                matchInfo.setFriendWin(friendWon);
 
-                    boolean friendWinIsSet = false;
-                    boolean friendWon = false;
-
-                    List<Friend> friendsInMatch = new ArrayList<>();
-                    for (FriendMatch friendMatch : friendMatches) {
-                        Friend friendGGG = friendMatch.getFriend();
-
-
-                        if(!friendWinIsSet && match.isSaved()){
-                            friendWinIsSet = true;
-                            Participant participant = participantRepositoryDao.findByMatchAndPuuid(match,friendGGG.getPuuId());
-                            friendWon = participant.isWin();
-                        }
-
-                        friendsInMatch.add(friendGGG);
-                    }
-
-                    MatchInfo matchInfo = new MatchInfo();
-                    matchInfo.setMatch(match);
-                    matchInfo.setFriends(friendsInMatch);
-                    matchInfo.setFriendWin(friendWon);
-
-                    matchInfos.add(matchInfo);
+                matchInfos.add(matchInfo);
             }
         }
 
         model.addAttribute("matchInfos", matchInfos);
-
         model.addAttribute("friends", friends);
 
         return "index";
@@ -167,12 +121,43 @@ public class IndexController {
             selectedFriend.setIcon(friend.getIcon());
             selectedFriend.setSummonerLevel(friend.getSummonerLevel());
 
+            //if list is 0 / Collections.singletonList(0L) no friends will be highlighted
             selectedFriend.setSelected(selection.contains(friend.getId()));
 
             selectedFriends.add(selectedFriend);
         }
 
         return selectedFriends;
+    }
+
+    private List<Match> findAllMatches(){
+        String sortBy = "gameId";
+        int page = 0;
+        int matchCount = 50;
+        Sort sort = Sort.by(Sort.Direction.DESC, sortBy);
+        Pageable pageable = PageRequest.of(page, matchCount, sort);
+
+        return matchRepositoryDao.findAll(pageable).getContent();
+    }
+
+    private List<Friend> findFriendsInMatch(List<FriendMatch> friendMatches){
+        List<Friend> friendsInMatch = new ArrayList<>();
+
+        for (FriendMatch friendMatch : friendMatches) {
+            Friend friend = friendMatch.getFriend();
+            friendsInMatch.add(friend);
+        }
+
+        return friendsInMatch;
+    }
+
+    private boolean didFriendWin(Match match, Friend friend){
+        if(match.isSaved()){
+            Participant participant = participantRepositoryDao.findByMatchAndPuuid(match,friend.getPuuId());
+            return participant.isWin();
+        } else {
+            return false;
+        }
     }
 }
 

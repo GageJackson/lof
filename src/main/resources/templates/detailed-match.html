@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/html" lang="en">
+<head th:replace="~{partials/head.html :: head('Home')}"><title>title</title></head>
+<body class="bg-color-neutral-dark">
+
+<main class="container-fluid ms-0">
+  <div class="row gx-5">
+    <nav th:replace="~{partials/primary-nav.html :: primary-nav}"></nav>
+
+    <section class="col-6 content">
+      <h1 class="font-bold color-neutral-light my-3">Recent matches</h1>
+      <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="pills-overview-tab" data-bs-toggle="pill" data-bs-target="#pills-overview" type="button" role="tab" aria-controls="pills-overview" aria-selected="true">Overview</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="pills-timelines-tab" data-bs-toggle="pill" data-bs-target="#pills-timelines" type="button" role="tab" aria-controls="pills-timelines" aria-selected="false">Timelines</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="pills-champion-tab" data-bs-toggle="pill" data-bs-target="#pills-champion" type="button" role="tab" aria-controls="pills-champion" aria-selected="false">Champion</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="pills-arena-tab" data-bs-toggle="pill" data-bs-target="#pills-arena" type="button" role="tab" aria-controls="pills-arena" aria-selected="false">Arena</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="pills-new-tab" data-bs-toggle="pill" data-bs-target="#pills-new" type="button" role="tab" aria-controls="pills-new" aria-selected="false">New</button>
+        </li>
+      </ul>
+      <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-overview" role="tabpanel" aria-labelledby="pills-overview-tab" tabindex="0">
+            <div th:replace="~{partials/index/match.html :: match-all}"></div>
+        </div>
+        <div class="tab-pane fade" id="pills-timelines" role="tabpanel" aria-labelledby="pills-timelines-tab" tabindex="1">
+        </div>
+        <div class="tab-pane fade" id="pills-champion" role="tabpanel" aria-labelledby="pills-champion-tab" tabindex="2">
+        </div>
+        <div class="tab-pane fade" id="pills-arena" role="tabpanel" aria-labelledby="pills-arena-tab" tabindex="3">
+        </div>
+        <div class="tab-pane fade" id="pills-new" role="tabpanel" aria-labelledby="pills-new-tab" tabindex="4">
+        </div>
+      </div>
+    </section>
+
+    <aside th:replace="~{partials/index/friends-aside.html :: aside}"></aside>
+  </div>
+
+</main>
+
+</body>
+</html>
+
+
+<!--<div-->
+<!--        th:with="maxDamage=${T(java.lang.Math).max(matchInfo.getMatch().getTeam()[0].getTotalDamage(), matchInfo.getMatch().getTeam()[1].getTotalDamage())}"-->
+<!--&gt;-->
+<!--    <p th:text="${participant.getTotalDamageDealt()}"></p>-->
+<!--    <div class="progress-stacked">-->
+<!--        <div class="progress" role="progressbar" aria-label="Segment one" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"-->
+<!--             th:style="'width:'+${#numbers.formatDecimal((100 * participant.getPhysicalDamageDealt()/(maxDamage)), 0, 0) + '%'}"-->
+<!--        >-->
+<!--            <div class="progress-bar"></div>-->
+<!--        </div>-->
+<!--        <div class="progress" role="progressbar" aria-label="Segment two" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"-->
+<!--             th:style="'width:'+${#numbers.formatDecimal((100 * participant.getMagicDamageDealt()/(maxDamage)), 0, 0) + '%'}"-->
+<!--        >-->
+<!--            <div class="progress-bar bg-success"></div>-->
+<!--        </div>-->
+<!--        <div class="progress" role="progressbar" aria-label="Segment three" aria-valuenow="20" aria-valuemin="0"aria-valuemax="100"-->
+<!--             th:style="'width:'+${#numbers.formatDecimal((100 * participant.getTrueDamageDealt()/participant.getTotalDamageDealt()), 0, 0) + '%'}"-->
+<!--        >-->
+<!--            <div class="progress-bar bg-info"></div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->

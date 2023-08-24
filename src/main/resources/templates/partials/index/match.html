@@ -102,8 +102,8 @@
       <!--BLUE TEAM CHAMPIONS-->
       <div th:replace="~{partials/index/champion-icon.html :: champion(100)}"></div>
 
-      <!--VERTICAL POSITION ICONS-->
-      <div th:replace="~{partials/index/position-icons.html :: horizontal('')}"></div>
+      <!--HORIZONTAL POSITION ICONS-->
+      <div th:replace="~{partials/index/position-icons.html :: position-icons(false)}"></div>
 
       <!--RED TEAM CHAMPIONS-->
       <div th:replace="~{partials/index/champion-icon.html :: champion(200)}"></div>
@@ -136,7 +136,7 @@
               <div  th:replace="~{partials/index/team-body.html :: blueTeam('')}"></div>
 
               <!--VERTICAL POSITION ICONS-->
-              <div  th:replace="~{partials/index/position-icons.html :: vertical('')}"></div>
+              <div th:replace="~{partials/index/position-icons.html :: position-icons(true)}"></div>
 
               <!--RED TEAM INFO-->
               <div  th:replace="~{partials/index/team-body.html :: redTeam('')}"></div>
@@ -154,6 +154,10 @@
               <!--RED TEAM INFO-->
               <div th:replace="~{partials/index/team-footer.html :: team('Red', 1)}"></div>
             </div>
+            <a th:href="@{${'/match?match=' + matchInfo.getMatch().getId()}}"
+               class="btn btn-primary" th:text="${'More Detail'}"
+            ></a>
+            <p th:text="${ matchInfo.getMatch().getId()}"></p>
           </div>
         </div>
       </div>

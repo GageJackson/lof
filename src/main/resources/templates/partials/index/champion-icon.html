@@ -1,11 +1,19 @@
 <div th:fragment="champion(teamId)"
-        class=" d-flex justify-content-between gap-3 mb-2">
-  <th:block th:each="participant : ${matchInfo.getMatch().getParticipant()}">
+     class=" d-flex justify-content-between gap-3 mb-2"
+     th:with="participants=${matchInfo.getMatch().getParticipant()}"
+>
+  <th:block th:each="participant : ${participants}">
     <th:block th:if="${participant.getTeamId() == teamId}">
-      <img th:src="@{${'/dragon_tail/13.14.1/img/champion/' + participant.getChampionName() + '.png'}}"
-           alt="champion icon" class="friend-icon non-selectable opacity-75"
-           th:classappend="${#lists.contains(friends.![puuId], participant.getPuuid())} ? 'border border-2 border-warning' : 'border border-2 border-secondary'"
-      >
+      <img th:replace="~{partials/index/champion-icon.html :: image(teamId)}">
     </th:block>
   </th:block>
 </div>
+
+<img th:fragment="image(teamId)"
+     th:with="champion=${participant.getChampionName()},
+              isFriend=${#lists.contains(friends.![puuId], participant.getPuuid())}"
+     th:src="@{${'/dragon_tail/13.14.1/img/champion/' + champion + '.png'}}"
+     alt="champion icon"
+     class="friend-icon non-selectable opacity-75 border border-2 ms-2"
+     th:classappend="${isFriend} ? 'border-warning' : 'border-secondary'"
+>
