@@ -1,0 +1,36 @@
+<div th:fragment="position-icons(isVertical)"
+     th:switch="${matchInfo.getMatch().getGameMode()}"
+     class=""
+     th:classappend="${isVertical} ? 'bg-color-neutral-dark col-auto py-0 px-0' : ''"
+>
+    <th:block th:case="CLASSIC">
+        <div th:replace="~{partials/index/position-icons.html :: classic(${isVertical})}"></div>
+    </th:block>
+
+    <th:block th:case="ARAM">
+        <div th:replace="~{partials/index/position-icons.html :: aram(${isVertical})}"></div>
+    </th:block>
+</div>
+
+<div th:fragment="aram(isVertical)"
+     class="d-flex justify-content-between align-items-center"
+     th:classappend="${isVertical} ? 'flex-column h-100' : 'px-2 mb-2'"
+>
+    <div th:replace="~{partials/icons/position-icon.html :: position-icon('mid', ${isVertical})}"></div>
+    <div th:replace="~{partials/icons/position-icon.html :: position-icon('mid', ${isVertical})}"></div>
+    <div th:replace="~{partials/icons/position-icon.html :: position-icon('mid', ${isVertical})}"></div>
+    <div th:replace="~{partials/icons/position-icon.html :: position-icon('mid', ${isVertical})}"></div>
+    <div th:replace="~{partials/icons/position-icon.html :: position-icon('mid', ${isVertical})}"></div>
+</div>
+
+<div th:fragment="classic(isVertical)"
+     class="d-flex justify-content-between align-items-center"
+     th:classappend="${isVertical} ? 'flex-column h-100' : 'px-2 mb-2'"
+>
+    <div th:replace="~{partials/icons/position-icon.html :: position-icon('top', ${isVertical})}"></div>
+    <div th:replace="~{partials/icons/position-icon.html :: position-icon('jgl', ${isVertical})}"></div>
+    <div th:replace="~{partials/icons/position-icon.html :: position-icon('mid', ${isVertical})}"></div>
+    <div th:replace="~{partials/icons/position-icon.html :: position-icon('bot', ${isVertical})}"></div>
+    <div th:replace="~{partials/icons/position-icon.html :: position-icon('sup', ${isVertical})}"></div>
+</div>
+

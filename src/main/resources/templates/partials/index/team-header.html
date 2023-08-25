@@ -1,0 +1,44 @@
+<div th:fragment="team(teamColor, teamNumber)"
+     th:with="teamWin=${matchInfo.getMatch().getTeam()[teamNumber].isWin()},
+              teamKills=${matchInfo.getMatch().getTeam()[teamNumber].getKills()},
+              teamAssists=${matchInfo.getMatch().getTeam()[teamNumber].getDeaths()},
+              teamDeaths=${matchInfo.getMatch().getTeam()[teamNumber].getAssists()},
+              teamGold=${#numbers.formatDecimal(matchInfo.getMatch().getTeam()[teamNumber].getGold(), 3, 'COMMA', 0, 'POINT')}"
+     class="col-5"
+>
+  <div class="d-flex justify-content-between">
+    <div>
+      <p>
+        <span th:text="${teamColor + ' Team'}"
+              class="fw-semibold"
+              th:classappend="${teamColor == 'Blue'} ? 'color-primary-blue' : 'color-primary-red'"
+        ></span>
+
+        <span class="badge"
+              th:classappend="${teamWin} ? 'bg-color-primary-main' : 'bg-color-primary-dark'"
+              th:text="${teamWin} ? 'Won' : 'Lost'"
+        ></span>
+      </p>
+    </div>
+
+    <div>
+      <img th:src="@{${'/img/kda.png'}}"
+           alt="player position top"
+           class="position-icon non-selectable opacity-75"
+      >
+      <span class="color-neutral-light fw-semibold"
+            th:text="${teamKills + '/' + teamAssists + '/' + teamDeaths}">
+      </span>
+    </div>
+
+    <div>
+      <img th:src="@{${'/img/gold.png'}}"
+           alt="player position top"
+           class="position-icon non-selectable opacity-75"
+      >
+      <span class="color-neutral-light fw-semibold"
+            th:text="${teamGold}">
+      </span>
+    </div>
+  </div>
+</div>

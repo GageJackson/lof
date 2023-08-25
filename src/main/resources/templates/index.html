@@ -3,296 +3,60 @@
       xmlns="http://www.w3.org/1999/html" lang="en">
 <head th:replace="~{partials/head.html :: head('Home')}"><title>title</title></head>
 <body class="bg-color-neutral-dark">
-<header th:replace="~{partials/header.html :: header}"></header>
+<main class="container-fluid ms-0">
+    <div class="row gx-5">
+        <nav th:replace="~{partials/primary-nav.html :: primary-nav}"></nav>
 
-<main class="container">
-    <div class="row row-cols-2 gx-5">
-        <section class="col-10">
-            <th:block th:each="matchInfo : ${matchInfos}">
-
-                <button class="card w-100 mb-3 ps-3 match border-0" th:id="${matchInfo.getMatch().getGameId()}"
-                        th:classappend="${matchInfo.isFriendWin() ? 'card-bg-win' : (matchInfo.getMatch().isSaved() ? 'card-bg-loss' : 'card-bg')}"
-
-                >
-                    <th:block th:if="${matchInfo.getMatch().isSaved()}">
-                        <div class="card-body border-0 d-flex justify-content-between align-items-center">
-                            <div>
-                                <h3 class="bold color-neutral-light" th:text="${matchInfo.getMatch().getGameMode()}"></h3>
-                                <p class="color-neutral-light" th:text="${#strings.substring(matchInfo.getMatch().getGameVersion(), 0, 5)}"></p>
-                                <p class="color-neutral-light" th:text="${#temporals.format(T(java.time.Instant).ofEpochMilli(matchInfo.getMatch().getGameCreation()), 'MM-dd')}"></p>
-                                <p class="color-neutral-light" th:text="${matchInfo.getMatch().getGameDuration() / 60 + ':' + matchInfo.getMatch().getGameDuration() % 60}"></p>
-                            </div>
-
-                            <div class="d-flex align-items-center">
-                                <div class="killChart-container"
-                                     th:attr="data-match-id=${matchInfo.getMatch().getGameId()},
-                                          data-team1-kill=${matchInfo.getMatch().getTeam()[0].getKills()},
-                                          data-team2-kill=${matchInfo.getMatch().getTeam()[1].getKills()}"
-                                >
-                                    <div th:id="'killChart-' + ${matchInfo.getMatch().getGameId()}"
-                                         class="chart w-100" style="height: 100px; aspect-ratio: 1">
-                                    </div>
-                                    <h5 class="text-light">Kills</h5>
-                                    <p>
-                                        <span th:text="${matchInfo.getMatch().getTeam()[1].getKills()}"
-                                              class="text-danger">
-                                        </span>
-                                        <span th:text="${matchInfo.getMatch().getTeam()[0].getKills()}"
-                                              class="text-primary">
-                                        </span>
-                                    </p>
-                                </div>
-
-                                <div class="damageChart-container"
-                                     th:attr="data-match-id=${matchInfo.getMatch().getGameId()},
-                                          data-team1-damage=${matchInfo.getMatch().getTeam()[0].getTotalDamage()},
-                                          data-team2-damage=${matchInfo.getMatch().getTeam()[1].getTotalDamage()}"
-                                >
-                                    <div th:id="'damageChart-' + ${matchInfo.getMatch().getGameId()}"
-                                         class="chart w-100" style="height: 100px; aspect-ratio: 1">
-                                    </div>
-                                    <h5 class="text-light">Damage</h5>
-                                    <p>
-                                        <span th:text="${matchInfo.getMatch().getTeam()[1].getTotalDamage()}"
-                                              class="text-danger">
-                                        </span>
-                                        <span th:text="${matchInfo.getMatch().getTeam()[0].getTotalDamage()}"
-                                        class="text-primary">
-                                        </span>
-                                    </p>
-                                </div>
-
-                                <div class="goldChart-container"
-                                     th:attr="data-match-id=${matchInfo.getMatch().getGameId()},
-                                         data-team1-gold=${matchInfo.getMatch().getTeam()[0].getGold()},
-                                         data-team2-gold=${matchInfo.getMatch().getTeam()[1].getGold()}"
-                                >
-                                    <div th:id="'goldChart-' + ${matchInfo.getMatch().getGameId()}"
-                                         class="chart w-100" style="height: 100px; aspect-ratio: 1">
-                                    </div>
-                                    <h5 class="text-light">Gold</h5>
-                                    <p>
-                                        <span th:text="${matchInfo.getMatch().getTeam()[1].getGold()}"
-                                              class="text-danger">
-                                        </span>
-                                        <span th:text="${matchInfo.getMatch().getTeam()[0].getGold()}"
-                                              class="text-primary">
-                                        </span>
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div>
-                                <div class="mb-2 d-flex justify-content-between gap-3">
-                                    <th:block th:each="participant : ${matchInfo.getMatch().getParticipant()}">
-                                        <th:block th:if="${participant.getTeamId() == 100}">
-                                            <img th:src="@{${'/dragon_tail/13.14.1/img/champion/' + participant.getChampionName() + '.png'}}"
-                                                 alt="player icon" class="friend-icon non-selectable opacity-75"
-                                                 th:classappend="${#lists.contains(friends.![puuId], participant.getPuuid())} ? 'border border-2 border-warning' : 'border border-2 border-primary'"
-                                            >
-                                        </th:block>
-                                    </th:block>
-                                </div>
-
-                                <th:block th:if="${matchInfo.getMatch().getGameMode().equals('CLASSIC')}">
-                                    <div class="mb-2 d-flex justify-content-between px-2">
-                                        <img th:src="@{${'/img/top.png'}}"
-                                             alt="player position" class="position-icon non-selectable opacity-75"
-                                        >
-                                        <img th:src="@{${'/img/jgl.png'}}"
-                                             alt="player position" class="position-icon non-selectable opacity-75"
-                                        >
-                                        <img th:src="@{${'/img/mid.png'}}"
-                                             alt="player position" class="position-icon non-selectable opacity-75"
-                                        >
-                                        <img th:src="@{${'/img/bot.png'}}"
-                                             alt="player position" class="position-icon non-selectable opacity-75"
-                                        >
-                                        <img th:src="@{${'/img/sup.png'}}"
-                                             alt="player position" class="position-icon non-selectable opacity-75"
-                                        >
-                                    </div>
-                                </th:block>
-
-                                <th:block th:if="${matchInfo.getMatch().getGameMode().equals('ARAM')}">
-                                    <div class="mb-2 d-flex justify-content-between px-2">
-                                        <img th:src="@{${'/img/mid.png'}}"
-                                             alt="player position" class="position-icon non-selectable opacity-75"
-                                        >
-                                        <img th:src="@{${'/img/mid.png'}}"
-                                             alt="player position" class="position-icon non-selectable opacity-75"
-                                        >
-                                        <img th:src="@{${'/img/mid.png'}}"
-                                             alt="player position" class="position-icon non-selectable opacity-75"
-                                        >
-                                        <img th:src="@{${'/img/mid.png'}}"
-                                             alt="player position" class="position-icon non-selectable opacity-75"
-                                        >
-                                        <img th:src="@{${'/img/mid.png'}}"
-                                             alt="player position" class="position-icon non-selectable opacity-75"
-                                        >
-                                    </div>
-                                </th:block>
-
-
-                                <div class=" d-flex justify-content-between gap-3">
-                                    <th:block th:each="participant : ${matchInfo.getMatch().getParticipant()}">
-                                        <th:block th:unless="${participant.getTeamId() == 100}">
-                                            <img th:src="@{${'/dragon_tail/13.14.1/img/champion/' + participant.getChampionName() + '.png'}}"
-                                                 alt="player icon" class="friend-icon non-selectable opacity-75"
-                                                 th:classappend="${#lists.contains(friends.![puuId], participant.getPuuid())} ? 'border border-2 border-warning' : 'border border-2 border-danger'"
-                                            >
-                                        </th:block>
-                                    </th:block>
-                                </div>
-                            </div>
-                        </div>
+        <section class="col-6 content">
+            <h1 class="font-bold color-neutral-light my-3">Recent matches</h1>
+            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">All</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-aram-tab" data-bs-toggle="pill" data-bs-target="#pills-aram" type="button" role="tab" aria-controls="pills-aram" aria-selected="false">Aram</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-rift-tab" data-bs-toggle="pill" data-bs-target="#pills-rift" type="button" role="tab" aria-controls="pills-rift" aria-selected="false">Rift</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-arena-tab" data-bs-toggle="pill" data-bs-target="#pills-arena" type="button" role="tab" aria-controls="pills-arena" aria-selected="false">Arena</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-new-tab" data-bs-toggle="pill" data-bs-target="#pills-new" type="button" role="tab" aria-controls="pills-new" aria-selected="false">New</button>
+                </li>
+            </ul>
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
+                    <th:block th:each="matchInfo : ${matchInfos}">
+                        <div th:replace="~{partials/index/match.html :: match-buttons('ALL')}"></div>
                     </th:block>
-
-                    <th:block th:unless="${matchInfo.getMatch().isSaved()}">
-                        <div class="card-body border-0 d-flex justify-content-between align-items-center">
-                            <div>
-                                <p class="color-neutral-light fs-400 my-0 non-selectable">Click to load match</p>
-                            </div>
-
-                            <div>
-                                <th:block th:each="friend : ${matchInfo.getFriends()}">
-                                    <img th:src="@{${'/dragon_tail/13.14.1/img/profileicon/' + friend.getIcon() + '.png'}}"
-                                         alt="player icon" class="friend-icon non-selectable opacity-75"
-                                    >
-                                </th:block>
-                            </div>
-                        </div>
+                </div>
+                <div class="tab-pane fade" id="pills-aram" role="tabpanel" aria-labelledby="pills-aram-tab" tabindex="1">
+                    <th:block th:each="matchInfo : ${matchInfos}">
+                        <div th:replace="~{partials/index/match.html :: match-buttons('ARAM')}"></div>
                     </th:block>
-                </button>
-            </th:block>
-        </section>
-
-        <aside class="col-2">
-            <p class="color-primary-main fs-500">Friends</p>
-            <hr class="color-primary-main">
-            <div th:each="friend : ${friends}"
-                    class="border-0 d-flex mb-3"
-            >
-                <img th:src="@{${'/dragon_tail/13.14.1/img/profileicon/' + friend.getIcon() + '.png'}}"
-                     alt="player icon" class="friend-icon me-3 mb-0 non-selectable"
-                >
-                <div>
-                    <p th:text="${friend.getName()}" class="to-lower bold color-neutral-light mb-0 non-selectable"></p>
-                    <p th:text="${friend.getSummonerLevel()}" class="color-primary-main fs-200 non-selectable"></p>
+                </div>
+                <div class="tab-pane fade" id="pills-rift" role="tabpanel" aria-labelledby="pills-rift-tab" tabindex="2">
+                    <th:block th:each="matchInfo : ${matchInfos}">
+                        <div th:replace="~{partials/index/match.html :: match-buttons('CLASSIC')}"></div>
+                    </th:block>
+                </div>
+                <div class="tab-pane fade" id="pills-arena" role="tabpanel" aria-labelledby="pills-arena-tab" tabindex="3">
+                    <th:block th:each="matchInfo : ${matchInfos}">
+                        <div th:replace="~{partials/index/match.html :: match-buttons('CHERRY')}"></div>
+                    </th:block>
+                </div>
+                <div class="tab-pane fade" id="pills-new" role="tabpanel" aria-labelledby="pills-new-tab" tabindex="4">
+                    <th:block th:each="matchInfo : ${matchInfos}">
+                        <div th:replace="~{partials/index/match.html :: match-buttons('NEW')}"></div>
+                    </th:block>
                 </div>
             </div>
-        </aside>
+        </section>
+
+        <aside th:replace="~{partials/index/friends-aside.html :: aside}"></aside>
     </div>
-
 </main>
-
-<footer th:replace="~{partials/footer.html :: footer}"></footer>
-
-<script type="text/javascript">
-    function drawTeamKillChart(matchId, team1Kill, team2Kill) {
-        google.charts.load("current", { packages: ["corechart"] });
-        google.charts.setOnLoadCallback(function () {
-            var data = google.visualization.arrayToDataTable([
-                ['Team', 'Damage'],
-                ['Blue Team', team1Kill],
-                ['Red Team',  team2Kill]
-            ]);
-
-            var options = {
-                pieHole: 0.7,
-                backgroundColor: 'transparent',
-                pieSliceBorderColor: 'transparent',
-                legend: 'none',
-                pieSliceText: 'none',
-                tooltip: {
-                    textStyle: {color: '#252525', fontSize: 12},
-                    trigger: 'selection'
-                }
-            };
-
-            var chart = new google.visualization.PieChart(document.getElementById('killChart-' + matchId));
-            chart.draw(data, options);
-        });
-    }
-
-    function drawTeamDamageChart(matchId, team1Damage, team2Damage) {
-        google.charts.load("current", { packages: ["corechart"] });
-        google.charts.setOnLoadCallback(function () {
-            var data = google.visualization.arrayToDataTable([
-                ['Team', 'Damage'],
-                ['Blue Team', team1Damage],
-                ['Red Team',  team2Damage]
-            ]);
-
-            var options = {
-                pieHole: 0.7,
-                backgroundColor: 'transparent',
-                pieSliceBorderColor: 'transparent',
-                legend: 'none',
-                pieSliceText: 'none',
-                tooltip: {
-                    textStyle: {color: '#252525', fontSize: 12},
-                    trigger: 'selection'
-                }
-            };
-
-            var chart = new google.visualization.PieChart(document.getElementById('damageChart-' + matchId));
-            chart.draw(data, options);
-        });
-    }
-
-    function drawTeamGoldChart(matchId, team1Gold, team2Gold) {
-        google.charts.load("current", { packages: ["corechart"] });
-        google.charts.setOnLoadCallback(function () {
-            var data = google.visualization.arrayToDataTable([
-                ['Team', 'Gold'],
-                ['Blue Team', team1Gold],
-                ['Red Team',  team2Gold]
-            ]);
-
-            var options = {
-                pieHole: 0.7,
-                backgroundColor: 'transparent',
-                pieSliceBorderColor: 'transparent',
-                legend: 'none',
-                pieSliceText: 'none',
-                tooltip:
-                    {textStyle: {color: '#252525', fontSize: 12},
-                        trigger: 'selection'}
-            };
-
-            var chart = new google.visualization.PieChart(document.getElementById('goldChart-' + matchId));
-            chart.draw(data, options);
-        });
-    }
-
-    var killContainers = document.getElementsByClassName("killChart-container");
-    for (var i = 0; i < killContainers.length; i++) {
-        var container = killContainers[i];
-        var matchId = container.getAttribute("data-match-id");
-        var team1Kill = parseInt(container.getAttribute("data-team1-kill"));
-        var team2Kill = parseInt(container.getAttribute("data-team2-kill"));
-        drawTeamKillChart(matchId, team1Kill, team2Kill);
-    }
-
-    var damageContainers = document.getElementsByClassName("damageChart-container");
-    for (var i = 0; i < damageContainers.length; i++) {
-        var container = damageContainers[i];
-        var matchId = container.getAttribute("data-match-id");
-        var team1Damage = parseInt(container.getAttribute("data-team1-damage"));
-        var team2Damage = parseInt(container.getAttribute("data-team2-damage"));
-        drawTeamDamageChart(matchId, team1Damage, team2Damage);
-    }
-
-    var goldContainers = document.getElementsByClassName("goldChart-container");
-    for (var i = 0; i < goldContainers.length; i++) {
-        var container = goldContainers[i];
-        var matchId = container.getAttribute("data-match-id");
-        var team1Gold = parseInt(container.getAttribute("data-team1-gold"));
-        var team2Gold = parseInt(container.getAttribute("data-team2-gold"));
-        drawTeamGoldChart(matchId, team1Gold, team2Gold);
-    }
-</script>
 </body>
 </html>

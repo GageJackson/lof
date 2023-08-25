@@ -1,0 +1,128 @@
+<div th:fragment="team(teamColor, teamNumber)"
+     th:with="participants=${matchInfo.getMatch().getParticipant()},
+              blueTeam=${100},
+              redTeam=${200},
+              team=${(teamNumber + 1) * 100},
+              isBlueTeam=${team == blueTeam},
+              isRedTeam=${team == redTeam}"
+     class="col p-0"
+     th:classappend="${isBlueTeam} ? 'blue-team-bg' : 'red-team-bg'"
+>
+  <div th:each="participant : ${participants}"
+       class="d-flex justify-content-between p-3"
+       th:if="${participant.teamId == team}"
+       th:classappend="${isBlueTeam} ? 'pe-4 blue-participant' : 'ps-4 red-participant'"
+  >
+    <th:block th:if="${isBlueTeam}">
+      <div th:replace="~{partials/index/team-body.html :: stats}"></div>
+      <div th:replace="~{partials/index/team-body.html :: participant('align-items-end', false)}"></div>
+    </th:block>
+
+    <th:block th:if="${isRedTeam}">
+      <div th:replace="~{partials/index/team-body.html :: participant('align-items-start', true)}"></div>
+      <div th:replace="~{partials/index/team-body.html :: stats}"></div>
+    </th:block>
+  </div>
+</div>
+
+
+<div th:fragment="stats">
+  <div class="d-flex justify-content-between mb-0">
+    <div th:replace="~{partials/index/team-body.html :: kda('')}"></div>
+
+    <div th:replace="~{partials/index/team-body.html :: minion('')}"></div>
+  </div>
+
+  <div th:replace="~{partials/index/item-icons.html :: items('')}"></div>
+</div>
+
+
+<div th:fragment="participant(alignItemsPosition, isBlueTeam)"
+     class="h-100"
+>
+  <div class="d-flex flex-column justify-content-between"
+       th:classappend="${alignItemsPosition}"
+  >
+    <div th:if="${isBlueTeam}" class="d-flex justify-content-between">
+      <img th:replace="~{partials/icons/champion-icon.html :: image(teamId)}">
+      <div th:replace="~{partials/index/team-body.html :: runes(${isBlueTeam})}"></div>
+    </div>
+
+    <div th:unless="${isBlueTeam}" class="d-flex justify-content-between">
+      <div th:replace="~{partials/index/team-body.html :: runes(${isBlueTeam})}"></div>
+      <img th:replace="~{partials/icons/champion-icon.html :: image(teamId)}">
+    </div>
+
+    <p th:text="${participant.getSummonerName()}"
+       class="color-primary-main fw-semibold mb-0"
+    ></p>
+  </div>
+</div>
+
+
+<div th:fragment="runes(isBlueTeam)">
+  <div class="d-flex" th:if="${isBlueTeam}">
+    <div th:replace="~{partials/index/team-body.html :: perks}"></div>
+    <div th:replace="~{partials/index/team-body.html :: spells}"></div>
+  </div>
+
+  <div class="d-flex" th:unless="${isBlueTeam}">
+    <div th:replace="~{partials/index/team-body.html :: spells}"></div>
+    <div th:replace="~{partials/index/team-body.html :: perks}"></div>
+  </div>
+</div>
+
+
+<div th:fragment="kda(teamId)"
+     th:with="kills=${participant.getKills()},
+              deaths=${participant.getDeaths()},
+              assists=${participant.getAssists()},
+              kda=${deaths > 0 ? #numbers.formatDecimal((1.00 * (kills + assists) / deaths), 1, 'COMMA', 2, 'POINT') : 0}"
+>
+  <p class="color-neutral-light mt-1 mb-3 fw-semibold line-h-0"
+     th:text="${kills + ' / ' + deaths + ' / ' + assists}"
+  ></p>
+
+  <p class="color-neutral-light mb-2 fst-italic fs-200 text-secondary"
+     th:text="${kda == 0} ? ${'Perfect'} : ${kda + ' KDA'}"
+  ></p>
+</div>
+
+
+<div th:fragment="minion(teamId)"
+     th:with="minionKills=${participant.getTotalMinionsKilled() + participant.getNeutralMinionsKilled()},
+              matchDuration=${((matchInfo.getMatch().getGameDuration() - 60) / 60)},
+              minionKillspMin=${#numbers.formatDecimal((1.00 * minionKills / matchDuration), 0, 1)},
+              playerKills=${matchInfo.getMatch().getTeam()[0].getKills()},
+              killParticipation=${100.00 * (participant.getKills() + participant.getAssists()) / playerKills},
+              formattedMinionKills=${minionKills + ' (' + minionKillspMin + ') CS'},
+              formattedPlayerKills=${#numbers.formatDecimal(killParticipation, 0, 1) + '% KP'}
+"
+>
+  <p class="color-neutral-light mt-1 mb-3 line-h-0">
+    <span th:text="${minionKills == 0} ? '0 CS' : ${formattedMinionKills}" class="fw-semibold"></span>
+  </p>
+
+  <p class="color-neutral-light mb-2 fst-italic fs-200 text-secondary">
+    <span th:text="${playerKills == 0} ? 'Oof...' : ${formattedPlayerKills}"></span>
+  </p>
+</div>
+
+
+<div th:fragment="perks"
+     class="rune-container position-relative mx-2"
+     th:with="primaryRune=${participant.getPerk()[0].getPerkNum()},
+              secondaryRunes=${participant.getPerk()[4].getStyle()}"
+>
+  <img th:replace="~{partials/icons/perk-icon.html :: perk(${primaryRune}, true)}">
+  <img th:replace="~{partials/icons/perk-icon.html :: perk(${secondaryRunes}, false)}">
+</div>
+
+<div th:fragment="spells"
+     class="d-flex flex-column"
+     th:with="spell1=${participant.getSummoner1Id()},
+              spell2=${participant.getSummoner2Id()}"
+>
+  <img th:replace="~{partials/icons/spell-icon.html :: spell(${spell1})}">
+  <img th:replace="~{partials/icons/spell-icon.html :: spell(${spell2})}">
+</div>

@@ -1,0 +1,11 @@
+<div th:fragment="items(title)"
+     class="d-flex justify-content-between gap-0 column-gap-1"
+>
+  <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem0()})}"></div>
+  <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem1()})}"></div>
+  <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem2()})}"></div>
+  <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem3()})}"></div>
+  <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem4()})}"></div>
+  <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem5()})}"></div>
+  <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem6()})}"></div>
+</div>
