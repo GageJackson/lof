@@ -10,9 +10,7 @@
             class="friend-btns d-flex justify-content-start align-items-center border-0 p-2 w-100"
             th:classappend="${friend.isSelected() ? 'selected' : 'bg-transparent'}"
     >
-      <img th:src="@{${'/dragon_tail/13.14.1/img/profileicon/' + friend.getIcon() + '.png'}}"
-           alt="player icon" class="friend-icon me-3 mb-0 non-selectable"
-      >
+      <img th:replace="~{partials/icons/friend-icon.html :: image}">
       <div>
         <p th:text="${friend.getName()}" class="to-lower bold color-neutral-light mb-0 non-selectable"></p>
         <p th:text="${friend.getSummonerLevel()}" class="color-primary-main mb-0 fs-200 text-start non-selectable"></p>

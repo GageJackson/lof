@@ -29,27 +29,27 @@
             <div class="tab-content" id="pills-tabContent">
                 <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
                     <th:block th:each="matchInfo : ${matchInfos}">
-                        <div th:replace="~{partials/index/match.html :: match-all}"></div>
+                        <div th:replace="~{partials/index/match.html :: match-buttons('ALL')}"></div>
                     </th:block>
                 </div>
                 <div class="tab-pane fade" id="pills-aram" role="tabpanel" aria-labelledby="pills-aram-tab" tabindex="1">
                     <th:block th:each="matchInfo : ${matchInfos}">
-                        <div th:replace="~{partials/index/match.html :: match-aram}"></div>
+                        <div th:replace="~{partials/index/match.html :: match-buttons('ARAM')}"></div>
                     </th:block>
                 </div>
                 <div class="tab-pane fade" id="pills-rift" role="tabpanel" aria-labelledby="pills-rift-tab" tabindex="2">
                     <th:block th:each="matchInfo : ${matchInfos}">
-                        <div th:replace="~{partials/index/match.html :: match-rift}"></div>
+                        <div th:replace="~{partials/index/match.html :: match-buttons('CLASSIC')}"></div>
                     </th:block>
                 </div>
                 <div class="tab-pane fade" id="pills-arena" role="tabpanel" aria-labelledby="pills-arena-tab" tabindex="3">
                     <th:block th:each="matchInfo : ${matchInfos}">
-                        <div th:replace="~{partials/index/match.html :: match-arena}"></div>
+                        <div th:replace="~{partials/index/match.html :: match-buttons('CHERRY')}"></div>
                     </th:block>
                 </div>
                 <div class="tab-pane fade" id="pills-new" role="tabpanel" aria-labelledby="pills-new-tab" tabindex="4">
                     <th:block th:each="matchInfo : ${matchInfos}">
-                        <div th:replace="~{partials/index/match.html :: match-new}"></div>
+                        <div th:replace="~{partials/index/match.html :: match-buttons('NEW')}"></div>
                     </th:block>
                 </div>
             </div>

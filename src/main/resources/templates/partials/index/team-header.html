@@ -7,39 +7,38 @@
      class="col-5"
 >
   <div class="d-flex justify-content-between">
-    <div class="">
+    <div>
       <p>
-        <span class="fw-semibold" th:text="${teamColor + ' Team'}"
-        th:classappend="${teamColor == 'Blue'} ? 'color-primary-blue' : 'color-primary-red'"
+        <span th:text="${teamColor + ' Team'}"
+              class="fw-semibold"
+              th:classappend="${teamColor == 'Blue'} ? 'color-primary-blue' : 'color-primary-red'"
         ></span>
 
-        <span th:if="${teamWin}"
-              class="badge bg-color-primary-main"
-        >Won</span>
-
-        <span th:unless="${teamWin}"
-              class="badge bg-color-primary-dark"
-        >Lost</span>
+        <span class="badge"
+              th:classappend="${teamWin} ? 'bg-color-primary-main' : 'bg-color-primary-dark'"
+              th:text="${teamWin} ? 'Won' : 'Lost'"
+        ></span>
       </p>
     </div>
 
-    <div class="">
+    <div>
       <img th:src="@{${'/img/kda.png'}}"
-           alt="player position top" class="position-icon non-selectable opacity-75"
+           alt="player position top"
+           class="position-icon non-selectable opacity-75"
       >
       <span class="color-neutral-light fw-semibold"
-         th:text="${teamKills + '/' + teamAssists + '/' + teamDeaths}">
+            th:text="${teamKills + '/' + teamAssists + '/' + teamDeaths}">
       </span>
     </div>
 
-    <div class="">
+    <div>
       <img th:src="@{${'/img/gold.png'}}"
-           alt="player position top" class="position-icon non-selectable opacity-75"
+           alt="player position top"
+           class="position-icon non-selectable opacity-75"
       >
       <span class="color-neutral-light fw-semibold"
-         th:text="${teamGold}">
+            th:text="${teamGold}">
       </span>
     </div>
   </div>
-
 </div>

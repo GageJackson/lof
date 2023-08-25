@@ -1,0 +1,12 @@
+<div th:fragment="item(item)"
+     class="d-flex justify-content-between gap-0 column-gap-1"
+>
+    <th:block th:if="${item == 0}">
+        <div class="item-icon non-selectable opacity-75 bg-dark border border-1 border-secondary"></div>
+    </th:block>
+    <th:block th:unless="${item == 0}">
+        <img th:src="@{${'/dragon_tail/13.14.1/img/item/' + item + '.png'}}"
+             alt="item icon" class="item-icon non-selectable opacity-75 border border-1 border-secondary"
+        >
+    </th:block>
+</div>

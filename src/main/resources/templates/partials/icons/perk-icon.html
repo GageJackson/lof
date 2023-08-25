@@ -1,0 +1,6 @@
+<img th:fragment="perk(perk, isPrimary)"
+     th:src="@{${'/img/summoner_runes/' + perk + '.png'}}"
+     th:alt="${'player rune'}"
+     class="non-selectable opacity-75"
+     th:classappend="${isPrimary} ? 'perk-icon-lg' : 'perk-icon-sm position-absolute bottom-0 end-0'"
+>

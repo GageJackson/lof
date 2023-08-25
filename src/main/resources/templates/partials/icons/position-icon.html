@@ -1,0 +1,10 @@
+<div th:fragment="position-icon(position, isVertical)"
+     class="d-flex justify-content-center align-items-center"
+     th:classappend="${isVertical} ? 'position-icon-lg-box my-3' : ''"
+>
+  <img th:src="@{${'/img/' + position + '.png'}}"
+       th:alt="${'player position ' + position}"
+       class="non-selectable opacity-75"
+       th:classappend="${isVertical} ? 'position-icon-lg' : 'position-icon'"
+  >
+</div>

@@ -1,5 +1,5 @@
 :root {
-    --color-primary-light: #eecc8a;
+    --color-primary-light: #b49d72;
     --color-primary-main: #9c865c;
     --color-primary-dark: #504229;
 
@@ -281,3 +281,26 @@ aside {
 #matches-btn:hover, #matches-btn.active {
     background-image: url('../img/matches-active.png');
 }
+
+.line-h-0 {
+    line-height: 0;
+}
+
+.blue-participant:hover {
+    background: linear-gradient(90deg, rgba(71, 117, 183, 0.5) 0%, rgba(33, 37, 42, 0.5) 100%);
+}
+
+.red-participant:hover {
+    background: linear-gradient(270deg, rgba(162, 67, 81, 0.5) 0%, rgba(33, 37, 42, 0.5) 100%);
+}
+
+.match-btn {
+    color: var(--color-neutral-light);
+    background: var(--color-primary-main);
+}
+
+.match-btn:hover {
+    color: var(--color-neutral-light);
+    background: var(--color-primary-light);
+}
+

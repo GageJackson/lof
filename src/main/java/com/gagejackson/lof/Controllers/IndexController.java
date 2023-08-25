@@ -133,7 +133,7 @@ public class IndexController {
     private List<Match> findAllMatches(){
         String sortBy = "gameId";
         int page = 0;
-        int matchCount = 50;
+        int matchCount = 25;
         Sort sort = Sort.by(Sort.Direction.DESC, sortBy);
         Pageable pageable = PageRequest.of(page, matchCount, sort);
 

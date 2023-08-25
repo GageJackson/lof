@@ -1,49 +1,26 @@
-<div th:fragment="match-all">
-  <th:block th:if="${matchInfo.getMatch().isSaved()}">
-    <div th:replace="~{partials/index/match.html :: saved-match}"></div>
+<div th:fragment="match-buttons(gameMode)"
+      th:with="matchIsSaved=${matchInfo.getMatch().isSaved()},
+               matchType=${matchInfo.getMatch().getGameMode()},
+               isGameMode=${matchType == gameMode}
+"
+>
+  <th:block th:if="${matchIsSaved && (isGameMode || gameMode == 'ALL')}">
+    <button th:replace="~{partials/index/match.html :: saved-match}"></button>
   </th:block>
 
-  <th:block th:unless="${matchInfo.getMatch().isSaved()}">
+  <th:block th:if="${!matchIsSaved && (gameMode == 'NEW' || gameMode == 'ALL')}">
     <button th:replace="~{partials/index/match.html :: new-match}"></button>
-  </th:block>
-</div>
-
-<div th:fragment="match-new">
-  <th:block th:if="${!matchInfo.getMatch().isSaved()}">
-    <button th:replace="~{partials/index/match.html :: new-match}"></button>
-  </th:block>
-</div>
-
-<div th:fragment="match-aram">
-  <th:block th:if="${matchInfo.getMatch().isSaved()}">
-    <th:block th:if="${matchInfo.getMatch().getGameMode.equals('ARAM')}">
-      <button th:replace="~{partials/index/match.html :: saved-match}"></button>
-    </th:block>
-  </th:block>
-</div>
-
-<div th:fragment="match-rift">
-  <th:block th:if="${matchInfo.getMatch().isSaved()}">
-    <th:block th:if="${matchInfo.getMatch().getGameMode.equals('CLASSIC')}">
-      <button th:replace="~{partials/index/match.html :: saved-match}"></button>
-    </th:block>
-  </th:block>
-</div>
-
-<div th:fragment="match-arena">
-  <th:block th:if="${matchInfo.getMatch().isSaved()}">
-    <th:block th:if="${matchInfo.getMatch().getGameMode.equals('CHERRY')}">
-      <button th:replace="~{partials/index/match.html :: saved-match}"></button>
-    </th:block>
   </th:block>
 </div>
 
 <div th:fragment="saved-match"
-     th:id="${'accordion' + matchInfo.getMatch().getGameId()}"
+     th:with="gameId=${matchInfo.getMatch().getGameId()},
+              friendWon=${matchInfo.isFriendWin()}"
+     th:id="${'accordion' + gameId}"
      class="accordion mb-3"
 >
   <div class="accordion-eventItem rounded"
-       th:classappend="${matchInfo.isFriendWin() ? 'card-bg-win' : 'card-bg-loss'}"
+       th:classappend="${friendWon ? 'card-bg-win' : 'card-bg-loss'}"
   >
     <button th:replace="~{partials/index/match.html :: accordion-button}"></button>
     <div th:replace="~{partials/index/match.html :: accordion-body}"></div>
@@ -51,7 +28,9 @@
 </div>
 
 <button th:fragment="new-match"
-        th:id="${matchInfo.getMatch().getGameId()}"
+        th:with="gameId=${matchInfo.getMatch().getGameId()},
+                 friends=${matchInfo.getFriends()}"
+        th:id="${'accordion' + gameId}"
         class="card card-bg w-100 mb-3 ps-3 match border-0"
 >
   <div class="card-body border-0 d-flex justify-content-between align-items-center">
@@ -60,10 +39,8 @@
     </div>
 
     <div>
-      <th:block th:each="friend : ${matchInfo.getFriends()}">
-        <img th:src="@{${'/dragon_tail/13.14.1/img/profileicon/' + friend.getIcon() + '.png'}}"
-             alt="player icon" class="friend-icon non-selectable opacity-75"
-        >
+      <th:block th:each="friend : ${friends}">
+        <img th:replace="~{partials/icons/friend-icon.html :: image}">
       </th:block>
     </div>
   </div>
@@ -71,18 +48,21 @@
 
 <button  th:fragment="accordion-button"
          class="accordion-button d-flex justify-content-between collapsed" type="button" data-bs-toggle="collapse" aria-expanded="false"
-         th:attr="data-bs-target=${'#accordion-' + matchInfo.getMatch().getGameId()},
-                  aria-controls=${'#accordion-' + matchInfo.getMatch().getGameId()}"
+         th:with="gameId=${matchInfo.getMatch().getGameId()}"
+         th:attr="data-bs-target=${'#accordion-' + gameId},
+                  aria-controls=${'#accordion-' + gameId}"
 >
     <div>
       <h3 class="bold color-neutral-light" th:text="${matchInfo.getMatch().getGameMode()}"></h3>
-      <p th:with="gameDuration=${matchInfo.getMatch().getGameDuration()}">
+      <p th:with="gameDuration=${matchInfo.getMatch().getGameDuration()},
+                  formattedDuration=${' ' + (gameDuration / 60) + 'm ' + (gameDuration % 60) + 's'},
+                  gameDate=${#temporals.format(T(java.time.Instant).ofEpochMilli(matchInfo.getMatch().getGameCreation()), 'MMM-dd')}"
+      >
         <span class="text-secondary fs-200"
-              th:text="${#temporals.format(T(java.time.Instant).ofEpochMilli(matchInfo.getMatch().getGameCreation()), 'MMM-dd')}"
+              th:text="${gameDate}"
         ></span>
-        <span> </span>
         <span class="text-secondary fs-200"
-              th:text="${(gameDuration / 60) + 'm ' + (gameDuration % 60) + 's'}"
+              th:text="${formattedDuration}"
         ></span>
       </p>
     </div>
@@ -100,66 +80,91 @@
 
     <div>
       <!--BLUE TEAM CHAMPIONS-->
-      <div th:replace="~{partials/index/champion-icon.html :: champion(100)}"></div>
+      <div th:replace="~{partials/index/match.html :: champion(100)}"></div>
 
       <!--HORIZONTAL POSITION ICONS-->
       <div th:replace="~{partials/index/position-icons.html :: position-icons(false)}"></div>
 
       <!--RED TEAM CHAMPIONS-->
-      <div th:replace="~{partials/index/champion-icon.html :: champion(200)}"></div>
+      <div th:replace="~{partials/index/match.html :: champion(200)}"></div>
     </div>
 </button>
 
 <div  th:fragment="accordion-body"
-      th:id="${'accordion-' + matchInfo.getMatch().getGameId()}" class="accordion-collapse collapse"
-      th:attr="data-bs-parent=${'#accordion' + matchInfo.getMatch().getGameId()}"
+      th:with="gameId=${matchInfo.getMatch().getGameId()}"
+      th:id="${'accordion-' + gameId}" class="accordion-collapse collapse"
+      th:attr="data-bs-parent=${'#accordion' + gameId}"
 >
     <div class="accordion-body bg-color-neutral-dark">
       <div class="card bg-transparent border-0 w-100">
-        <div class="card-header bg-transparent border-0">
-          <div class="container">
-            <div class="row row-cols-3">
-              <!--BLUE TEAM INFO-->
-              <div th:replace="~{partials/index/team-header.html :: team('Blue', 0)}"></div>
-
-              <div class="col-2"></div>
-
-              <!--RED TEAM INFO-->
-              <div th:replace="~{partials/index/team-header.html :: team('Red', 1)}"></div>
-            </div>
-          </div>
-        </div>
-        <div class="card-body border-0 bg-transparent py-0">
-          <div class="container">
-            <div class="row">
-              <!--BLUE TEAM INFO-->
-              <div  th:replace="~{partials/index/team-body.html :: blueTeam('')}"></div>
-
-              <!--VERTICAL POSITION ICONS-->
-              <div th:replace="~{partials/index/position-icons.html :: position-icons(true)}"></div>
-
-              <!--RED TEAM INFO-->
-              <div  th:replace="~{partials/index/team-body.html :: redTeam('')}"></div>
-            </div>
-          </div>
-        </div>
-        <div class="card-footer bg-transparent border-0">
-          <div class="container">
-            <div class="row">
-              <!--BLUE TEAM INFO-->
-              <div th:replace="~{partials/index/team-footer.html :: team('Blue', 0)}"></div>
-
-              <div class="col-2"></div>
-
-              <!--RED TEAM INFO-->
-              <div th:replace="~{partials/index/team-footer.html :: team('Red', 1)}"></div>
-            </div>
-            <a th:href="@{${'/match?match=' + matchInfo.getMatch().getId()}}"
-               class="btn btn-primary" th:text="${'More Detail'}"
-            ></a>
-            <p th:text="${ matchInfo.getMatch().getId()}"></p>
-          </div>
-        </div>
+        <div th:replace="~{partials/index/match.html :: card-header}"></div>
+        <div th:replace="~{partials/index/match.html :: card-body}"></div>
+        <div th:replace="~{partials/index/match.html :: card-footer}"></div>
       </div>
     </div>
+</div>
+
+<div th:fragment="card-header"
+     class="card-header bg-transparent border-0"
+>
+  <div class="container">
+    <div class="row row-cols-3">
+      <!--BLUE TEAM INFO-->
+      <div th:replace="~{partials/index/team-header.html :: team('Blue', 0)}"></div>
+
+      <div class="col-2"></div>
+
+      <!--RED TEAM INFO-->
+      <div th:replace="~{partials/index/team-header.html :: team('Red', 1)}"></div>
+    </div>
+  </div>
+</div>
+
+<div th:fragment="card-body"
+     class="card-body border-0 bg-transparent py-0"
+>
+  <div class="container">
+    <div class="row">
+      <!--BLUE TEAM INFO-->
+      <div  th:replace="~{partials/index/team-body.html :: team('Blue', 0)}"></div>
+
+      <!--VERTICAL POSITION ICONS-->
+      <div th:replace="~{partials/index/position-icons.html :: position-icons(true)}"></div>
+
+      <!--RED TEAM INFO-->
+      <div  th:replace="~{partials/index/team-body.html :: team('Red', 1)}"></div>
+    </div>
+  </div>
+</div>
+
+<div th:fragment="card-footer"
+     class="card-footer bg-transparent border-0"
+>
+  <div class="container">
+    <div class="row">
+      <!--BLUE TEAM INFO-->
+      <div th:replace="~{partials/index/team-footer.html :: team('Blue', 0)}"></div>
+
+      <div class="col-2"></div>
+
+      <!--RED TEAM INFO-->
+      <div th:replace="~{partials/index/team-footer.html :: team('Red', 1)}"></div>
+    </div>
+    <a th:href="@{${'/match?match=' + matchInfo.getMatch().getId()}}"
+       class="btn match-btn" th:text="${'More Details'}"
+    ></a>
+  </div>
+</div>
+
+<div th:fragment="champion(teamId)"
+     class=" d-flex justify-content-between gap-3 mb-2"
+     th:with="participants=${matchInfo.getMatch().getParticipant()}"
+>
+  <th:block th:each="participant : ${participants}"
+            th:with="participantTeam=${participant.getTeamId()}"
+  >
+    <th:block th:if="${participantTeam == teamId}">
+      <img th:replace="~{partials/icons/champion-icon.html :: image(teamId)}">
+    </th:block>
+  </th:block>
 </div>
