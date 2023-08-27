@@ -1,77 +1,36 @@
-<div  th:fragment="kill-chart"
+<div  th:fragment="chart(chartType, team1Data, team2Data)"
       class="chart-container d-flex flex-column justify-content-center align-items-center"
       th:with="gameId=${matchInfo.getMatch().getGameId()},
-               team1Kills=${matchInfo.getMatch().getTeam()[0].getKills()},
-               team2Kills=${matchInfo.getMatch().getTeam()[1].getKills()}
+               chartType=${chartType},
+               team1Data=${team1Data},
+               team2Data=${team2Data},
+               formattedData1=${#numbers.formatDecimal(team1Data, 0, 'COMMA', 0, 'POINT')},
+               formattedData2=${#numbers.formatDecimal(team2Data, 0, 'COMMA', 0, 'POINT')}
               "
       th:attr="data-match-id=${gameId},
-               data-chart-type='kill',
-               data-team1=${team1Kills},
-               data-team2=${team2Kills}"
+               data-chart-type=${chartType},
+               data-team1=${team1Data},
+               data-team2=${team2Data}"
 >
-    <div th:id="'killChart-' + ${gameId}"
-         class="chart w-100" style="height: 75px; aspect-ratio: 1">
-    </div>
-
-    <p class="text-light fw-semibold mb-0">Kills</p>
-    <p>
-        <span th:text="${#numbers.formatDecimal(team2Kills, 0, 'COMMA', 0, 'POINT')}"
-              class="color-primary-red fs-200"
-        >
-        </span>
-        <span th:text="${#numbers.formatDecimal(team1Kills, 0, 'COMMA', 0, 'POINT')}"
-              class="color-primary-blue fs-200"
-        ></span>
-    </p>
+    <div th:replace="~{partials/index/chart-container.html :: chart-info(${chartType}, ${gameId})}"></div>
+    <div th:replace="~{partials/index/chart-container.html :: chart-text(${chartType}, ${formattedData1}, ${formattedData2})}"></div>
 </div>
 
-<div th:fragment="damage-chart"
-     class="chart-container d-flex flex-column justify-content-center align-items-center"
-     th:with="gameId=${matchInfo.getMatch().getGameId()},
-               team1Damage=${matchInfo.getMatch().getTeam()[0].getTotalDamage()},
-               team2Damage=${matchInfo.getMatch().getTeam()[1].getTotalDamage()}
-              "
-     th:attr="data-match-id=${gameId},
-              data-chart-type='damage',
-              data-team1=${team1Damage},
-              data-team2=${team2Damage}"
->
-    <div th:id="'damageChart-' + ${gameId}"
-         class="chart w-100" style="height: 75px; aspect-ratio: 1">
-    </div>
+<div th:fragment="chart-info(chartType, gameId)"
+     th:id="${chartType} + 'Chart-' + ${gameId}"
+     class="chart w-100"
+     style="height: 75px; aspect-ratio: 1"
+></div>
 
-    <p class="text-light fw-semibold mb-0">Damage</p>
+<div th:fragment="chart-text(chartType, team1Value, team2Value)">
+    <p th:text="${chartType}"
+       class="text-light text-center fw-semibold mb-0"
+    ></p>
     <p>
-        <span th:text="${#numbers.formatDecimal(team2Damage, 3, 'COMMA', 0, 'POINT')}"
+        <span th:text="${team2Value}"
               class="color-primary-red fs-200"
         ></span>
-        <span th:text="${#numbers.formatDecimal(team1Damage, 3, 'COMMA', 0, 'POINT')}"
-              class="color-primary-blue fs-200"
-        ></span>
-    </p>
-</div>
-
-<div th:fragment="gold-chart"
-     class="chart-container d-flex flex-column justify-content-center align-items-center"
-     th:with="gameId=${matchInfo.getMatch().getGameId()},
-               team1Gold=${matchInfo.getMatch().getTeam()[0].getGold()},
-               team2Gold=${matchInfo.getMatch().getTeam()[1].getGold()}
-              "
-     th:attr="data-match-id=${gameId},
-              data-chart-type='gold',
-              data-team1=${team1Gold},
-              data-team2=${team2Gold}"
->
-    <div th:id="'goldChart-' + ${gameId}"
-         class="chart w-100" style="height: 75px; aspect-ratio: 1">
-    </div>
-
-    <p class="text-light fw-semibold mb-0">Gold</p>
-    <p>
-        <span th:text="${#numbers.formatDecimal(team2Gold, 3, 'COMMA', 0, 'POINT')}"
-              class="color-primary-red fs-200"
-        ></span>
-        <span th:text="${#numbers.formatDecimal(team1Gold, 3, 'COMMA', 0, 'POINT')}"
+        <span th:text="${team1Value}"
               class="color-primary-blue fs-200"
         ></span>
     </p>

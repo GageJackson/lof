@@ -1,0 +1,23 @@
+<div  th:fragment="match-champions">
+  <!--BLUE TEAM CHAMPIONS-->
+  <div th:replace="~{partials/index/match-champions.html :: champions(100)}"></div>
+
+  <!--HORIZONTAL POSITION ICONS-->
+  <div th:replace="~{partials/index/position-icons.html :: position-icons(false)}"></div>
+
+  <!--RED TEAM CHAMPIONS-->
+  <div th:replace="~{partials/index/match-champions.html :: champions(200)}"></div>
+</div>
+
+<div th:fragment="champions(teamId)"
+     class=" d-flex justify-content-between gap-3 mb-2"
+     th:with="participants=${matchInfo.getMatch().getParticipant()}"
+>
+  <th:block th:each="participant : ${participants}"
+            th:with="participantTeam=${participant.getTeamId()}"
+  >
+    <th:block th:if="${participantTeam == teamId}">
+      <img th:replace="~{partials/icons/champion-icon.html :: image(teamId)}">
+    </th:block>
+  </th:block>
+</div>

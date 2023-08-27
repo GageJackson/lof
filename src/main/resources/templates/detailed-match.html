@@ -29,7 +29,9 @@
       </ul>
       <div class="tab-content" id="pills-tabContent">
         <div class="tab-pane fade show active" id="pills-overview" role="tabpanel" aria-labelledby="pills-overview-tab" tabindex="0">
-          <div th:replace="~{partials/index/match.html :: match-buttons('ALL')}"></div>
+<!--          <div th:replace="~{partials/index/match.html :: match-buttons('ALL')}"></div>-->
+          <div th:replace="~{partials/index/match-body.html :: card}"></div>
+
         </div>
         <div class="tab-pane fade" id="pills-timelines" role="tabpanel" aria-labelledby="pills-timelines-tab" tabindex="1">
         </div>
@@ -42,7 +44,7 @@
       </div>
     </section>
 
-    <aside th:replace="~{partials/index/friends-aside.html :: aside}"></aside>
+    <aside th:replace="~{partials/friends-aside.html :: aside}"></aside>
   </div>
 
 </main>

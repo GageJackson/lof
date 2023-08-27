@@ -14,7 +14,7 @@ function drawChart(chartType, matchId, team1Data, team2Data) {
             legend: 'none',
             pieSliceText: 'none',
             tooltip: {
-                textStyle: {color: '#252525', fontSize: 12},
+                textStyle: {color: '#252525', fontSize: 8},
                 trigger: 'selection'
             },
             colors: ['#4775b4', '#a2434e', '#9c865c', '#4b4b56']

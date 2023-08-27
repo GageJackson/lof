@@ -1,0 +1,48 @@
+<button  th:fragment="accordion-button"
+         class="accordion-button d-flex justify-content-between collapsed"
+         type="button" data-bs-toggle="collapse" aria-expanded="false"
+         th:with="gameId=${matchInfo.getMatch().getGameId()}"
+         th:attr="data-bs-target=${'#accordion-' + gameId},
+                  aria-controls=${'#accordion-' + gameId}"
+>
+  <div th:replace="~{partials/index/match-button.html :: match-basicInfo}"></div>
+  <div th:replace="~{partials/index/match-button.html :: match-charts}"></div>
+  <div th:replace="~{partials/index/match-champions.html :: match-champions}"></div>
+</button>
+
+<div th:fragment="match-basicInfo">
+  <h3 class="bold color-neutral-light" th:text="${matchInfo.getMatch().getGameMode()}"></h3>
+
+  <p th:with="gameDuration=${matchInfo.getMatch().getGameDuration()},
+                  formattedDuration=${' ' + (gameDuration / 60) + 'm ' + (gameDuration % 60) + 's'},
+                  gameDate=${(matchInfo.getMatch().getGameCreation())},
+                  formattedDate=${#temporals.format(T(java.time.Instant).ofEpochMilli(gameDate), 'MMM-dd')}"
+  >
+        <span class="text-secondary fs-200"
+              th:text="${formattedDate}"
+        ></span>
+    <span class="text-secondary fs-200"
+          th:text="${formattedDuration}"
+    ></span>
+  </p>
+</div>
+
+<div th:fragment="match-charts"
+     class="d-flex justify-content-center align-items-center"
+     th:with="team1Gold=${matchInfo.getMatch().getTeam()[0].getGold()},
+              team2Gold=${matchInfo.getMatch().getTeam()[1].getGold()},
+              team1Kills=${matchInfo.getMatch().getTeam()[0].getKills()},
+              team2Kills=${matchInfo.getMatch().getTeam()[1].getKills()},
+              team1Damage=${matchInfo.getMatch().getTeam()[0].getTotalDamage()},
+              team2Damage=${matchInfo.getMatch().getTeam()[1].getTotalDamage()}
+"
+>
+  <!--BLUE VS RED GOLD COMPARISON CHART-->
+  <div  th:replace="~{partials/index/chart-container.html :: chart('gold', ${team1Gold}, ${team2Gold})}"></div>
+
+  <!--BLUE VS RED KILL COMPARISON CHART-->
+  <div  th:replace="~{partials/index/chart-container.html :: chart('kills', ${team1Kills}, ${team2Kills})}"></div>
+
+  <!--BLUE VS RED DAMAGE COMPARISON CHART-->
+  <div  th:replace="~{partials/index/chart-container.html :: chart('damage', ${team1Damage}, ${team2Damage})}"></div>
+</div>
