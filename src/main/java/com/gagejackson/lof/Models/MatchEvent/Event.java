@@ -20,8 +20,8 @@ public class Event {
     @JoinColumn(name = "participant_id")
     private Participant participant;
 
-    @OneToMany (cascade = CascadeType.ALL, mappedBy = "event")
-    private List<EventItem> eventItem;
+    @OneToOne (cascade = CascadeType.ALL, mappedBy = "event")
+    private EventItem eventItem;
 
     @OneToMany (cascade = CascadeType.ALL, mappedBy = "event")
     private List<SkillUp> skillUp;
@@ -48,7 +48,7 @@ public class Event {
     public Event() {
     }
 
-    public Event(long timestamp, Participant participant, List<EventItem> eventItem, List<SkillUp> skillUp, List<LevelUp> levelUp, List<ChampKill> champKill, List<BuildingKill> buildingKill, List<MonsterKill> monsterKill, List<SpecialKill> specialKill) {
+    public Event(long timestamp, Participant participant, EventItem eventItem, List<SkillUp> skillUp, List<LevelUp> levelUp, List<ChampKill> champKill, List<BuildingKill> buildingKill, List<MonsterKill> monsterKill, List<SpecialKill> specialKill) {
         this.timestamp = timestamp;
         this.participant = participant;
         this.eventItem = eventItem;
@@ -60,7 +60,7 @@ public class Event {
         this.specialKill = specialKill;
     }
 
-    public Event(long id, long timestamp, Participant participant, List<EventItem> eventItem, List<SkillUp> skillUp, List<LevelUp> levelUp, List<ChampKill> champKill, List<BuildingKill> buildingKill, List<MonsterKill> monsterKill, List<SpecialKill> specialKill) {
+    public Event(long id, long timestamp, Participant participant, EventItem eventItem, List<SkillUp> skillUp, List<LevelUp> levelUp, List<ChampKill> champKill, List<BuildingKill> buildingKill, List<MonsterKill> monsterKill, List<SpecialKill> specialKill) {
         this.id = id;
         this.timestamp = timestamp;
         this.participant = participant;
@@ -101,11 +101,11 @@ public class Event {
         this.participant = participant;
     }
 
-    public List<EventItem> getEventItem() {
+    public EventItem getEventItem() {
         return eventItem;
     }
 
-    public void setEventItem(List<EventItem> eventItem) {
+    public void setEventItem(EventItem eventItem) {
         this.eventItem = eventItem;
     }
 

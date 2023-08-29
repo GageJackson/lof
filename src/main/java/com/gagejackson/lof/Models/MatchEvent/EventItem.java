@@ -16,7 +16,7 @@ public class EventItem {
     @Column(name = "item_type", length = 20)
     private String itemType;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 
