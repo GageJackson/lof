@@ -2,15 +2,22 @@ package com.gagejackson.lof.Controllers;
 
 import com.gagejackson.lof.DTOs.FriendSelection;
 import com.gagejackson.lof.DTOs.MatchInfo;
+import com.gagejackson.lof.DTOs.ParticipantDTO;
 import com.gagejackson.lof.Models.Friend.Friend;
 import com.gagejackson.lof.Models.Friend.FriendMatch;
-import com.gagejackson.lof.Models.MatchOverview.Match;
-import com.gagejackson.lof.Models.MatchOverview.Participant;
+import com.gagejackson.lof.Models.MatchEvent.Event;
+import com.gagejackson.lof.Models.MatchEvent.EventItem;
+import com.gagejackson.lof.Models.MatchEvent.SkillUp;
+import com.gagejackson.lof.Models.MatchOverview.*;
 import com.gagejackson.lof.Repositories.Friend.FriendChampsRepository;
 import com.gagejackson.lof.Repositories.Friend.FriendMatchRepository;
 import com.gagejackson.lof.Repositories.Friend.FriendRankRepository;
 import com.gagejackson.lof.Repositories.Friend.FriendRepository;
+import com.gagejackson.lof.Repositories.MatchEvent.EventRepository;
 import com.gagejackson.lof.Repositories.MatchEvent.MatchRepository;
+import com.gagejackson.lof.Repositories.MatchOverview.ParticipantFrameChampRepository;
+import com.gagejackson.lof.Repositories.MatchOverview.ParticipantFrameDamageRepository;
+import com.gagejackson.lof.Repositories.MatchOverview.ParticipantFrameRepository;
 import com.gagejackson.lof.Repositories.MatchOverview.ParticipantRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +37,10 @@ public class MatchController {
     private final FriendMatchRepository friendMatchRepositoryDao;
     private final MatchRepository matchRepositoryDao;
     private final ParticipantRepository participantRepositoryDao;
+    private final ParticipantFrameRepository participantFrameRepositoryDao;
+    private final ParticipantFrameDamageRepository participantFrameDamageRepositoryDao;
+    private final ParticipantFrameChampRepository participantFrameChampRepositoryDao;
+    private final EventRepository eventDao;
 
     public MatchController(
             FriendRepository friendRepositoryDao,
@@ -37,7 +48,12 @@ public class MatchController {
             FriendRankRepository friendRankRepositoryDao,
             FriendMatchRepository friendMatchRepositoryDao,
             MatchRepository matchRepositoryDao,
-            ParticipantRepository participantRepositoryDao
+            ParticipantRepository participantRepositoryDao,
+            ParticipantFrameRepository participantFrameRepositoryDao,
+            ParticipantFrameDamageRepository participantFrameDamageRepositoryDao,
+            ParticipantFrameChampRepository participantFrameChampRepositoryDao,
+            EventRepository eventDao
+
     ){
         this.friendRepositoryDao = friendRepositoryDao;
         this.friendChampsRepositoryDao = friendChampsRepositoryDao;
@@ -45,6 +61,10 @@ public class MatchController {
         this.friendMatchRepositoryDao = friendMatchRepositoryDao;
         this.matchRepositoryDao = matchRepositoryDao;
         this.participantRepositoryDao = participantRepositoryDao;
+        this.participantFrameRepositoryDao = participantFrameRepositoryDao;
+        this.participantFrameDamageRepositoryDao = participantFrameDamageRepositoryDao;
+        this.participantFrameChampRepositoryDao = participantFrameChampRepositoryDao;
+        this.eventDao = eventDao;
     }
 
     @GetMapping("/match")
@@ -63,8 +83,11 @@ public class MatchController {
         matchInfo.setFriends(friendsInMatch);
         matchInfo.setFriendWin(friendWon);
 
+        List<ParticipantDTO> participants = getParticipants(match);
+
         model.addAttribute("matchInfo", matchInfo);
         model.addAttribute("friends", friends);
+        model.addAttribute("participants", participants);
 
         return "detailed-match";
     }
@@ -102,11 +125,72 @@ public class MatchController {
     }
 
     private boolean didFriendWin(Match match, Friend friend){
+        boolean friendsWon = false;
         if(match.isSaved()){
-            Participant participant = participantRepositoryDao.findByMatchAndPuuid(match,friend.getPuuId());
-            return participant.isWin();
-        } else {
-            return false;
+//            Participant participant = participantRepositoryDao.findByMatchAndPuuid(match,friend.getPuuId());
+            List<Participant> participants = match.getParticipant();
+            for (Participant participant : participants) {
+                if (participant.getPuuid().equals(friend.getPuuId())){
+                    friendsWon = participant.isWin();
+                }
+            }
         }
+        return friendsWon;
+    }
+
+    private List<ParticipantDTO> getParticipants(Match match){
+        List<ParticipantDTO> participantDTOs = new ArrayList<>();
+        List<Participant> participants = match.getParticipant();
+
+        for (Participant participant : participants) {
+            ParticipantDTO participantDTO = new ParticipantDTO();
+            List<SkillUp> skillUps = new ArrayList<>();
+            List<List<EventItem>> eventItems = new ArrayList<>();
+            List<EventItem> allItems = new ArrayList<>();
+
+
+            List<Event> events = participant.getEvent();
+            for (Event event : events) {
+                if (event.getEventItem() != null) {
+                    if (event.getEventItem().getItemType().equals("ITEM_PURCHASED")){
+                        allItems.add(event.getEventItem());
+                    }
+                }
+
+                if (event.getSkillUp() != null){
+                    skillUps.add(event.getSkillUp());
+                }
+            }
+
+            List<EventItem> currentGroup = new ArrayList<>();
+            int interval = 30;
+            for ( int i = 0; i < allItems.size(); i++) {
+                EventItem currentItem = allItems.get(i);
+
+                if (currentGroup.isEmpty()) {
+                    currentGroup.add(currentItem);
+                } else {
+                    EventItem lastGroupedItem = currentGroup.get(currentGroup.size() - 1);
+                    if (currentItem.getEvent().getTimestamp() - lastGroupedItem.getEvent().getTimestamp() <= interval * 1000) {
+                        currentGroup.add(currentItem);
+                    } else {
+                        eventItems.add(currentGroup);
+                        currentGroup = new ArrayList<>();
+                        currentGroup.add(currentItem);
+                    }
+                }
+            }
+
+            List<ParticipantFrame> participantFrames = participant.getParticipantFrame();
+
+            participantDTO.setParticipant(participant);
+            participantDTO.setEventItems(eventItems);
+            participantDTO.setSkillUps(skillUps);
+            participantDTO.setParticipantFrames(participantFrames);
+
+            participantDTOs.add(participantDTO);
+        }
+
+        return participantDTOs;
     }
 }

@@ -425,7 +425,7 @@ public class SaveMatchController {
     }
 
     private Map<Integer, Participant> getParticipantsByMatch(Match newMatch) {
-        List<Participant> participants = participantRepositoryDao.findByMatch(newMatch);
+        List<Participant> participants = newMatch.getParticipant();
         Map<Integer, Participant> participantMap = new HashMap<>();
         for (Participant participant : participants) {
             participantMap.put(participant.getParticipantNum(), participant);

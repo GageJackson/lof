@@ -16,7 +16,7 @@ public class SkillUp {
     @Column(name = "level_up_type", length = 15)
     private String levelUpType;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 

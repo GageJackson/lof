@@ -23,23 +23,23 @@ public class Event {
     @OneToOne (cascade = CascadeType.ALL, mappedBy = "event")
     private EventItem eventItem;
 
-    @OneToMany (cascade = CascadeType.ALL, mappedBy = "event")
-    private List<SkillUp> skillUp;
+    @OneToOne (cascade = CascadeType.ALL, mappedBy = "event")
+    private SkillUp skillUp;
 
-    @OneToMany (cascade = CascadeType.ALL, mappedBy = "event")
-    private List<LevelUp> levelUp;
+    @OneToOne (cascade = CascadeType.ALL, mappedBy = "event")
+    private LevelUp levelUp;
 
-    @OneToMany (cascade = CascadeType.ALL, mappedBy = "event")
-    private List<ChampKill> champKill;
+    @OneToOne (cascade = CascadeType.ALL, mappedBy = "event")
+    private ChampKill champKill;
 
-    @OneToMany (cascade = CascadeType.ALL, mappedBy = "event")
-    private List<BuildingKill> buildingKill;
+    @OneToOne (cascade = CascadeType.ALL, mappedBy = "event")
+    private BuildingKill buildingKill;
 
-    @OneToMany (cascade = CascadeType.ALL, mappedBy = "event")
-    private List<MonsterKill> monsterKill;
+    @OneToOne (cascade = CascadeType.ALL, mappedBy = "event")
+    private MonsterKill monsterKill;
 
-    @OneToMany (cascade = CascadeType.ALL, mappedBy = "event")
-    private List<SpecialKill> specialKill;
+    @OneToOne (cascade = CascadeType.ALL, mappedBy = "event")
+    private SpecialKill specialKill;
 
 
     /*////////////////////////////////////////////////////////////////
@@ -48,7 +48,7 @@ public class Event {
     public Event() {
     }
 
-    public Event(long timestamp, Participant participant, EventItem eventItem, List<SkillUp> skillUp, List<LevelUp> levelUp, List<ChampKill> champKill, List<BuildingKill> buildingKill, List<MonsterKill> monsterKill, List<SpecialKill> specialKill) {
+    public Event(long timestamp, Participant participant, EventItem eventItem, SkillUp skillUp, LevelUp levelUp, ChampKill champKill, BuildingKill buildingKill, MonsterKill monsterKill, SpecialKill specialKill) {
         this.timestamp = timestamp;
         this.participant = participant;
         this.eventItem = eventItem;
@@ -60,7 +60,7 @@ public class Event {
         this.specialKill = specialKill;
     }
 
-    public Event(long id, long timestamp, Participant participant, EventItem eventItem, List<SkillUp> skillUp, List<LevelUp> levelUp, List<ChampKill> champKill, List<BuildingKill> buildingKill, List<MonsterKill> monsterKill, List<SpecialKill> specialKill) {
+    public Event(long id, long timestamp, Participant participant, EventItem eventItem, SkillUp skillUp, LevelUp levelUp, ChampKill champKill, BuildingKill buildingKill, MonsterKill monsterKill, SpecialKill specialKill) {
         this.id = id;
         this.timestamp = timestamp;
         this.participant = participant;
@@ -73,10 +73,10 @@ public class Event {
         this.specialKill = specialKill;
     }
 
-
     /*////////////////////////////////////////////////////////////////
     GETTERS & SETTERS
     ////////////////////////////////////////////////////////////////*/
+
     public long getId() {
         return id;
     }
@@ -109,51 +109,51 @@ public class Event {
         this.eventItem = eventItem;
     }
 
-    public List<SkillUp> getEventSkillUp() {
+    public SkillUp getSkillUp() {
         return skillUp;
     }
 
-    public void setEventSkillUp(List<SkillUp> skillUp) {
+    public void setSkillUp(SkillUp skillUp) {
         this.skillUp = skillUp;
     }
 
-    public List<LevelUp> getEventLevelUp() {
+    public LevelUp getLevelUp() {
         return levelUp;
     }
 
-    public void setEventLevelUp(List<LevelUp> levelUp) {
+    public void setLevelUp(LevelUp levelUp) {
         this.levelUp = levelUp;
     }
 
-    public List<ChampKill> getEventChampKill() {
+    public ChampKill getChampKill() {
         return champKill;
     }
 
-    public void setEventChampKill(List<ChampKill> champKill) {
+    public void setChampKill(ChampKill champKill) {
         this.champKill = champKill;
     }
 
-    public List<BuildingKill> getEventBuildingKill() {
+    public BuildingKill getBuildingKill() {
         return buildingKill;
     }
 
-    public void setEventBuildingKill(List<BuildingKill> buildingKill) {
+    public void setBuildingKill(BuildingKill buildingKill) {
         this.buildingKill = buildingKill;
     }
 
-    public List<MonsterKill> getEventEliteMonsterKill() {
+    public MonsterKill getMonsterKill() {
         return monsterKill;
     }
 
-    public void setEventEliteMonsterKill(List<MonsterKill> monsterKill) {
+    public void setMonsterKill(MonsterKill monsterKill) {
         this.monsterKill = monsterKill;
     }
 
-    public List<SpecialKill> getEventChampSpecialKill() {
+    public SpecialKill getSpecialKill() {
         return specialKill;
     }
 
-    public void setEventChampSpecialKill(List<SpecialKill> specialKill) {
+    public void setSpecialKill(SpecialKill specialKill) {
         this.specialKill = specialKill;
     }
 }

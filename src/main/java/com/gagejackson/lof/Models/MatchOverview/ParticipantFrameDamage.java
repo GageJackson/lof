@@ -46,7 +46,7 @@ public class ParticipantFrameDamage {
     @Column (name = "true_damage_taken")
     private int trueDamageTaken;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "participant_frame_id", nullable = false)
     private ParticipantFrame participantFrame;
 

@@ -85,7 +85,7 @@ public class ParticipantFrameChamp {
     @Column(name = "spell_vamp")
     private int spellVamp;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "participant_frame_id", nullable = false)
     private ParticipantFrame participantFrame;
 

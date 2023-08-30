@@ -1,18 +1,16 @@
 <div th:fragment="champ-overview"
-     class="content"
-     th:with="participants=${matchInfo.getMatch().getParticipant()}"
 >
   <h2 class="font-bold color-neutral-light my-3">Champion Overview</h2>
   <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
     <th:block th:each="participant : ${participants}"
-              th:with="participantTag=${'participant-' + participant.getId()}"
+              th:with="participantTag=${'participant-' + participant.getParticipant().getId()}"
     >
       <li class="nav-item" role="presentation">
         <button class="nav-link" th:id="${'pills-' + participantTag + '-tab'}" data-bs-toggle="pill" th:data-bs-target="${'#' + participantTag}"
                 type="button" role="tab" th:aria-controls="${participantTag}" aria-selected="true">
           <img th:fragment="image(teamId)"
-               th:with="champion=${participant.getChampionName()},
-                        isFriend=${#lists.contains(friends.![puuId], participant.getPuuid())}"
+               th:with="champion=${participant.getParticipant().getChampionName()},
+                        isFriend=${#lists.contains(friends.![puuId], participant.getParticipant().getPuuid())}"
                th:src="@{${'/dragon_tail/13.14.1/img/champion/' + champion + '.png'}}"
                alt="champion icon"
                class="friend-icon non-selectable opacity-75 border border-2"
@@ -24,18 +22,18 @@
   </ul>
   <div class="tab-content" id="pills-tabContent">
     <th:block th:each="participant : ${participants}"
-              th:with="participantTag=${'participant-' + participant.getId()}"
+              th:with="participantTag=${'participant-' + participant.getParticipant().getId()}"
     >
       <div th:id="${participantTag}"
            class="tab-pane fade"
            th:aria-labelledby="${'pills-' + participantTag + '-tab'}"
-           th:tabindex="${participant.getParticipantNum}" role="tabpanel">
+           th:tabindex="${participant.getParticipant().getParticipantNum}" role="tabpanel">
         <div class="container">
           <div class="row">
             <div class="col-auto">
               <img th:fragment="image(teamId)"
-                   th:with="champion=${participant.getChampionName()},
-                      isFriend=${#lists.contains(friends.![puuId], participant.getPuuid())}"
+                   th:with="champion=${participant.getParticipant().getChampionName()},
+                      isFriend=${#lists.contains(friends.![puuId], participant.getParticipant().getPuuid())}"
                    th:src="@{${'/dragon_tail/img/champion/loading/' + champion + '_0.jpg'}}"
                    th:alt="${champion + ' splash'}"
                    class="non-selectable opacity-75 border border-2"
@@ -43,42 +41,27 @@
               >
             </div>
             <div class="col">
-<!--              <th:block th:each="event, itemIndex : ${participant.getEvent()}"-->
-<!--              >-->
-<!--                <div th:if="${event.getEventItem()}" th:with="item=${event.getEventItem()}">-->
-<!--                  <th:block th:if="${item.getItemType() == 'ITEM_PURCHASED'}" th:with="itemNum=${item.getItemNum()}">-->
-<!--                    <div th:replace="~{partials/icons/item-icon.html :: item(${itemNum})}"></div>-->
-<!--                    <p th:with="timestamp=${event.getTimestamp()},-->
-<!--                      timeMins=${timestamp / (60 * 1000)},-->
-<!--                      timeSecs=${#numbers.formatDecimal((timestamp % (60 * 1000)/1000), 0, 'COMMA', 0, 'POINT')},-->
-<!--                      formattedTimestamp=${' ' + timeMins + 'm ' + timeSecs + 's'}"-->
-<!--                       th:text="${itemIndex.index + 1 + '. ' + formattedTimestamp}"-->
-<!--                       class="color-neutral-main"-->
-<!--                    ></p>-->
-<!--                  </th:block>-->
-<!--                </div>-->
-<!--              </th:block>-->
-
-              <th:block th:each="event : ${participant.getEvent()}"
+              <div th:with="itemGroups=${participant.getEventItems()}"
               >
-                <div th:if="${event.getEventItem()}"
-                     th:with="item=${event.getEventItem()},
-                              itemCounter=${itemCounter} ? ${itemCounter} + 1 : 1"
+                <div th:each="itemGroup : ${itemGroups}"
                 >
-                  <th:block th:if="${item.getItemType() == 'ITEM_PURCHASED'}"
-                            th:with="itemNum=${item.getItemNum()}"
-                  >
-                    <div th:replace="~{partials/icons/item-icon.html :: item(${itemNum})}"></div>
-                    <p th:with="timestamp=${event.getTimestamp()},
-                       timeMins=${timestamp / (60 * 1000)},
-                       timeSecs=${#numbers.formatDecimal((timestamp % (60 * 1000)/1000), 0, 'COMMA', 0, 'POINT')},
-                       formattedTimestamp=${' ' + timeMins + 'm ' + timeSecs + 's'}"
-                       th:text="${itemCounter + '. ' + formattedTimestamp}"
-                       class="color-neutral-main">
-                    </p>
-                  </th:block>
+                  <div class="d-flex gap-1">
+                    <th:block th:each="item : ${itemGroup}"
+                              th:with="itemNum=${item.getItemNum()}"
+                    >
+                      <div th:replace="~{partials/icons/item-icon.html :: item(${itemNum})}"></div>
+                    </th:block>
+                  </div>
+
+                  <p th:with="timestamp=${itemGroup[0].getEvent().getTimestamp()},
+                            timeMins=${timestamp / (60 * 1000)},
+                            timeSecs=${#numbers.formatDecimal((timestamp % (60 * 1000)/1000), 0, 'COMMA', 0, 'POINT')},
+                            formattedTimestamp=${' ' + timeMins + 'm ' + timeSecs + 's'}"
+                     th:text="${formattedTimestamp}"
+                     class="color-neutral-main"
+                  ></p>
                 </div>
-              </th:block>
+              </div>
 
               <!--                <div th:if="${event.getEventSkillUp}">-->
               <!--                  <p>getEventSkillUp</p>-->
@@ -100,22 +83,25 @@
               <!--                </div>-->
 
               <div
-                      th:with="maxDamage=${T(java.lang.Math).max(matchInfo.getMatch().getTeam()[0].getTotalDamage(), matchInfo.getMatch().getTeam()[1].getTotalDamage())}"
+                      th:with="team1Damage=${matchInfo.getMatch().getTeam()[0].getTotalDamage()},
+                               team2Damage=${matchInfo.getMatch().getTeam()[1].getTotalDamage()},
+                               maxDamage=${T(java.lang.Math).max(team1Damage, team2Damage)}
+                              "
               >
-                <p th:text="${participant.getTotalDamageDealt()}"></p>
+                <p th:text="${participant.getParticipant().getTotalDamageDealt()}" class="color-primary-main"></p>
                 <div class="progress-stacked">
                   <div class="progress" role="progressbar" aria-label="Segment one" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"
-                       th:style="'width:'+${#numbers.formatDecimal((100 * participant.getPhysicalDamageDealt()/(maxDamage)), 0, 0) + '%'}"
+                       th:style="'width:'+${#numbers.formatDecimal((100 * participant.getParticipant().getPhysicalDamageDealt()/(maxDamage)), 0, 0) + '%'}"
                   >
                     <div class="progress-bar"></div>
                   </div>
                   <div class="progress" role="progressbar" aria-label="Segment two" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"
-                       th:style="'width:'+${#numbers.formatDecimal((100 * participant.getMagicDamageDealt()/(maxDamage)), 0, 0) + '%'}"
+                       th:style="'width:'+${#numbers.formatDecimal((100 * participant.getParticipant().getMagicDamageDealt()/(maxDamage)), 0, 0) + '%'}"
                   >
                     <div class="progress-bar bg-success"></div>
                   </div>
-                  <div class="progress" role="progressbar" aria-label="Segment three" aria-valuenow="20" aria-valuemin="0"aria-valuemax="100"
-                       th:style="'width:'+${#numbers.formatDecimal((100 * participant.getTrueDamageDealt()/participant.getTotalDamageDealt()), 0, 0) + '%'}"
+                  <div class="progress" role="progressbar" aria-label="Segment three" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"
+                       th:style="'width:'+${#numbers.formatDecimal((100 * participant.getParticipant().getTrueDamageDealt()/(maxDamage)), 0, 0) + '%'}"
                   >
                     <div class="progress-bar bg-info"></div>
                   </div>

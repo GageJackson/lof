@@ -32,7 +32,7 @@ public class ChampKill {
     @JoinColumn(name = "victim_id", nullable = false)
     private Participant victim;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 

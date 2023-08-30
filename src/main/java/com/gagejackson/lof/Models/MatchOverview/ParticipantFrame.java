@@ -36,11 +36,11 @@ public class ParticipantFrame {
     @Column (name = "frame")
     private int frame;
 
-    @OneToMany (cascade = CascadeType.ALL, mappedBy = "participantFrame")
-    private List<ParticipantFrameChamp> participantFrameChamp;
+    @OneToOne (cascade = CascadeType.ALL, mappedBy = "participantFrame")
+    private ParticipantFrameChamp participantFrameChamp;
 
-    @OneToMany (cascade = CascadeType.ALL, mappedBy = "participantFrame")
-    private List<ParticipantFrameDamage> participantFrameDamage;
+    @OneToOne (cascade = CascadeType.ALL, mappedBy = "participantFrame")
+    private ParticipantFrameDamage participantFrameDamage;
 
     @ManyToOne
     @JoinColumn(name = "participant_id", nullable = false)
@@ -53,7 +53,7 @@ public class ParticipantFrame {
     public ParticipantFrame() {
     }
 
-    public ParticipantFrame(int currentGold, int jungleMinionsKilled, int level, int minionsKilled, int timeEnemySpentControlled, int totalGold, int xp, int frame, List<ParticipantFrameChamp> participantFrameChamp, List<ParticipantFrameDamage> participantFrameDamage, Participant participant) {
+    public ParticipantFrame(int currentGold, int jungleMinionsKilled, int level, int minionsKilled, int timeEnemySpentControlled, int totalGold, int xp, int frame, ParticipantFrameChamp participantFrameChamp, ParticipantFrameDamage participantFrameDamage, Participant participant) {
         this.currentGold = currentGold;
         this.jungleMinionsKilled = jungleMinionsKilled;
         this.level = level;
@@ -67,7 +67,7 @@ public class ParticipantFrame {
         this.participant = participant;
     }
 
-    public ParticipantFrame(long id, int currentGold, int jungleMinionsKilled, int level, int minionsKilled, int timeEnemySpentControlled, int totalGold, int xp, int frame, List<ParticipantFrameChamp> participantFrameChamp, List<ParticipantFrameDamage> participantFrameDamage, Participant participant) {
+    public ParticipantFrame(long id, int currentGold, int jungleMinionsKilled, int level, int minionsKilled, int timeEnemySpentControlled, int totalGold, int xp, int frame, ParticipantFrameChamp participantFrameChamp, ParticipantFrameDamage participantFrameDamage, Participant participant) {
         this.id = id;
         this.currentGold = currentGold;
         this.jungleMinionsKilled = jungleMinionsKilled;
@@ -157,19 +157,19 @@ public class ParticipantFrame {
         this.frame = frame;
     }
 
-    public List<ParticipantFrameChamp> getParticipantFrameChamp() {
+    public ParticipantFrameChamp getParticipantFrameChamp() {
         return participantFrameChamp;
     }
 
-    public void setParticipantFrameChamp(List<ParticipantFrameChamp> participantFrameChamp) {
+    public void setParticipantFrameChamp(ParticipantFrameChamp participantFrameChamp) {
         this.participantFrameChamp = participantFrameChamp;
     }
 
-    public List<ParticipantFrameDamage> getParticipantFrameDamage() {
+    public ParticipantFrameDamage getParticipantFrameDamage() {
         return participantFrameDamage;
     }
 
-    public void setParticipantFrameDamage(List<ParticipantFrameDamage> participantFrameDamage) {
+    public void setParticipantFrameDamage(ParticipantFrameDamage participantFrameDamage) {
         this.participantFrameDamage = participantFrameDamage;
     }
 

@@ -25,7 +25,7 @@ public class BuildingKill {
     @Column(name = "position_y")
     private int positionY;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 

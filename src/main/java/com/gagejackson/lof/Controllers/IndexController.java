@@ -152,12 +152,17 @@ public class IndexController {
     }
 
     private boolean didFriendWin(Match match, Friend friend){
+        boolean friendsWon = false;
         if(match.isSaved()){
-            Participant participant = participantRepositoryDao.findByMatchAndPuuid(match,friend.getPuuId());
-            return participant.isWin();
-        } else {
-            return false;
+//            Participant participant = participantRepositoryDao.findByMatchAndPuuid(match,friend.getPuuId());
+            List<Participant> participants = match.getParticipant();
+            for (Participant participant : participants) {
+                if (participant.getPuuid().equals(friend.getPuuId())){
+                    friendsWon = participant.isWin();
+                }
+            }
         }
+        return friendsWon;
     }
 }
 
