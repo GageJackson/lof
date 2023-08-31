@@ -30,6 +30,8 @@ UTILITY CLASSES
 .bg-color-primary-light {background-color: var(--color-primary-light);}
 .bg-color-primary-main {background-color: var(--color-primary-main);}
 .bg-color-primary-dark {background-color: var(--color-primary-dark);}
+.bg-color-primary-red {background-color: var(--color-primary-red);}
+.bg-color-primary-blue {background-color: var(--color-primary-blue);}
 .bg-color-neutral-light {background-color: var(--color-neutral-light);}
 .bg-color-neutral-main {background-color: var(--color-neutral-main);}
 .bg-color-neutral-dark {background-color: var(--color-neutral-dark);}
