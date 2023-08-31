@@ -118,7 +118,14 @@
 
             const matches = [overviewMatch, timelineMatch];
 
-            await postData('/saveMatchData', matches)
+            await postData('/saveMatchData', matches);
+
+            const url = '/index';
+            try {
+                window.location.href = url;
+            } catch (error) {
+                console.error('Error:', error);
+            }
         }
     }
 

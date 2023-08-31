@@ -25,72 +25,129 @@
   <div class="tab-content" id="pills-tabContent">
     <th:block th:each="participantInfo : ${participants}"
               th:with="participant=${participantInfo.getParticipant()},
-                       participantTag=${'participant-' + participant.getId()}
+                       participantId=${participant.getId()},
+                       participantTag=${'participant-' + participantId}
               "    >
       <div th:id="${participantTag}"
            class="tab-pane fade"
-           th:aria-labelledby="${'pills-' + participantTag + '-tab'}"
+           th:aria-labelledby="${'participant-' + participantTag + '-tab'}"
            th:tabindex="${participant.getParticipantNum}" role="tabpanel">
         <div class="container">
           <div class="row">
-            <div class="col-auto">
+            <div class="col-3">
               <img th:with="champion=${participant.getChampionName()}"
                    th:src="@{${'/dragon_tail/img/champion/loading/' + champion + '_0.jpg'}}"
                    th:alt="${champion + ' splash'}"
-                   class="non-selectable opacity-75"
+                   class="non-selectable opacity-75 img-fluid"
               >
             </div>
             <div class="col">
-              <div class="container">
-                <div class="row">
-                  <h3 th:text="${participant.getSummonerName()}" class="color-primary-main"></h3>
+              <h3 th:text="${participant.getSummonerName()}" class="color-primary-main"></h3>
 
-                  <th:block th:with="kills=${participant.getKills()},
+                    <ul class="nav nav-pills mb-3" th:id="${'participant-tab-' + participantId}" role="tablist">
+                      <li class="nav-item" role="presentation">
+                        <button class="nav-link active" th:id="${'participant-overview-tab-' + participantId}"
+                                data-bs-toggle="pill" th:data-bs-target="${'#participant-overview-' + participantId}"
+                                type="button" role="tab" th:aria-controls="${'participant-overview-' + participantId}"
+                                aria-selected="true"
+                        >Overview</button>
+                      </li>
+                      <li class="nav-item" role="presentation">
+                        <button class="nav-link" th:id="${'participant-buildPath-tab-' + participantId}"
+                                data-bs-toggle="pill" th:data-bs-target="${'#participant-buildPath-' + participantId}"
+                                type="button" role="tab" th:aria-controls="${'participant-buildPath-' + participantId}"
+                                aria-selected="false"
+                        >Build Path</button>
+                      </li>
+                      <li class="nav-item" role="presentation">
+                        <button class="nav-link" th:id="${'participant-stats-tab-' + participantId}"
+                                data-bs-toggle="pill" th:data-bs-target="${'#participant-stats-' + participantId}"
+                                type="button" role="tab" th:aria-controls="${'participant-stats-' + participantId}"
+                                aria-selected="false"
+                        >Stats</button>
+                      </li>
+                    </ul>
+                    <div class="tab-content" th:id="${'participant-tabContent-' + participantId}">
+                      <div class="tab-pane fade show active" th:id="${'participant-overview-' + participantId}"
+                           role="tabpanel" th:aria-labelledby="${'participant-overview-tab-' + participantId}" tabindex="0"
+                      >
+                        <div th:replace="~{partials/detailed-match/champion-overview.html :: participant }"></div>
+                      </div>
+                      <div class="tab-pane fade" th:id="${'participant-buildPath-' + participantId}"
+                           role="tabpanel" th:aria-labelledby="${'participant-buildPath-tab-' + participantId}" tabindex="1"
+                      >
+                        <div th:replace="~{partials/detailed-match/champion-overview.html :: buildPath }"></div>
+                      </div>
+                      <div class="tab-pane fade" th:id="${'participant-stats-' + participantId}"
+                           role="tabpanel" th:aria-labelledby="${'participant-stats-tab-' + participantId}" tabindex="1"
+                      >
+                        <div th:replace="~{partials/detailed-match/champion-overview.html :: stats }"></div>
+                      </div>
+                    </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </th:block>
+  </div>
+</div>
+
+<div th:fragment="participant">
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <th:block th:with="kills=${participant.getKills()},
                               deaths=${participant.getDeaths()},
                               assists=${participant.getAssists()},
                               kda=${1.00 * (kills + assists) / deaths},
                               kdaFormatted=${deaths > 0 ? #numbers.formatDecimal(kda, 1, 'COMMA', 2, 'POINT') : 0}"
-                  >
-                    <p class="color-neutral-light mt-1 mb-3 fw-semibold line-h-0"
-                       th:text="${kills + ' / ' + deaths + ' / ' + assists}"
-                    ></p>
+        >
+          <p class="color-neutral-light mt-1 mb-3 fw-semibold line-h-0"
+             th:text="${kills + ' / ' + deaths + ' / ' + assists}"
+          ></p>
 
-                    <p class="color-neutral-main mb-2 fst-italic fs-200"
-                       th:text="${kdaFormatted == 0} ? ${'Perfect'} : ${kdaFormatted + ' KDA'}"
-                    ></p>
-                  </th:block>
-
-                  <th:block th:with="minionKills=${participant.getTotalMinionsKilled() + participant.getNeutralMinionsKilled()},
+          <p class="color-neutral-main mb-2 fst-italic fs-200"
+             th:text="${kdaFormatted == 0} ? ${'Perfect'} : ${kdaFormatted + ' KDA'}"
+          ></p>
+        </th:block>
+      </div>
+      <div class="col">
+        <th:block th:with="minionKills=${participant.getTotalMinionsKilled() + participant.getNeutralMinionsKilled()},
                                     matchDuration=${((matchInfo.getMatch().getGameDuration() - 60) / 60)},
                                     minionKillspMin=${#numbers.formatDecimal((1.00 * minionKills / matchDuration), 0, 1)},
-                                    playerKills=${matchInfo.getMatch().getTeam()[0].getKills()},
+                                    playerTeam=${(participant.getTeamId() / 100) - 1},
+                                    playerKills=${matchInfo.getMatch().getTeam()[playerTeam].getKills()},
                                     killParticipation=${100.00 * (participant.getKills() + participant.getAssists()) / playerKills},
                                     formattedMinionKills=${minionKills + ' (' + minionKillspMin + ') CS'},
                                     formattedPlayerKills=${#numbers.formatDecimal(killParticipation, 0, 1) + '% KP'}
-"
-                  >
-                    <p class="color-neutral-light mt-1 mb-3 line-h-0">
-                      <span th:text="${minionKills == 0} ? '0 CS' : ${formattedMinionKills}" class="fw-semibold"></span>
-                    </p>
+                                    "
+        >
+          <p class="color-neutral-light mt-1 mb-3 line-h-0">
+            <span th:text="${minionKills == 0} ? '0 CS' : ${formattedMinionKills}" class="fw-semibold"></span>
+          </p>
 
-                    <p class="color-neutral-main mb-2 fst-italic fs-200">
-                      <span th:text="${playerKills == 0} ? 'Oof...' : ${formattedPlayerKills}"></span>
-                    </p>
-                  </th:block>
-
-                  <div class="d-flex justify-content-between gap-0 column-gap-1">
-                    <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem0()})}"></div>
-                    <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem1()})}"></div>
-                    <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem2()})}"></div>
-                    <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem3()})}"></div>
-                    <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem4()})}"></div>
-                    <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem5()})}"></div>
-                    <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem6()})}"></div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col">
-                    <div th:with="totalDamage=${participant.getTotalDamageDealtToChampions()},
+          <p class="color-neutral-main mb-2 fst-italic fs-200">
+            <span th:text="${playerKills == 0} ? 'Oof...' : ${formattedPlayerKills}"></span>
+          </p>
+        </th:block>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="d-flex gap-2 column-gap-1">
+          <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem0()})}"></div>
+          <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem1()})}"></div>
+          <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem2()})}"></div>
+          <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem3()})}"></div>
+          <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem4()})}"></div>
+          <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem5()})}"></div>
+          <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem6()})}"></div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div th:with="totalDamage=${participant.getTotalDamageDealtToChampions()},
                             physicalDamage=${(participant.getPhysicalDamageDealtToChampions())},
                             magicDamage=${(participant.getMagicDamageDealtToChampions())},
                             trueDamage=${(participant.getTrueDamageDealtToChampions())},
@@ -106,41 +163,41 @@
 
                             valueMin=${0},
                             valueMax=${100}"
-                    >
-                      <p th:text="'Damage Dealt ' + ${formattedTotalDamage}" class="color-primary-main mb-1"></p>
-                      <div class="progress-stacked bg-color-neutral-main">
-                        <div class="progress" role="progressbar" aria-label="Segment one"
-                             th:aria-valuenow="${physicalDamagePercent}"
-                             th:aria-valuemin="${valueMin}" th:aria-valuemax="${valueMax}"
-                             th:style="'width:' + ${physicalDamagePercent} + '%'"
-                        >
-                          <div class="progress-bar bg-color-primary-red"></div>
-                        </div>
-                        <div class="progress" role="progressbar" aria-label="Segment two"
-                             th:aria-valuenow="${magicDamagePercent}"
-                             th:aria-valuemin="${valueMin}" th:aria-valuemax="${valueMax}"
-                             th:style="'width:' + ${magicDamagePercent} + '%'"
-                        >
-                          <div class="progress-bar bg-color-primary-blue"></div>
-                        </div>
-                        <div class="progress" role="progressbar" aria-label="Segment three"
-                             th:aria-valuenow="${trueDamagPercent}"
-                             th:aria-valuemin="${valueMin}" th:aria-valuemax="${valueMax}"
-                             th:style="'width:' + ${trueDamagPercent} + '%'"
-                        >
-                          <div class="progress-bar bg-color-neutral-light"></div>
-                        </div>
-                      </div>
+        >
+          <p th:text="'Damage Dealt ' + ${formattedTotalDamage}" class="color-primary-main mb-1"></p>
+          <div class="progress-stacked bg-color-neutral-main">
+            <div class="progress" role="progressbar" aria-label="Segment one"
+                 th:aria-valuenow="${physicalDamagePercent}"
+                 th:aria-valuemin="${valueMin}" th:aria-valuemax="${valueMax}"
+                 th:style="'width:' + ${physicalDamagePercent} + '%'"
+            >
+              <div class="progress-bar bg-color-primary-red"></div>
+            </div>
+            <div class="progress" role="progressbar" aria-label="Segment two"
+                 th:aria-valuenow="${magicDamagePercent}"
+                 th:aria-valuemin="${valueMin}" th:aria-valuemax="${valueMax}"
+                 th:style="'width:' + ${magicDamagePercent} + '%'"
+            >
+              <div class="progress-bar bg-color-primary-blue"></div>
+            </div>
+            <div class="progress" role="progressbar" aria-label="Segment three"
+                 th:aria-valuenow="${trueDamagPercent}"
+                 th:aria-valuemin="${valueMin}" th:aria-valuemax="${valueMax}"
+                 th:style="'width:' + ${trueDamagPercent} + '%'"
+            >
+              <div class="progress-bar bg-color-neutral-light"></div>
+            </div>
+          </div>
 
-                      <p>
-                        <span th:text="'Physical ' + ${formattedPhysicalDamage}" class="color-primary-red me-2 fst-italic fs-200"></span>
-                        <span th:text="'Magic ' + ${formattedMagicDamage}" class="color-primary-blue me-2 fst-italic fs-200"></span>
-                        <span th:text="'True ' + ${formattedTrueDamage}" class="color-neutral-light fst-italic fs-200"></span>
-                      </p>
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div th:with="totalDamage=${participant.getTotalDamageTaken()},
+          <p>
+            <span th:text="'Physical ' + ${formattedPhysicalDamage}" class="color-primary-red me-2 fst-italic fs-200"></span>
+            <span th:text="'Magic ' + ${formattedMagicDamage}" class="color-primary-blue me-2 fst-italic fs-200"></span>
+            <span th:text="'True ' + ${formattedTrueDamage}" class="color-neutral-light fst-italic fs-200"></span>
+          </p>
+        </div>
+      </div>
+      <div class="col">
+        <div th:with="totalDamage=${participant.getTotalDamageTaken()},
                             physicalDamage=${(participant.getPhysicalDamageTaken())},
                             magicDamage=${(participant.getMagicDamageTaken())},
                             trueDamage=${(participant.getTrueDamageTaken())},
@@ -156,214 +213,213 @@
 
                             valueMin=${0},
                             valueMax=${100}"
-                    >
-                      <p th:text="'Damage Taken ' + ${formattedTotalDamage}" class="color-primary-main mb-1"></p>
-                      <div class="progress-stacked bg-color-neutral-main">
-                        <div class="progress" role="progressbar" aria-label="Segment one"
-                             th:aria-valuenow="${physicalDamagePercent}"
-                             th:aria-valuemin="${valueMin}" th:aria-valuemax="${valueMax}"
-                             th:style="'width:' + ${physicalDamagePercent} + '%'"
-                        >
-                          <div class="progress-bar bg-color-primary-red"></div>
-                        </div>
-                        <div class="progress" role="progressbar" aria-label="Segment two"
-                             th:aria-valuenow="${magicDamagePercent}"
-                             th:aria-valuemin="${valueMin}" th:aria-valuemax="${valueMax}"
-                             th:style="'width:' + ${magicDamagePercent} + '%'"
-                        >
-                          <div class="progress-bar bg-color-primary-blue"></div>
-                        </div>
-                        <div class="progress" role="progressbar" aria-label="Segment three"
-                             th:aria-valuenow="${trueDamagPercent}"
-                             th:aria-valuemin="${valueMin}" th:aria-valuemax="${valueMax}"
-                             th:style="'width:' + ${trueDamagPercent} + '%'"
-                        >
-                          <div class="progress-bar bg-color-neutral-light"></div>
-                        </div>
-                      </div>
-
-                      <p>
-                        <span th:text="'Physical ' + ${formattedPhysicalDamage}" class="color-primary-red me-2 fst-italic fs-200"></span>
-                        <span th:text="'Magic ' + ${formattedMagicDamage}" class="color-primary-blue me-2 fst-italic fs-200"></span>
-                        <span th:text="'True ' + ${formattedTrueDamage}" class="color-neutral-light fst-italic fs-200"></span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+        >
+          <p th:text="'Damage Taken ' + ${formattedTotalDamage}" class="color-primary-main mb-1"></p>
+          <div class="progress-stacked bg-color-neutral-main">
+            <div class="progress" role="progressbar" aria-label="Segment one"
+                 th:aria-valuenow="${physicalDamagePercent}"
+                 th:aria-valuemin="${valueMin}" th:aria-valuemax="${valueMax}"
+                 th:style="'width:' + ${physicalDamagePercent} + '%'"
+            >
+              <div class="progress-bar bg-color-primary-red"></div>
+            </div>
+            <div class="progress" role="progressbar" aria-label="Segment two"
+                 th:aria-valuenow="${magicDamagePercent}"
+                 th:aria-valuemin="${valueMin}" th:aria-valuemax="${valueMax}"
+                 th:style="'width:' + ${magicDamagePercent} + '%'"
+            >
+              <div class="progress-bar bg-color-primary-blue"></div>
+            </div>
+            <div class="progress" role="progressbar" aria-label="Segment three"
+                 th:aria-valuenow="${trueDamagPercent}"
+                 th:aria-valuemin="${valueMin}" th:aria-valuemax="${valueMax}"
+                 th:style="'width:' + ${trueDamagPercent} + '%'"
+            >
+              <div class="progress-bar bg-color-neutral-light"></div>
             </div>
           </div>
 
-          <div class="row">
-            <div class="col">
-              <div th:with="itemGroups=${participantInfo.getEventItems()}"
-                   class="d-flex gap-3"
+          <p>
+            <span th:text="'Physical ' + ${formattedPhysicalDamage}" class="color-primary-red me-2 fst-italic fs-200"></span>
+            <span th:text="'Magic ' + ${formattedMagicDamage}" class="color-primary-blue me-2 fst-italic fs-200"></span>
+            <span th:text="'True ' + ${formattedTrueDamage}" class="color-neutral-light fst-italic fs-200"></span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-              >
-                <div th:each="itemGroup : ${itemGroups}"
-                >
-                  <div class="d-flex gap-1">
-                    <th:block th:each="item : ${itemGroup}"
-                              th:with="itemNum=${item.getItemNum()}"
-                    >
-                      <div th:replace="~{partials/icons/item-icon.html :: item(${itemNum})}"></div>
-                    </th:block>
-                  </div>
 
-                  <p th:with="timestamp=${itemGroup[0].getEvent().getTimestamp()},
+
+<div th:fragment="buildPath"
+     class="container"
+     >
+  <div class="row">
+    <div class="col">
+      <div th:with="itemGroups=${participantInfo.getEventItems()}"
+           class="d-flex gap-3"
+      >
+        <div th:each="itemGroup : ${itemGroups}"
+        >
+          <div class="d-flex gap-1">
+            <th:block th:each="item : ${itemGroup}"
+                      th:with="itemNum=${item.getItemNum()}"
+            >
+              <div th:replace="~{partials/icons/item-icon.html :: item(${itemNum})}"></div>
+            </th:block>
+          </div>
+
+          <p th:with="timestamp=${itemGroup[0].getEvent().getTimestamp()},
                               timeMins=${timestamp / (60 * 1000)},
                               timeSecs=${#numbers.formatDecimal((timestamp % (60 * 1000)/1000), 0, 'COMMA', 0, 'POINT')},
                               formattedTimestamp=${' ' + timeMins + 'm ' + timeSecs + 's'}"
-                     th:text="${formattedTimestamp}"
-                     class="color-neutral-main mb-1 fst-italic fs-200"
-                  ></p>
-                </div>
-              </div>
+             th:text="${formattedTimestamp}"
+             class="color-neutral-main mb-1 fst-italic fs-200"
+          ></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div th:with="skills=${participantInfo.getSkillUps()}"
+           class="d-flex gap-2"
+      >
+        <div class="d-flex flex-column gap-1"
+        >
+          <div class="item-icon non-selectable opacity-75 color-primary-main text-center text-bold"><p>Q</p></div>
+          <div class="item-icon non-selectable opacity-75 color-primary-main text-center text-bold"><p>W</p></div>
+          <div class="item-icon non-selectable opacity-75 color-primary-main text-center text-bold"><p>E</p></div>
+          <div class="item-icon non-selectable opacity-75 color-primary-main text-center text-bold"><p>R</p></div>
+        </div>
+
+        <div th:each="skill, skillIndex : ${skills}"
+             th:switch="${skill.getSkillSlot()}"
+             class="d-flex flex-column gap-1"
+        >
+          <th:block th:case="1">
+            <div class="item-icon non-selectable opacity-75 bg-color-primary-main">
+              <p th:text="${skillIndex.index + 1}" class="color-neutral-light text-center"></p>
             </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <div th:with="skills=${participantInfo.getSkillUps()}"
-                   class="d-flex gap-2"
-              >
-                <div class="d-flex flex-column gap-1"
-                >
-                  <div class="item-icon non-selectable opacity-75 color-primary-main text-center text-bold"><p>Q</p></div>
-                  <div class="item-icon non-selectable opacity-75 color-primary-main text-center text-bold"><p>W</p></div>
-                  <div class="item-icon non-selectable opacity-75 color-primary-main text-center text-bold"><p>E</p></div>
-                  <div class="item-icon non-selectable opacity-75 color-primary-main text-center text-bold"><p>R</p></div>
-                </div>
+            <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+            <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+            <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+          </th:block>
 
-                <div th:each="skill, skillIndex : ${skills}"
-                     th:switch="${skill.getSkillSlot()}"
-                     class="d-flex flex-column gap-1"
-                >
-                  <th:block th:case="1">
-                    <div class="item-icon non-selectable opacity-75 bg-color-primary-main">
-                      <p th:text="${skillIndex.index + 1}" class="color-neutral-light text-center"></p>
-                    </div>
-                    <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
-                    <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
-                    <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
-                  </th:block>
-
-                  <th:block th:case="2">
-                    <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
-                    <div class="item-icon non-selectable opacity-75 bg-color-primary-main">
-                      <p th:text="${skillIndex.index + 1}" class="color-neutral-light text-center"></p>
-                    </div>
-                    <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
-                    <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
-                  </th:block>
-
-                  <th:block th:case="3">
-                    <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
-                    <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
-                    <div class="item-icon non-selectable opacity-75 bg-color-primary-main">
-                      <p th:text="${skillIndex.index + 1}" class="color-neutral-light text-center"></p>
-                    </div>
-                    <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
-                  </th:block>
-
-                  <th:block th:case="4">
-                    <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
-                    <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
-                    <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
-                    <div class="item-icon non-selectable opacity-75 bg-color-primary-main">
-                      <p th:text="${skillIndex.index + 1}" class="color-neutral-light text-center"></p>
-                    </div>
-                  </th:block>
-                </div>
-              </div>
+          <th:block th:case="2">
+            <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+            <div class="item-icon non-selectable opacity-75 bg-color-primary-main">
+              <p th:text="${skillIndex.index + 1}" class="color-neutral-light text-center"></p>
             </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <div class="container">
-                <div class="row">
-                  <div class="col">
-                    <div th:with="perks=${participant.getPerk()}"
-                         class="d-flex"
-                    >
-                      <div class="card bg-transparent border-0">
-                        <div class="card-body bg-transparent border-0"
-                             th:with="perkNum=${perks[0].getPerkNum()},
+            <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+            <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+          </th:block>
+
+          <th:block th:case="3">
+            <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+            <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+            <div class="item-icon non-selectable opacity-75 bg-color-primary-main">
+              <p th:text="${skillIndex.index + 1}" class="color-neutral-light text-center"></p>
+            </div>
+            <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+          </th:block>
+
+          <th:block th:case="4">
+            <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+            <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+            <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+            <div class="item-icon non-selectable opacity-75 bg-color-primary-main">
+              <p th:text="${skillIndex.index + 1}" class="color-neutral-light text-center"></p>
+            </div>
+          </th:block>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <div th:with="perks=${participant.getPerk()}"
+                 class="d-flex"
+            >
+              <div class="card bg-transparent border-0">
+                <div class="card-body bg-transparent border-0"
+                     th:with="perkNum=${perks[0].getPerkNum()},
                                       perkStyle=${perks[0].getStyle()}"
-                        >
-                          <img th:src="@{${'/img/summoner_runes/' + perkStyle + '.png'}}"
-                               th:alt="${'player perk'}"
-                               class="perk-icon-lg non-selectable opacity-75"
-                          >
-                        </div>
+                >
+                  <img th:src="@{${'/img/summoner_runes/' + perkStyle + '.png'}}"
+                       th:alt="${'player perk'}"
+                       class="perk-icon-lg non-selectable opacity-75"
+                  >
+                </div>
 
-                        <div class="card-footer bg-transparent border-0">
-                          <div class="d-flex">
-                            <div th:each="perk, perkIndex : ${perks}"
-                                 th:with="perkNum=${perk.getPerkNum()},
+                <div class="card-footer bg-transparent border-0">
+                  <div class="d-flex">
+                    <div th:each="perk, perkIndex : ${perks}"
+                         th:with="perkNum=${perk.getPerkNum()},
                                         perkStyle=${perk.getStyle()}"
-                            >
-                              <th:block th:if="${perkIndex.index <= 3}">
-                                <img th:src="@{${'/img/summoner_runes/' + perkNum + '.png'}}"
-                                     th:alt="${'player perk'}"
-                                     class="perk-icon-lg non-selectable opacity-75"
-                                >
-                                <!--                          <th:block th:if="${perk.getPerkStat1() > 0}">-->
-                                <!--                            <p th:text="${perk.getPerkStat1()}" class="color-neutral-light"></p>-->
-                                <!--                          </th:block>-->
-                                <!--                          <th:block th:if="${perk.getPerkStat2() > 0}">-->
-                                <!--                            <p th:text="${perk.getPerkStat2()}" class="color-neutral-light"></p>-->
-                                <!--                          </th:block>-->
-                                <!--                          <th:block th:if="${perk.getPerkStat3() > 0}">-->
-                                <!--                            <p th:text="${perk.getPerkStat3()}" class="color-neutral-light"></p>-->
-                                <!--                          </th:block>-->
-                              </th:block>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                    >
+                      <th:block th:if="${perkIndex.index <= 3}">
+                        <img th:src="@{${'/img/summoner_runes/' + perkNum + '.png'}}"
+                             th:alt="${'player perk'}"
+                             class="perk-icon-lg non-selectable opacity-75"
+                        >
+                        <!--                          <th:block th:if="${perk.getPerkStat1() > 0}">-->
+                        <!--                            <p th:text="${perk.getPerkStat1()}" class="color-neutral-light"></p>-->
+                        <!--                          </th:block>-->
+                        <!--                          <th:block th:if="${perk.getPerkStat2() > 0}">-->
+                        <!--                            <p th:text="${perk.getPerkStat2()}" class="color-neutral-light"></p>-->
+                        <!--                          </th:block>-->
+                        <!--                          <th:block th:if="${perk.getPerkStat3() > 0}">-->
+                        <!--                            <p th:text="${perk.getPerkStat3()}" class="color-neutral-light"></p>-->
+                        <!--                          </th:block>-->
+                      </th:block>
                     </div>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-                  <div class="col">
-                    <div th:with="perks=${participant.getPerk()}"
-                         class="d-flex"
-                    >
-                      <div class="card bg-transparent border-0">
-                        <div class="card-body bg-transparent border-0"
-                             th:with="perkNum=${perks[4].getPerkNum()},
+          <div class="col">
+            <div th:with="perks=${participant.getPerk()}"
+                 class="d-flex"
+            >
+              <div class="card bg-transparent border-0">
+                <div class="card-body bg-transparent border-0"
+                     th:with="perkNum=${perks[4].getPerkNum()},
                                       perkStyle=${perks[4].getStyle()}"
-                        >
-                          <img th:src="@{${'/img/summoner_runes/' + perkStyle + '.png'}}"
-                               th:alt="${'player perk'}"
-                               class="perk-icon-lg non-selectable opacity-75"
-                          >
-                        </div>
+                >
+                  <img th:src="@{${'/img/summoner_runes/' + perkStyle + '.png'}}"
+                       th:alt="${'player perk'}"
+                       class="perk-icon-lg non-selectable opacity-75"
+                  >
+                </div>
 
-                        <div class="card-footer bg-transparent border-0">
-                          <div class="d-flex">
-                            <div th:each="perk, perkIndex : ${perks}"
-                                 th:with="perkNum=${perk.getPerkNum()},
+                <div class="card-footer bg-transparent border-0">
+                  <div class="d-flex">
+                    <div th:each="perk, perkIndex : ${perks}"
+                         th:with="perkNum=${perk.getPerkNum()},
                                         perkStyle=${perk.getStyle()}"
-                            >
-                              <th:block th:if="${perkIndex.index > 3}">
-                                <img th:src="@{${'/img/summoner_runes/' + perkNum + '.png'}}"
-                                     th:alt="${'player perk'}"
-                                     class="perk-icon-lg non-selectable opacity-75"
-                                >
-                                <!--                          <th:block th:if="${perk.getPerkStat1() > 0}">-->
-                                <!--                            <p th:text="${perk.getPerkStat1()}" class="color-neutral-light"></p>-->
-                                <!--                          </th:block>-->
-                                <!--                          <th:block th:if="${perk.getPerkStat2() > 0}">-->
-                                <!--                            <p th:text="${perk.getPerkStat2()}" class="color-neutral-light"></p>-->
-                                <!--                          </th:block>-->
-                                <!--                          <th:block th:if="${perk.getPerkStat3() > 0}">-->
-                                <!--                            <p th:text="${perk.getPerkStat3()}" class="color-neutral-light"></p>-->
-                                <!--                          </th:block>-->
-                              </th:block>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                    >
+                      <th:block th:if="${perkIndex.index > 3}">
+                        <img th:src="@{${'/img/summoner_runes/' + perkNum + '.png'}}"
+                             th:alt="${'player perk'}"
+                             class="perk-icon-lg non-selectable opacity-75"
+                        >
+                        <!--                          <th:block th:if="${perk.getPerkStat1() > 0}">-->
+                        <!--                            <p th:text="${perk.getPerkStat1()}" class="color-neutral-light"></p>-->
+                        <!--                          </th:block>-->
+                        <!--                          <th:block th:if="${perk.getPerkStat2() > 0}">-->
+                        <!--                            <p th:text="${perk.getPerkStat2()}" class="color-neutral-light"></p>-->
+                        <!--                          </th:block>-->
+                        <!--                          <th:block th:if="${perk.getPerkStat3() > 0}">-->
+                        <!--                            <p th:text="${perk.getPerkStat3()}" class="color-neutral-light"></p>-->
+                        <!--                          </th:block>-->
+                      </th:block>
                     </div>
                   </div>
                 </div>
@@ -372,6 +428,11 @@
           </div>
         </div>
       </div>
-    </th:block>
+    </div>
   </div>
+</div>
+
+<div th:fragment="stats">
+  <div class="chart-stats"></div>
+
 </div>

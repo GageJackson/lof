@@ -40,18 +40,20 @@ public class SaveMatchController {
     Batch Save Arrays
      */
 //    private List<Event> events = new ArrayList<>();
-//    private List<EventItem> eventItems = new ArrayList<>();
+    private List<EventItem> eventItemsSave = new ArrayList<>();
+    private List<SkillUp> skillUpsSave = new ArrayList<>();
+    private List<LevelUp> levelUpsSave = new ArrayList<>();
+    private List<BuildingKill> buildingKillsSave = new ArrayList<>();
+    private List<MonsterKill> monsterKillsSave = new ArrayList<>();
+    private List<ChampKill> champKillsSave = new ArrayList<>();
+    private List<DamageDealt> damageDealtListSave = new ArrayList<>();
+    private List<DamageReceived> damageReceivedListSave = new ArrayList<>();
+    private List<SpecialKill> specialKillsSave = new ArrayList<>();
+
 //    private List<ParticipantFrame> participantFrames = new ArrayList<>();
-//    private List<ParticipantFrameChamp> participantFrameChamps = new ArrayList<>();
-//    private List<ParticipantFrameDamage> participantFrameDamages = new ArrayList<>();
-//    private List<SkillUp> skillUps = new ArrayList<>();
-//    private List<LevelUp> levelUps = new ArrayList<>();
-//    private List<BuildingKill> buildingKills = new ArrayList<>();
-//    private List<MonsterKill> monsterKills = new ArrayList<>();
-//    private List<ChampKill> champKills = new ArrayList<>();
-//    private List<DamageDealt> damageDealtList = new ArrayList<>();
-//    private List<DamageReceived> damageReceivedList = new ArrayList<>();
-//    private List<SpecialKill> specialKills = new ArrayList<>();
+    private List<ParticipantFrameChamp> participantFrameChampsSave = new ArrayList<>();
+    private List<ParticipantFrameDamage> participantFrameDamagesSave = new ArrayList<>();
+
 //    private List<Participant> participants = new ArrayList<>();
 //    private List<Perk> perks = new ArrayList<>();
 //    private List<Team> teams = new ArrayList<>();
@@ -117,7 +119,7 @@ public class SaveMatchController {
         List<Map<String, Object>> timelineFrames = (List<Map<String, Object>>) timelineData.get("frames");
 
         Match newMatch = saveMatchData(overviewData);
-        
+
         if (newMatch != null){
             Match match1 = saveMatchOverview(overviewData, newMatch);
             Match match2 = saveMatchTimeline(timelineFrames, match1);
@@ -827,24 +829,24 @@ public class SaveMatchController {
 //        objectiveRepositoryDao.saveAll(objectives);
 //    }
 
-//    private void insertBatchTimelineData(){
+    private void insertBatchTimelineData(){
 //        eventRepositoryDao.saveAll(events);
-//
-//        eventItemRepositoryDao.saveAll(eventItems);
-//        skillUpRepositoryDao.saveAll(skillUps);
-//        levelUpRepositoryDao.saveAll(levelUps);
-//        buildingKillRepositoryDao.saveAll(buildingKills);
-//        monsterKillRepositoryDao.saveAll(monsterKills);
-//        specialKillRepositoryDao.saveAll(specialKills);
-//
-//        champKillRepositoryDao.saveAll(champKills);
-//        damageDealtRepositoryDao.saveAll(damageDealtList);
-//        damageReceivedRepositoryDao.saveAll(damageReceivedList);
-//
+
+        eventItemRepositoryDao.saveAll(eventItemsSave);
+        skillUpRepositoryDao.saveAll(skillUpsSave);
+        levelUpRepositoryDao.saveAll(levelUpsSave);
+        buildingKillRepositoryDao.saveAll(buildingKillsSave);
+        monsterKillRepositoryDao.saveAll(monsterKillsSave);
+        specialKillRepositoryDao.saveAll(specialKillsSave);
+
+        champKillRepositoryDao.saveAll(champKillsSave);
+        damageDealtRepositoryDao.saveAll(damageDealtListSave);
+        damageReceivedRepositoryDao.saveAll(damageReceivedListSave);
+
 //        participantFrameRepositoryDao.saveAll(participantFrames);
-//        participantFrameChampRepositoryDao.saveAll(participantFrameChamps);
-//        participantFrameDamageRepositoryDao.saveAll(participantFrameDamages);
-//    }
+        participantFrameChampRepositoryDao.saveAll(participantFrameChampsSave);
+        participantFrameDamageRepositoryDao.saveAll(participantFrameDamagesSave);
+    }
 
     private void getEventInfo(Map<String, Object> event){
         List<String> eventTypes = new ArrayList<>();

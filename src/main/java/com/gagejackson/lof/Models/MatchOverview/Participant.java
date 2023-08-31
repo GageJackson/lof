@@ -1,5 +1,7 @@
 package com.gagejackson.lof.Models.MatchOverview;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.gagejackson.lof.Models.MatchEvent.ChampKill;
 import com.gagejackson.lof.Models.MatchEvent.Event;
 import jakarta.persistence.*;
@@ -327,18 +329,23 @@ public class Participant {
     private boolean win;
 
     @OneToMany (cascade = CascadeType.ALL, mappedBy = "participant")
+    @JsonManagedReference
     private List<Perk> perk;
 
     @OneToMany (cascade = CascadeType.ALL, mappedBy = "participant")
+    @JsonManagedReference
     private List<ParticipantFrame> participantFrame;
 
     @OneToMany (cascade = CascadeType.ALL, mappedBy = "participant")
+    @JsonManagedReference
     private List<Event> event;
 
     @OneToMany (cascade = CascadeType.ALL, mappedBy = "victim")
+    @JsonManagedReference
     private List<ChampKill> champKill;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "matches_id", nullable = false)
     private Match match;
 

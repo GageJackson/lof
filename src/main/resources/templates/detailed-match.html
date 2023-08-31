@@ -4,7 +4,7 @@
 <head th:replace="~{partials/head.html :: head('Home')}"><title>title</title></head>
 <body class="bg-color-neutral-dark">
 
-<main class="container-fluid ms-0">
+<main class="container-fluid ms-0" id="match" th:data-matchId="${matchInfo.getMatch().getId()}">
   <div class="row gx-5">
     <nav th:replace="~{partials/primary-nav.html :: primary-nav}"></nav>
 
@@ -12,34 +12,24 @@
       <h1 class="font-bold color-neutral-light my-3">Recent matches</h1>
       <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
         <li class="nav-item" role="presentation">
-          <button class="nav-link active" id="pills-overview-tab" data-bs-toggle="pill" data-bs-target="#pills-overview" type="button" role="tab" aria-controls="pills-overview" aria-selected="true">Overview</button>
+          <button class="nav-link active" id="overview-tab" data-bs-toggle="pill" data-bs-target="#overview" type="button" role="tab" aria-controls="overview" aria-selected="true">Overview</button>
         </li>
         <li class="nav-item" role="presentation">
-          <button class="nav-link" id="pills-timelines-tab" data-bs-toggle="pill" data-bs-target="#pills-timelines" type="button" role="tab" aria-controls="pills-timelines" aria-selected="false">Timelines</button>
+          <button class="nav-link" id="timelines-tab" data-bs-toggle="pill" data-bs-target="#timelines" type="button" role="tab" aria-controls="timelines" aria-selected="false">Timelines</button>
         </li>
         <li class="nav-item" role="presentation">
-          <button class="nav-link" id="pills-champion-tab" data-bs-toggle="pill" data-bs-target="#pills-champion" type="button" role="tab" aria-controls="pills-champion" aria-selected="false">Champion</button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="pills-arena-tab" data-bs-toggle="pill" data-bs-target="#pills-arena" type="button" role="tab" aria-controls="pills-arena" aria-selected="false">Arena</button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="pills-new-tab" data-bs-toggle="pill" data-bs-target="#pills-new" type="button" role="tab" aria-controls="pills-new" aria-selected="false">New</button>
+          <button class="nav-link" id="champion-tab" data-bs-toggle="pill" data-bs-target="#champion" type="button" role="tab" aria-controls="champion" aria-selected="false">Champion</button>
         </li>
       </ul>
       <div class="tab-content" id="pills-tabContent">
-        <div class="tab-pane fade show active" id="pills-overview" role="tabpanel" aria-labelledby="pills-overview-tab" tabindex="0">
+        <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab" tabindex="0">
           <div th:replace="~{partials/index/match-body.html :: card}"></div>
 
         </div>
-        <div class="tab-pane fade" id="pills-timelines" role="tabpanel" aria-labelledby="pills-timelines-tab" tabindex="1">
+        <div class="tab-pane fade" id="timelines" role="tabpanel" aria-labelledby="timelines-tab" tabindex="1">
         </div>
-        <div class="tab-pane fade" id="pills-champion" role="tabpanel" aria-labelledby="pills-champion-tab" tabindex="2">
+        <div class="tab-pane fade" id="champion" role="tabpanel" aria-labelledby="champion-tab" tabindex="2">
           <div th:replace="~{partials/detailed-match/champion-overview.html :: champ-overview}"></div>
-        </div>
-        <div class="tab-pane fade" id="pills-arena" role="tabpanel" aria-labelledby="pills-arena-tab" tabindex="3">
-        </div>
-        <div class="tab-pane fade" id="pills-new" role="tabpanel" aria-labelledby="pills-new-tab" tabindex="4">
         </div>
       </div>
     </section>

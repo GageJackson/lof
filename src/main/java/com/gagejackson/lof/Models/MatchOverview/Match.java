@@ -1,5 +1,6 @@
 package com.gagejackson.lof.Models.MatchOverview;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.gagejackson.lof.Models.Friend.FriendMatch;
 import jakarta.persistence.*;
 
@@ -56,12 +57,15 @@ public class Match {
     private String tournamentCode;
 
     @OneToMany (cascade = CascadeType.ALL, mappedBy = "match")
+    @JsonManagedReference
     private List<Team> team;
 
     @OneToMany (cascade = CascadeType.ALL, mappedBy = "match")
+    @JsonManagedReference
     private List<Participant>participant;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "match")
+    @JsonManagedReference
     private List<FriendMatch> friendMatch;
 
 

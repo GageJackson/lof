@@ -26,6 +26,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.*;
 
@@ -192,5 +193,29 @@ public class MatchController {
         }
 
         return participantDTOs;
+    }
+
+    @GetMapping("/participant-stats-chart")
+    @ResponseBody
+    public List<Participant> participantStats(Model model, @RequestParam("match") long matchId) {
+        Optional<Match> matchObject = matchRepositoryDao.findById(matchId);
+        Match match = matchObject.get();
+
+        List<Participant> participants = match.getParticipant();
+
+//        List<ParticipantDTO> participants = getParticipants(match);
+
+//        for (Participant participant : participants) {
+//            participant.getParticipantFrame();
+//        }
+
+        System.out.println("match id = " + match.getParticipant().get(0).getSummonerName());
+        return participants;
+    }
+
+    @GetMapping("/ng")
+    @ResponseBody
+    public List<Friend> test(Model model) {
+        return friendRepositoryDao.findAll();
     }
 }
