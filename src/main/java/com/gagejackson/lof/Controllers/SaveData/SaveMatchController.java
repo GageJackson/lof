@@ -427,9 +427,6 @@ public class SaveMatchController {
         List<List<Event>> eventCollection = new ArrayList<>();
         List<List<ParticipantFrame>> participantFrameCollection = new ArrayList<>();
 
-        List<Event> events = new ArrayList<>();
-        List<ParticipantFrame> participantFrames = new ArrayList<>();
-
         for (Map<String, Object> frameData : framesData) {
             eventCollection.add(saveEvents(frameData));
             participantFrameCollection.add(saveParticipantFrames(frameData, currentFrame));
@@ -437,7 +434,42 @@ public class SaveMatchController {
             currentFrame++;
         }
 
-//        insertBatchTimelineData();
+        List<Event> events = new ArrayList<>();
+        List<ParticipantFrame> participantFrames = new ArrayList<>();
+
+        for (List<Event> eventList : eventCollection) {
+            events.addAll(eventList);
+        }
+
+        for (List<ParticipantFrame> participantFrameList : participantFrameCollection) {
+            participantFrames.addAll(participantFrameList);
+        }
+
+        List<Participant> finalParticipants = new ArrayList<>();
+
+        for (int i = 1; i <= participantsData.size(); i++) {
+            Participant participant = participantsData.get(i);
+
+            List<Event> participantEvents = new ArrayList<>();
+            List<ParticipantFrame> participantParticipantFrames = new ArrayList<>();
+            for (Event event : events ) {
+                if(event.getParticipant() != null && event.getParticipant() == participant){
+
+                    participantEvents.add(event);
+                }
+            }
+
+            for (ParticipantFrame participantFrame : participantFrames ) {
+                if(participantFrame.getParticipant() == participant){
+                    participantParticipantFrames.add(participantFrame);
+                }
+            }
+            participant.setEvent(participantEvents);
+            participant.setParticipantFrame(participantParticipantFrames);
+            finalParticipants.add(participant);
+        }
+
+        newMatch.setParticipant(finalParticipants);
         return newMatch;
     }
 
@@ -466,8 +498,13 @@ public class SaveMatchController {
         List<Event> events = new ArrayList<>();
 
         for (Map<String, Object> eventData : eventsData) {
-            events.add(saveEvent(eventData));
+            Event event = new Event();
+            event = saveEvent(eventData);
+            if (event != null && event.getParticipant() != null){
+                events.add(event);
+            }
         }
+
         return events;
     }
 

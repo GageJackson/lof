@@ -145,8 +145,8 @@
 
     function handleButtonClick(event) {
         const button = event.target.closest('.match');
-        const matchId = button.id
-        console.log(button.id)
+        const matchId = (button.id).slice(9);
+        console.log(button.id);
         saveMatchData([matchId]);
     }
 
