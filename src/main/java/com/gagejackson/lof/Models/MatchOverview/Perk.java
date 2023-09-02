@@ -1,5 +1,7 @@
 package com.gagejackson.lof.Models.MatchOverview;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gagejackson.lof.Models.MatchOverview.Participant;
 import jakarta.persistence.*;
 
@@ -30,6 +32,7 @@ public class Perk {
     private int perkStat3;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "participant_id", nullable = false)
     private Participant participant;
 

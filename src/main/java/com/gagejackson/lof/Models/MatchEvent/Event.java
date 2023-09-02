@@ -1,5 +1,8 @@
 package com.gagejackson.lof.Models.MatchEvent;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.gagejackson.lof.Models.MatchOverview.Participant;
 import jakarta.persistence.*;
 
@@ -18,6 +21,7 @@ public class Event {
 
     @ManyToOne
     @JoinColumn(name = "participant_id")
+    @JsonIgnore
     private Participant participant;
 
     @OneToOne (cascade = CascadeType.ALL, mappedBy = "event")

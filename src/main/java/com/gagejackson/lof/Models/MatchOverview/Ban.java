@@ -1,5 +1,7 @@
 package com.gagejackson.lof.Models.MatchOverview;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -17,6 +19,7 @@ public class Ban {
     private int pickTurn;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "team_id", nullable = false)
     private Team team;
 

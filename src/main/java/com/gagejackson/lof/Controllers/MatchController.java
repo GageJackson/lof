@@ -197,20 +197,21 @@ public class MatchController {
 
     @GetMapping("/participant-stats-chart")
     @ResponseBody
-    public List<Participant> participantStats(Model model, @RequestParam("match") long matchId) {
+    public List<List<ParticipantFrame>> participantStats(Model model, @RequestParam("match") long matchId) {
         Optional<Match> matchObject = matchRepositoryDao.findById(matchId);
         Match match = matchObject.get();
 
         List<Participant> participants = match.getParticipant();
 
 //        List<ParticipantDTO> participants = getParticipants(match);
-
-//        for (Participant participant : participants) {
-//            participant.getParticipantFrame();
-//        }
+        List<List<ParticipantFrame>> matchParticipantFrames = new ArrayList<>();
+        for (Participant participant : participants) {
+            List<ParticipantFrame> participantFrames = participant.getParticipantFrame();
+            matchParticipantFrames.add(participantFrames);
+        }
 
         System.out.println("match id = " + match.getParticipant().get(0).getSummonerName());
-        return participants;
+        return matchParticipantFrames;
     }
 
     @GetMapping("/ng")

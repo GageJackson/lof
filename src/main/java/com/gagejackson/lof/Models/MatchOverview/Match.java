@@ -57,15 +57,12 @@ public class Match {
     private String tournamentCode;
 
     @OneToMany (cascade = CascadeType.ALL, mappedBy = "match")
-    @JsonManagedReference
     private List<Team> team;
 
     @OneToMany (cascade = CascadeType.ALL, mappedBy = "match")
-    @JsonManagedReference
     private List<Participant>participant;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "match")
-    @JsonManagedReference
     private List<FriendMatch> friendMatch;
 
 

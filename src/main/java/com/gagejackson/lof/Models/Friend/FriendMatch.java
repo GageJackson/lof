@@ -1,5 +1,6 @@
 package com.gagejackson.lof.Models.Friend;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gagejackson.lof.Models.MatchOverview.Match;
 import jakarta.persistence.*;
 
@@ -12,10 +13,12 @@ public class FriendMatch {
     private long id;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "friend_id", nullable = false)
     private Friend friend;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "matches_id", nullable = false)
     private Match match;
 

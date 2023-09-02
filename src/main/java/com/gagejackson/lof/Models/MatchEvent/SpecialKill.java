@@ -1,5 +1,7 @@
 package com.gagejackson.lof.Models.MatchEvent;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -23,6 +25,7 @@ public class SpecialKill {
     private int positionY;
 
     @OneToOne
+    @JsonIgnore
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 
