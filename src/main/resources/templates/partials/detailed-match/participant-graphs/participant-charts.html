@@ -1,0 +1,52 @@
+<div th:fragment="partcipant(participantNum)"
+     class="participant-charts mb-5"
+     th:with="sectionName=${'charts'},
+              tab1Name=${'Overview'},
+              tab2Name=${'Damage'},
+              tab3Name=${'Stats'},
+
+              chart1Name=${sectionName + tab1Name},
+              chart2Name=${sectionName + tab2Name},
+              chart3Name=${sectionName + tab3Name},
+
+              tab1ContentId=${chart1Name + participantNum},
+              tab2ContentId=${chart1Name + participantNum},
+              tab3ContentId=${chart1Name + participantNum},
+
+              tab1ChartId=${'chart-' + tab1ContentId},
+              tab2ChartId=${'chart-' + tab2ContentId},
+              tab3ChartId=${'chart-' + tab3ContentId},
+
+              tab1ButtonId=${'button-' + tab1ContentId},
+              tab2ButtonId=${'button-' + tab2ContentId},
+              tab3ButtonId=${'button-' + tab3ContentId}
+              "
+     th:data-participantId="${participantNum}"
+>
+    <ul class="nav nav-pills mb-3"
+        th:id="${sectionName + '-tabButtons-' + participantNum}"
+        role="tablist">
+        <li th:replace="~{partials/detailed-match/participant-graphs/tab-list.html ::
+          tabList(${tab1ButtonId}, ${tab1ContentId}, ${tab1Name}, true)}"
+        >
+        <li th:replace="~{partials/detailed-match/participant-graphs/tab-list.html ::
+          tabList(${tab2ButtonId}, ${tab2ContentId}, ${tab2Name}, false)}"
+        >
+        <li th:replace="~{partials/detailed-match/participant-graphs/tab-list.html ::
+          tabList(${tab3ButtonId}, ${tab3ContentId}, ${tab3Name}, false)}"
+        >
+    </ul>
+    <div class="tab-content"
+         th:id="${sectionName + '-tabContent-' + participantNum}"
+    >
+        <div th:replace="~{partials/detailed-match/participant-graphs/tab-content.html ::
+            link(${tab1ButtonId}, ${tab1ContentId}, ${tab1ChartId}, ${chart1Name}, true, ${participantNum}, 'OVERVIEW')}"
+        ></div>
+        <div th:replace="~{partials/detailed-match/participant-graphs/tab-content.html ::
+            link(${tab2ButtonId}, ${tab2ContentId}, ${tab2ChartId}, ${chart2Name}, false, ${participantNum}, 'DAMAGE')}"
+        ></div>
+        <div th:replace="~{partials/detailed-match/participant-graphs/tab-content.html ::
+            link(${tab3ButtonId}, ${tab3ContentId}, ${tab3ChartId}, ${chart3Name}, false, ${participantNum}, 'STATS')}"
+        ></div>
+    </div>
+</div>

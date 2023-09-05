@@ -44,46 +44,46 @@
             <div class="col">
               <h3 th:text="${participant.getSummonerName()}" class="color-primary-main"></h3>
 
-                    <ul class="nav nav-pills mb-3" th:id="${'participant-tab-' + participantId}" role="tablist">
-                      <li class="nav-item" role="presentation">
-                        <button class="nav-link active" th:id="${'participant-overview-tab-' + participantId}"
-                                data-bs-toggle="pill" th:data-bs-target="${'#participant-overview-' + participantId}"
-                                type="button" role="tab" th:aria-controls="${'participant-overview-' + participantId}"
-                                aria-selected="true"
-                        >Overview</button>
-                      </li>
-                      <li class="nav-item" role="presentation">
-                        <button class="nav-link" th:id="${'participant-buildPath-tab-' + participantId}"
-                                data-bs-toggle="pill" th:data-bs-target="${'#participant-buildPath-' + participantId}"
-                                type="button" role="tab" th:aria-controls="${'participant-buildPath-' + participantId}"
-                                aria-selected="false"
-                        >Build Path</button>
-                      </li>
-                      <li class="nav-item" role="presentation">
-                        <button class="nav-link" th:id="${'participant-stats-tab-' + participantId}"
-                                data-bs-toggle="pill" th:data-bs-target="${'#participant-stats-' + participantId}"
-                                type="button" role="tab" th:aria-controls="${'participant-stats-' + participantId}"
-                                aria-selected="false"
-                        >Stats</button>
-                      </li>
-                    </ul>
-                    <div class="tab-content" th:id="${'participant-tabContent-' + participantId}">
-                      <div class="tab-pane fade show active" th:id="${'participant-overview-' + participantId}"
-                           role="tabpanel" th:aria-labelledby="${'participant-overview-tab-' + participantId}" tabindex="0"
-                      >
-                        <div th:replace="~{partials/detailed-match/champion-overview.html :: participant }"></div>
-                      </div>
-                      <div class="tab-pane fade" th:id="${'participant-buildPath-' + participantId}"
-                           role="tabpanel" th:aria-labelledby="${'participant-buildPath-tab-' + participantId}" tabindex="1"
-                      >
-                        <div th:replace="~{partials/detailed-match/champion-overview.html :: buildPath }"></div>
-                      </div>
-                      <div class="tab-pane fade" th:id="${'participant-stats-' + participantId}"
-                           role="tabpanel" th:aria-labelledby="${'participant-stats-tab-' + participantId}" tabindex="1"
-                      >
-                        <div th:replace="~{partials/detailed-match/champion-overview.html :: stats }"></div>
-                      </div>
-                    </div>
+              <ul class="nav nav-pills mb-3" th:id="${'participant-tab-' + participantId}" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active" th:id="${'participant-overview-tab-' + participantId}"
+                          data-bs-toggle="pill" th:data-bs-target="${'#participant-overview-' + participantId}"
+                          type="button" role="tab" th:aria-controls="${'participant-overview-' + participantId}"
+                          aria-selected="true"
+                  >Overview</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" th:id="${'participant-buildPath-tab-' + participantId}"
+                          data-bs-toggle="pill" th:data-bs-target="${'#participant-buildPath-' + participantId}"
+                          type="button" role="tab" th:aria-controls="${'participant-buildPath-' + participantId}"
+                          aria-selected="false"
+                  >Build Path</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" th:id="${'participant-graphs-tab-' + participantId}"
+                          data-bs-toggle="pill" th:data-bs-target="${'#participant-graphs-' + participantId}"
+                          type="button" role="tab" th:aria-controls="${'participant-graphs-' + participantId}"
+                          aria-selected="false"
+                  >Graphs</button>
+                </li>
+              </ul>
+              <div class="tab-content" th:id="${'participant-tabContent-' + participantId}">
+                <div class="tab-pane fade show active" th:id="${'participant-overview-' + participantId}"
+                     role="tabpanel" th:aria-labelledby="${'participant-overview-tab-' + participantId}" tabindex="0"
+                >
+                  <div th:replace="~{partials/detailed-match/champion-overview.html :: participant }"></div>
+                </div>
+                <div class="tab-pane fade" th:id="${'participant-buildPath-' + participantId}"
+                     role="tabpanel" th:aria-labelledby="${'participant-buildPath-tab-' + participantId}" tabindex="1"
+                >
+                  <div th:replace="~{partials/detailed-match/champion-overview.html :: buildPath }"></div>
+                </div>
+                <div class="tab-pane fade" th:id="${'participant-graphs-' + participantId}"
+                     role="tabpanel" th:aria-labelledby="${'participant-graphs-tab-' + participantId}" tabindex="1"
+                >
+                  <div th:replace="~{partials/detailed-match/participant-graphs/participant-charts.html :: partcipant(${participant.getParticipantNum() - 1})}"></div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -428,78 +428,6 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
-
-<div th:fragment="stats"
-     th:with="participantNum=${participant.getParticipantNum() - 1}"
-     class="mb-5"
->
-  <ul class="nav nav-pills mb-3" th:id="${'stats-tab-' + participantNum}" role="tablist">
-    <li class="nav-item" role="presentation">
-      <button class="nav-link active" th:id="${'stats-damageDone-tab-' + participantNum}"
-              data-bs-toggle="pill" th:data-bs-target="${'#stats-damageDone-' + participantNum}"
-              type="button" role="tab" th:aria-controls="${'stats-damageDone-' + participantNum}"
-              aria-selected="true"
-      >Damage Done</button>
-    </li>
-    <li class="nav-item" role="presentation">
-      <button class="nav-link" th:id="${'stats-damageTaken-tab-' + participantNum}"
-              data-bs-toggle="pill" th:data-bs-target="${'#stats-damageTaken-' + participantNum}"
-              type="button" role="tab" th:aria-controls="${'stats-damageTaken-' + participantNum}"
-              aria-selected="false"
-      >Damage Taken</button>
-    </li>
-    <li class="nav-item" role="presentation">
-      <button class="nav-link" th:id="${'stats-gold-tab-' + participantNum}"
-              data-bs-toggle="pill" th:data-bs-target="${'#stats-gold-' + participantNum}"
-              type="button" role="tab" th:aria-controls="${'stats-gold-' + participantNum}"
-              aria-selected="true"
-      >Gold</button>
-    </li>
-    <li class="nav-item" role="presentation">
-      <button class="nav-link" th:id="${'stats-cs-tab-' + participantNum}"
-              data-bs-toggle="pill" th:data-bs-target="${'#stats-cs-' + participantNum}"
-              type="button" role="tab" th:aria-controls="${'stats-cs-' + participantNum}"
-              aria-selected="false"
-      >CS</button>
-    </li>
-    <li class="nav-item" role="presentation">
-      <button class="nav-link" th:id="${'stats-stats-tab-' + participantNum}"
-              data-bs-toggle="pill" th:data-bs-target="${'#stats-stats-' + participantNum}"
-              type="button" role="tab" th:aria-controls="${'stats-stats-' + participantNum}"
-              aria-selected="false"
-      >Stats</button>
-    </li>
-  </ul>
-  <div class="tab-content" th:id="${'stats-tabContent-' + participantNum}">
-    <div class="tab-pane fade show active" th:id="${'stats-damageDone-' + participantNum}"
-         role="tabpanel" th:aria-labelledby="${'stats-damageDone-tab-' + participantNum}" tabindex="0"
-    >
-      <div th:data-participantId="${participantNum}" th:id="${'stats-damageDone-chart-' + participantNum}" class="stats-damageDone"></div>
-    </div>
-
-    <div class="tab-pane fade" th:id="${'stats-damageTaken-' + participantNum}"
-         role="tabpanel" th:aria-labelledby="${'stats-damageTaken-tab-' + participantNum}" tabindex="1"
-    >
-      <div th:data-participantId="${participantNum}" th:id="${'stats-damageTaken-chart-' + participantNum}" class="stats-damageTaken"></div>
-    </div>
-    <div class="tab-pane fade" th:id="${'stats-gold-' + participantNum}"
-         role="tabpanel" th:aria-labelledby="${'stats-gold-tab-' + participantNum}" tabindex="0"
-    >
-      <div th:data-participantId="${participantNum}" th:id="${'stats-gold-chart-' + participantNum}" class="stats-gold"></div>
-    </div>
-
-    <div class="tab-pane fade" th:id="${'stats-cs-' + participantNum}"
-         role="tabpanel" th:aria-labelledby="${'stats-cs-tab-' + participantNum}" tabindex="1"
-    >
-      <div th:data-participantId="${participantNum}" th:id="${'stats-cs-chart-' + participantNum}" class="stats-cs"></div>
-    </div>
-    <div class="tab-pane fade" th:id="${'stats-stats-' + participantNum}"
-         role="tabpanel" th:aria-labelledby="${'stats-stats-tab-' + participantNum}" tabindex="1"
-    >
-      <div th:data-participantId="${participantNum}" th:id="${'stats-stats-chart-' + participantNum}" class="stats-stats"></div>
     </div>
   </div>
 </div>

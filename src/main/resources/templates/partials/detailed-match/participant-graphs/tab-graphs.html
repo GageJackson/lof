@@ -1,0 +1,32 @@
+<!--<div th:fragment="tabs(participantNum, navName, tabNames)">-->
+<!--  <ul class="nav nav-pills mb-3"-->
+<!--      th:id="${navName + '-tabButtons-' + participantNum}"-->
+<!--      role="tablist">-->
+<!--    <th:block th:each="tabName, tabIdx : ${tabNames}"-->
+<!--              th:with="isActive=${tabIdx.index == 0},-->
+<!--                       chartName=${navName + tabName},-->
+<!--                       tabContentId=${chartName + participantNum},-->
+<!--                       tabChartId=${'chart-' + tabContentId},-->
+<!--                       tabButtonId=${'button-' + tabContentId}"-->
+<!--    >-->
+<!--    <li th:replace="~{partials/detailed-match/participant-graphs/tab-list.html ::-->
+<!--                tabList(${tabButtonId}, ${tabContentId}, ${chartName}, ${isActive})}">-->
+<!--    </li>-->
+<!--    </th:block>-->
+<!--  </ul>-->
+<!--  <div class="tab-content"-->
+<!--       th:id="${navName + '-tabContent-' + participantNum}">-->
+<!--    <th:block th:each="tabName, tabIdx : ${tabNames}"-->
+<!--              th:with="isActive=${tabIdx.index == 0},-->
+<!--                       chartName=${navName + tabName},-->
+<!--                       tabContentId=${chartName + participantNum},-->
+<!--                       tabChartId=${'chart-' + tabContentId},-->
+<!--                       tabButtonId=${'button-' + tabContentId}"-->
+<!--    >-->
+<!--      <div th:replace="~{partials/detailed-match/participant-graphs/tab-content.html ::-->
+<!--                chart(${tabButtonId}, ${tabContentId}, ${tabChartId}, ${chartName}, ${isActive})}"-->
+<!--      >-->
+<!--      </div>-->
+<!--    </th:block>-->
+<!--  </div>-->
+<!--</div>-->

@@ -1,0 +1,15 @@
+<li th:fragment="tabList(buttonId, contentId, label, isActive)"
+    class="nav-item"
+    role="presentation"
+>
+  <button th:id="${buttonId}"
+          data-bs-toggle="pill"
+          th:data-bs-target="${'#' + contentId}"
+          type="button" role="tab"
+          th:aria-controls="${contentId}"
+          aria-selected="true"
+          th:text="${label}"
+          class="nav-link"
+          th:classappend="${isActive} ? 'active' : ''"
+  ></button>
+</li>
