@@ -18,15 +18,12 @@
      th:classappend="${isActive} ? 'show active' : ''"
 >
     <th:block th:if="${location == 'OVERVIEW'}">
-        <p class="color-primary-red">O</p>
-<!--        <div th:replace="~{partials/detailed-match/participant-graphs/overview.html :: overview(${participantNum})}"></div>-->
+        <div th:replace="~{partials/detailed-match/participant-graphs/overview.html :: overview(${participantNum})}"></div>
     </th:block>
     <th:block th:if="${location == 'DAMAGE'}">
-        <p class="color-primary-red">V</p>
-<!--        <div th:replace="~{partials/detailed-match/participant-graphs/damage.html :: damage(${participantNum})}"></div>-->
+        <div th:replace="~{partials/detailed-match/participant-graphs/damage.html :: damage(${participantNum})}"></div>
     </th:block>
     <th:block th:if="${location == 'STATS'}">
-        <p class="color-primary-red">S</p>
-<!--        <div th:replace="~{partials/detailed-match/participant-graphs/stats.html :: stats(${participantNum})}"></div>-->
+        <div th:replace="~{partials/detailed-match/participant-graphs/stats.html :: stats(${participantNum})}"></div>
     </th:block>
 </div>

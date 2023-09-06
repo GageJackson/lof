@@ -1,4 +1,4 @@
-function drawApexLineChart(participantNum, chartLocation, data){
+function drawApexAreaChart(participantNum, chartLocation, data){
 
     let options = {
         series: data,
@@ -15,7 +15,12 @@ function drawApexLineChart(participantNum, chartLocation, data){
             yaxis: {
                 lines: {
                     show: true
-                }
+                },
+                labels: {
+                    formatter: function(val, index) {
+                        return val.toFixed(2);
+                    }
+                },
             },
         },
         chart: {
@@ -41,15 +46,300 @@ function drawApexLineChart(participantNum, chartLocation, data){
         stroke: {
             curve: 'smooth',
             colors: ['#a2434e', '#4775b4', '#f6f1e5'],
-            width: 3,
+            width: 2,
         },
         fill: {
             type: 'solid',
         },
         legend: {
             position: 'top',
-            horizontalAlign: 'center'
+            horizontalAlign: 'center',
+            labels: {
+                colors: ['#a2434e', '#4775b4', '#f6f1e5'],
+                useSeriesColors: false
+            },
         },
+        tooltip: {
+            enabled: true,
+            enabledOnSeries: undefined,
+            shared: true,
+            followCursor: false,
+            intersect: false,
+            inverseOrder: false,
+            custom: undefined,
+            fillSeriesColor: false,
+            theme: false,
+            style: {
+                fontSize: '12px',
+                fontFamily: undefined
+            },
+            onDatasetHover: {
+                highlightDataSeries: false,
+            },
+            x: {
+                show: false,
+            },
+            y: {
+                formatter: undefined,
+                title: {
+                    formatter: (seriesName) => seriesName,
+                },
+            },
+            marker: {
+                show: true,
+            },
+            items: {
+                display: 'flex',
+            },
+            fixed: {
+                enabled: false,
+                position: 'topRight',
+                offsetX: 0,
+                offsetY: 0,
+            },
+        }
+    };
+
+    let chart = new ApexCharts(document.getElementById(chartLocation + participantNum), options);
+    chart.render();
+}
+
+function getYaxisConfig(numberOfDatasets){
+    let yaxisConfig = [];
+
+    if (numberOfDatasets >= 2) {
+        // Add the configuration for the left y-axis
+        yaxisConfig.push({
+            axisTicks: {
+                show: true,
+            },
+            axisBorder: {
+                show: true,
+                color: '#008FFB',
+            },
+            labels: {
+                style: {
+                    colors: '#008FFB',
+                },
+                formatter: function (value) {
+                    return value.toLocaleString();
+                }
+            },
+            tooltip: {
+                enabled: false,
+            },
+        });
+    }
+
+    if (numberOfDatasets >= 4) {
+        // Add the configuration for the right y-axis
+        yaxisConfig.push({
+            opposite: true,
+            axisTicks: {
+                show: true,
+            },
+            axisBorder: {
+                show: true,
+                color: '#00E396',
+            },
+            labels: {
+                style: {
+                    colors: '#00E396',
+                },
+                formatter: function (value) {
+                    return value.toLocaleString();
+                }
+            },
+            tooltip: {
+                enabled: false,
+            },
+        });
+    }
+
+    return yaxisConfig;
+}
+
+function getColors(numberOfDatasets){
+    if (numberOfDatasets === 1) {
+        return ['#9C865C'];
+    }
+
+    if (numberOfDatasets === 2) {
+        return ['#a2434e', '#4775b4'];
+    }
+
+    if (numberOfDatasets === 3) {
+        return ['#a2434e', '#4775b4', '#9C865C'];
+    }
+
+    if (numberOfDatasets === 4) {
+        return ['#a2434e', '#4775b4', '#673339', '#314664'];
+    }
+}
+
+function getFillType(chartType) {
+    if (chartType === 'line') {
+        return {
+            type: 'solid',
+        }
+    }
+    if (chartType === 'area') {
+        return {
+            type: 'gradient',
+            gradient: {
+                shade: 'dark',
+                // type: "vertical",
+                shadeIntensity: 0.5,
+                inverseColors: true,
+                opacityFrom: 1,
+                opacityTo: 1,
+                stops: [0, 100],
+            }
+        }
+    }
+}
+
+function getChartType(chartType){
+    if (chartType === 'line') {
+        return {
+            type: 'line',
+            height: 350,
+            toolbar: {
+                show: false,
+            },
+            zoom: {
+                enabled: false,
+            },
+            dropShadow: {
+                enabled: false,
+            },
+        };
+    }
+
+    if (chartType === 'area') {
+        return {
+            type: 'area',
+            stacked: true,
+            height: 350,
+            toolbar: {
+                show: false,
+            },
+            zoom: {
+                enabled: false,
+            },
+            dropShadow: {
+                enabled: false,
+            },
+        };
+    }
+}
+
+function drawApexChart(participantNum, chartLocation, data, graphType){
+// Determine the number of datasets you have
+    let numberOfDatasets = data.length; // Change this according to your actual number of datasets
+
+// Define the y-axis configuration
+    let yaxisConfig = getYaxisConfig(numberOfDatasets);
+    let colors = getColors(numberOfDatasets);
+    let chartType = getChartType(graphType);
+    let fillType = getFillType(graphType);
+
+    let options = {
+        series: data,
+        grid: {
+            show: true,
+            borderColor: '#4b4b56',
+            strokeDashArray: 0,
+            position: 'back',
+        },
+        xaxis: {
+            show: false,
+            tooltip: {
+                enabled: false,
+            },
+        },
+        yaxis: yaxisConfig,
+        chart: chartType,
+        colors: colors,
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            curve: 'smooth',
+            colors: colors,
+            width: 2,
+            type: 'solid',
+        },
+        fill: fillType,
+        legend: {
+            position: 'top',
+            horizontalAlign: 'right',
+            offsetX: 0,
+            offsetY: 50,
+        },
+        tooltip: {
+            enabled: true,
+            enabledOnSeries: undefined,
+            shared: true,
+            followCursor: false,
+            intersect: false,
+            inverseOrder: false,
+            custom: function({ series, seriesIndex, dataPointIndex, w }) {
+                var tooltipContent = `
+                    <div class="custom-tooltip d-flex bg-transparent color-neutral-light"
+                         style="box-shadow: none"
+                    >
+                `;
+
+                // Iterate through all series and display their values
+                for (let i = 0; i < w.config.series.length; i++) {
+                    if(w.config.series[i].data[dataPointIndex])
+                    {
+                        let seriesColor = w.config.colors[i]; // Get the color of the series
+
+                        tooltipContent += `
+                        <div class="series-tooltip fs-200 d-flex align-items-center gap-2 me-1 px-2 rounded-pill" 
+                             style="background-color:${seriesColor}"
+                        >
+                            <span class="series-name text-bolder"> ${w.config.series[i].name}</span>
+                            <span class="data-point"> ${(w.config.series[i].data[dataPointIndex]).toLocaleString()}</span>
+                        </div>
+                        `;
+                    }
+                }
+
+                tooltipContent += '</div>';
+                return tooltipContent;
+            },
+            fillSeriesColor: undefined,
+            theme: undefined,
+            onDatasetHover: {
+                highlightDataSeries: false,
+            },
+            x: {
+                show: false,
+            },
+            y: {
+                title: {
+                    formatter: (seriesName) => seriesName,
+                },
+            },
+            marker: {
+                show: false,
+            },
+            items: {
+                display: 'flex',
+            },
+            fixed: {
+                enabled: true,
+                position: 'topLeft',
+                offsetX: 60,
+                offsetY: 30,
+            },
+            dropShadow: {
+                enabled: false,
+            },
+        }
     };
 
     let chart = new ApexCharts(document.getElementById(chartLocation + participantNum), options);
@@ -83,19 +373,19 @@ window.onload = async (event) => {
         let statsDefenseData = getStatsDefenseData(participantData);
         let statsLifestealData = getStatsLifestealData(participantData);
 
-        drawApexLineChart(participantNum, 'chart-damageOverview', damageOverviewData);
-        drawApexLineChart(participantNum, 'chart-damageDealt', damageDealtData);
-        drawApexLineChart(participantNum, 'chart-damageTaken', damageTakenData);
+        drawApexChart(participantNum, 'chart-damageOverview', damageOverviewData, 'line');
+        drawApexChart(participantNum, 'chart-damageDealt', damageDealtData, 'area');
+        drawApexChart(participantNum, 'chart-damageTaken', damageTakenData, 'area');
 
-        drawApexLineChart(participantNum, 'chart-overviewGold', overviewGoldData);
-        drawApexLineChart(participantNum, 'chart-overviewCs', overviewCsData);
-        drawApexLineChart(participantNum, 'chart-overviewXp', overviewXpData);
+        drawApexChart(participantNum, 'chart-overviewGold', overviewGoldData, 'area');
+        drawApexChart(participantNum, 'chart-overviewCs', overviewCsData, 'area');
+        drawApexChart(participantNum, 'chart-overviewXp', overviewXpData, 'area');
 
-        drawApexLineChart(participantNum, 'chart-statsBasic', statsBasicData);
-        drawApexLineChart(participantNum, 'chart-statsDamage', statsDamageData);
-        drawApexLineChart(participantNum, 'chart-statsPen', statsPenData);
-        drawApexLineChart(participantNum, 'chart-statsDefense', statsDefenseData);
-        drawApexLineChart(participantNum, 'chart-statsLifesteal', statsLifestealData);
+        drawApexChart(participantNum, 'chart-statsBasic', statsBasicData, 'line');
+        drawApexChart(participantNum, 'chart-statsDamage', statsDamageData, 'line');
+        drawApexChart(participantNum, 'chart-statsPen', statsPenData, 'line');
+        drawApexChart(participantNum, 'chart-statsDefense', statsDefenseData, 'line');
+        drawApexChart(participantNum, 'chart-statsLifesteal', statsLifestealData, 'line');
     }
 };
 
@@ -229,19 +519,29 @@ function getStatsBasicData(participantData){
     return [
         {
             name: 'healthMax',
-            data: healthMax
-        },
-        {
-            name: 'healthRegen',
-            data: healthRegen
+            data: healthMax,
+            group: 'group1',
+            yaxisIndex: 0
         },
         {
             name: 'powerMax',
-            data: powerMax
+            data: powerMax,
+            group: 'group1',
+            yaxisIndex: 0
+        },
+        {
+            name: 'healthRegen',
+            data: healthRegen,
+            group: 'group2',
+
+            yaxisIndex: 3
         },
         {
             name: 'powerRegen',
-            data: powerRegen
+            data: powerRegen,
+            group: 'group2',
+
+            yaxisIndex: 3
         }
     ]
 }
@@ -265,6 +565,10 @@ function getStatsDamageData(participantData){
             data: attackDamage
         },
         {
+            name: 'abilityPower',
+            data: abilityPower
+        },
+        {
             name: 'attackSpeed',
             data: attackSpeed
         },
@@ -272,10 +576,7 @@ function getStatsDamageData(participantData){
             name: 'abilityHaste',
             data: abilityHaste
         },
-        {
-            name: 'abilityPower',
-            data: abilityPower
-        }
+
     ]
 
 }
@@ -299,12 +600,12 @@ function getStatsPenData(participantData){
             data: armorPen
         },
         {
-            name: 'armorPenPercent',
-            data: armorPenPercent
-        },
-        {
             name: 'magicPen',
             data: magicPen
+        },
+        {
+            name: 'armorPenPercent',
+            data: armorPenPercent
         },
         {
             name: 'magicPenPercent',
