@@ -1,0 +1,125 @@
+<div th:fragment="overview">
+    <div class="container">
+        <div class="row">
+            <div th:replace="~{partials/detailed-match/participant-overview/stats/kda.html :: kda}"></div>
+            <div th:replace="~{partials/detailed-match/participant-overview/stats/minions.html :: minions}"></div>
+            <div th:replace="~{partials/detailed-match/participant-overview/stats/gold.html :: gold}"></div>
+            <div th:replace="~{partials/detailed-match/participant-overview/stats/vision.html :: vision}"></div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="d-flex gap-2 column-gap-1">
+                    <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem0()})}"></div>
+                    <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem1()})}"></div>
+                    <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem2()})}"></div>
+                    <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem3()})}"></div>
+                    <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem4()})}"></div>
+                    <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem5()})}"></div>
+                    <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem6()})}"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div th:with="totalDamage=${participant.getTotalDamageDealtToChampions()},
+                            physicalDamage=${(participant.getPhysicalDamageDealtToChampions())},
+                            magicDamage=${(participant.getMagicDamageDealtToChampions())},
+                            trueDamage=${(participant.getTrueDamageDealtToChampions())},
+
+                            physicalDamagePercent=${(100 * physicalDamage / totalDamage)},
+                            magicDamagePercent=${(100 * magicDamage / totalDamage)},
+                            trueDamagPercent=${(100 * trueDamage / totalDamage)},
+
+                            formattedTotalDamage=${#numbers.formatDecimal(totalDamage,  0, 'COMMA', 0, 'POINT')},
+                            formattedPhysicalDamage=${#numbers.formatDecimal(physicalDamage,  0, 'COMMA', 0, 'POINT')},
+                            formattedMagicDamage=${#numbers.formatDecimal(magicDamage,  0, 'COMMA', 0, 'POINT')},
+                            formattedTrueDamage=${#numbers.formatDecimal(trueDamage,  0, 'COMMA', 0, 'POINT')},
+
+                            valueMin=${0},
+                            valueMax=${100}"
+                >
+                    <p th:text="'Damage Dealt ' + ${formattedTotalDamage}" class="color-primary-main mb-1"></p>
+                    <div class="progress-stacked bg-color-neutral-main">
+                        <div class="progress" role="progressbar" aria-label="Segment one"
+                             th:aria-valuenow="${physicalDamagePercent}"
+                             th:aria-valuemin="${valueMin}" th:aria-valuemax="${valueMax}"
+                             th:style="'width:' + ${physicalDamagePercent} + '%'"
+                        >
+                            <div class="progress-bar bg-color-primary-red"></div>
+                        </div>
+                        <div class="progress" role="progressbar" aria-label="Segment two"
+                             th:aria-valuenow="${magicDamagePercent}"
+                             th:aria-valuemin="${valueMin}" th:aria-valuemax="${valueMax}"
+                             th:style="'width:' + ${magicDamagePercent} + '%'"
+                        >
+                            <div class="progress-bar bg-color-primary-blue"></div>
+                        </div>
+                        <div class="progress" role="progressbar" aria-label="Segment three"
+                             th:aria-valuenow="${trueDamagPercent}"
+                             th:aria-valuemin="${valueMin}" th:aria-valuemax="${valueMax}"
+                             th:style="'width:' + ${trueDamagPercent} + '%'"
+                        >
+                            <div class="progress-bar bg-color-neutral-light"></div>
+                        </div>
+                    </div>
+
+                    <p>
+                        <span th:text="'Physical ' + ${formattedPhysicalDamage}" class="color-primary-red me-2 fst-italic fs-200"></span>
+                        <span th:text="'Magic ' + ${formattedMagicDamage}" class="color-primary-blue me-2 fst-italic fs-200"></span>
+                        <span th:text="'True ' + ${formattedTrueDamage}" class="color-neutral-light fst-italic fs-200"></span>
+                    </p>
+                </div>
+            </div>
+            <div class="col">
+                <div th:with="totalDamage=${participant.getTotalDamageTaken()},
+                            physicalDamage=${(participant.getPhysicalDamageTaken())},
+                            magicDamage=${(participant.getMagicDamageTaken())},
+                            trueDamage=${(participant.getTrueDamageTaken())},
+
+                            physicalDamagePercent=${(100 * physicalDamage / totalDamage)},
+                            magicDamagePercent=${(100 * magicDamage / totalDamage)},
+                            trueDamagPercent=${(100 * trueDamage / totalDamage)},
+
+                            formattedTotalDamage=${#numbers.formatDecimal(totalDamage,  0, 'COMMA', 0, 'POINT')},
+                            formattedPhysicalDamage=${#numbers.formatDecimal(physicalDamage,  0, 'COMMA', 0, 'POINT')},
+                            formattedMagicDamage=${#numbers.formatDecimal(magicDamage,  0, 'COMMA', 0, 'POINT')},
+                            formattedTrueDamage=${#numbers.formatDecimal(trueDamage,  0, 'COMMA', 0, 'POINT')},
+
+                            valueMin=${0},
+                            valueMax=${100}"
+                >
+                    <p th:text="'Damage Taken ' + ${formattedTotalDamage}" class="color-primary-main mb-1"></p>
+                    <div class="progress-stacked bg-color-neutral-main">
+                        <div class="progress" role="progressbar" aria-label="Segment one"
+                             th:aria-valuenow="${physicalDamagePercent}"
+                             th:aria-valuemin="${valueMin}" th:aria-valuemax="${valueMax}"
+                             th:style="'width:' + ${physicalDamagePercent} + '%'"
+                        >
+                            <div class="progress-bar bg-color-primary-red"></div>
+                        </div>
+                        <div class="progress" role="progressbar" aria-label="Segment two"
+                             th:aria-valuenow="${magicDamagePercent}"
+                             th:aria-valuemin="${valueMin}" th:aria-valuemax="${valueMax}"
+                             th:style="'width:' + ${magicDamagePercent} + '%'"
+                        >
+                            <div class="progress-bar bg-color-primary-blue"></div>
+                        </div>
+                        <div class="progress" role="progressbar" aria-label="Segment three"
+                             th:aria-valuenow="${trueDamagPercent}"
+                             th:aria-valuemin="${valueMin}" th:aria-valuemax="${valueMax}"
+                             th:style="'width:' + ${trueDamagPercent} + '%'"
+                        >
+                            <div class="progress-bar bg-color-neutral-light"></div>
+                        </div>
+                    </div>
+
+                    <p>
+                        <span th:text="'Physical ' + ${formattedPhysicalDamage}" class="color-primary-red me-2 fst-italic fs-200"></span>
+                        <span th:text="'Magic ' + ${formattedMagicDamage}" class="color-primary-blue me-2 fst-italic fs-200"></span>
+                        <span th:text="'True ' + ${formattedTrueDamage}" class="color-neutral-light fst-italic fs-200"></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

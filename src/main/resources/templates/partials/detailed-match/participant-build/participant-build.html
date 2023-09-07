@@ -1,0 +1,179 @@
+<div th:fragment="builds"
+     class="container"
+>
+  <div class="row">
+    <div class="col">
+      <div th:with="itemGroups=${participantInfo.getEventItems()}"
+           class="d-flex flex-wrap gap-3"
+      >
+        <div th:each="itemGroup : ${itemGroups}"
+        >
+          <div class="d-flex gap-1">
+            <th:block th:each="item : ${itemGroup}"
+                      th:with="itemNum=${item.getItemNum()}"
+            >
+              <div th:replace="~{partials/icons/item-icon.html :: item(${itemNum})}"></div>
+            </th:block>
+          </div>
+
+          <p th:with="timestamp=${itemGroup[0].getEvent().getTimestamp()},
+                              timeMins=${timestamp / (60 * 1000)},
+                              timeSecs=${#numbers.formatDecimal((timestamp % (60 * 1000)/1000), 0, 'COMMA', 0, 'POINT')},
+                              formattedTimestamp=${' ' + timeMins + 'm ' + timeSecs + 's'}"
+             th:text="${formattedTimestamp}"
+             class="color-neutral-main mb-1 fst-italic fs-200"
+          ></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div th:with="skills=${participantInfo.getSkillUps()}"
+           class="d-flex gap-2"
+      >
+        <div class="d-flex flex-column gap-1"
+        >
+          <div class="item-icon non-selectable opacity-75 color-primary-main text-center text-bold"><p>Q</p></div>
+          <div class="item-icon non-selectable opacity-75 color-primary-main text-center text-bold"><p>W</p></div>
+          <div class="item-icon non-selectable opacity-75 color-primary-main text-center text-bold"><p>E</p></div>
+          <div class="item-icon non-selectable opacity-75 color-primary-main text-center text-bold"><p>R</p></div>
+        </div>
+
+        <div th:each="skill, skillIndex : ${skills}"
+             th:switch="${skill.getSkillSlot()}"
+             class="d-flex flex-column gap-1"
+        >
+          <th:block th:case="1">
+            <div class="item-icon non-selectable opacity-75 bg-color-primary-main">
+              <p th:text="${skillIndex.index + 1}" class="color-neutral-light text-center"></p>
+            </div>
+            <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+            <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+            <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+          </th:block>
+
+          <th:block th:case="2">
+            <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+            <div class="item-icon non-selectable opacity-75 bg-color-primary-main">
+              <p th:text="${skillIndex.index + 1}" class="color-neutral-light text-center"></p>
+            </div>
+            <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+            <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+          </th:block>
+
+          <th:block th:case="3">
+            <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+            <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+            <div class="item-icon non-selectable opacity-75 bg-color-primary-main">
+              <p th:text="${skillIndex.index + 1}" class="color-neutral-light text-center"></p>
+            </div>
+            <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+          </th:block>
+
+          <th:block th:case="4">
+            <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+            <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+            <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+            <div class="item-icon non-selectable opacity-75 bg-color-primary-main">
+              <p th:text="${skillIndex.index + 1}" class="color-neutral-light text-center"></p>
+            </div>
+          </th:block>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <div th:with="perks=${participant.getPerk()}"
+                 class="d-flex"
+            >
+              <div class="card bg-transparent border-0">
+                <div class="card-body bg-transparent border-0"
+                     th:with="perkNum=${perks[0].getPerkNum()},
+                                      perkStyle=${perks[0].getStyle()}"
+                >
+                  <img th:src="@{${'/img/summoner_runes/' + perkStyle + '.png'}}"
+                       th:alt="${'player perk'}"
+                       class="perk-icon-lg non-selectable opacity-75"
+                  >
+                </div>
+
+                <div class="card-footer bg-transparent border-0">
+                  <div class="d-flex">
+                    <div th:each="perk, perkIndex : ${perks}"
+                         th:with="perkNum=${perk.getPerkNum()},
+                                        perkStyle=${perk.getStyle()}"
+                    >
+                      <th:block th:if="${perkIndex.index <= 3}">
+                        <img th:src="@{${'/img/summoner_runes/' + perkNum + '.png'}}"
+                             th:alt="${'player perk'}"
+                             class="perk-icon-lg non-selectable opacity-75"
+                        >
+                        <!--                          <th:block th:if="${perk.getPerkStat1() > 0}">-->
+                        <!--                            <p th:text="${perk.getPerkStat1()}" class="color-neutral-light"></p>-->
+                        <!--                          </th:block>-->
+                        <!--                          <th:block th:if="${perk.getPerkStat2() > 0}">-->
+                        <!--                            <p th:text="${perk.getPerkStat2()}" class="color-neutral-light"></p>-->
+                        <!--                          </th:block>-->
+                        <!--                          <th:block th:if="${perk.getPerkStat3() > 0}">-->
+                        <!--                            <p th:text="${perk.getPerkStat3()}" class="color-neutral-light"></p>-->
+                        <!--                          </th:block>-->
+                      </th:block>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col">
+            <div th:with="perks=${participant.getPerk()}"
+                 class="d-flex"
+            >
+              <div class="card bg-transparent border-0">
+                <div class="card-body bg-transparent border-0"
+                     th:with="perkNum=${perks[4].getPerkNum()},
+                                      perkStyle=${perks[4].getStyle()}"
+                >
+                  <img th:src="@{${'/img/summoner_runes/' + perkStyle + '.png'}}"
+                       th:alt="${'player perk'}"
+                       class="perk-icon-lg non-selectable opacity-75"
+                  >
+                </div>
+
+                <div class="card-footer bg-transparent border-0">
+                  <div class="d-flex">
+                    <div th:each="perk, perkIndex : ${perks}"
+                         th:with="perkNum=${perk.getPerkNum()},
+                                        perkStyle=${perk.getStyle()}"
+                    >
+                      <th:block th:if="${perkIndex.index > 3}">
+                        <img th:src="@{${'/img/summoner_runes/' + perkNum + '.png'}}"
+                             th:alt="${'player perk'}"
+                             class="perk-icon-lg non-selectable opacity-75"
+                        >
+                        <!--                          <th:block th:if="${perk.getPerkStat1() > 0}">-->
+                        <!--                            <p th:text="${perk.getPerkStat1()}" class="color-neutral-light"></p>-->
+                        <!--                          </th:block>-->
+                        <!--                          <th:block th:if="${perk.getPerkStat2() > 0}">-->
+                        <!--                            <p th:text="${perk.getPerkStat2()}" class="color-neutral-light"></p>-->
+                        <!--                          </th:block>-->
+                        <!--                          <th:block th:if="${perk.getPerkStat3() > 0}">-->
+                        <!--                            <p th:text="${perk.getPerkStat3()}" class="color-neutral-light"></p>-->
+                        <!--                          </th:block>-->
+                      </th:block>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

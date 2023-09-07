@@ -2,33 +2,23 @@
      th:with="sectionName=${'stats'},
               tab1Name=${'Basic'},
               tab2Name=${'Damage'},
-              tab3Name=${'Pen'},
-              tab4Name=${'Defense'},
-              tab5Name=${'Lifesteal'},
+              tab3Name=${'Defense'},
 
               chart1Name=${sectionName + tab1Name},
               chart2Name=${sectionName + tab2Name},
               chart3Name=${sectionName + tab3Name},
-              chart4Name=${sectionName + tab4Name},
-              chart5Name=${sectionName + tab5Name},
 
               tab1ContentId=${chart1Name + participantNum},
               tab2ContentId=${chart2Name + participantNum},
               tab3ContentId=${chart3Name + participantNum},
-              tab4ContentId=${chart4Name + participantNum},
-              tab5ContentId=${chart5Name + participantNum},
 
               tab1ChartId=${'chart-' + tab1ContentId},
               tab2ChartId=${'chart-' + tab2ContentId},
               tab3ChartId=${'chart-' + tab3ContentId},
-              tab4ChartId=${'chart-' + tab4ContentId},
-              tab5ChartId=${'chart-' + tab5ContentId},
 
               tab1ButtonId=${'button-' + tab1ContentId},
               tab2ButtonId=${'button-' + tab2ContentId},
-              tab3ButtonId=${'button-' + tab3ContentId},
-              tab4ButtonId=${'button-' + tab4ContentId},
-              tab5ButtonId=${'button-' + tab5ContentId}
+              tab3ButtonId=${'button-' + tab3ContentId}
               "
 >
     <ul class="nav nav-pills mb-3"
@@ -44,12 +34,6 @@
         <li th:replace="~{partials/detailed-match/participant-graphs/tab-list.html ::
             tabList(${tab3ButtonId}, ${tab3ContentId}, ${tab3Name}, false)}"
         >
-        <li th:replace="~{partials/detailed-match/participant-graphs/tab-list.html ::
-            tabList(${tab4ButtonId}, ${tab4ContentId}, ${tab4Name}, false)}"
-        >
-        <li th:replace="~{partials/detailed-match/participant-graphs/tab-list.html ::
-            tabList(${tab5ButtonId}, ${tab5ContentId}, ${tab5Name}, false)}"
-        >
     </ul>
 
     <div class="tab-content"
@@ -63,12 +47,6 @@
         ></div>
         <div th:replace="~{partials/detailed-match/participant-graphs/tab-content.html ::
             chart(${tab3ButtonId}, ${tab3ContentId}, ${tab3ChartId}, ${chart3Name}, false)}"
-        ></div>
-        <div th:replace="~{partials/detailed-match/participant-graphs/tab-content.html ::
-            chart(${tab4ButtonId}, ${tab4ContentId}, ${tab4ChartId}, ${chart4Name}, false)}"
-        ></div>
-        <div th:replace="~{partials/detailed-match/participant-graphs/tab-content.html ::
-            chart(${tab5ButtonId}, ${tab5ContentId}, ${tab5ChartId}, ${chart5Name}, false)}"
         ></div>
     </div>
 </div>

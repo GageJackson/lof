@@ -1,0 +1,18 @@
+<div th:fragment="vision"
+     class="col"
+>
+  <th:block th:with="kills=${participant.getKills()},
+                              deaths=${participant.getDeaths()},
+                              assists=${participant.getAssists()},
+                              kda=${1.00 * (kills + assists) / deaths},
+                              kdaFormatted=${deaths > 0 ? #numbers.formatDecimal(kda, 1, 'COMMA', 2, 'POINT') : 0}"
+  >
+    <p class="color-neutral-light mt-1 mb-3 fw-semibold line-h-0"
+       th:text="${kills + ' / ' + deaths + ' / ' + assists}"
+    ></p>
+
+    <p class="color-neutral-main mb-2 fst-italic fs-200"
+       th:text="${kdaFormatted == 0} ? ${'Perfect'} : ${kdaFormatted + ' KDA'}"
+    ></p>
+  </th:block>
+</div>

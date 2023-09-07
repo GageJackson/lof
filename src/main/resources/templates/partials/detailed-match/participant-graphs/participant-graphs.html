@@ -1,4 +1,4 @@
-<div th:fragment="partcipant(participantNum)"
+<div th:fragment="graphs(participantNum)"
      class="participant-charts mb-5"
      th:with="sectionName=${'charts'},
               tab1Name=${'Overview'},
@@ -40,13 +40,13 @@
          th:id="${sectionName + '-tabContent-' + participantNum}"
     >
         <div th:replace="~{partials/detailed-match/participant-graphs/tab-content.html ::
-            link(${tab1ButtonId}, ${tab1ContentId}, ${tab1ChartId}, ${chart1Name}, true, ${participantNum}, 'OVERVIEW')}"
+            link(${tab1ButtonId}, ${tab1ContentId}, ${tab1ChartId}, ${chart1Name}, true, ${participantNum}, ${tab1Name})}"
         ></div>
         <div th:replace="~{partials/detailed-match/participant-graphs/tab-content.html ::
-            link(${tab2ButtonId}, ${tab2ContentId}, ${tab2ChartId}, ${chart2Name}, false, ${participantNum}, 'DAMAGE')}"
+            link(${tab2ButtonId}, ${tab2ContentId}, ${tab2ChartId}, ${chart2Name}, false, ${participantNum}, ${tab2Name})}"
         ></div>
         <div th:replace="~{partials/detailed-match/participant-graphs/tab-content.html ::
-            link(${tab3ButtonId}, ${tab3ContentId}, ${tab3ChartId}, ${chart3Name}, false, ${participantNum}, 'STATS')}"
+            link(${tab3ButtonId}, ${tab3ContentId}, ${tab3ChartId}, ${chart3Name}, false, ${participantNum}, ${tab3Name})}"
         ></div>
     </div>
 </div>
