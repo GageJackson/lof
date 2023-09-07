@@ -1,25 +1,31 @@
 <div th:fragment="overview">
     <div class="container">
-        <div class="row">
+        <div class="row mb-3">
             <div th:replace="~{partials/detailed-match/participant-overview/stats/kda.html :: kda}"></div>
+        </div>
+        <div class="row mb-3">
+            <div th:replace="~{partials/detailed-match/participant-overview/objectives.html :: objectives}"></div>
+        </div>
+        <div class="row row-cols-3 mb-3">
             <div th:replace="~{partials/detailed-match/participant-overview/stats/minions.html :: minions}"></div>
             <div th:replace="~{partials/detailed-match/participant-overview/stats/gold.html :: gold}"></div>
             <div th:replace="~{partials/detailed-match/participant-overview/stats/vision.html :: vision}"></div>
+            <div th:replace="~{partials/detailed-match/participant-overview/stats/support.html :: support}"></div>
         </div>
-        <div class="row">
+        <div class="row mb-3">
             <div class="col">
                 <div class="d-flex gap-2 column-gap-1">
-                    <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem0()})}"></div>
-                    <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem1()})}"></div>
-                    <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem2()})}"></div>
-                    <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem3()})}"></div>
-                    <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem4()})}"></div>
-                    <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem5()})}"></div>
-                    <div th:replace="~{partials/icons/item-icon.html :: item(${participant.getItem6()})}"></div>
+                    <div th:replace="~{partials/icons/item-icon.html :: itemLg(${participant.getItem0()})}"></div>
+                    <div th:replace="~{partials/icons/item-icon.html :: itemLg(${participant.getItem1()})}"></div>
+                    <div th:replace="~{partials/icons/item-icon.html :: itemLg(${participant.getItem2()})}"></div>
+                    <div th:replace="~{partials/icons/item-icon.html :: itemLg(${participant.getItem3()})}"></div>
+                    <div th:replace="~{partials/icons/item-icon.html :: itemLg(${participant.getItem4()})}"></div>
+                    <div th:replace="~{partials/icons/item-icon.html :: itemLg(${participant.getItem5()})}"></div>
+                    <div th:replace="~{partials/icons/item-icon.html :: itemLg(${participant.getItem6()})}"></div>
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row mb-3">
             <div class="col">
                 <div th:with="totalDamage=${participant.getTotalDamageDealtToChampions()},
                             physicalDamage=${(participant.getPhysicalDamageDealtToChampions())},

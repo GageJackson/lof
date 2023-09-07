@@ -1,0 +1,15 @@
+<div th:fragment="support"
+     class="col"
+>
+  <th:block th:with="healsGiven=${participant.getTotalDamageShieldedOnTeammates()},
+                    shieldsGiven=${participant.getTotalHealsOnTeammates()}"
+  >
+    <p class="color-neutral-light mt-1 mb-3 fw-semibold line-h-0"
+       th:text="${healsGiven + ' Healing'}"
+    ></p>
+
+    <p class="color-neutral-main mb-2 fst-italic fs-200"
+       th:text="${shieldsGiven + ' Shielding'}"
+    ></p>
+  </th:block>
+</div>

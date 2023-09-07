@@ -109,6 +109,12 @@ VISUAL FRAMEWORK
     border-radius: 12.5%;
 }
 
+.itemLg-icon {
+    height: 36px;
+    aspect-ratio: 1;
+    border-radius: 12.5%;
+}
+
 .position-icon {
     height: 24px;
     aspect-ratio: 1;
