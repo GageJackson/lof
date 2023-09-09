@@ -5,12 +5,16 @@
                     wardsPlaced=${participant.getWardsPlaced()},
                     wardsKilled=${participant.getWardsKilled()}"
   >
-    <p class="color-neutral-light mt-1 mb-3 fw-semibold line-h-0"
-       th:text="${visionScore + ' VS'}"
-    ></p>
-
-    <p class="color-neutral-main mb-2 fst-italic fs-200"
-       th:text="${'+' + wardsPlaced + ' | ' + '-' + wardsKilled}"
-    ></p>
+    <div class="d-flex gap-2">
+      <div class="small-icons vision-icon"></div>
+      <p>
+        <span  th:text="${visionScore}"
+               class="color-neutral-light mt-1 mb-3 fw-semibold line-h-0"
+        ></span>
+        <span class="color-neutral-main mb-2 fst-italic fs-200"
+              th:text="${'+' + wardsPlaced + ' | ' + '-' + wardsKilled}"
+        ></span>
+      </p>
+    </div>
   </th:block>
 </div>

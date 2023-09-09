@@ -8,6 +8,7 @@
 
     --color-neutral-light: #f6f1e5;
     --color-neutral-main: #4b4b56;
+    --color-neutral-medDark: #2c2f35;
     --color-neutral-dark: #21252a;
     --color-neutral-black: rgba(23, 26, 31, 0.5);
 
@@ -34,6 +35,7 @@ UTILITY CLASSES
 .bg-color-primary-blue {background-color: var(--color-primary-blue);}
 .bg-color-neutral-light {background-color: var(--color-neutral-light);}
 .bg-color-neutral-main {background-color: var(--color-neutral-main);}
+.bg-color-neutral-medDark {background-color: var(--color-neutral-medDark);}
 .bg-color-neutral-dark {background-color: var(--color-neutral-dark);}
 .bg-color-neutral-black {background-color: var(--color-neutral-black);}
 
@@ -289,6 +291,27 @@ aside {
 #matches-btn:hover, #matches-btn.active {
     background-image: url('../img/matches-active.png');
 }
+
+.small-icons {
+    height: 20px;
+    width: 20px;
+    background-position: top;
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+}
+
+.cs-icon {
+    background-image: url('../img/cs.png');
+}
+
+.coin-icon {
+    background-image: url('../img/coin.png');
+}
+
+.vision-icon {
+    background-image: url('../img/vision.png');
+}
+
 
 .line-h-0 {
     line-height: 0;

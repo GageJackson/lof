@@ -1,22 +1,29 @@
 <div th:fragment="champ-overview"
 >
-  <h2 class="font-bold color-neutral-light my-3">Champion Overview</h2>
+<!--  <h2 class="font-bold color-neutral-light my-3">Champion Overview</h2>-->
   <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-    <th:block th:each="participantInfo : ${participants}"
+    <th:block th:each="participantInfo, index : ${participants}"
               th:with="participant=${participantInfo.getParticipant()},
                        participantTag=${'participant-' + participant.getId()}
               "
     >
       <li class="nav-item" role="presentation">
-        <button class="nav-link" th:id="${'pills-' + participantTag + '-tab'}" data-bs-toggle="pill" th:data-bs-target="${'#' + participantTag}"
-                type="button" role="tab" th:aria-controls="${participantTag}" aria-selected="true">
+        <button class="nav-link px-0 mx-3"
+                th:id="${'pills-' + participantTag + '-tab'}"
+                data-bs-toggle="pill"
+                th:data-bs-target="${'#' + participantTag}"
+                type="button" role="tab"
+                th:aria-controls="${participantTag}"
+                aria-selected="false"
+                th:classappend="${index == 0} ? 'active' : ''"
+        >
           <img th:replace="~{partials/icons/champion-icon.html :: image(teamId)}">
         </button>
       </li>
     </th:block>
   </ul>
   <div class="tab-content" id="pills-tabContent">
-    <th:block th:each="participantInfo : ${participants}"
+    <th:block th:each="participantInfo, index : ${participants}"
               th:with="participant=${participantInfo.getParticipant()},
                        participantId=${participant.getId()},
                        participantTag=${'participant-' + participantId}
@@ -24,10 +31,12 @@
       <div th:id="${participantTag}"
            class="tab-pane fade"
            th:aria-labelledby="${'participant-' + participantTag + '-tab'}"
-           th:tabindex="${participant.getParticipantNum}" role="tabpanel">
+           th:tabindex="${participant.getParticipantNum()}" role="tabpanel"
+           th:classappend="${index == 0} ? 'active show' : ''"
+      >
         <div class="container">
           <div class="row">
-            <h3 th:text="${participant.getSummonerName()}" class="color-primary-main"></h3>
+            <h3 th:text="${participant.getSummonerName()}" class="color-primary-main fs-700"></h3>
             <div class="col-3">
               <img th:with="champion=${participant.getChampionName()}"
                    th:src="@{${'/dragon_tail/img/champion/loading/' + champion + '_0.jpg'}}"

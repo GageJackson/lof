@@ -1,5 +1,5 @@
 <div th:fragment="kda"
-     class="col"
+     class="col-auto"
 >
   <th:block th:with="kills=${participant.getKills()},
                     deaths=${participant.getDeaths()},
@@ -10,7 +10,7 @@
 
                     playerTeam=${(participant.getTeamId() / 100) - 1},
                     teamKills=${matchInfo.getMatch().getTeam()[playerTeam].getKills()},
-                    killParticipation=${1.00 * (kills + assists / teamKills)},
+                    killParticipation=${100.00 * (kills + assists) / teamKills},
                     formattedKillParticipation=${#numbers.formatDecimal(killParticipation, 0, 'COMMA', 1, 'POINT') + '% KP'}"
   >
     <div class="d-flex align-items-center gap-3">

@@ -1,0 +1,268 @@
+<div th:fragment="perkBuild" class="col">
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <div th:with="perks=${participant.getPerk()}"
+             class="d-flex"
+        >
+          <div class="card bg-transparent border-0">
+            <div class="card-body bg-transparent border-0"
+                 th:with="perkNum=${perks[0].getPerkNum()},
+                          perkStyle=${perks[0].getStyle()}"
+            >
+              <img th:src="@{${'/img/summoner_runes/' + perkStyle + '.png'}}"
+                   th:alt="${'player perk'}"
+                   class="perk-icon-lg non-selectable opacity-75"
+              >
+            </div>
+
+            <div class="card-footer bg-transparent border-0">
+              <div class="d-flex">
+                <div th:each="perk, perkIndex : ${perks}"
+                     th:with="perkNum=${perk.getPerkNum()},
+                              perkStyle=${perk.getStyle()}"
+                >
+                  <th:block th:if="${perkIndex.index <= 3}">
+                    <img th:src="@{${'/img/summoner_runes/' + perkNum + '.png'}}"
+                         th:alt="${'player perk'}"
+                         class="perk-icon-lg non-selectable opacity-75"
+                    >
+                  </th:block>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div th:with="perks=${participant.getPerk()}"
+             class="d-flex"
+        >
+          <div class="card bg-transparent border-0">
+            <div class="card-body bg-transparent border-0"
+                 th:with="perkNum=${perks[4].getPerkNum()},
+                                      perkStyle=${perks[4].getStyle()}"
+            >
+              <img th:src="@{${'/img/summoner_runes/' + perkStyle + '.png'}}"
+                   th:alt="${'player perk'}"
+                   class="perk-icon-lg non-selectable opacity-75"
+              >
+            </div>
+
+            <div class="card-footer bg-transparent border-0">
+              <div class="d-flex">
+                <div th:each="perk, perkIndex : ${perks}"
+                     th:with="perkNum=${perk.getPerkNum()},
+                                        perkStyle=${perk.getStyle()}"
+                >
+                  <th:block th:if="${perkIndex.index > 3}">
+                    <img th:src="@{${'/img/summoner_runes/' + perkNum + '.png'}}"
+                         th:alt="${'player perk'}"
+                         class="perk-icon-lg non-selectable opacity-75"
+                    >
+                  </th:block>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="col">
+  <div th:with="perks=${participant.getPerk()}"
+       class="d-flex"
+  >
+    <div class="card bg-transparent border-0">
+      <div class="card-header bg-transparent border-0"
+           th:with="perkStyle=${perks[0].getStyle()}"
+      >
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${perkStyle}, ${true})}"></div>
+      </div>
+      <th:block th:with="perkStyle=${perks[0].getStyle()},
+                         perkNum=${perks[0].getPerkNum()}"
+      >
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: body(${perkStyle}, ${perkNum})}"></div>
+      </th:block>
+
+
+      <div class="card-footer bg-transparent border-0">
+        <div class="d-flex">
+          <div th:each="perk, perkIndex : ${perks}"
+               th:with="perkNum=${perk.getPerkNum()}"
+          >
+            <th:block th:if="${perkIndex.index <= 3}">
+              <img th:src="@{${'/img/summoner_runes/' + perkNum + '.png'}}"
+                   th:alt="${'player perk'}"
+                   class="perk-icon-lg non-selectable opacity-75"
+              >
+            </th:block>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div th:fragment="body(perkStyle, perkNum)" class="card-footer bg-transparent border-0">
+  <div th:switch="${perkStyle}">
+    <div  class="d-flex gap-3" th:case="8000">
+      <th:block th:if="${perkNum == 8005}">
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${8005}, ${true})}"></div>
+      </th:block>
+      <th:block th:unless="${perkNum == 8005}">
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${8005}, ${false})}"></div>
+      </th:block>
+
+      <th:block th:if="${perkNum == 8008}">
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${8008}, ${true})}"></div>
+      </th:block>
+      <th:block th:unless="${perkNum == 8008}">
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${8008}, ${false})}"></div>
+      </th:block>
+
+      <th:block th:if="${perkNum == 8010}">
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${8010}, ${true})}"></div>
+      </th:block>
+      <th:block th:unless="${perkNum == 8010}">
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${8010}, ${false})}"></div>
+      </th:block>
+
+      <th:block th:if="${perkNum == 8021}">
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${8021}, ${true})}"></div>
+      </th:block>
+      <th:block th:unless="${perkNum == 8021}">
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${8021}, ${false})}"></div>
+      </th:block>
+    </div>
+
+    <div  class="d-flex gap-3" th:case="8100">
+      <th:block th:if="${perkNum == 9923}">
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${9923}, ${true})}"></div>
+      </th:block>
+      <th:block th:unless="${perkNum == 9923}">
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${9923}, ${false})}"></div>
+      </th:block>
+
+      <th:block th:if="${perkNum == 8112}">
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${8112}, ${true})}"></div>
+      </th:block>
+      <th:block th:unless="${perkNum == 8112}">
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${8112}, ${false})}"></div>
+      </th:block>
+
+      <th:block th:if="${perkNum == 8124}">
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${8124}, ${true})}"></div>
+      </th:block>
+      <th:block th:unless="${perkNum == 8124}">
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${8124}, ${false})}"></div>
+      </th:block>
+
+      <th:block th:if="${perkNum == 8128}">
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${8128}, ${true})}"></div>
+      </th:block>
+      <th:block th:unless="${perkNum == 8128}">
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${8128}, ${false})}"></div>
+      </th:block>
+    </div>
+
+    <div class="d-flex gap-3" th:case="8200">
+      <th:block th:if="${perkNum == 8214}">
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${8214}, ${true})}"></div>
+      </th:block>
+      <th:block th:unless="${perkNum == 8214}">
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${8214}, ${false})}"></div>
+      </th:block>
+
+      <th:block th:if="${perkNum == 8229}">
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${8229}, ${true})}"></div>
+      </th:block>
+      <th:block th:unless="${perkNum == 8229}">
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${8229}, ${false})}"></div>
+      </th:block>
+
+      <th:block th:if="${perkNum == 8230}">
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${8230}, ${true})}"></div>
+      </th:block>
+      <th:block th:unless="${perkNum == 8230}">
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${8230}, ${false})}"></div>
+      </th:block>
+    </div>
+
+    <div class="d-flex gap-3" th:case="8300">
+      <th:block th:if="${perkNum == 8351}">
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${8351}, ${true})}"></div>
+      </th:block>
+      <th:block th:unless="${perkNum == 8351}">
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${8351}, ${false})}"></div>
+      </th:block>
+
+      <th:block th:if="${perkNum == 8360}">
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${8360}, ${true})}"></div>
+      </th:block>
+      <th:block th:unless="${perkNum == 8360}">
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${8360}, ${false})}"></div>
+      </th:block>
+
+      <th:block th:if="${perkNum == 8369}">
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${8369}, ${true})}"></div>
+      </th:block>
+      <th:block th:unless="${perkNum == 8369}">
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${8369}, ${false})}"></div>
+      </th:block>
+    </div>
+
+    <div class="d-flex gap-3" th:case="8400">
+      <th:block th:if="${perkNum == 8437}">
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${8437}, ${true})}"></div>
+      </th:block>
+      <th:block th:unless="${perkNum == 8437}">
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${8437}, ${false})}"></div>
+      </th:block>
+
+      <th:block th:if="${perkNum == 8439}">
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${8439}, ${true})}"></div>
+      </th:block>
+      <th:block th:unless="${perkNum == 8439}">
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${8439}, ${false})}"></div>
+      </th:block>
+
+      <th:block th:if="${perkNum == 8465}">
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${8465}, ${true})}"></div>
+      </th:block>
+      <th:block th:unless="${perkNum == 8465}">
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${8465}, ${false})}"></div>
+      </th:block>
+    </div>
+  </div>
+</div>
+
+<div th:fragment="footer(perkStyle)" class="card-footer bg-transparent border-0">
+  <div class="d-flex" th:switch="${perkStyle}">
+    <th:block th:case="8000">
+
+    </th:block>
+    <th:block th:case="8100">
+
+    </th:block>
+    <th:block th:case="8200">
+
+    </th:block>
+    <th:block th:case="8300">
+
+    </th:block>
+    <th:block th:case="8400">
+
+    </th:block>
+  </div>
+</div>
+
+<img th:fragment="rune-icon(perkNum, isUsed)"
+     th:src="@{${'/img/summoner_runes/' + perkNum + '.png'}}"
+     th:alt="${'player perk'}"
+     class="perk-icon-lg non-selectable opacity-75"
+     th:classappend="${isUsed} ? 'opacity-75' : 'opacity-25'"
+>

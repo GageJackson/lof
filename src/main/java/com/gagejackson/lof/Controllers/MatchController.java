@@ -149,7 +149,6 @@ public class MatchController {
             List<List<EventItem>> eventItems = new ArrayList<>();
             List<EventItem> allItems = new ArrayList<>();
 
-
             List<Event> events = participant.getEvent();
             for (Event event : events) {
                 if (event.getEventItem() != null) {
@@ -165,6 +164,7 @@ public class MatchController {
 
             List<EventItem> currentGroup = new ArrayList<>();
             int interval = 30;
+            System.out.println("allItems = " + allItems.size());
             for ( int i = 0; i < allItems.size(); i++) {
                 EventItem currentItem = allItems.get(i);
 
@@ -180,9 +180,15 @@ public class MatchController {
                         currentGroup.add(currentItem);
                     }
                 }
+
+                if((i + 1) == allItems.size()){
+                    eventItems.add(currentGroup);
+                }
             }
 
             List<ParticipantFrame> participantFrames = participant.getParticipantFrame();
+
+            System.out.println("eventItems = " + eventItems.size());
 
             participantDTO.setParticipant(participant);
             participantDTO.setEventItems(eventItems);
@@ -203,14 +209,11 @@ public class MatchController {
 
         List<Participant> participants = match.getParticipant();
 
-//        List<ParticipantDTO> participants = getParticipants(match);
         List<List<ParticipantFrame>> matchParticipantFrames = new ArrayList<>();
         for (Participant participant : participants) {
             List<ParticipantFrame> participantFrames = participant.getParticipantFrame();
             matchParticipantFrames.add(participantFrames);
         }
-
-        System.out.println("match id = " + match.getParticipant().get(0).getSummonerName());
         return matchParticipantFrames;
     }
 

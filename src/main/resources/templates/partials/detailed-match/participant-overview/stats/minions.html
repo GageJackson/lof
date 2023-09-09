@@ -2,23 +2,18 @@
      class="col"
 >
   <th:block th:with="minionKills=${participant.getTotalMinionsKilled() + participant.getNeutralMinionsKilled()},
-                    matchDuration=${((matchInfo.getMatch().getGameDuration() - 60) / 60)},
-                    minionKillspMin=${#numbers.formatDecimal((1.00 * minionKills / matchDuration), 0, 1)},
-
-                    playerTeam=${(participant.getTeamId() / 100) - 1},
-                    teamKills=${matchInfo.getMatch().getTeam()[playerTeam].getKills()},
-                    killParticipation=${100.00 * (participant.getKills() + participant.getAssists()) / teamKills},
-
-                    formattedMinionKills=${minionKills + ' (' + minionKillspMin + ') CS'},
-                    formattedKillParticipation=${#numbers.formatDecimal(killParticipation, 0, 1) + '% KP'}
-                    "
+                    matchDuration=${((matchInfo.getMatch().getGameDuration() - 60) / 60)}"
   >
-    <p class="color-neutral-light mt-1 mb-3 line-h-0">
-      <span th:text="${minionKills == 0} ? '0 CS' : ${formattedMinionKills}" class="fw-semibold"></span>
-    </p>
-
-    <p class="color-neutral-main mb-2 fst-italic fs-200">
-      <span th:text="${teamKills == 0} ? 'Oof...' : ${formattedKillParticipation}"></span>
-    </p>
+    <div class="d-flex gap-2">
+      <div class="small-icons cs-icon"></div>
+      <p>
+        <span  th:text="${minionKills}"
+               class="color-neutral-light mt-1 mb-3 fw-semibold line-h-0"
+        ></span>
+        <span class="color-neutral-main mb-2 fst-italic fs-200"
+              th:text="${minionKills == 0} ? '0 CS' : ${#numbers.formatDecimal((1.00 * minionKills / matchDuration), 1, 1) + '/min'}"
+        ></span>
+      </p>
+    </div>
   </th:block>
 </div>

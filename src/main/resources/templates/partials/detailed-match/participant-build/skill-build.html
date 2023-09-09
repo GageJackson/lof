@@ -1,0 +1,54 @@
+<div th:fragment="skillBuild" class="col">
+  <div th:with="skills=${participantInfo.getSkillUps()}"
+       class="d-flex gap-1"
+  >
+    <div class="d-flex flex-column gap-1"
+    >
+      <div class="item-icon non-selectable opacity-75 color-primary-main text-center text-bold"><p>Q</p></div>
+      <div class="item-icon non-selectable opacity-75 color-primary-main text-center text-bold"><p>W</p></div>
+      <div class="item-icon non-selectable opacity-75 color-primary-main text-center text-bold"><p>E</p></div>
+      <div class="item-icon non-selectable opacity-75 color-primary-main text-center text-bold"><p>R</p></div>
+    </div>
+
+    <div th:each="skill, skillIndex : ${skills}"
+         th:switch="${skill.getSkillSlot()}"
+         class="d-flex flex-column gap-1"
+    >
+      <th:block th:case="1">
+        <div class="item-icon non-selectable opacity-75 bg-color-primary-main">
+          <p th:text="${skillIndex.index + 1}" class="color-neutral-light text-center mb-0"></p>
+        </div>
+        <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+        <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+        <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+      </th:block>
+
+      <th:block th:case="2">
+        <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+        <div class="item-icon non-selectable opacity-75 bg-color-primary-main">
+          <p th:text="${skillIndex.index + 1}" class="color-neutral-light text-center mb-0"></p>
+        </div>
+        <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+        <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+      </th:block>
+
+      <th:block th:case="3">
+        <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+        <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+        <div class="item-icon non-selectable opacity-75 bg-color-primary-main">
+          <p th:text="${skillIndex.index + 1}" class="color-neutral-light text-center mb-0"></p>
+        </div>
+        <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+      </th:block>
+
+      <th:block th:case="4">
+        <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+        <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+        <div class="item-icon non-selectable opacity-25 bg-color-neutral-main"></div>
+        <div class="item-icon non-selectable opacity-75 bg-color-primary-main">
+          <p th:text="${skillIndex.index + 1}" class="color-neutral-light text-center mb-0"></p>
+        </div>
+      </th:block>
+    </div>
+  </div>
+</div>

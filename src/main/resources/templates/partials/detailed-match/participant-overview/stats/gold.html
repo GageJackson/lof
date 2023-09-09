@@ -12,12 +12,20 @@
                     goldPerMinFormatted=${#numbers.formatDecimal(goldPerMin, 1, 'COMMA', 0, 'POINT')},
                     xpPerMinFormatted=${#numbers.formatDecimal(xpPerMin, 1, 'COMMA', 0, 'POINT')}"
   >
-    <p class="color-neutral-light mt-1 mb-3 fw-semibold line-h-0"
-       th:text="${totalGoldFormatted + ' (' + goldPerMinFormatted + ') Gold'}"
-    ></p>
+    <div class="d-flex gap-2">
+      <div class="small-icons coin-icon"></div>
+      <p>
+        <span  th:text="${totalGoldFormatted}"
+               class="color-neutral-light mt-1 mb-3 fw-semibold line-h-0"
+        ></span>
+        <span class="color-neutral-main mb-2 fst-italic fs-200"
+              th:text="${goldPerMinFormatted + '/min'}"
+        ></span>
+      </p>
+    </div>
 
-    <p class="color-neutral-main mb-2 fst-italic fs-200"
-       th:text="${totalXpFormatted + ' (' + xpPerMinFormatted + ') XP'}"
-    ></p>
+<!--    <p class="color-neutral-main mb-2 fst-italic fs-200"-->
+<!--       th:text="${totalXpFormatted + ' (' + xpPerMinFormatted + ') XP'}"-->
+<!--    ></p>-->
   </th:block>
 </div>
