@@ -6,7 +6,8 @@
     --color-primary-red: #a2434e;
     --color-primary-blue: #4775b4;
 
-    --color-neutral-light: #f6f1e5;
+    --color-neutral-white: #eae6de;
+    --color-neutral-light: #c5c2bb;
     --color-neutral-main: #4b4b56;
     --color-neutral-medDark: #2c2f35;
     --color-neutral-dark: #21252a;
@@ -33,6 +34,7 @@ UTILITY CLASSES
 .bg-color-primary-dark {background-color: var(--color-primary-dark);}
 .bg-color-primary-red {background-color: var(--color-primary-red);}
 .bg-color-primary-blue {background-color: var(--color-primary-blue);}
+.bg-color-neutral-white {background-color: var(--color-neutral-white);}
 .bg-color-neutral-light {background-color: var(--color-neutral-light);}
 .bg-color-neutral-main {background-color: var(--color-neutral-main);}
 .bg-color-neutral-medDark {background-color: var(--color-neutral-medDark);}
@@ -45,6 +47,7 @@ UTILITY CLASSES
 .color-primary-dark {color: var(--color-primary-dark);}
 .color-primary-red {color: var(--color-primary-red);}
 .color-primary-blue {color: var(--color-primary-blue);}
+.color-neutral-white {color: var(--color-neutral-white);}
 .color-neutral-light {color: var(--color-neutral-light);}
 .color-neutral-main {color: var(--color-neutral-main);}
 .color-neutral-dark {color: var(--color-neutral-dark);}
@@ -134,6 +137,11 @@ VISUAL FRAMEWORK
 
 .perk-icon-lg {
     height: 36px;
+    aspect-ratio: 1;
+}
+
+.perk-icon-xl {
+    height: 48px;
     aspect-ratio: 1;
 }
 
@@ -338,4 +346,5 @@ aside {
 .apexcharts-tooltip {
     box-shadow: none !important;
 }
+
 

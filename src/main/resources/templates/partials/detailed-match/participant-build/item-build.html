@@ -1,6 +1,6 @@
 <div th:fragment="itemBuild" class="col">
   <div th:with="itemGroups=${participantInfo.getEventItems()}"
-       class="d-flex flex-wrap gap-3"
+       class="d-flex flex-wrap col-gap-3 row-gap-1"
   >
     <div th:each="itemGroup : ${itemGroups}"
          class=""
@@ -14,9 +14,9 @@
       </div>
 
       <p th:with="timestamp=${itemGroup[0].getEvent().getTimestamp()},
-                      timeMins=${timestamp / (60 * 1000)},
-                      timeSecs=${#numbers.formatDecimal((timestamp % (60 * 1000)/1000), 0, 'COMMA', 0, 'POINT')},
-                      formattedTimestamp=${' ' + timeMins + 'm ' + timeSecs + 's'}"
+                  timeMins=${timestamp / (60 * 1000)},
+                  timeSecs=${#numbers.formatDecimal((timestamp % (60 * 1000)/1000), 0, 'COMMA', 0, 'POINT')},
+                  formattedTimestamp=${' ' + timeMins + 'm ' + timeSecs + 's'}"
          th:text="${formattedTimestamp}"
          class="color-neutral-main mb-1 fst-italic fs-200"
       ></p>
