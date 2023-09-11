@@ -1,18 +1,18 @@
 <div th:fragment="overview">
     <div class="container">
         <div class="row mb-3">
-            <div th:replace="~{partials/detailed-match/participant-overview/stats/kda.html :: kda}"></div>
-        </div>
-        <div class="row mb-3">
-            <div th:replace="~{partials/detailed-match/participant-overview/stats/minions.html :: minions}"></div>
-            <div th:replace="~{partials/detailed-match/participant-overview/stats/gold.html :: gold}"></div>
-            <div th:replace="~{partials/detailed-match/participant-overview/stats/vision.html :: vision}"></div>
-            <div class="col-4"></div>
-            <!--            <div th:replace="~{partials/detailed-match/participant-overview/stats/support.html :: support}"></div>-->
+            <div class="col">
+                <div class="d-flex justify-content-start align-items-end gap-4">
+                    <div th:replace="~{partials/detailed-match/participant-overview/stats/kda.html :: kda}"></div>
+                    <div th:replace="~{partials/detailed-match/participant-overview/stats/minions.html :: minions}"></div>
+                    <div th:replace="~{partials/detailed-match/participant-overview/stats/gold.html :: gold}"></div>
+                    <div th:replace="~{partials/detailed-match/participant-overview/stats/vision.html :: vision}"></div>
+                </div>
+            </div>
         </div>
         <div class="row mb-3">
             <div class="col">
-                <div class="d-flex gap-2 column-gap-1">
+                <div class="d-flex column-gap-2">
                     <div th:replace="~{partials/icons/item-icon.html :: itemLg(${participant.getItem0()})}"></div>
                     <div th:replace="~{partials/icons/item-icon.html :: itemLg(${participant.getItem1()})}"></div>
                     <div th:replace="~{partials/icons/item-icon.html :: itemLg(${participant.getItem2()})}"></div>
@@ -23,24 +23,24 @@
                 </div>
             </div>
         </div>
-        <div class="row mb-3">
-            <th:block th:with="title=${'Damage Dealt'},
-                               totalDamage=${participant.getTotalDamageDealtToChampions()},
-                               physicalDamage=${(participant.getPhysicalDamageDealtToChampions())},
-                               magicDamage=${(participant.getMagicDamageDealtToChampions())},
-                               trueDamage=${(participant.getTrueDamageDealtToChampions())}"
-            >
-                <div th:replace="~{partials/detailed-match/participant-overview/damage-bar.html :: damageBar(${title}, ${totalDamage}, ${physicalDamage}, ${magicDamage}, ${trueDamage})}"></div>
-            </th:block>
-            <th:block th:with="title=${'Damage Taken'},
-                               totalDamage=${participant.getTotalDamageTaken()},
-                               physicalDamage=${(participant.getPhysicalDamageTaken())},
-                               magicDamage=${(participant.getMagicDamageTaken())},
-                               trueDamage=${(participant.getTrueDamageTaken())}"
-            >
-                <div th:replace="~{partials/detailed-match/participant-overview/damage-bar.html :: damageBar(${title}, ${totalDamage}, ${physicalDamage}, ${magicDamage}, ${trueDamage})}"></div>
-            </th:block>
-        </div>
+<!--        <div class="row mb-3">-->
+<!--            <th:block th:with="title=${'Damage Dealt'},-->
+<!--                               totalDamage=${participant.getTotalDamageDealtToChampions()},-->
+<!--                               physicalDamage=${(participant.getPhysicalDamageDealtToChampions())},-->
+<!--                               magicDamage=${(participant.getMagicDamageDealtToChampions())},-->
+<!--                               trueDamage=${(participant.getTrueDamageDealtToChampions())}"-->
+<!--            >-->
+<!--                <div th:replace="~{partials/detailed-match/participant-overview/damage-bar.html :: damageBar(${title}, ${totalDamage}, ${physicalDamage}, ${magicDamage}, ${trueDamage})}"></div>-->
+<!--            </th:block>-->
+<!--            <th:block th:with="title=${'Damage Taken'},-->
+<!--                               totalDamage=${participant.getTotalDamageTaken()},-->
+<!--                               physicalDamage=${(participant.getPhysicalDamageTaken())},-->
+<!--                               magicDamage=${(participant.getMagicDamageTaken())},-->
+<!--                               trueDamage=${(participant.getTrueDamageTaken())}"-->
+<!--            >-->
+<!--                <div th:replace="~{partials/detailed-match/participant-overview/damage-bar.html :: damageBar(${title}, ${totalDamage}, ${physicalDamage}, ${magicDamage}, ${trueDamage})}"></div>-->
+<!--            </th:block>-->
+<!--        </div>-->
         <div class="row mb-3">
             <div th:replace="~{partials/detailed-match/participant-overview/objectives.html :: objectives}"></div>
         </div>

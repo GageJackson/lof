@@ -260,6 +260,8 @@ window.onload = async (event) => {
         drawApexChart(participantNum, 'chart-statsDefense', statsDefenseData, 'line');
         // drawApexChart(participantNum, 'chart-statsLifesteal', statsLifestealData, 'line');
     }
+
+
 };
 
 function getDamageOverviewData(participantData){
@@ -518,4 +520,32 @@ function getStatsLifestealData(participantData){
             data: spellVamp
         }
     ]
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function drawDonut(participantNum, chartLocation, data){
+    let colors = getColors(data.length);
+
+    let options = {
+        series: data,
+        colors: colors,
+        chart: {
+            type: 'donut',
+        },
+        responsive: [{
+            breakpoint: 480,
+            options: {
+                chart: {
+                    width: 200
+                },
+                legend: {
+                    show: false,
+                }
+            }
+        }]
+    };
+
+    let chart = new ApexCharts(document.getElementById(chartLocation + participantNum), options);
+    chart.render();
 }

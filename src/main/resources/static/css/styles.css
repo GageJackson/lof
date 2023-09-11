@@ -309,15 +309,19 @@ aside {
 }
 
 .cs-icon {
-    background-image: url('../img/cs.png');
+    background-image: url('../img/match-icons/cs.png');
 }
 
 .coin-icon {
-    background-image: url('../img/coin.png');
+    background-image: url('../img/match-icons/coin.png');
 }
 
 .vision-icon {
-    background-image: url('../img/vision.png');
+    background-image: url('../img/match-icons/vision.png');
+}
+
+.kda-icon {
+    background-image: url('../img/match-icons/kda.png');
 }
 
 
