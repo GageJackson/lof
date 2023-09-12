@@ -15,7 +15,7 @@
                 type="button" role="tab"
                 th:aria-controls="${participantTag}"
                 aria-selected="false"
-                th:classappend="${index == 0} ? 'active' : ''"
+                th:classappend="${index.count == 1} ? 'active' : ''"
         >
           <img th:replace="~{partials/icons/champion-icon.html :: image(teamId)}">
         </button>
@@ -32,12 +32,13 @@
            class="tab-pane fade"
            th:aria-labelledby="${'participant-' + participantTag + '-tab'}"
            th:tabindex="${participant.getParticipantNum()}" role="tabpanel"
-           th:classappend="${index == 0} ? 'active show' : ''"
+           th:classappend="${index.count == 1} ? 'active show' : ''"
       >
         <div class="container">
           <div class="row">
             <h3 th:text="${participant.getSummonerName()}" class="color-primary-main fs-700"></h3>
             <div class="col-3">
+<!--              <p class="color-neutral-light" th:text="${index}"></p>-->
               <img th:with="champion=${participant.getChampionName()}"
                    th:src="@{${'/dragon_tail/img/champion/loading/' + champion + '_0.jpg'}}"
                    th:alt="${champion + ' splash'}"

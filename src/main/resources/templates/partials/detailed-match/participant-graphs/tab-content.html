@@ -9,21 +9,3 @@
          th:class="${chartName}"
     ></div>
 </div>
-
-<div th:fragment="link(buttonId, contentId, chartId, chartName, isActive, participantNum, location)"
-     th:id="${contentId}"
-     role="tabpanel" tabindex="0"
-     th:aria-labelledby="${buttonId}"
-     class="tab-pane fade"
-     th:classappend="${isActive} ? 'show active' : ''"
->
-    <th:block th:if="${location == 'Overview'}">
-        <div th:replace="~{partials/detailed-match/participant-graphs/overview.html :: overview(${participantNum})}"></div>
-    </th:block>
-    <th:block th:if="${location == 'Damage'}">
-        <div th:replace="~{partials/detailed-match/participant-graphs/damage.html :: damage(${participantNum})}"></div>
-    </th:block>
-    <th:block th:if="${location == 'Stats'}">
-        <div th:replace="~{partials/detailed-match/participant-graphs/stats.html :: stats(${participantNum})}"></div>
-    </th:block>
-</div>

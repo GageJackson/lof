@@ -12,38 +12,57 @@
       <div class="d-flex align-items-end justify-content-start">
         <h1 class="font-bold color-neutral-light mt-3 mb-1 me-4" th:text="${matchInfo.getMatch().getGameMode()}"></h1>
         <p th:with="gameDuration=${matchInfo.getMatch().getGameDuration()},
-                  formattedDuration=${' ' + (gameDuration / 60) + 'm ' + (gameDuration % 60) + 's'},
-                  gameDate=${(matchInfo.getMatch().getGameCreation())},
-                  formattedDate=${#temporals.format(T(java.time.Instant).ofEpochMilli(gameDate), 'MMM-dd')}"
+                    formattedDuration=${' ' + (gameDuration / 60) + 'm ' + (gameDuration % 60) + 's'},
+                    gameDate=${(matchInfo.getMatch().getGameCreation())},
+                    formattedDate=${#temporals.format(T(java.time.Instant).ofEpochMilli(gameDate), 'MMM-dd')}"
            class="mb-1"
         >
         <span class="text-secondary me-2"
               th:text="${formattedDate}"
         ></span>
-          <span class="text-secondary"
-                th:text="${formattedDuration}"
-          ></span>
+        <span class="text-secondary"
+              th:text="${formattedDuration}"
+        ></span>
         </p>
       </div>
       <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
         <li class="nav-item" role="presentation">
           <button class="nav-link active" id="overview-tab" data-bs-toggle="pill" data-bs-target="#overview" type="button" role="tab" aria-controls="overview" aria-selected="true">Overview</button>
         </li>
+
         <li class="nav-item" role="presentation">
           <button class="nav-link" id="timelines-tab" data-bs-toggle="pill" data-bs-target="#timelines" type="button" role="tab" aria-controls="timelines" aria-selected="false">Timelines</button>
         </li>
+
         <li class="nav-item" role="presentation">
-          <button class="nav-link" id="champion-tab" data-bs-toggle="pill" data-bs-target="#champion" type="button" role="tab" aria-controls="champion" aria-selected="false">Champion</button>
+          <button class="nav-link" id="graphs-tab" data-bs-toggle="pill" data-bs-target="#graphs" type="button" role="tab" aria-controls="graphs" aria-selected="false">Graphs</button>
+        </li>
+
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="stats-tab" data-bs-toggle="pill" data-bs-target="#stats" type="button" role="tab" aria-controls="stats" aria-selected="false">Stats</button>
+        </li>
+
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="participants-tab" data-bs-toggle="pill" data-bs-target="#participants" type="button" role="tab" aria-controls="participants" aria-selected="false">Participants</button>
         </li>
       </ul>
       <div class="tab-content" id="pills-tabContent">
         <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab" tabindex="0">
           <div th:replace="~{partials/index/match-body.html :: card}"></div>
         </div>
+
         <div class="tab-pane fade" id="timelines" role="tabpanel" aria-labelledby="timelines-tab" tabindex="1">
         </div>
-        <div class="tab-pane fade" id="champion" role="tabpanel" aria-labelledby="champion-tab" tabindex="2">
-          <div th:replace="~{partials/detailed-match/champion-overview.html :: champ-overview}"></div>
+
+        <div class="tab-pane fade" id="graphs" role="tabpanel" aria-labelledby="graphs-tab" tabindex="2">
+          <div th:replace="~{partials/detailed-match/match-graphs.html :: match-graphs}"></div>
+        </div>
+
+        <div class="tab-pane fade" id="stats" role="tabpanel" aria-labelledby="stats-tab" tabindex="3">
+        </div>
+
+        <div class="tab-pane fade" id="participants" role="tabpanel" aria-labelledby="participants-tab" tabindex="4">
+          <div th:replace="~{partials/detailed-match/match-participants.html :: champ-overview}"></div>
         </div>
       </div>
     </section>

@@ -1,4 +1,4 @@
-<li th:fragment="tabList(buttonId, contentId, label, isActive)"
+<li th:fragment="tabList(buttonId, contentId, icon, isActive)"
     class="nav-item"
     role="presentation"
 >
@@ -8,8 +8,9 @@
           type="button" role="tab"
           th:aria-controls="${contentId}"
           aria-selected="true"
-          th:text="${label}"
-          class="nav-link"
+          class="nav-link px-0 mx-3"
           th:classappend="${isActive} ? 'active' : ''"
-  ></button>
+  >
+    <div class="small-icons" th:classappend="${icon}"></div>
+  </button>
 </li>

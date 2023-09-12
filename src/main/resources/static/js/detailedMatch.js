@@ -1,12 +1,8 @@
 function getYaxisConfig(numberOfDatasets) {
     const yaxisConfig = [];
 
-    if (numberOfDatasets >= 2) {
-        yaxisConfig.push(getYAxisConfig('#008FFB'));
-    }
-
-    if (numberOfDatasets >= 4) {
-        yaxisConfig.push(getYAxisConfig('#00E396', true));
+    if (numberOfDatasets >= 0) {
+        yaxisConfig.push(getYAxisConfig('#c5c2bb'));
     }
 
     return yaxisConfig;
@@ -52,6 +48,20 @@ function getColors(numberOfDatasets){
     if (numberOfDatasets === 4) {
         return ['#a2434e', '#4775b4', '#673339', '#314664'];
     }
+    if (numberOfDatasets > 4) {
+        return [
+            '#51005e',
+            '#8a0d5e',
+            '#a41616',
+            '#d03f25',
+            '#ffc44b',
+            '#1d005e',
+            '#171491',
+            '#233aad',
+            '#2ab0b0',
+            '#56fca9'
+        ];
+    }
 }
 
 function getFillType(chartType) {
@@ -76,9 +86,9 @@ function getFillType(chartType) {
     }
 }
 
-function getChartType(chartType) {
+function getChartType(chartType, height, width) {
     const commonOptions = {
-        height: 350,
+
         toolbar: {
             show: false,
         },
@@ -171,8 +181,8 @@ function drawApexChart(participantNum, chartLocation, data, graphType){
         legend: {
             position: 'top',
             horizontalAlign: 'left',
-            offsetX: 60,
-            offsetY: 0,
+            offsetX: 30,
+            offsetY: 30,
         },
         tooltip: {
             enabled: true,
@@ -205,8 +215,8 @@ function drawApexChart(participantNum, chartLocation, data, graphType){
             },
             fixed: {
                 enabled: true,
-                position: 'topLeft',
-                offsetX: 60,
+                position: 'topright',
+                offsetX: 0,
                 offsetY: 30,
             },
             dropShadow: {
@@ -220,51 +230,134 @@ function drawApexChart(participantNum, chartLocation, data, graphType){
 }
 
 
-const participantCharts = document.getElementsByClassName("participant-charts");
+const participantCharts = document.getElementsByClassName("participant-graphs");
 
 window.onload = async (event) => {
-    const match = document.getElementById('match')
-    const matchId = match.getAttribute("data-matchId");
-    let participants = await getData('/participant-stats-chart?match=' + matchId);
+    let participants = await getParticipants();
 
-    for (let i = 0; i < participantCharts.length; i++) {
-        let container = participantCharts[i];
-        let participantNum = container.getAttribute("data-participantId");
-        let participantData = participants[i];
-
-        let damageOverviewData = getDamageOverviewData(participantData);
-        let damageDealtData = getDamageDealtData(participantData);
-        let damageTakenData = getDamageTakenData(participantData);
-
-        let overviewGoldData = getOverviewGoldData(participantData);
-        let overviewCsData = getOverviewCsData(participantData);
-        let overviewXpData = getOverviewXpData(participantData);
-
-        let statsBasicData = getStatsBasicData(participantData);
-        let statsDamageData = getStatsDamageData(participantData);
-        let statsPenData = getStatsPenData(participantData);
-        let statsDefenseData = getStatsDefenseData(participantData);
-        let statsLifestealData = getStatsLifestealData(participantData);
-
-        drawApexChart(participantNum, 'chart-damageBoth', damageOverviewData, 'line');
-        drawApexChart(participantNum, 'chart-damageDealt', damageDealtData, 'area');
-        drawApexChart(participantNum, 'chart-damageTaken', damageTakenData, 'area');
-
-        drawApexChart(participantNum, 'chart-overviewGold', overviewGoldData, 'area');
-        drawApexChart(participantNum, 'chart-overviewCs', overviewCsData, 'area');
-        drawApexChart(participantNum, 'chart-overviewXp', overviewXpData, 'area');
-
-        drawApexChart(participantNum, 'chart-statsBasic', statsBasicData, 'line');
-        drawApexChart(participantNum, 'chart-statsDamage', statsDamageData, 'line');
-        // drawApexChart(participantNum, 'chart-statsPen', statsPenData, 'line');
-        drawApexChart(participantNum, 'chart-statsDefense', statsDefenseData, 'line');
-        // drawApexChart(participantNum, 'chart-statsLifesteal', statsLifestealData, 'line');
-    }
-
-
+    console.log(participants)
+    drawMatchGraphs(participants);
+    drawParticipantGraphs(participants);
 };
 
-function getDamageOverviewData(participantData){
+async function getParticipants(){
+    const match = document.getElementById('match')
+    const matchId = match.getAttribute("data-matchId");
+    return getData('/participant-stats-chart?match=' + matchId);
+}
+
+function drawMatchGraphs(participants){
+    let matchDamageDealt = getMatchDamageDealt(participants);
+    let matchDamageTaken = getMatchDamageTaken(participants);
+    let matchGold = getMatchGold(participants);
+    let matchCs = getMatchCs(participants);
+    let matchXp = getMatchXp(participants);
+
+    drawApexChart('', 'match-DamageDealt', matchDamageDealt, 'line');
+    drawApexChart('', 'match-DamageTaken', matchDamageTaken, 'line');
+    drawApexChart('', 'match-Golds', matchGold, 'line');
+    drawApexChart('', 'match-Cs', matchCs, 'line');
+    drawApexChart('', 'match-Xp', matchXp, 'line');
+}
+
+function drawParticipantGraphs(participants){
+    console.log(participants);
+    console.log(participantCharts.length);
+
+    for (let i = 0; i < participantCharts.length; i++) {
+        let participantData = participants[i];
+
+        let damageBothData = getDamageBothData(participantData);
+        let damageDealtData = getDamageDealtData(participantData);
+        let damageTakenData = getDamageTakenData(participantData);
+        let overviewData = getOverviewData(participantData);
+        let csData = getCsData(participantData);
+
+        drawApexChart(i, 'chart-DamageBoth', damageBothData, 'line');
+        drawApexChart(i, 'chart-DamageDealt', damageDealtData, 'area');
+        drawApexChart(i, 'chart-DamageTaken', damageTakenData, 'area');
+        drawApexChart(i, 'chart-Overview', overviewData, 'line');
+        drawApexChart(i, 'chart-CS', csData, 'area');
+    }
+}
+
+function getMatchDamageDealt(participants){
+    let finalData = [];
+
+    for (let i = 0; i < participants.length; i++) {
+        let participantData = participants[i];
+        let graphData = [];
+        for (let j = 0; j < participantData.length; j++) {
+
+            graphData.push(participantData[j].participantFrameDamage.totalDamageDoneToChamps);
+        }
+        finalData.push({name:participantData[0].id, data:graphData})
+    }
+    return finalData;
+}
+
+function getMatchDamageTaken(participants){
+    let finalData = [];
+
+    for (let i = 0; i < participants.length; i++) {
+        let participantData = participants[i];
+        let graphData = [];
+        for (let j = 0; j < participantData.length; j++) {
+            graphData.push(participantData[j].participantFrameDamage.totalDamageTaken);
+        }
+        finalData.push({name:participantData[0].id, data:graphData})
+    }
+
+    return finalData;
+}
+
+function getMatchGold(participants){
+    let finalData = [];
+
+    for (let i = 0; i < participants.length; i++) {
+        let participantData = participants[i];
+        let graphData = [];
+        for (let j = 0; j < participantData.length; j++) {
+            graphData.push(participantData[j].totalGold);
+        }
+        finalData.push({name:participantData[0].id, data:graphData})
+    }
+
+    return finalData;
+}
+
+function getMatchCs(participants){
+    let finalData = [];
+
+    for (let i = 0; i < participants.length; i++) {
+        let participantData = participants[i];
+        let graphData = [];
+        for (let j = 0; j < participantData.length; j++) {
+            graphData.push(participantData[j].jungleMinionsKilled + participantData[j].minionsKilled);
+        }
+        finalData.push({name:participantData[0].id, data:graphData})
+    }
+
+    return finalData;
+}
+
+function getMatchXp(participants){
+    let finalData = [];
+
+    for (let i = 0; i < participants.length; i++) {
+        let participantData = participants[i];
+        let graphData = [];
+        for (let j = 0; j < participantData.length; j++) {
+            graphData.push(participantData[j].xp);
+        }
+        finalData.push({name:participantData[0].id, data:graphData})
+    }
+
+    return finalData;
+}
+
+
+function getDamageBothData(participantData){
     let taken = [];
     let dealt = [];
 
@@ -339,188 +432,48 @@ function getDamageTakenData(participantData){
     ];
 }
 
-function getOverviewGoldData(participantData){
+function getOverviewData(participantData){
     let goldData = [];
-
-    for (let i = 0; i < participantData.length; i++) {
-        goldData.push(participantData[i].totalGold);
-    }
-
-    return [{
-        name: 'Gold',
-        data: goldData
-    }];
-}
-
-function getOverviewCsData(participantData){
-    let csData = [];
-
-    for (let i = 0; i < participantData.length; i++) {
-        csData.push(participantData[i].jungleMinionsKilled + participantData[i].minionsKilled);
-    }
-
-    return [{
-        name: 'CS',
-        data: csData
-    }];
-}
-
-function getOverviewXpData(participantData){
     let xpData = [];
 
     for (let i = 0; i < participantData.length; i++) {
+        goldData.push(participantData[i].totalGold);
         xpData.push(participantData[i].xp);
     }
 
-    return [{
-        name: 'XP',
-        data: xpData
-    }];
-}
-
-function getStatsBasicData(participantData){
-    let healthMax = [];
-    let healthRegen = [];
-    let powerMax = [];
-    let powerRegen = [];
-
-    for (let i = 0; i < participantData.length; i++) {
-        healthMax.push(participantData[i].participantFrameChamp.healthMax);
-        healthRegen.push(participantData[i].participantFrameChamp.healthRegen);
-        powerMax.push(participantData[i].participantFrameChamp.powerMax);
-        powerRegen.push(participantData[i].participantFrameChamp.powerRegen);
-    }
-
     return [
         {
-            name: 'healthMax',
-            data: healthMax,
-            group: 'group1',
-            yaxisIndex: 0
+            name: 'Gold',
+            data: goldData
         },
         {
-            name: 'powerMax',
-            data: powerMax,
-            group: 'group1',
-            yaxisIndex: 0
+            name: 'Xp',
+            data: xpData
         }
-    ]
+    ];
 }
 
-function getStatsDamageData(participantData){
-    let abilityHaste = [];
-    let abilityPower = [];
-    let attackDamage = [];
-    let attackSpeed = [];
+function getCsData(participantData){
+    let jungleData = [];
+    let minionData = [];
 
     for (let i = 0; i < participantData.length; i++) {
-        abilityHaste.push(participantData[i].participantFrameChamp.abilityHaste);
-        abilityPower.push(participantData[i].participantFrameChamp.abilityPower);
-        attackDamage.push(participantData[i].participantFrameChamp.attackDamage);
-        attackSpeed.push(participantData[i].participantFrameChamp.attackSpeed);
+        jungleData.push(participantData[i].jungleMinionsKilled);
+        minionData.push(participantData[i].minionsKilled);
     }
 
     return [
         {
-            name: 'attackDamage',
-            data: attackDamage
+            name: 'Jungle',
+            data: jungleData
         },
         {
-            name: 'abilityPower',
-            data: abilityPower
+            name: 'Minion',
+            data: minionData
         }
-    ]
+    ];
 }
 
-function getStatsPenData(participantData){
-    let armorPen = [];
-    let armorPenPercent = [];
-    let magicPen = [];
-    let magicPenPercent = [];
-
-    for (let i = 0; i < participantData.length; i++) {
-        armorPen.push(participantData[i].participantFrameChamp.armorPen);
-        armorPenPercent.push(participantData[i].participantFrameChamp.armorPenPercent + participantData[i].participantFrameChamp.bonusArmorPenPercent);
-        magicPen.push(participantData[i].participantFrameChamp.magicPen);
-        magicPenPercent.push(participantData[i].participantFrameChamp.magicPenPercent + participantData[i].participantFrameChamp.bonusMagicPenPercent);
-    }
-
-    return [
-        {
-            name: 'armorPen',
-            data: armorPen
-        },
-        {
-            name: 'magicPen',
-            data: magicPen
-        },
-        {
-            name: 'armorPenPercent',
-            data: armorPenPercent
-        },
-        {
-            name: 'magicPenPercent',
-            data: magicPenPercent
-        }
-    ]
-
-}
-
-function getStatsDefenseData(participantData){
-    let armor = [];
-    let magicResist = [];
-
-    for (let i = 0; i < participantData.length; i++) {
-        armor.push(participantData[i].participantFrameChamp.armor);
-        magicResist.push(participantData[i].participantFrameChamp.magicResist);
-    }
-
-    return [
-        {
-            name: 'armor',
-            data: armor
-        },
-        {
-            name: 'magicResist',
-            data: magicResist
-        },
-    ]
-
-}
-
-function getStatsLifestealData(participantData){
-    let lifesteal = [];
-    let omnivamp = [];
-    let physicalVamp = [];
-    let spellVamp = [];
-
-    for (let i = 0; i < participantData.length; i++) {
-
-        lifesteal.push(participantData[i].participantFrameChamp.lifesteal);
-        omnivamp.push(participantData[i].participantFrameChamp.omnivamp);
-        physicalVamp.push(participantData[i].participantFrameChamp.physicalVamp);
-        spellVamp.push(participantData[i].participantFrameChamp.spellVamp);
-    }
-
-    return [
-        {
-            name: 'lifesteal',
-            data: lifesteal
-        },
-        {
-            name: 'omnivamp',
-            data: omnivamp
-        },
-        {
-            name: 'physicalVamp',
-            data: physicalVamp
-        },
-        {
-            name: 'spellVamp',
-            data: spellVamp
-        }
-    ]
-}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
