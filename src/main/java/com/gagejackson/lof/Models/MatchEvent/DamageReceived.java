@@ -1,5 +1,7 @@
 package com.gagejackson.lof.Models.MatchEvent;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gagejackson.lof.Models.MatchOverview.Participant;
 import jakarta.persistence.*;
 
@@ -37,10 +39,12 @@ public class DamageReceived {
 
     @ManyToOne
     @JoinColumn(name = "participant_id")
+    @JsonIgnore
     private Participant participant;
 
     @ManyToOne
     @JoinColumn(name = "champ_kill_id", nullable = false)
+    @JsonIgnore
     private ChampKill champKill;
 
 

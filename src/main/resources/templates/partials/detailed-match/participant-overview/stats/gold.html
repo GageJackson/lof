@@ -1,0 +1,23 @@
+<div th:fragment="gold"
+>
+  <th:block th:with="totalGold=${participant.getGoldEarned()},
+                    totalMinsPlayed=${participant.getTimePlayed() / 60},
+                    goldPerMin=${totalGold / totalMinsPlayed},
+
+                    totalGoldFormatted=${#numbers.formatDecimal(totalGold, 1, 'COMMA', 0, 'POINT')},
+                    goldPerMinFormatted=${#numbers.formatDecimal(goldPerMin, 1, 'COMMA', 0, 'POINT')}"
+  >
+    <div class="d-flex justify-content-center gap-2">
+      <div class="small-icons coin-icon"></div>
+      <p  th:text="${totalGoldFormatted}"
+             class="color-neutral-light fw-semibold mb-0"
+      ></p>
+    </div>
+
+    <div class="d-flex justify-content-center gap-2">
+      <p class="color-neutral-main fst-italic fs-200 mb-0"
+         th:text="${goldPerMinFormatted + '/min'}"
+      ></p>
+    </div>
+  </th:block>
+</div>

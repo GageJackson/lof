@@ -14,26 +14,26 @@
        th:classappend="${isBlueTeam} ? 'pe-4 blue-participant' : 'ps-4 red-participant'"
   >
     <th:block th:if="${isBlueTeam}">
-      <div th:replace="~{partials/index/team-body.html :: stats}"></div>
+      <div th:replace="~{partials/index/team-body.html :: stats(${teamNumber})}"></div>
       <div th:replace="~{partials/index/team-body.html :: participant('align-items-end', false)}"></div>
     </th:block>
 
     <th:block th:if="${isRedTeam}">
       <div th:replace="~{partials/index/team-body.html :: participant('align-items-start', true)}"></div>
-      <div th:replace="~{partials/index/team-body.html :: stats}"></div>
+      <div th:replace="~{partials/index/team-body.html :: stats(${teamNumber})}"></div>
     </th:block>
   </div>
 </div>
 
 
-<div th:fragment="stats">
+<div th:fragment="stats(teamNumber)">
   <div class="d-flex justify-content-between mb-0">
-    <div th:replace="~{partials/index/team-body.html :: kda('')}"></div>
+    <div th:replace="~{partials/index/team-body.html :: kda(${teamNumber})}"></div>
 
-    <div th:replace="~{partials/index/team-body.html :: minion('')}"></div>
+    <div th:replace="~{partials/index/team-body.html :: minion(${teamNumber})}"></div>
   </div>
 
-  <div th:replace="~{partials/index/item-icons.html :: items('')}"></div>
+  <div th:replace="~{partials/index/item-icons.html :: items(${teamNumber})}"></div>
 </div>
 
 
@@ -93,7 +93,7 @@
      th:with="minionKills=${participant.getTotalMinionsKilled() + participant.getNeutralMinionsKilled()},
               matchDuration=${((matchInfo.getMatch().getGameDuration() - 60) / 60)},
               minionKillspMin=${#numbers.formatDecimal((1.00 * minionKills / matchDuration), 0, 1)},
-              playerKills=${matchInfo.getMatch().getTeam()[0].getKills()},
+              playerKills=${matchInfo.getMatch().getTeam()[(teamId)].getKills()},
               killParticipation=${100.00 * (participant.getKills() + participant.getAssists()) / playerKills},
               formattedMinionKills=${minionKills + ' (' + minionKillspMin + ') CS'},
               formattedPlayerKills=${#numbers.formatDecimal(killParticipation, 0, 1) + '% KP'}

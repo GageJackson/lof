@@ -1,5 +1,7 @@
 package com.gagejackson.lof.Models.MatchOverview;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -47,6 +49,7 @@ public class ParticipantFrameDamage {
     private int trueDamageTaken;
 
     @OneToOne
+    @JsonIgnore
     @JoinColumn(name = "participant_frame_id", nullable = false)
     private ParticipantFrame participantFrame;
 

@@ -1,0 +1,67 @@
+<div th:fragment="graphs(participantNum)"
+     class="participant-graphs mb-5"
+     th:with="tab1Name=${'Overview'},
+              tab2Name=${'CS'},
+              tab3Name=${'DamageDealt'},
+              tab4Name=${'DamageTaken'},
+              tab5Name=${'DamageBoth'},
+
+              tab1ContentId=${tab1Name + participantNum},
+              tab2ContentId=${tab2Name + participantNum},
+              tab3ContentId=${tab3Name + participantNum},
+              tab4ContentId=${tab4Name + participantNum},
+              tab5ContentId=${tab5Name + participantNum},
+
+              tab1ChartId=${'chart-' + tab1ContentId},
+              tab2ChartId=${'chart-' + tab2ContentId},
+              tab3ChartId=${'chart-' + tab3ContentId},
+              tab4ChartId=${'chart-' + tab4ContentId},
+              tab5ChartId=${'chart-' + tab5ContentId},
+
+              tab1ButtonId=${'button-' + tab1ContentId},
+              tab2ButtonId=${'button-' + tab2ContentId},
+              tab3ButtonId=${'button-' + tab3ContentId},
+              tab4ButtonId=${'button-' + tab4ContentId},
+              tab5ButtonId=${'button-' + tab5ContentId}
+              "
+     th:data-participantId="${participantNum}"
+>
+    <ul class="nav nav-pills mb-3"
+        th:id="${'charts-tabButtons-' + participantNum}"
+        role="tablist">
+        <li th:replace="~{partials/detailed-match/participant-graphs/tab-list.html ::
+          tabList(${tab1ButtonId}, ${tab1ContentId}, ${tab1Name + '-icon'}, true)}"
+        >
+        <li th:replace="~{partials/detailed-match/participant-graphs/tab-list.html ::
+          tabList(${tab2ButtonId}, ${tab2ContentId}, ${tab2Name + '-icon'}, false)}"
+        >
+        <li th:replace="~{partials/detailed-match/participant-graphs/tab-list.html ::
+          tabList(${tab3ButtonId}, ${tab3ContentId}, ${tab3Name + '-icon'}, false)}"
+        >
+        <li th:replace="~{partials/detailed-match/participant-graphs/tab-list.html ::
+          tabList(${tab4ButtonId}, ${tab4ContentId}, ${tab4Name + '-icon'}, false)}"
+        >
+        <li th:replace="~{partials/detailed-match/participant-graphs/tab-list.html ::
+          tabList(${tab5ButtonId}, ${tab5ContentId}, ${tab5Name + '-icon'}, false)}"
+        >
+    </ul>
+    <div class="tab-content"
+         th:id="${'charts-tabContent-' + participantNum}"
+    >
+        <div th:replace="~{partials/detailed-match/participant-graphs/tab-content.html ::
+            chart(${tab1ButtonId}, ${tab1ContentId}, ${tab1ChartId}, ${tab1Name}, true)}"
+        ></div>
+        <div th:replace="~{partials/detailed-match/participant-graphs/tab-content.html ::
+            chart(${tab2ButtonId}, ${tab2ContentId}, ${tab2ChartId}, ${tab2Name}, false)}"
+        ></div>
+        <div th:replace="~{partials/detailed-match/participant-graphs/tab-content.html ::
+            chart(${tab3ButtonId}, ${tab3ContentId}, ${tab3ChartId}, ${tab3Name}, false)}"
+        ></div>
+        <div th:replace="~{partials/detailed-match/participant-graphs/tab-content.html ::
+            chart(${tab4ButtonId}, ${tab4ContentId}, ${tab4ChartId}, ${tab4Name}, false)}"
+        ></div>
+        <div th:replace="~{partials/detailed-match/participant-graphs/tab-content.html ::
+            chart(${tab5ButtonId}, ${tab5ContentId}, ${tab5ChartId}, ${tab5Name}, false)}"
+        ></div>
+    </div>
+</div>

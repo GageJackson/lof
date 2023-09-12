@@ -1,5 +1,6 @@
 package com.gagejackson.lof.Models.MatchOverview;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.gagejackson.lof.Models.Friend.FriendMatch;
 import jakarta.persistence.*;
 

@@ -1,5 +1,8 @@
 package com.gagejackson.lof.Models.MatchOverview;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.gagejackson.lof.Models.MatchEvent.ChampKill;
 import com.gagejackson.lof.Models.MatchEvent.Event;
 import jakarta.persistence.*;
@@ -339,6 +342,7 @@ public class Participant {
     private List<ChampKill> champKill;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "matches_id", nullable = false)
     private Match match;
 

@@ -26,6 +26,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.*;
 
@@ -148,7 +149,6 @@ public class MatchController {
             List<List<EventItem>> eventItems = new ArrayList<>();
             List<EventItem> allItems = new ArrayList<>();
 
-
             List<Event> events = participant.getEvent();
             for (Event event : events) {
                 if (event.getEventItem() != null) {
@@ -164,6 +164,7 @@ public class MatchController {
 
             List<EventItem> currentGroup = new ArrayList<>();
             int interval = 30;
+            System.out.println("allItems = " + allItems.size());
             for ( int i = 0; i < allItems.size(); i++) {
                 EventItem currentItem = allItems.get(i);
 
@@ -179,9 +180,15 @@ public class MatchController {
                         currentGroup.add(currentItem);
                     }
                 }
+
+                if((i + 1) == allItems.size()){
+                    eventItems.add(currentGroup);
+                }
             }
 
             List<ParticipantFrame> participantFrames = participant.getParticipantFrame();
+
+            System.out.println("eventItems = " + eventItems.size());
 
             participantDTO.setParticipant(participant);
             participantDTO.setEventItems(eventItems);
@@ -192,5 +199,27 @@ public class MatchController {
         }
 
         return participantDTOs;
+    }
+
+    @GetMapping("/participant-stats-chart")
+    @ResponseBody
+    public List<List<ParticipantFrame>> participantStats(Model model, @RequestParam("match") long matchId) {
+        Optional<Match> matchObject = matchRepositoryDao.findById(matchId);
+        Match match = matchObject.get();
+
+        List<Participant> participants = match.getParticipant();
+
+        List<List<ParticipantFrame>> matchParticipantFrames = new ArrayList<>();
+        for (Participant participant : participants) {
+            List<ParticipantFrame> participantFrames = participant.getParticipantFrame();
+            matchParticipantFrames.add(participantFrames);
+        }
+        return matchParticipantFrames;
+    }
+
+    @GetMapping("/ng")
+    @ResponseBody
+    public List<Friend> test(Model model) {
+        return friendRepositoryDao.findAll();
     }
 }

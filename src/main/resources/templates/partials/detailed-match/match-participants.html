@@ -1,0 +1,96 @@
+<div th:fragment="champ-overview"
+>
+<!--  <h2 class="font-bold color-neutral-light my-3">Champion Overview</h2>-->
+  <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+    <th:block th:each="participantInfo, index : ${participants}"
+              th:with="participant=${participantInfo.getParticipant()},
+                       participantTag=${'participant-' + participant.getId()}
+              "
+    >
+      <li class="nav-item" role="presentation">
+        <button class="nav-link px-0 mx-3"
+                th:id="${'pills-' + participantTag + '-tab'}"
+                data-bs-toggle="pill"
+                th:data-bs-target="${'#' + participantTag}"
+                type="button" role="tab"
+                th:aria-controls="${participantTag}"
+                aria-selected="false"
+                th:classappend="${index.count == 1} ? 'active' : ''"
+        >
+          <img th:replace="~{partials/icons/champion-icon.html :: image(teamId)}">
+        </button>
+      </li>
+    </th:block>
+  </ul>
+  <div class="tab-content" id="pills-tabContent">
+    <th:block th:each="participantInfo, index : ${participants}"
+              th:with="participant=${participantInfo.getParticipant()},
+                       participantId=${participant.getId()},
+                       participantTag=${'participant-' + participantId}
+              "    >
+      <div th:id="${participantTag}"
+           class="tab-pane fade"
+           th:aria-labelledby="${'participant-' + participantTag + '-tab'}"
+           th:tabindex="${participant.getParticipantNum()}" role="tabpanel"
+           th:classappend="${index.count == 1} ? 'active show' : ''"
+      >
+        <div class="container">
+          <div class="row">
+            <h3 th:text="${participant.getSummonerName()}" class="color-primary-main fs-700"></h3>
+            <div class="col-3">
+<!--              <p class="color-neutral-light" th:text="${index}"></p>-->
+              <img th:with="champion=${participant.getChampionName()}"
+                   th:src="@{${'/dragon_tail/img/champion/loading/' + champion + '_0.jpg'}}"
+                   th:alt="${champion + ' splash'}"
+                   class="non-selectable opacity-75 img-fluid"
+              >
+            </div>
+            <div class="col">
+              <ul class="nav nav-pills mb-3" th:id="${'participant-tab-' + participantId}" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active" th:id="${'participant-overview-tab-' + participantId}"
+                          data-bs-toggle="pill" th:data-bs-target="${'#participant-overview-' + participantId}"
+                          type="button" role="tab" th:aria-controls="${'participant-overview-' + participantId}"
+                          aria-selected="true"
+                  >Overview</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" th:id="${'participant-buildPath-tab-' + participantId}"
+                          data-bs-toggle="pill" th:data-bs-target="${'#participant-buildPath-' + participantId}"
+                          type="button" role="tab" th:aria-controls="${'participant-buildPath-' + participantId}"
+                          aria-selected="false"
+                  >Build Path</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" th:id="${'participant-graphs-tab-' + participantId}"
+                          data-bs-toggle="pill" th:data-bs-target="${'#participant-graphs-' + participantId}"
+                          type="button" role="tab" th:aria-controls="${'participant-graphs-' + participantId}"
+                          aria-selected="false"
+                  >Graphs</button>
+                </li>
+              </ul>
+              <div class="tab-content" th:id="${'participant-tabContent-' + participantId}">
+                <div class="tab-pane fade show active" th:id="${'participant-overview-' + participantId}"
+                     role="tabpanel" th:aria-labelledby="${'participant-overview-tab-' + participantId}" tabindex="0"
+                >
+                  <div th:replace="~{partials/detailed-match/participant-overview/participant-overview.html :: overview }"></div>
+                </div>
+                <div class="tab-pane fade" th:id="${'participant-buildPath-' + participantId}"
+                     role="tabpanel" th:aria-labelledby="${'participant-buildPath-tab-' + participantId}" tabindex="1"
+                >
+                  <div th:replace="~{partials/detailed-match/participant-build/participant-build.html :: builds }"></div>
+                </div>
+                <div class="tab-pane fade" th:id="${'participant-graphs-' + participantId}"
+                     role="tabpanel" th:aria-labelledby="${'participant-graphs-tab-' + participantId}" tabindex="1"
+                >
+                  <div th:replace="~{partials/detailed-match/participant-graphs/participant-graphs.html :: graphs(${participant.getParticipantNum() - 1})}"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </th:block>
+  </div>
+</div>
+

@@ -1,5 +1,8 @@
 package com.gagejackson.lof.Models.MatchOverview;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -42,6 +45,7 @@ public class Team {
     private List<Ban>ban;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "matches_id", nullable = false)
     private Match match;
 

@@ -1,0 +1,11 @@
+<div th:fragment="chart(buttonId, contentId, chartId, chartName, isActive)"
+     th:id="${contentId}"
+     role="tabpanel" tabindex="0"
+     th:aria-labelledby="${buttonId}"
+     class="tab-pane fade"
+     th:classappend="${isActive} ? 'show active' : ''"
+>
+    <div th:id="${chartId}"
+         th:class="${chartName}"
+    ></div>
+</div>

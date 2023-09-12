@@ -50,7 +50,7 @@ public class IndexController {
         this.participantRepositoryDao = participantRepositoryDao;
     }
 
-    @GetMapping("/")
+    @GetMapping({"/", "/index"})
     public String goHome(Model model) {
         List<MatchInfo> matchInfos = new ArrayList<>();
 
