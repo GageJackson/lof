@@ -22,9 +22,6 @@ function getYAxisConfig(color, opposite = false) {
             style: {
                 colors: color,
             },
-            formatter: function (value) {
-                return value.toLocaleString();
-            },
         },
         tooltip: {
             enabled: false,
@@ -50,16 +47,16 @@ function getColors(numberOfDatasets){
     }
     if (numberOfDatasets > 4) {
         return [
-            '#51005e',
-            '#8a0d5e',
-            '#a41616',
-            '#d03f25',
-            '#ffc44b',
-            '#1d005e',
-            '#171491',
-            '#233aad',
-            '#2ab0b0',
-            '#56fca9'
+            '#a2434e',
+            '#852b35',
+            '#65151e',
+            '#4f0810',
+            '#330106',
+            '#4775B4',
+            '#2d5a96',
+            '#153d72',
+            '#082d5d',
+            '#001d42'
         ];
     }
 }
@@ -141,7 +138,7 @@ function getCustomTooltip({ series, seriesIndex, dataPointIndex, w }) {
     return tooltipContent;
 }
 
-function drawApexChart(participantNum, chartLocation, data, graphType){
+function drawApexChart(participantNum, chartLocation, data, graphType, isMatchGraph){
 // Determine the number of datasets you have
     let numberOfDatasets = data.length; // Change this according to your actual number of datasets
 
@@ -173,7 +170,6 @@ function drawApexChart(participantNum, chartLocation, data, graphType){
         },
         stroke: {
             curve: 'smooth',
-            colors: colors,
             width: 2,
             type: 'solid',
         },
@@ -226,16 +222,122 @@ function drawApexChart(participantNum, chartLocation, data, graphType){
     };
 
     let chart = new ApexCharts(document.getElementById(chartLocation + participantNum), options);
+
+    if(isMatchGraph){
+        document.getElementById((chartLocation + '-toggleMatch')).addEventListener("click", function() {
+            chart.updateOptions(removeData(chart));
+            chart.updateOptions(addMatchData(data));
+        })
+
+        document.getElementById((chartLocation + '-toggleTeam')).addEventListener("click", function() {
+            chart.updateOptions(removeData(chart));
+            chart.updateOptions(addTeamData(data));
+        })
+
+        document.getElementById((chartLocation + '-toggleIndividual')).addEventListener("click", function() {
+            chart.updateOptions(removeData(chart));
+            chart.updateOptions(addIndividualData(data));
+        })
+    }
+
     chart.render();
+}
+
+function removeData(chart){
+    return chart.w.globals.series.slice(1, 1);
+}
+
+function addIndividualData(data){
+    return ({
+        series: data,
+        colors: [
+            '#a2434e',
+            '#852b35',
+            '#65151e',
+            '#4f0810',
+            '#330106',
+            '#4775B4',
+            '#2d5a96',
+            '#153d72',
+            '#082d5d',
+            '#001d42'
+        ]
+    });
+}
+
+function addTeamData(data){
+    let finalData = [];
+    let blueTeamData = [];
+    let redTeamData = [];
+    for (let i = 0; i < data.length; i++) {
+        if (i < 5){
+            for (let j = 0; j < data[i].data.length; j++) {
+                if (i === 0){
+                    blueTeamData.push(data[i].data[j])
+                } else {
+                    blueTeamData[j] += data[i].data[j];
+                }
+            }
+        } else {
+            for (let j = 0; j < data[i].data.length; j++) {
+                if (i === 5){
+                    redTeamData.push(data[i].data[j])
+                } else {
+                    redTeamData[j] += data[i].data[j];
+                }
+            }
+        }
+    }
+    finalData.push({name:'blue team', data:blueTeamData, type:'bar'});
+    finalData.push({name:'red team', data:redTeamData, type:'bar'});
+    return ({
+        series: finalData,
+        colors: [
+            '#a2434e',
+            '#4775B4'
+        ]
+    });
+}
+
+function addMatchData(data){
+    let finalData = [];
+    let teamDiffData = []
+    for (let i = 0; i < data.length; i++) {
+        if (i < 5){
+            for (let j = 0; j < data[i].data.length; j++) {
+                if (i === 0){
+                    teamDiffData.push(data[i].data[j])
+                } else {
+                    teamDiffData[j] += data[i].data[j];
+                }
+            }
+        } else {
+            for (let j = 0; j < data[i].data.length; j++) {
+                teamDiffData[j] -= data[i].data[j];
+            }
+        }
+    }
+    finalData.push({name:'team diff', data:teamDiffData, type:'bar'});
+    return ({
+        series: finalData,
+        colors: [function({ value, seriesIndex, w }) {
+            if (value < 0) {
+                return '#a2434e'
+            } else {
+                return '#4775B4'
+            }
+        }]
+    });
 }
 
 
 const participantCharts = document.getElementsByClassName("participant-graphs");
 
+
+
 window.onload = async (event) => {
     let participants = await getParticipants();
 
-    console.log(participants)
     drawMatchGraphs(participants);
     drawParticipantGraphs(participants);
 };
@@ -253,17 +355,14 @@ function drawMatchGraphs(participants){
     let matchCs = getMatchCs(participants);
     let matchXp = getMatchXp(participants);
 
-    drawApexChart('', 'match-DamageDealt', matchDamageDealt, 'line');
-    drawApexChart('', 'match-DamageTaken', matchDamageTaken, 'line');
-    drawApexChart('', 'match-Golds', matchGold, 'line');
-    drawApexChart('', 'match-Cs', matchCs, 'line');
-    drawApexChart('', 'match-Xp', matchXp, 'line');
+    drawApexChart('', 'match-DamageDealt', matchDamageDealt, 'line', true);
+    drawApexChart('', 'match-DamageTaken', matchDamageTaken, 'line', true);
+    drawApexChart('', 'match-Gold', matchGold, 'line', true);
+    drawApexChart('', 'match-CS', matchCs, 'line', true);
+    drawApexChart('', 'match-Xp', matchXp, 'line', true);
 }
 
 function drawParticipantGraphs(participants){
-    console.log(participants);
-    console.log(participantCharts.length);
-
     for (let i = 0; i < participantCharts.length; i++) {
         let participantData = participants[i];
 
@@ -273,11 +372,11 @@ function drawParticipantGraphs(participants){
         let overviewData = getOverviewData(participantData);
         let csData = getCsData(participantData);
 
-        drawApexChart(i, 'chart-DamageBoth', damageBothData, 'line');
-        drawApexChart(i, 'chart-DamageDealt', damageDealtData, 'area');
-        drawApexChart(i, 'chart-DamageTaken', damageTakenData, 'area');
-        drawApexChart(i, 'chart-Overview', overviewData, 'line');
-        drawApexChart(i, 'chart-CS', csData, 'area');
+        drawApexChart(i, 'chart-DamageBoth', damageBothData, 'line', false);
+        drawApexChart(i, 'chart-DamageDealt', damageDealtData, 'area', false);
+        drawApexChart(i, 'chart-DamageTaken', damageTakenData, 'area', false);
+        drawApexChart(i, 'chart-Overview', overviewData, 'line', false);
+        drawApexChart(i, 'chart-CS', csData, 'area', false);
     }
 }
 
@@ -291,7 +390,7 @@ function getMatchDamageDealt(participants){
 
             graphData.push(participantData[j].participantFrameDamage.totalDamageDoneToChamps);
         }
-        finalData.push({name:participantData[0].id, data:graphData})
+        finalData.push({name:participantData[0].id, data:graphData, type:'line'})
     }
     return finalData;
 }
@@ -305,7 +404,7 @@ function getMatchDamageTaken(participants){
         for (let j = 0; j < participantData.length; j++) {
             graphData.push(participantData[j].participantFrameDamage.totalDamageTaken);
         }
-        finalData.push({name:participantData[0].id, data:graphData})
+        finalData.push({name:participantData[0].id, data:graphData, type:'line'})
     }
 
     return finalData;
@@ -320,7 +419,7 @@ function getMatchGold(participants){
         for (let j = 0; j < participantData.length; j++) {
             graphData.push(participantData[j].totalGold);
         }
-        finalData.push({name:participantData[0].id, data:graphData})
+        finalData.push({name:participantData[0].id, data:graphData, type:'line'})
     }
 
     return finalData;
@@ -335,7 +434,7 @@ function getMatchCs(participants){
         for (let j = 0; j < participantData.length; j++) {
             graphData.push(participantData[j].jungleMinionsKilled + participantData[j].minionsKilled);
         }
-        finalData.push({name:participantData[0].id, data:graphData})
+        finalData.push({name:participantData[0].id, data:graphData, type:'line'})
     }
 
     return finalData;
@@ -350,7 +449,7 @@ function getMatchXp(participants){
         for (let j = 0; j < participantData.length; j++) {
             graphData.push(participantData[j].xp);
         }
-        finalData.push({name:participantData[0].id, data:graphData})
+        finalData.push({name:participantData[0].id, data:graphData, type:'line'})
     }
 
     return finalData;

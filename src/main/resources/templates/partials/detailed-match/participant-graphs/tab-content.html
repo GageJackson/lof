@@ -5,6 +5,19 @@
      class="tab-pane fade"
      th:classappend="${isActive} ? 'show active' : ''"
 >
+      <div class="d-flex gap-3">
+        <button th:id="${chartId + '-toggleMatch'}">
+          Match
+        </button>
+
+        <button th:id="${chartId + '-toggleTeam'}">
+          Team
+        </button>
+
+        <button th:id="${chartId + '-toggleIndividual'}">
+          Individual
+        </button>
+      </div>
     <div th:id="${chartId}"
          th:class="${chartName}"
     ></div>

@@ -328,6 +328,14 @@ aside {
     background-image: url('../img/match-icons/coin.png');
 }
 
+.Gold-icon {
+    background-image: url('../img/match-icons/coin.png');
+}
+
+.Xp-icon {
+    background-image: url('../img/match-icons/xp.png');
+}
+
 .CS-icon {
     background-image: url('../img/match-icons/cs.png');
 }
@@ -345,6 +353,14 @@ aside {
 }
 
 .active > .Overview-icon {
+    background-image: url('../img/gold.png');
+}
+
+.active > .Gold-icon {
+    background-image: url('../img/gold.png');
+}
+
+.active > .Xp-icon {
     background-image: url('../img/gold.png');
 }
 
