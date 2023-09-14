@@ -406,4 +406,44 @@ aside {
     box-shadow: none !important;
 }
 
+.participant-toggle-1 {
+    border: 2px solid #4775B4;
+}
+
+.participant-toggle-2 {
+    border: 2px solid #2d5a96;
+}
+
+.participant-toggle-3 {
+    border: 2px solid #153d72;
+}
+
+.participant-toggle-4 {
+    border: 2px solid #082d5d;
+}
+
+.participant-toggle-5 {
+    border: 2px solid #001d42;
+}
+
+.participant-toggle-6 {
+    border: 2px solid #a2434e;
+}
+
+.participant-toggle-7 {
+    border: 2px solid #852b35;
+}
+
+.participant-toggle-8 {
+    border: 2px solid #65151e;
+}
+
+.participant-toggle-9 {
+    border: 2px solid #4f0810;
+}
+
+.participant-toggle-10 {
+    border: 2px solid #330106;
+}
+
 

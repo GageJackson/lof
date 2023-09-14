@@ -46,23 +46,23 @@
        th:id="${'matchGraphs-tabContent'}"
   >
     <div th:replace="~{partials/detailed-match/participant-graphs/tab-content.html ::
-            chart(${tab1ButtonId}, ${tab1Name}, ${tab1ChartId}, ${tab1Name}, true)}"
+            chart(${tab1ButtonId}, ${tab1Name}, ${tab1ChartId}, ${tab1Name}, true, true)}"
     ></div>
 
     <div th:replace="~{partials/detailed-match/participant-graphs/tab-content.html ::
-            chart(${tab2ButtonId}, ${tab2Name}, ${tab2ChartId}, ${tab2Name}, false)}"
+            chart(${tab2ButtonId}, ${tab2Name}, ${tab2ChartId}, ${tab2Name}, false, true)}"
     ></div>
 
     <div th:replace="~{partials/detailed-match/participant-graphs/tab-content.html ::
-            chart(${tab3ButtonId}, ${tab3Name}, ${tab3ChartId}, ${tab3Name}, false)}"
+            chart(${tab3ButtonId}, ${tab3Name}, ${tab3ChartId}, ${tab3Name}, false, true)}"
     ></div>
 
     <div th:replace="~{partials/detailed-match/participant-graphs/tab-content.html ::
-            chart(${tab4ButtonId}, ${tab4Name}, ${tab4ChartId}, ${tab4Name}, false)}"
+            chart(${tab4ButtonId}, ${tab4Name}, ${tab4ChartId}, ${tab4Name}, false, true)}"
     ></div>
 
     <div th:replace="~{partials/detailed-match/participant-graphs/tab-content.html ::
-            chart(${tab5ButtonId}, ${tab5Name}, ${tab5ChartId}, ${tab5Name}, false)}"
+            chart(${tab5ButtonId}, ${tab5Name}, ${tab5ChartId}, ${tab5Name}, false, true)}"
     ></div>
   </div>
 </div>

@@ -47,16 +47,16 @@ function getColors(numberOfDatasets){
     }
     if (numberOfDatasets > 4) {
         return [
+            '#4775B4',
+            '#2d5a96',
+            '#153d72',
+            '#082d5d',
+            '#001d42',
             '#a2434e',
             '#852b35',
             '#65151e',
             '#4f0810',
             '#330106',
-            '#4775B4',
-            '#2d5a96',
-            '#153d72',
-            '#082d5d',
-            '#001d42'
         ];
     }
 }
@@ -124,15 +124,16 @@ function getCustomTooltip({ series, seriesIndex, dataPointIndex, w }) {
         if (w.config.series[i].data[dataPointIndex]) {
             const seriesColor = w.config.colors[i];
             tooltipContent += `
-          <div class="series-tooltip fs-200 d-flex align-items-center gap-2 me-1 px-2 rounded-pill"
+          <div class="series-tooltip fs-200 d-flex justify-content-end align-items-center gap-2 me-1 px-2 rounded-pill"
                style="background-color:${seriesColor}"
           >
-              <span class="series-name text-bolder"> ${w.config.series[i].name}</span>
               <span class="data-point"> ${(w.config.series[i].data[dataPointIndex]).toLocaleString()}</span>
           </div>
         `;
         }
     }
+    // <span class="series-name text-bolder"> ${w.config.series[i].name}</span>
+
 
     tooltipContent += '</div>';
     return tooltipContent;
@@ -238,6 +239,13 @@ function drawApexChart(participantNum, chartLocation, data, graphType, isMatchGr
             chart.updateOptions(removeData(chart));
             chart.updateOptions(addIndividualData(data));
         })
+
+        for (let i = 1; i <= 10 ; i++) {
+            console.log('participantToggle-' + i);
+            document.getElementById(('participantToggle-' + i)).addEventListener("click", function() {
+                chart.toggleSeries(i + '');
+            })
+        }
     }
 
     chart.render();
@@ -251,16 +259,16 @@ function addIndividualData(data){
     return ({
         series: data,
         colors: [
-            '#a2434e',
-            '#852b35',
-            '#65151e',
-            '#4f0810',
-            '#330106',
-            '#4775B4',
-            '#2d5a96',
-            '#153d72',
-            '#082d5d',
-            '#001d42'
+            '#6d92c5',
+            '#4068a0',
+            '#2f4c75',
+            '#1d2f49',
+            '#111c2c',
+            '#c36f79',
+            '#9e424d',
+            '#733038',
+            '#481e23',
+            '#2b1215',
         ]
     });
 }
@@ -293,8 +301,9 @@ function addTeamData(data){
     return ({
         series: finalData,
         colors: [
+            '#4775B4',
             '#a2434e',
-            '#4775B4'
+
         ]
     });
 }
@@ -322,9 +331,9 @@ function addMatchData(data){
         series: finalData,
         colors: [function({ value, seriesIndex, w }) {
             if (value < 0) {
-                return '#a2434e'
-            } else {
                 return '#4775B4'
+            } else {
+                return '#a2434e'
             }
         }]
     });
@@ -390,7 +399,7 @@ function getMatchDamageDealt(participants){
 
             graphData.push(participantData[j].participantFrameDamage.totalDamageDoneToChamps);
         }
-        finalData.push({name:participantData[0].id, data:graphData, type:'line'})
+        finalData.push({name:i + 1, data:graphData, type:'line'})
     }
     return finalData;
 }
@@ -404,7 +413,7 @@ function getMatchDamageTaken(participants){
         for (let j = 0; j < participantData.length; j++) {
             graphData.push(participantData[j].participantFrameDamage.totalDamageTaken);
         }
-        finalData.push({name:participantData[0].id, data:graphData, type:'line'})
+        finalData.push({name:i + 1, data:graphData, type:'line'})
     }
 
     return finalData;
@@ -419,7 +428,7 @@ function getMatchGold(participants){
         for (let j = 0; j < participantData.length; j++) {
             graphData.push(participantData[j].totalGold);
         }
-        finalData.push({name:participantData[0].id, data:graphData, type:'line'})
+        finalData.push({name:i + 1, data:graphData, type:'line'})
     }
 
     return finalData;
@@ -434,7 +443,7 @@ function getMatchCs(participants){
         for (let j = 0; j < participantData.length; j++) {
             graphData.push(participantData[j].jungleMinionsKilled + participantData[j].minionsKilled);
         }
-        finalData.push({name:participantData[0].id, data:graphData, type:'line'})
+        finalData.push({name:i + 1, data:graphData, type:'line'})
     }
 
     return finalData;
@@ -449,7 +458,7 @@ function getMatchXp(participants){
         for (let j = 0; j < participantData.length; j++) {
             graphData.push(participantData[j].xp);
         }
-        finalData.push({name:participantData[0].id, data:graphData, type:'line'})
+        finalData.push({name:i + 1, data:graphData, type:'line'})
     }
 
     return finalData;

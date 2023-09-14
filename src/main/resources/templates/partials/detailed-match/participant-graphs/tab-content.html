@@ -1,23 +1,44 @@
-<div th:fragment="chart(buttonId, contentId, chartId, chartName, isActive)"
+<div th:fragment="chart(buttonId, contentId, chartId, chartName, isActive, isMatchGraph)"
      th:id="${contentId}"
      role="tabpanel" tabindex="0"
      th:aria-labelledby="${buttonId}"
      class="tab-pane fade"
      th:classappend="${isActive} ? 'show active' : ''"
 >
-      <div class="d-flex gap-3">
-        <button th:id="${chartId + '-toggleMatch'}">
-          Match
-        </button>
+    <div th:if="${isMatchGraph}">
+        <div class="d-flex gap-3">
+            <button th:id="${chartId + '-toggleMatch'}" class="btn match-btn">
+                Match
+            </button>
 
-        <button th:id="${chartId + '-toggleTeam'}">
-          Team
-        </button>
+            <button th:id="${chartId + '-toggleTeam'}" class="btn match-btn">
+                Team
+            </button>
 
-        <button th:id="${chartId + '-toggleIndividual'}">
-          Individual
-        </button>
-      </div>
+            <button th:id="${chartId + '-toggleIndividual'}" class="btn match-btn">
+                Individual
+            </button>
+        </div>
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <th:block th:each="participantInfo, index : ${participants}"
+                      th:with="participant=${participantInfo.getParticipant()},
+                           participantTag=${'participantToggle-' + index.count}"
+            >
+                <li>
+                    <button class="nav-link px-0 mx-1"
+                            th:id="${participantTag}"
+                            data-bs-toggle="pill"
+                            type="button" role="tab"
+                            th:aria-controls="${participantTag}"
+                            aria-selected="false"
+                    >
+                        <img th:replace="~{partials/icons/champion-icon.html :: graph(${index.count})}">
+                    </button>
+                </li>
+            </th:block>
+        </ul>
+    </div>
+
     <div th:id="${chartId}"
          th:class="${chartName}"
     ></div>
