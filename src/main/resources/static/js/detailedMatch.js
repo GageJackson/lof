@@ -356,7 +356,7 @@ async function getParticipants(){
     const matchId = match.getAttribute("data-matchId");
     return getData('/participant-stats-chart?match=' + matchId);
 }
-
+//these need to be hard refactored and condensed
 function drawMatchGraphs(participants){
     let matchDamageDealt = getMatchDamageDealt(participants);
     let matchDamageTaken = getMatchDamageTaken(participants);
