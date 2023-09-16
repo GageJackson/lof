@@ -1,24 +1,11 @@
-<div th:fragment="chart(buttonId, contentId, chartId, chartName, isActive, isMatchGraph)"
+<div th:fragment="chart(buttonId, contentId, chartId, chartName, isActive, isAllParticipants)"
      th:id="${contentId}"
      role="tabpanel" tabindex="0"
      th:aria-labelledby="${buttonId}"
      class="tab-pane fade"
      th:classappend="${isActive} ? 'show active' : ''"
 >
-    <div th:if="${isMatchGraph}">
-        <div class="d-flex gap-3">
-            <button th:id="${chartId + '-toggleMatch'}" class="btn match-btn">
-                Match
-            </button>
-
-            <button th:id="${chartId + '-toggleTeam'}" class="btn match-btn">
-                Team
-            </button>
-
-            <button th:id="${chartId + '-toggleIndividual'}" class="btn match-btn">
-                Individual
-            </button>
-        </div>
+    <div th:if="${isAllParticipants}">
         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
             <th:block th:each="participantInfo, index : ${participants}"
                       th:with="participant=${participantInfo.getParticipant()},
@@ -37,6 +24,14 @@
                 </li>
             </th:block>
         </ul>
+    </div>
+
+    <div class="d-flex gap-3">
+        <button th:id="${chartId + '-toggleDamageDealt'}" class="small-icons DamageDealt-icon"></button>
+        <button th:id="${chartId + '-toggleDamageTaken'}" class="small-icons DamageTaken-icon"></button>
+        <button th:id="${chartId + '-toggleXp'}" class="small-icons Xp-icon"></button>
+        <button th:id="${chartId + '-toggleCs'}" class="small-icons CS-icon"></button>
+        <button th:id="${chartId + '-toggleGold'}" class="small-icons Gold-icon"></button>
     </div>
 
     <div th:id="${chartId}"

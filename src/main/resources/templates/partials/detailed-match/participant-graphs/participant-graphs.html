@@ -30,19 +30,19 @@
         th:id="${'charts-tabButtons-' + participantNum}"
         role="tablist">
         <li th:replace="~{partials/detailed-match/participant-graphs/tab-list.html ::
-          tabList(${tab1ButtonId}, ${tab1ContentId}, ${tab1Name + '-icon'}, true)}"
+          icon(${tab1ButtonId}, ${tab1ContentId}, ${tab1Name + '-icon'}, true)}"
         >
         <li th:replace="~{partials/detailed-match/participant-graphs/tab-list.html ::
-          tabList(${tab2ButtonId}, ${tab2ContentId}, ${tab2Name + '-icon'}, false)}"
+          icon(${tab2ButtonId}, ${tab2ContentId}, ${tab2Name + '-icon'}, false)}"
         >
         <li th:replace="~{partials/detailed-match/participant-graphs/tab-list.html ::
-          tabList(${tab3ButtonId}, ${tab3ContentId}, ${tab3Name + '-icon'}, false)}"
+          icon(${tab3ButtonId}, ${tab3ContentId}, ${tab3Name + '-icon'}, false)}"
         >
         <li th:replace="~{partials/detailed-match/participant-graphs/tab-list.html ::
-          tabList(${tab4ButtonId}, ${tab4ContentId}, ${tab4Name + '-icon'}, false)}"
+          icon(${tab4ButtonId}, ${tab4ContentId}, ${tab4Name + '-icon'}, false)}"
         >
         <li th:replace="~{partials/detailed-match/participant-graphs/tab-list.html ::
-          tabList(${tab5ButtonId}, ${tab5ContentId}, ${tab5Name + '-icon'}, false)}"
+          icon(${tab5ButtonId}, ${tab5ContentId}, ${tab5Name + '-icon'}, false)}"
         >
     </ul>
     <div class="tab-content"

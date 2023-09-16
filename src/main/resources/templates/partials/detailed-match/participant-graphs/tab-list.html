@@ -1,4 +1,4 @@
-<li th:fragment="tabList(buttonId, contentId, icon, isActive)"
+<li th:fragment="icon(buttonId, contentId, icon, isActive)"
     class="nav-item"
     role="presentation"
 >
@@ -12,5 +12,22 @@
           th:classappend="${isActive} ? 'active' : ''"
   >
     <div class="small-icons" th:classappend="${icon}"></div>
+  </button>
+</li>
+
+<li th:fragment="text(buttonId, contentId, text, isActive)"
+    class="nav-item"
+    role="presentation"
+>
+  <button th:id="${buttonId}"
+          data-bs-toggle="pill"
+          th:data-bs-target="${'#' + contentId}"
+          type="button" role="tab"
+          th:aria-controls="${contentId}"
+          aria-selected="true"
+          class="nav-link px-0 mx-3"
+          th:classappend="${isActive} ? 'active' : ''"
+          th:text="${text}"
+  >
   </button>
 </li>
