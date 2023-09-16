@@ -5,6 +5,13 @@
      class="tab-pane fade"
      th:classappend="${isActive} ? 'show active' : ''"
 >
+    <div class="d-flex gap-3">
+        <button th:id="${chartId + '-toggleDamageDealt'}" class="small-icons DamageDealt-icon"></button>
+        <button th:id="${chartId + '-toggleDamageTaken'}" class="small-icons DamageTaken-icon"></button>
+        <button th:id="${chartId + '-toggleXp'}" class="small-icons Xp-icon"></button>
+        <button th:id="${chartId + '-toggleCs'}" class="small-icons CS-icon"></button>
+        <button th:id="${chartId + '-toggleGold'}" class="small-icons Gold-icon"></button>
+    </div>
     <div th:if="${isAllParticipants}">
         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
             <th:block th:each="participantInfo, index : ${participants}"
@@ -26,12 +33,44 @@
         </ul>
     </div>
 
+    <div th:id="${chartId}"
+         th:class="${chartName}"
+    ></div>
+</div>
+
+<div th:fragment="match(buttonId, contentId, chartId, chartName, isActive, isAllParticipants)"
+     th:id="${contentId}"
+     role="tabpanel" tabindex="0"
+     th:aria-labelledby="${buttonId}"
+     class="tab-pane fade"
+     th:classappend="${isActive} ? 'show active' : ''"
+>
     <div class="d-flex gap-3">
-        <button th:id="${chartId + '-toggleDamageDealt'}" class="small-icons DamageDealt-icon"></button>
-        <button th:id="${chartId + '-toggleDamageTaken'}" class="small-icons DamageTaken-icon"></button>
-        <button th:id="${chartId + '-toggleXp'}" class="small-icons Xp-icon"></button>
-        <button th:id="${chartId + '-toggleCs'}" class="small-icons CS-icon"></button>
-        <button th:id="${chartId + '-toggleGold'}" class="small-icons Gold-icon"></button>
+        <button th:id="${chartId + '-toggleDamageDealt'}" class="small-icons DamageDealt-icon toggleDamageDealt"></button>
+        <button th:id="${chartId + '-toggleDamageTaken'}" class="small-icons DamageTaken-icon toggleDamageTaken"></button>
+        <button th:id="${chartId + '-toggleXp'}" class="small-icons Xp-icon toggleXp"></button>
+        <button th:id="${chartId + '-toggleCs'}" class="small-icons CS-icon toggleCs"></button>
+        <button th:id="${chartId + '-toggleGold'}" class="small-icons Gold-icon toggleGold"></button>
+    </div>
+    <div th:if="${isAllParticipants}">
+        <ul class="nav nav-pills mb-3" id="pills-tab2" role="tablist">
+            <th:block th:each="participantInfo, index : ${participants}"
+                      th:with="participant=${participantInfo.getParticipant()},
+                           participantTag=${'participantToggle-' + index.count}"
+            >
+                <li>
+                    <button class="nav-link px-0 mx-1"
+                            th:id="${participantTag}"
+                            data-bs-toggle="pill"
+                            type="button" role="tab"
+                            th:aria-controls="${participantTag}"
+                            aria-selected="false"
+                    >
+                        <img th:replace="~{partials/icons/champion-icon.html :: graph(${index.count})}">
+                    </button>
+                </li>
+            </th:block>
+        </ul>
     </div>
 
     <div th:id="${chartId}"

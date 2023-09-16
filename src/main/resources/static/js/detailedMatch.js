@@ -224,21 +224,69 @@ function drawApexChart(participantNum, chartLocation, data, graphType, isMatchGr
 
     let chart = new ApexCharts(document.getElementById(chartLocation + participantNum), options);
 
-    // if(isMatchGraph){
-    //     document.getElementById((chartLocation + '-toggleMatch')).addEventListener("click", function() {
+    // console.log("chart")
+    // console.log(chart)
+    //
+    // document.querySelectorAll('.toggleDamageDealt').forEach(function(element) {
+    //     element.addEventListener("click", function() {
     //         chart.updateOptions(removeData(chart));
     //         chart.updateOptions(addMatchData(data));
-    //     })
+    //     });
+    // });
     //
-    //     document.getElementById((chartLocation + '-toggleTeam')).addEventListener("click", function() {
+    // document.querySelectorAll('.toggleDamageTaken').forEach(function(element) {
+    //     element.addEventListener("click", function() {
     //         chart.updateOptions(removeData(chart));
-    //         chart.updateOptions(addTeamData(data));
-    //     })
+    //         chart.updateOptions(addMatchData(data));
+    //     });
+    // });
     //
-    //     document.getElementById((chartLocation + '-toggleIndividual')).addEventListener("click", function() {
+    // document.querySelectorAll('.toggleXp').forEach(function(element) {
+    //     element.addEventListener("click", function() {
     //         chart.updateOptions(removeData(chart));
-    //         chart.updateOptions(addIndividualData(data));
-    //     })
+    //         chart.updateOptions(addMatchData(data));
+    //     });
+    // });
+    //
+    // document.querySelectorAll('.toggleCs').forEach(function(element) {
+    //     element.addEventListener("click", function() {
+    //         chart.updateOptions(removeData(chart));
+    //         chart.updateOptions(addMatchData(data));
+    //     });
+    // });
+    //
+    // document.querySelectorAll('.toggleGold').forEach(function(element) {
+    //     element.addEventListener("click", function() {
+    //         chart.updateOptions(removeData(chart));
+    //         chart.updateOptions(addMatchData(data));
+    //     });
+    // });
+
+    if(isMatchGraph){
+        document.getElementById((chartLocation + '-toggleDamageDealt')).addEventListener("click", function() {
+            chart.updateOptions(removeData(chart));
+            chart.updateOptions(addMatchData(data));
+        })
+
+        document.getElementById((chartLocation + '-toggleDamageTaken')).addEventListener("click", function() {
+            chart.updateOptions(removeData(chart));
+            chart.updateOptions(addTeamData(data));
+        })
+
+        document.getElementById((chartLocation + '-toggleXp')).addEventListener("click", function() {
+            chart.updateOptions(removeData(chart));
+            chart.updateOptions(addIndividualData(data));
+        })
+
+        document.getElementById((chartLocation + '-toggleCs')).addEventListener("click", function() {
+            chart.updateOptions(removeData(chart));
+            chart.updateOptions(addTeamData(data));
+        })
+
+        document.getElementById((chartLocation + '-toggleGold')).addEventListener("click", function() {
+            chart.updateOptions(removeData(chart));
+            chart.updateOptions(addIndividualData(data));
+        })
     //
     //     for (let i = 1; i <= 10 ; i++) {
     //         console.log('participantToggle-' + i);
@@ -246,7 +294,7 @@ function drawApexChart(participantNum, chartLocation, data, graphType, isMatchGr
     //             chart.toggleSeries(i + '');
     //         })
     //     }
-    // }
+    }
 
     chart.render();
 }
@@ -357,20 +405,6 @@ async function getParticipants(){
     const matchId = match.getAttribute("data-matchId");
     return getData('/participant-stats-chart?match=' + matchId);
 }
-//these need to be hard refactored and condensed
-// function drawMatchGraphs(participants){
-//     let matchDamageDealt = getMatchDamageDealt(participants);
-//     let matchDamageTaken = getMatchDamageTaken(participants);
-//     let matchGold = getMatchGold(participants);
-//     let matchCs = getMatchCs(participants);
-//     let matchXp = getMatchXp(participants);
-//
-//     drawApexChart('', 'match-DamageDealt', matchDamageDealt, 'line', true);
-//     drawApexChart('', 'match-DamageTaken', matchDamageTaken, 'line', true);
-//     drawApexChart('', 'match-Gold', matchGold, 'line', true);
-//     drawApexChart('', 'match-CS', matchCs, 'line', true);
-//     drawApexChart('', 'match-Xp', matchXp, 'line', true);
-// }
 
 function drawMatchGraphs(dataSet){
     let individualGraph = getIndividualAllGraph(dataSet, "graphName", 'line');
