@@ -5,13 +5,13 @@
      class="tab-pane fade"
      th:classappend="${isActive} ? 'show active' : ''"
 >
-    <div class="d-flex gap-3">
-        <button th:id="${chartId + '-toggleDamageDealt'}" class="small-icons DamageDealt-icon"></button>
-        <button th:id="${chartId + '-toggleDamageTaken'}" class="small-icons DamageTaken-icon"></button>
-        <button th:id="${chartId + '-toggleXp'}" class="small-icons Xp-icon"></button>
-        <button th:id="${chartId + '-toggleCs'}" class="small-icons CS-icon"></button>
-        <button th:id="${chartId + '-toggleGold'}" class="small-icons Gold-icon"></button>
-    </div>
+<!--    <div class="d-flex gap-3">-->
+<!--        <button th:id="${chartId + '-toggleDamageDealt'}" class="small-icons DamageDealt-icon"></button>-->
+<!--        <button th:id="${chartId + '-toggleDamageTaken'}" class="small-icons DamageTaken-icon"></button>-->
+<!--        <button th:id="${chartId + '-toggleXp'}" class="small-icons Xp-icon"></button>-->
+<!--        <button th:id="${chartId + '-toggleCs'}" class="small-icons CS-icon"></button>-->
+<!--        <button th:id="${chartId + '-toggleGold'}" class="small-icons Gold-icon"></button>-->
+<!--    </div>-->
     <div th:if="${isAllParticipants}">
         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
             <th:block th:each="participantInfo, index : ${participants}"

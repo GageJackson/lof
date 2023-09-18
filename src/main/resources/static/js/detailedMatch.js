@@ -1,3 +1,20 @@
+let matchCharts = [];
+let matchDamageDealtPhysicalData = [];
+let matchDamageDealtMagicData = [];
+let matchDamageDealtTrueData = [];
+let matchDamageDealtTotalData = [];
+
+let matchDamageTakenPhysicalData = [];
+let matchDamageTakenMagicData = [];
+let matchDamageTakenTrueData = [];
+let matchDamageTakenTotalData = [];
+
+let matchTotalGoldData = [];
+let matchTotalXpData = [];
+let matchTotalMinionData = [];
+let matchTotalJungleData = [];
+let matchTotalCsData = [];
+
 function getYaxisConfig(numberOfDatasets) {
     const yaxisConfig = [];
 
@@ -224,70 +241,9 @@ function drawApexChart(participantNum, chartLocation, data, graphType, isMatchGr
 
     let chart = new ApexCharts(document.getElementById(chartLocation + participantNum), options);
 
-    // console.log("chart")
-    // console.log(chart)
-    //
-    // document.querySelectorAll('.toggleDamageDealt').forEach(function(element) {
-    //     element.addEventListener("click", function() {
-    //         chart.updateOptions(removeData(chart));
-    //         chart.updateOptions(addMatchData(data));
-    //     });
-    // });
-    //
-    // document.querySelectorAll('.toggleDamageTaken').forEach(function(element) {
-    //     element.addEventListener("click", function() {
-    //         chart.updateOptions(removeData(chart));
-    //         chart.updateOptions(addMatchData(data));
-    //     });
-    // });
-    //
-    // document.querySelectorAll('.toggleXp').forEach(function(element) {
-    //     element.addEventListener("click", function() {
-    //         chart.updateOptions(removeData(chart));
-    //         chart.updateOptions(addMatchData(data));
-    //     });
-    // });
-    //
-    // document.querySelectorAll('.toggleCs').forEach(function(element) {
-    //     element.addEventListener("click", function() {
-    //         chart.updateOptions(removeData(chart));
-    //         chart.updateOptions(addMatchData(data));
-    //     });
-    // });
-    //
-    // document.querySelectorAll('.toggleGold').forEach(function(element) {
-    //     element.addEventListener("click", function() {
-    //         chart.updateOptions(removeData(chart));
-    //         chart.updateOptions(addMatchData(data));
-    //     });
-    // });
-
     if(isMatchGraph){
-        document.getElementById((chartLocation + '-toggleDamageDealt')).addEventListener("click", function() {
-            chart.updateOptions(removeData(chart));
-            chart.updateOptions(addMatchData(data));
-        })
 
-        document.getElementById((chartLocation + '-toggleDamageTaken')).addEventListener("click", function() {
-            chart.updateOptions(removeData(chart));
-            chart.updateOptions(addTeamData(data));
-        })
-
-        document.getElementById((chartLocation + '-toggleXp')).addEventListener("click", function() {
-            chart.updateOptions(removeData(chart));
-            chart.updateOptions(addIndividualData(data));
-        })
-
-        document.getElementById((chartLocation + '-toggleCs')).addEventListener("click", function() {
-            chart.updateOptions(removeData(chart));
-            chart.updateOptions(addTeamData(data));
-        })
-
-        document.getElementById((chartLocation + '-toggleGold')).addEventListener("click", function() {
-            chart.updateOptions(removeData(chart));
-            chart.updateOptions(addIndividualData(data));
-        })
-    //
+        matchCharts.push(chart);
     //     for (let i = 1; i <= 10 ; i++) {
     //         console.log('participantToggle-' + i);
     //         document.getElementById(('participantToggle-' + i)).addEventListener("click", function() {
@@ -299,25 +255,76 @@ function drawApexChart(participantNum, chartLocation, data, graphType, isMatchGr
     chart.render();
 }
 
+function setMatchToggleBtns(){
+    document.getElementById(('toggleDamageDealt')).addEventListener("click", function() {
+        setNewGraphData(matchDamageDealtTotalData);
+        document.getElementById(('toggleDamageDealt')).classList.add('active');
+    })
+
+    document.getElementById(('toggleDamageTaken')).addEventListener("click", function() {
+        setNewGraphData(matchDamageTakenTotalData);
+        document.getElementById(('toggleDamageTaken')).classList.add('active');
+    })
+
+    document.getElementById(('toggleXp')).addEventListener("click", function() {
+        setNewGraphData(matchTotalXpData);
+        document.getElementById(('toggleXp')).classList.add('active');
+    })
+
+    document.getElementById(('toggleCs')).addEventListener("click", function() {
+        setNewGraphData(matchTotalCsData);
+        document.getElementById(('toggleCs')).classList.add('active');
+    })
+
+    document.getElementById(('toggleGold')).addEventListener("click", function() {
+        setNewGraphData(matchTotalGoldData);
+        document.getElementById(('toggleGold')).classList.add('active');
+    })
+}
+
+function setNewGraphData (data){
+    let individualGraph = getIndividualAllGraph(data, "graphName", 'line');
+    let teamCompareGraph = getTeamCompareGraph(data, "graphName", 'line');
+    let teamDifferenceGraph = getTeamDifferenceGraph(data, "graphName", 'area');
+
+    for (let i = 0; i < matchCharts.length; i++) {
+        matchCharts[i].updateSeries(removeData(matchCharts[i]));
+        if(i === 0){
+            matchCharts[i].updateOptions(updateData([teamDifferenceGraph]));
+        } else if(i === 1) {
+            matchCharts[i].updateOptions(updateData(teamCompareGraph));
+        } else if (i === 2) {
+            matchCharts[i].updateOptions(updateData(individualGraph));
+        } else {
+            matchCharts[i].updateOptions(updateData(individualGraph));
+        }
+    }
+
+    document.querySelectorAll('.match-graph-toggle').forEach(function(element) {
+        element.classList.remove('active')
+    });
+
+}
+
 function removeData(chart){
     return chart.w.globals.series.slice(1, 1);
 }
 
-function addIndividualData(data){
+function updateData(data){
     return ({
         series: data,
-        colors: [
-            '#6d92c5',
-            '#4068a0',
-            '#2f4c75',
-            '#1d2f49',
-            '#111c2c',
-            '#c36f79',
-            '#9e424d',
-            '#733038',
-            '#481e23',
-            '#2b1215',
-        ]
+        // colors: [
+        //     '#6d92c5',
+        //     '#4068a0',
+        //     '#2f4c75',
+        //     '#1d2f49',
+        //     '#111c2c',
+        //     '#c36f79',
+        //     '#9e424d',
+        //     '#733038',
+        //     '#481e23',
+        //     '#2b1215',
+        // ]
     });
 }
 
@@ -387,17 +394,15 @@ function addMatchData(data){
     });
 }
 
-
 const participantCharts = document.getElementsByClassName("participant-graphs");
-
-
 
 window.onload = async (event) => {
     let participants = await getParticipants();
     await setGraphDataSets(participants);
 
-    drawMatchGraphs(matchTotalCsData);
+    await drawMatchGraphs(matchTotalCsData);
     drawParticipantGraphs(participants);
+    setMatchToggleBtns();
 };
 
 async function getParticipants(){
@@ -410,12 +415,6 @@ function drawMatchGraphs(dataSet){
     let individualGraph = getIndividualAllGraph(dataSet, "graphName", 'line');
     let teamCompareGraph = getTeamCompareGraph(dataSet, "graphName", 'line');
     let teamDifferenceGraph = getTeamDifferenceGraph(dataSet, "graphName", 'line');
-
-    console.log("teamCompareGraph");
-    console.log(teamCompareGraph);
-
-    console.log("teamDifferenceGraph");
-    console.log(teamDifferenceGraph);
 
     drawApexChart('', 'match-Match', [teamDifferenceGraph], 'line', true);
     drawApexChart('', 'match-Team', teamCompareGraph, 'line', true);
@@ -455,22 +454,6 @@ function drawParticipantGraphs(participantFramesSet){
         drawApexChart(i, 'chart-CS', graphCS, 'area', false);
     }
 }
-
-let matchDamageDealtPhysicalData = [];
-let matchDamageDealtMagicData = [];
-let matchDamageDealtTrueData = [];
-let matchDamageDealtTotalData = [];
-
-let matchDamageTakenPhysicalData = [];
-let matchDamageTakenMagicData = [];
-let matchDamageTakenTrueData = [];
-let matchDamageTakenTotalData = [];
-
-let matchTotalGoldData = [];
-let matchTotalXpData = [];
-let matchTotalMinionData = [];
-let matchTotalJungleData = [];
-let matchTotalCsData = [];
 
 function setGraphDataSets(participantFramesSet){
     for (let i = 0; i < participantFramesSet.length; i++) {
@@ -551,14 +534,8 @@ function getTeamCompareGraph(dataSet, graphName, graphType){
     let teamCompareGraph = [];
     let teamsData = getTeamsData(dataSet);
 
-    console.log('team compare graph')
-    console.log(teamsData)
-
     let blueTeamData = addArrays(teamsData[0]);
     let redTeamData = addArrays(teamsData[1]);
-
-    console.log(blueTeamData)
-    console.log(redTeamData)
 
     let blueTeamGraph = getGraphEntry((graphName + 'blue'), blueTeamData, graphType);
     let redTeamGraph = getGraphEntry((graphName + 'red'), redTeamData, graphType);
@@ -592,7 +569,7 @@ function getTeamsData(dataSet){
 
 function addArrays(arrays){
     const result = [];
-    // console.log(arrays);
+
     for (let i = 0; i < arrays.length; i++) {
         for (let j = 0; j < arrays[0].length; j++) {
             if (i === 0) {
@@ -602,7 +579,7 @@ function addArrays(arrays){
             }
         }
     }
-    // console.log(result);
+
     return result;
 }
 
@@ -625,92 +602,10 @@ function subtractArrays(arrays){
 function getTeamDifferenceGraph(dataSet, graphName, graphType){
     let teamsData = getTeamsData(dataSet);
 
-    console.log('team diff graph')
-    console.log(teamsData)
-
     let blueTeamData = addArrays(teamsData[0]);
     let redTeamData = addArrays(teamsData[1]);
 
-    console.log(blueTeamData)
-    console.log(redTeamData)
-
     let teamDiffData = subtractArrays([blueTeamData, redTeamData])
-    console.log(teamDiffData)
 
     return getGraphEntry(graphName, teamDiffData, graphType);
-}
-
-function getMatchDamageDealt(participants){
-    let finalData = [];
-
-    for (let i = 0; i < participants.length; i++) {
-        let participantData = participants[i];
-        let graphData = [];
-        for (let j = 0; j < participantData.length; j++) {
-
-            graphData.push(participantData[j].participantFrameDamage.totalDamageDoneToChamps);
-        }
-        finalData.push({name:i + 1, data:graphData, type:'line'})
-    }
-    return finalData;
-}
-
-function getMatchDamageTaken(participants){
-    let finalData = [];
-
-    for (let i = 0; i < participants.length; i++) {
-        let participantData = participants[i];
-        let graphData = [];
-        for (let j = 0; j < participantData.length; j++) {
-            graphData.push(participantData[j].participantFrameDamage.totalDamageTaken);
-        }
-        finalData.push({name:i + 1, data:graphData, type:'line'})
-    }
-
-    return finalData;
-}
-
-function getMatchGold(participants){
-    let finalData = [];
-
-    for (let i = 0; i < participants.length; i++) {
-        let participantData = participants[i];
-        let graphData = [];
-        for (let j = 0; j < participantData.length; j++) {
-            graphData.push(participantData[j].totalGold);
-        }
-        finalData.push({name:i + 1, data:graphData, type:'line'})
-    }
-
-    return finalData;
-}
-
-function getMatchCs(participants){
-    let finalData = [];
-
-    for (let i = 0; i < participants.length; i++) {
-        let participantData = participants[i];
-        let graphData = [];
-        for (let j = 0; j < participantData.length; j++) {
-            graphData.push(participantData[j].jungleMinionsKilled + participantData[j].minionsKilled);
-        }
-        finalData.push({name:i + 1, data:graphData, type:'line'})
-    }
-
-    return finalData;
-}
-
-function getMatchXp(participants){
-    let finalData = [];
-
-    for (let i = 0; i < participants.length; i++) {
-        let participantData = participants[i];
-        let graphData = [];
-        for (let j = 0; j < participantData.length; j++) {
-            graphData.push(participantData[j].xp);
-        }
-        finalData.push({name:i + 1, data:graphData, type:'line'})
-    }
-
-    return finalData;
 }

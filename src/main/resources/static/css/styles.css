@@ -348,35 +348,42 @@ aside {
     background-image: url('../img/match-icons/damageTaken.png');
 }
 
-.DamageBoth-icon {
+.DamageBoth-icon{
     background-image: url('../img/match-icons/damageBoth.png');
 }
 
-.active > .Overview-icon {
+.active > .Overview-icon,
+.active.Overview-icon {
     background-image: url('../img/gold.png');
 }
 
-.active > .Gold-icon {
+.active > .Gold-icon,
+.active.Gold-icon {
     background-image: url('../img/gold.png');
 }
 
-.active > .Xp-icon {
+.active > .Xp-icon,
+.active.Xp-icon {
     background-image: url('../img/gold.png');
 }
 
-.active >  .CS-icon {
+.active > .CS-icon,
+.active.CS-icon {
     background-image: url('../img/gold.png');
 }
 
-.active > .DamageDealt-icon {
+.active > .DamageDealt-icon,
+.active.DamageDealt-icon {
     background-image: url('../img/gold.png');
 }
 
-.active > .DamageTaken-icon {
+.active > .DamageTaken-icon,
+.active.DamageTaken-icon {
     background-image: url('../img/gold.png');
 }
 
-.active > .DamageBoth-icon {
+.active > .DamageBoth-icon,
+.active.DamageBoth-icon {
     background-image: url('../img/gold.png');
 }
 
