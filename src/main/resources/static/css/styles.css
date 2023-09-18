@@ -453,4 +453,9 @@ aside {
     border: 2px solid #330106;
 }
 
+.unclicked {
+    filter: grayscale(100%);
+    opacity: 25%;
+}
+
 

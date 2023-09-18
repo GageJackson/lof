@@ -193,6 +193,7 @@ function drawApexChart(participantNum, chartLocation, data, graphType, isMatchGr
         },
         fill: fillType,
         legend: {
+            show: (!isMatchGraph),
             position: 'top',
             horizontalAlign: 'left',
             offsetX: 30,
@@ -242,14 +243,7 @@ function drawApexChart(participantNum, chartLocation, data, graphType, isMatchGr
     let chart = new ApexCharts(document.getElementById(chartLocation + participantNum), options);
 
     if(isMatchGraph){
-
         matchCharts.push(chart);
-    //     for (let i = 1; i <= 10 ; i++) {
-    //         console.log('participantToggle-' + i);
-    //         document.getElementById(('participantToggle-' + i)).addEventListener("click", function() {
-    //             chart.toggleSeries(i + '');
-    //         })
-    //     }
     }
 
     chart.render();
@@ -257,53 +251,102 @@ function drawApexChart(participantNum, chartLocation, data, graphType, isMatchGr
 
 function setMatchToggleBtns(){
     document.getElementById(('toggleDamageDealt')).addEventListener("click", function() {
-        setNewGraphData(matchDamageDealtTotalData);
+        setNewGraphData(matchDamageDealtTotalData, 'Damage Dealt');
         document.getElementById(('toggleDamageDealt')).classList.add('active');
     })
 
     document.getElementById(('toggleDamageTaken')).addEventListener("click", function() {
-        setNewGraphData(matchDamageTakenTotalData);
+        setNewGraphData(matchDamageTakenTotalData, 'Damage Taken');
         document.getElementById(('toggleDamageTaken')).classList.add('active');
     })
 
     document.getElementById(('toggleXp')).addEventListener("click", function() {
-        setNewGraphData(matchTotalXpData);
+        setNewGraphData(matchTotalXpData, 'XP');
         document.getElementById(('toggleXp')).classList.add('active');
     })
 
     document.getElementById(('toggleCs')).addEventListener("click", function() {
-        setNewGraphData(matchTotalCsData);
+        setNewGraphData(matchTotalCsData, 'CS');
         document.getElementById(('toggleCs')).classList.add('active');
     })
 
     document.getElementById(('toggleGold')).addEventListener("click", function() {
-        setNewGraphData(matchTotalGoldData);
+        setNewGraphData(matchTotalGoldData, 'Gold');
         document.getElementById(('toggleGold')).classList.add('active');
     })
 }
 
-function setNewGraphData (data){
-    let individualGraph = getIndividualAllGraph(data, "graphName", 'line');
-    let teamCompareGraph = getTeamCompareGraph(data, "graphName", 'line');
-    let teamDifferenceGraph = getTeamDifferenceGraph(data, "graphName", 'area');
+function setNewGraphData (data, dataName){
+    let individualGraph = getIndividualAllGraph(data, 'graphName', 'line');
+    let teamCompareGraph = getTeamCompareGraph(data, 'graphName', 'line');
+    let teamDifferenceGraph = getTeamDifferenceGraph(data, 'graphName', 'area');
 
     for (let i = 0; i < matchCharts.length; i++) {
-        matchCharts[i].updateSeries(removeData(matchCharts[i]));
+        // matchCharts[i].updateSeries(removeData(matchCharts[i]));
         if(i === 0){
             matchCharts[i].updateOptions(updateData([teamDifferenceGraph]));
+
         } else if(i === 1) {
             matchCharts[i].updateOptions(updateData(teamCompareGraph));
+
         } else if (i === 2) {
+            newChartToggle(matchCharts[i]);
             matchCharts[i].updateOptions(updateData(individualGraph));
+            newChartToggle(matchCharts[i]);
+
         } else {
+            newChartToggle(matchCharts[i]);
             matchCharts[i].updateOptions(updateData(individualGraph));
+            newChartToggle(matchCharts[i]);
         }
     }
 
     document.querySelectorAll('.match-graph-toggle').forEach(function(element) {
-        element.classList.remove('active')
+        element.classList.remove('active');
     });
 
+    document.querySelectorAll('.match-graph-title').forEach(function(element) {
+        element.innerText = dataName;
+    });
+}
+
+function newChartToggle(chart){
+    for (const individual of toggledIndividuals) {
+        toggleChart(chart, individual);
+    }
+}
+
+
+function individualButtons(chart) {
+    for (let i = 1; i <= 10; i++) {
+        const button = document.getElementById('individual-toggle-' + i);
+
+        button.addEventListener("click", createClickListener(chart, i));
+    }
+}
+
+let toggledIndividuals = [];
+
+function createClickListener(chart, i) {
+    return function() {
+        let toggledGraph = 'graphName' + (i - 1);
+        toggleIndividuals(toggledGraph);
+        toggleChart(chart, toggledGraph);
+        this.classList.toggle('unclicked');
+    };
+}
+
+function toggleIndividuals(toggledGraph){
+    if(toggledIndividuals.includes(toggledGraph)){
+        let removeIndividual = toggledIndividuals.indexOf(toggledGraph);
+        toggledIndividuals.splice(removeIndividual,1)
+    } else {
+        toggledIndividuals.push(toggledGraph);
+    }
+}
+
+function toggleChart(chart, toggledGraph){
+    chart.toggleSeries(toggledGraph);
 }
 
 function removeData(chart){
@@ -313,96 +356,19 @@ function removeData(chart){
 function updateData(data){
     return ({
         series: data,
-        // colors: [
-        //     '#6d92c5',
-        //     '#4068a0',
-        //     '#2f4c75',
-        //     '#1d2f49',
-        //     '#111c2c',
-        //     '#c36f79',
-        //     '#9e424d',
-        //     '#733038',
-        //     '#481e23',
-        //     '#2b1215',
-        // ]
     });
 }
 
-function addTeamData(data){
-    let finalData = [];
-    let blueTeamData = [];
-    let redTeamData = [];
-    for (let i = 0; i < data.length; i++) {
-        if (i < 5){
-            for (let j = 0; j < data[i].data.length; j++) {
-                if (i === 0){
-                    blueTeamData.push(data[i].data[j])
-                } else {
-                    blueTeamData[j] += data[i].data[j];
-                }
-            }
-        } else {
-            for (let j = 0; j < data[i].data.length; j++) {
-                if (i === 5){
-                    redTeamData.push(data[i].data[j])
-                } else {
-                    redTeamData[j] += data[i].data[j];
-                }
-            }
-        }
-    }
-    finalData.push({name:'blue team', data:blueTeamData, type:'bar'});
-    finalData.push({name:'red team', data:redTeamData, type:'bar'});
-    return ({
-        series: finalData,
-        colors: [
-            '#4775B4',
-            '#a2434e',
-
-        ]
-    });
-}
-
-function addMatchData(data){
-    let finalData = [];
-    let teamDiffData = []
-    for (let i = 0; i < data.length; i++) {
-        if (i < 5){
-            for (let j = 0; j < data[i].data.length; j++) {
-                if (i === 0){
-                    teamDiffData.push(data[i].data[j])
-                } else {
-                    teamDiffData[j] += data[i].data[j];
-                }
-            }
-        } else {
-            for (let j = 0; j < data[i].data.length; j++) {
-                teamDiffData[j] -= data[i].data[j];
-            }
-        }
-    }
-    finalData.push({name:'team diff', data:teamDiffData, type:'bar'});
-    return ({
-        series: finalData,
-        colors: [function({ value, seriesIndex, w }) {
-            if (value < 0) {
-                return '#4775B4'
-            } else {
-                return '#a2434e'
-            }
-        }]
-    });
-}
-
-const participantCharts = document.getElementsByClassName("participant-graphs");
+// const participantCharts = document.getElementsByClassName("participant-graphs");
 
 window.onload = async (event) => {
     let participants = await getParticipants();
     await setGraphDataSets(participants);
 
-    await drawMatchGraphs(matchTotalCsData);
+    await drawMatchGraphs(matchDamageDealtTotalData);
     drawParticipantGraphs(participants);
     setMatchToggleBtns();
+    individualButtons(matchCharts[2]);
 };
 
 async function getParticipants(){
@@ -414,7 +380,7 @@ async function getParticipants(){
 function drawMatchGraphs(dataSet){
     let individualGraph = getIndividualAllGraph(dataSet, "graphName", 'line');
     let teamCompareGraph = getTeamCompareGraph(dataSet, "graphName", 'line');
-    let teamDifferenceGraph = getTeamDifferenceGraph(dataSet, "graphName", 'line');
+    let teamDifferenceGraph = getTeamDifferenceGraph(dataSet, "graphName", 'area');
 
     drawApexChart('', 'match-Match', [teamDifferenceGraph], 'line', true);
     drawApexChart('', 'match-Team', teamCompareGraph, 'line', true);
@@ -609,3 +575,138 @@ function getTeamDifferenceGraph(dataSet, graphName, graphType){
 
     return getGraphEntry(graphName, teamDiffData, graphType);
 }
+
+/*
+
+<div class="stat-block" data-info-red="300000" data-info-blue="150000">
+		<div class="stat-info">
+			<p class="number">
+				<span class="blue">300,000</span>
+			</p>
+			<p class="title">Damage Dealt</p>
+      <p class="number">
+				<span class="red">15,000</span>
+			</p>
+		</div>
+		<svg class="stat-ring">
+      <circle class="back-ring"/>
+			<circle class="front-ring"/>
+		</svg>
+</div>
+
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;900&display=swap');
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 400;
+	font-size: 20px;
+	color: #333;
+	list-style-type: none;
+	text-decoration: none;
+}
+
+body {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 100vh;
+	padding: 20px;
+	background-color: #292929;
+}
+
+.stat-block {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 200px;
+	height: 200px;
+}
+
+.stat-info {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	width: calc(100% - 80px);
+	height: calc(100% - 80px);
+	border-radius: 50%;
+	background-color: #292929;
+	box-shadow: 0 0 5px 3px #222121;
+}
+
+.blue {
+	font-size: 12px;
+	font-weight: bold;
+  color: blue;
+}
+
+.red {
+	font-size: 12px;
+	font-weight: bold;
+  color: red;
+}
+
+
+.title {
+	font-size: 16px;
+	color: #9b9b9b;
+}
+
+.stat-ring {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+  display: flex;
+	align-items: center;
+	justify-content: center;
+	fill: none;
+	transform: rotate(-90deg);
+
+}
+
+.front-ring {
+	stroke: blue;
+	stroke-width: .75rem;
+}
+
+.back-ring {
+	stroke: red;
+	stroke-width: .6825rem;
+}
+
+
+window.addEventListener('load', function(){
+  const statBlock = document.querySelectorAll('.stat-block');
+  statBlock.forEach(item => {
+    let redTeam = item.getAttribute('data-info-red');
+    let blueTeam = item.getAttribute('data-info-blue');
+
+    let redNum = parseInt(redTeam);
+    let blueNum = parseInt(blueTeam);
+    let matchTotal = redNum + blueNum;
+
+    let frontRing = item.querySelector('.front-ring');
+    let backRing = item.querySelector('.back-ring');
+    let radius = 80;
+    let diameter = Math.round(3.14 * 2 * radius);
+    let strokeOffset = diameter - ( diameter * ( blueNum / matchTotal ))
+
+    frontRing.style.strokeDasharray = diameter;
+    frontRing.style.strokeDashoffset = strokeOffset;
+    frontRing.style.strokeWidth = 12;
+    frontRing.setAttribute("cx", 100);
+    frontRing.setAttribute("cy", 100);
+    frontRing.setAttribute("r", radius);
+
+    backRing.style.strokeWidth = 10;
+    backRing.setAttribute("cx", 100);
+    backRing.setAttribute("cy", 100);
+    backRing.setAttribute("r", radius);
+  })
+});
+
+ */
