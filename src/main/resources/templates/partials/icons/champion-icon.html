@@ -14,5 +14,13 @@
      alt="champion icon"
      class="friend-icon non-selectable opacity-75"
      th:classappend="${'participant-toggle-' + num}"
+>
 
+<img th:fragment="small(num)"
+     th:with="champion=${participant.getChampionName()},
+              isFriend=${#lists.contains(friends.![puuId], participant.getPuuid())}"
+     th:src="@{${'/dragon_tail/13.14.1/img/champion/' + champion + '.png'}}"
+     alt="champion icon"
+     class="champ-icon non-selectable opacity-75"
+     th:classappend="${'participant-toggle-' + num}"
 >

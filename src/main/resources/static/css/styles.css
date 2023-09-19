@@ -108,6 +108,12 @@ VISUAL FRAMEWORK
     border-radius: 50%;
 }
 
+.champ-icon {
+    height: 20px;
+    aspect-ratio: 1;
+    border-radius: 12.5%;
+}
+
 .item-icon {
     height: 24px;
     aspect-ratio: 1;
@@ -460,9 +466,6 @@ aside {
 
 .stat-block {
     position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     width: 200px;
     height: 200px;
 }
@@ -471,9 +474,6 @@ aside {
     position: absolute;
     width: 100%;
     height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     fill: none;
     transform: rotate(-90deg);
 }
@@ -485,11 +485,41 @@ aside {
 }
 
 .front-ring {
-    stroke: var(--color-primary-blue);
+    stroke: var(--color-primary-red);
 }
 
 .back-ring {
-    stroke: var(--color-primary-red);
+    stroke: var(--color-primary-blue);
+}
+
+.player-stat {
+    position: relative;
+    width: 120px;
+    height: 20px;
+}
+
+.stat-rect {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.player-info {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.front-rect-blue {
+    fill: var(--color-primary-blue);
+}
+
+.front-rect-red {
+    fill: var(--color-primary-red);
+}
+
+.back-rect {
+    fill: var(--color-neutral-medDark);
 }
 
 

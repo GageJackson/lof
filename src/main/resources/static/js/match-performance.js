@@ -12,7 +12,7 @@ window.addEventListener('load', function(){
         let backRing = item.querySelector('.back-ring');
         let radius = 80;
         let diameter = Math.round(3.14 * 2 * radius);
-        let strokeOffset = diameter - ( diameter * ( blueNum / matchTotal ))
+        let strokeOffset = diameter - ( diameter * ( redNum / matchTotal ))
 
         frontRing.style.strokeDasharray = diameter;
         frontRing.style.strokeDashoffset = strokeOffset;
@@ -21,9 +21,34 @@ window.addEventListener('load', function(){
         frontRing.setAttribute("cy", 100);
         frontRing.setAttribute("r", radius);
 
-        backRing.style.strokeWidth = 10;
+        backRing.style.strokeWidth = 12;
         backRing.setAttribute("cx", 100);
         backRing.setAttribute("cy", 100);
         backRing.setAttribute("r", radius);
+    })
+
+    const playerStat = document.querySelectorAll('.player-stat');
+    playerStat.forEach(item => {
+        let playerData = item.getAttribute('data-info-player');
+        let bestData = item.getAttribute('data-info-best');
+
+        let playerNum = parseInt(playerData);
+        let bestNum = parseInt(bestData);
+
+        let frontRect = item.querySelector('.front-rect');
+        let backRect = item.querySelector('.back-rect');
+        let width = 120;
+        let height = 20;
+        let adjustedWidth = width - ( width * ( playerNum / bestNum ))
+
+        frontRect.setAttribute("width", adjustedWidth);
+        frontRect.setAttribute("height", height);
+
+        if (! item.querySelector('.front-rect-blue')){
+            frontRect.setAttribute("x", (width - adjustedWidth));
+        }
+
+        backRect.setAttribute("width", width);
+        backRect.setAttribute("height", height);
     })
 });
