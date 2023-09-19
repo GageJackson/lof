@@ -1,0 +1,13 @@
+<div th:fragment="match-performance">
+    <div class="stat-block" th:data-info-red="${'300000'}" th:data-info-blue="${'150000'}">
+        <div class="stat-info d-flex flex-column justify-content-center align-items-center rounded-circle">
+            <p class="color-primary-blue fs-300 fw-bold mb-0">300,000</p>
+            <p class="color-neutral-light mb-0">Damage Dealt</p>
+            <p class="color-primary-red fs-300 fw-bold mb-0">15,000</p>
+        </div>
+        <svg class="stat-ring">
+            <circle class="back-ring"/>
+            <circle class="front-ring"/>
+        </svg>
+    </div>
+</div>
