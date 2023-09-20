@@ -1,7 +1,13 @@
 <aside th:fragment="aside"
        class="col-auto"
 >
-  <p class="color-primary-main fs-500">Friends</p>
+  <div class="d-flex gap-3">
+    <p class="color-primary-main fs-500">Friends</p>
+    <button id="friend-refresh-btn">
+      <img src="../../static/img/refresh-friend.png" alt="refresh friends">
+    </button>
+  </div>
+
   <hr class="color-primary-main">
   <div th:each="friend : ${friends}"
        class="mb-1 w-100"

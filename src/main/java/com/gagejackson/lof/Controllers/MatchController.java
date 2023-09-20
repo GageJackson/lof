@@ -3,6 +3,7 @@ package com.gagejackson.lof.Controllers;
 import com.gagejackson.lof.DTOs.FriendSelection;
 import com.gagejackson.lof.DTOs.MatchInfo;
 import com.gagejackson.lof.DTOs.ParticipantDTO;
+import com.gagejackson.lof.DTOs.PerformanceStat;
 import com.gagejackson.lof.Models.Friend.Friend;
 import com.gagejackson.lof.Models.Friend.FriendMatch;
 import com.gagejackson.lof.Models.MatchEvent.Event;
@@ -19,9 +20,6 @@ import com.gagejackson.lof.Repositories.MatchOverview.ParticipantFrameChampRepos
 import com.gagejackson.lof.Repositories.MatchOverview.ParticipantFrameDamageRepository;
 import com.gagejackson.lof.Repositories.MatchOverview.ParticipantFrameRepository;
 import com.gagejackson.lof.Repositories.MatchOverview.ParticipantRepository;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -86,12 +84,51 @@ public class MatchController {
 
         List<ParticipantDTO> participants = getParticipants(match);
 
+//        List<PerformanceStat> performanceStats = getPerformanceStats(participants);
+
         model.addAttribute("matchInfo", matchInfo);
         model.addAttribute("friends", friends);
         model.addAttribute("participants", participants);
+//        model.addAttribute("performanceStats", performanceStats);
 
         return "detailed-match";
     }
+
+//    private List<PerformanceStat> getPerformanceStats(List<ParticipantDTO> participants){
+//        List<PerformanceStat> performanceStats = new ArrayList<>();
+//
+//
+//        PerformanceStat killStats = new PerformanceStat("Damage Dealt");
+//        PerformanceStat goldStats = new PerformanceStat("Damage Dealt");
+//        PerformanceStat csStats = new PerformanceStat("Damage Dealt");
+//
+//        PerformanceStat shieldStats = new PerformanceStat("Damage Dealt");
+//        PerformanceStat healStats = new PerformanceStat("Damage Dealt");
+//        PerformanceStat wardStats = new PerformanceStat("Damage Dealt");
+//
+//        PerformanceStat totalDamageDealtStats = new PerformanceStat("Damage Dealt");
+//        PerformanceStat totalDamageTakenStats = new PerformanceStat("Damage Taken");
+//        PerformanceStat ccStats = new PerformanceStat("Damage Dealt");
+//
+//        PerformanceStat turretDamageDealtStats = new PerformanceStat("Damage Dealt");
+//        PerformanceStat inhibitorDamageDealtStats = new PerformanceStat("Damage Taken");
+//        PerformanceStat monsterDamageDealtStats = new PerformanceStat("Damage Dealt");
+//
+//
+//        for ( ParticipantDTO participantInfo : participants) {
+//            Participant participant = participantInfo.getParticipant();
+//        }
+//
+//        performanceStats.add(damageDealtStats);
+//        performanceStats.add(damageDealtStats);
+//        performanceStats.add(damageDealtStats);
+//        performanceStats.add(damageDealtStats);
+//        performanceStats.add(damageDealtStats);
+//        performanceStats.add(damageDealtStats);
+//        performanceStats.add(damageDealtStats);
+//
+//        return performanceStats;
+//    }
 
     private List<FriendSelection> getFriends(List<Long> selection){
         List<FriendSelection> selectedFriends = new ArrayList<>();

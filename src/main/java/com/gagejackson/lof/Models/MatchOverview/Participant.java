@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.gagejackson.lof.Models.MatchEvent.ChampKill;
 import com.gagejackson.lof.Models.MatchEvent.Event;
+import com.gagejackson.lof.Models.MatchEvent.EventItem;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -341,6 +342,9 @@ public class Participant {
     @OneToMany (cascade = CascadeType.ALL, mappedBy = "victim")
     private List<ChampKill> champKill;
 
+    @OneToOne (cascade = CascadeType.ALL, mappedBy = "participant")
+    private ParticipantChallenges participantChallenges;
+
     @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "matches_id", nullable = false)
@@ -352,7 +356,7 @@ public class Participant {
     ////////////////////////////////////////////////////////////////*/
     public Participant(){}
 
-    public Participant(int assists, int baronKills, int bountyLevel, int champExperience, int champLevel, int championId, String championName, int championTransform, int consumablesPurchased, int damageDealtToBuildings, int damageDealtToObjectives, int damageDealtToTurrets, int damageSelfMitigated, int deaths, int detectorWardsPlaced, int doubleKills, int dragonKills, boolean firstBloodAssist, boolean firstBloodKill, boolean firstTowerAssist, boolean firstTowerKill, boolean gameEndedInEarlySurrender, boolean gameEndedInSurrender, int goldEarned, int goldSpent, String individualPosition, int inhibitorKills, int inhibitorTakedowns, int inhibitorsLost, int item0, int item1, int item2, int item3, int item4, int item5, int item6, int itemsPurchased, int killingSprees, int kills, String lane, int largestCriticalStrike, int largestKillingSpree, int largestMultiKill, int longestTimeSpentLiving, int magicDamageDealt, int magicDamageDealtToChampions, int magicDamageTaken, int neutralMinionsKilled, int nexusKills, int nexusTakedowns, int nexusLost, int objectivesStolen, int objectivesStolenAssists, int participantNum, int pentaKills, int physicalDamageDealt, int physicalDamageDealtToChampions, int physicalDamageTaken, int profileIcon, String puuid, int quadraKills, String riotIdName, String riotIdTagline, String role, int sightWardsBoughtInGame, int spell1Casts, int spell2Casts, int spell3Casts, int spell4Casts, int summoner1Casts, int summoner1Id, int summoner2Casts, int summoner2Id, String summonerId, int summonerLevel, String summonerName, boolean teamEarlySurrendered, int teamId, String teamPosition, int timeCCingOthers, int timePlayed, int totalDamageDealt, int totalDamageDealtToChampions, int totalDamageShieldedOnTeammates, int totalDamageTaken, int totalHeal, int totalHealsOnTeammates, int totalMinionsKilled, int totalTimeCCDealt, int totalTimeSpentDead, int totalUnitsHealed, int tripleKills, int trueDamageDealt, int trueDamageDealtToChampions, int trueDamageTaken, int turretKills, int turretTakedowns, int turretsLost, int unrealKills, int visionScore, int visionWardsBoughtInGame, int wardsKilled, int wardsPlaced, boolean win, List<Perk> perk, List<ParticipantFrame> participantFrame, List<Event> event, List<ChampKill> champKill, Match match) {
+    public Participant(int assists, int baronKills, int bountyLevel, int champExperience, int champLevel, int championId, String championName, int championTransform, int consumablesPurchased, int damageDealtToBuildings, int damageDealtToObjectives, int damageDealtToTurrets, int damageSelfMitigated, int deaths, int detectorWardsPlaced, int doubleKills, int dragonKills, boolean firstBloodAssist, boolean firstBloodKill, boolean firstTowerAssist, boolean firstTowerKill, boolean gameEndedInEarlySurrender, boolean gameEndedInSurrender, int goldEarned, int goldSpent, String individualPosition, int inhibitorKills, int inhibitorTakedowns, int inhibitorsLost, int item0, int item1, int item2, int item3, int item4, int item5, int item6, int itemsPurchased, int killingSprees, int kills, String lane, int largestCriticalStrike, int largestKillingSpree, int largestMultiKill, int longestTimeSpentLiving, int magicDamageDealt, int magicDamageDealtToChampions, int magicDamageTaken, int neutralMinionsKilled, int nexusKills, int nexusTakedowns, int nexusLost, int objectivesStolen, int objectivesStolenAssists, int participantNum, int pentaKills, int physicalDamageDealt, int physicalDamageDealtToChampions, int physicalDamageTaken, int profileIcon, String puuid, int quadraKills, String riotIdName, String riotIdTagline, String role, int sightWardsBoughtInGame, int spell1Casts, int spell2Casts, int spell3Casts, int spell4Casts, int summoner1Casts, int summoner1Id, int summoner2Casts, int summoner2Id, String summonerId, int summonerLevel, String summonerName, boolean teamEarlySurrendered, int teamId, String teamPosition, int timeCCingOthers, int timePlayed, int totalDamageDealt, int totalDamageDealtToChampions, int totalDamageShieldedOnTeammates, int totalDamageTaken, int totalHeal, int totalHealsOnTeammates, int totalMinionsKilled, int totalTimeCCDealt, int totalTimeSpentDead, int totalUnitsHealed, int tripleKills, int trueDamageDealt, int trueDamageDealtToChampions, int trueDamageTaken, int turretKills, int turretTakedowns, int turretsLost, int unrealKills, int visionScore, int visionWardsBoughtInGame, int wardsKilled, int wardsPlaced, boolean win, List<Perk> perk, List<ParticipantFrame> participantFrame, List<Event> event, List<ChampKill> champKill, ParticipantChallenges participantChallenges, Match match) {
         this.assists = assists;
         this.baronKills = baronKills;
         this.bountyLevel = bountyLevel;
@@ -461,10 +465,11 @@ public class Participant {
         this.participantFrame = participantFrame;
         this.event = event;
         this.champKill = champKill;
+        this.participantChallenges = participantChallenges;
         this.match = match;
     }
 
-    public Participant(long id, int assists, int baronKills, int bountyLevel, int champExperience, int champLevel, int championId, String championName, int championTransform, int consumablesPurchased, int damageDealtToBuildings, int damageDealtToObjectives, int damageDealtToTurrets, int damageSelfMitigated, int deaths, int detectorWardsPlaced, int doubleKills, int dragonKills, boolean firstBloodAssist, boolean firstBloodKill, boolean firstTowerAssist, boolean firstTowerKill, boolean gameEndedInEarlySurrender, boolean gameEndedInSurrender, int goldEarned, int goldSpent, String individualPosition, int inhibitorKills, int inhibitorTakedowns, int inhibitorsLost, int item0, int item1, int item2, int item3, int item4, int item5, int item6, int itemsPurchased, int killingSprees, int kills, String lane, int largestCriticalStrike, int largestKillingSpree, int largestMultiKill, int longestTimeSpentLiving, int magicDamageDealt, int magicDamageDealtToChampions, int magicDamageTaken, int neutralMinionsKilled, int nexusKills, int nexusTakedowns, int nexusLost, int objectivesStolen, int objectivesStolenAssists, int participantNum, int pentaKills, int physicalDamageDealt, int physicalDamageDealtToChampions, int physicalDamageTaken, int profileIcon, String puuid, int quadraKills, String riotIdName, String riotIdTagline, String role, int sightWardsBoughtInGame, int spell1Casts, int spell2Casts, int spell3Casts, int spell4Casts, int summoner1Casts, int summoner1Id, int summoner2Casts, int summoner2Id, String summonerId, int summonerLevel, String summonerName, boolean teamEarlySurrendered, int teamId, String teamPosition, int timeCCingOthers, int timePlayed, int totalDamageDealt, int totalDamageDealtToChampions, int totalDamageShieldedOnTeammates, int totalDamageTaken, int totalHeal, int totalHealsOnTeammates, int totalMinionsKilled, int totalTimeCCDealt, int totalTimeSpentDead, int totalUnitsHealed, int tripleKills, int trueDamageDealt, int trueDamageDealtToChampions, int trueDamageTaken, int turretKills, int turretTakedowns, int turretsLost, int unrealKills, int visionScore, int visionWardsBoughtInGame, int wardsKilled, int wardsPlaced, boolean win, List<Perk> perk, List<ParticipantFrame> participantFrame, List<Event> event, List<ChampKill> champKill, Match match) {
+    public Participant(long id, int assists, int baronKills, int bountyLevel, int champExperience, int champLevel, int championId, String championName, int championTransform, int consumablesPurchased, int damageDealtToBuildings, int damageDealtToObjectives, int damageDealtToTurrets, int damageSelfMitigated, int deaths, int detectorWardsPlaced, int doubleKills, int dragonKills, boolean firstBloodAssist, boolean firstBloodKill, boolean firstTowerAssist, boolean firstTowerKill, boolean gameEndedInEarlySurrender, boolean gameEndedInSurrender, int goldEarned, int goldSpent, String individualPosition, int inhibitorKills, int inhibitorTakedowns, int inhibitorsLost, int item0, int item1, int item2, int item3, int item4, int item5, int item6, int itemsPurchased, int killingSprees, int kills, String lane, int largestCriticalStrike, int largestKillingSpree, int largestMultiKill, int longestTimeSpentLiving, int magicDamageDealt, int magicDamageDealtToChampions, int magicDamageTaken, int neutralMinionsKilled, int nexusKills, int nexusTakedowns, int nexusLost, int objectivesStolen, int objectivesStolenAssists, int participantNum, int pentaKills, int physicalDamageDealt, int physicalDamageDealtToChampions, int physicalDamageTaken, int profileIcon, String puuid, int quadraKills, String riotIdName, String riotIdTagline, String role, int sightWardsBoughtInGame, int spell1Casts, int spell2Casts, int spell3Casts, int spell4Casts, int summoner1Casts, int summoner1Id, int summoner2Casts, int summoner2Id, String summonerId, int summonerLevel, String summonerName, boolean teamEarlySurrendered, int teamId, String teamPosition, int timeCCingOthers, int timePlayed, int totalDamageDealt, int totalDamageDealtToChampions, int totalDamageShieldedOnTeammates, int totalDamageTaken, int totalHeal, int totalHealsOnTeammates, int totalMinionsKilled, int totalTimeCCDealt, int totalTimeSpentDead, int totalUnitsHealed, int tripleKills, int trueDamageDealt, int trueDamageDealtToChampions, int trueDamageTaken, int turretKills, int turretTakedowns, int turretsLost, int unrealKills, int visionScore, int visionWardsBoughtInGame, int wardsKilled, int wardsPlaced, boolean win, List<Perk> perk, List<ParticipantFrame> participantFrame, List<Event> event, List<ChampKill> champKill, ParticipantChallenges participantChallenges, Match match) {
         this.id = id;
         this.assists = assists;
         this.baronKills = baronKills;
@@ -574,6 +579,7 @@ public class Participant {
         this.participantFrame = participantFrame;
         this.event = event;
         this.champKill = champKill;
+        this.participantChallenges = participantChallenges;
         this.match = match;
     }
 
@@ -1451,6 +1457,14 @@ public class Participant {
 
     public void setEventChampKill(List<ChampKill> champKill) {
         this.champKill = champKill;
+    }
+
+    public ParticipantChallenges getParticipantChallenges() {
+        return participantChallenges;
+    }
+
+    public void setParticipantChallenges(ParticipantChallenges participantChallenges) {
+        this.participantChallenges = participantChallenges;
     }
 
     public Match getMatch() {
