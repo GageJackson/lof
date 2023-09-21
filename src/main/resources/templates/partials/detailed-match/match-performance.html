@@ -1,34 +1,34 @@
 <div th:fragment="match-performance"
-     th:with="match=${matchInfo.getMatch()},
-              teams=${match.getTeam()},
-              blueTeam=${teams[0]},
-              redTeam=${teams[1]},
-              blueData=${blueTeam.getTotalDamage},
-              redData=${redTeam.getTotalDamage},
+>
+    <th:block th:each="pStat : ${performanceStats}"
+              th:with="pStatName=${pStat.getStatName()},
+              blueData=${pStat.getBlueTeamTotal()},
+              redData=${pStat.getRedTeamTotal()},
               blueDataFormatted=${#numbers.formatDecimal(blueData, 1, 'COMMA', 0, 'POINT')},
               redDataFormatted=${#numbers.formatDecimal(redData, 1, 'COMMA', 0, 'POINT')}
 "
->
-    <div class="d-flex justify-content-between align-content-center gap-3">
-        <div th:replace="~{partials/detailed-match/match-performance :: team('Blue Team', ${0})}"></div>
+    >
+        <div class="d-flex justify-content-between align-content-center gap-3 mb-3 bg-color-neutral-black">
+            <div th:replace="~{partials/detailed-match/match-performance :: team('Blue Team', ${0})}"></div>
 
-        <div th:replace="~{partials/detailed-match/match-performance :: performanceDial('Damage Dealt', ${redData}, ${blueData}, ${redDataFormatted}, ${blueDataFormatted})}"></div>
+            <div th:replace="~{partials/detailed-match/match-performance :: performanceDial(${pStatName}, ${redData}, ${blueData}, ${redDataFormatted}, ${blueDataFormatted})}"></div>
 
-        <div th:replace="~{partials/detailed-match/match-performance :: team('Red Team', ${1})}"></div>
-    </div>
+            <div th:replace="~{partials/detailed-match/match-performance :: team('Red Team', ${1})}"></div>
+        </div>
+    </th:block>
 </div>
 
-<div th:fragment="redPlayer(participantData)"
+<div th:fragment="redPlayer(participantData, maxValueData)"
      th:with="participantDataFormatted=${#numbers.formatDecimal(participantData, 1, 'COMMA', 0, 'POINT')}"
      class="d-flex justify-content-end gap-1"
 >
     <div class="player-stat"
          th:data-info-player="${participantData}"
-         th:data-info-best="${participantData * 2}"
+         th:data-info-best="${maxValueData}"
     >
         <svg class="stat-rect">
-            <rect class="back-rect"/>
-            <rect class="front-rect front-rect-red"/>
+            <rect class="back-rect front-rect-red"/>
+            <rect class="front-rect"/>
         </svg>
         <div class="player-info d-flex justify-content-end">
             <p class="color-neutral-light fs-200 fw-bold mb-0 pe-2" th:text="${participantDataFormatted}">0</p>
@@ -37,18 +37,18 @@
     <img th:replace="~{partials/icons/champion-icon :: small(100)}">
 </div>
 
-<div th:fragment="bluePlayer(participantData)"
+<div th:fragment="bluePlayer(participantData, maxValueData)"
      th:with="participantDataFormatted=${#numbers.formatDecimal(participantData, 1, 'COMMA', 0, 'POINT')}"
      class="d-flex gap-1"
 >
     <img th:replace="~{partials/icons/champion-icon :: small(100)}">
     <div class="player-stat"
          th:data-info-player="${participantData}"
-         th:data-info-best="${participantData * 2}"
+         th:data-info-best="${maxValueData}"
     >
         <svg class="stat-rect">
-            <rect class="back-rect"/>
-            <rect class="front-rect front-rect-blue"/>
+            <rect class="back-rect front-rect-blue"/>
+            <rect class="front-rect"/>
         </svg>
         <div class="player-info d-flex justify-content-start">
             <p class="color-neutral-light fs-200 fw-bold mb-0 ps-2" th:text="${participantDataFormatted}">0</p>
@@ -65,16 +65,16 @@
               isRedTeam=${team == redTeam}"
      class="d-flex flex-column justify-content-between"
 >
-    <div th:each="participant : ${participants}"
+    <div th:each="participant, i : ${participants}"
          class="p-2"
          th:if="${participant.teamId == team}"
     >
         <th:block th:if="${isBlueTeam}">
-            <div th:replace="~{partials/detailed-match/match-performance :: bluePlayer(${participant.getTotalDamageDealtToChampions()})}"></div>
+            <div th:replace="~{partials/detailed-match/match-performance :: bluePlayer(${pStat.getPlayerTotals()[i.index]}, ${pStat.getHighestPlayerTotal()})}"></div>
         </th:block>
 
         <th:block th:if="${isRedTeam}">
-            <div th:replace="~{partials/detailed-match/match-performance :: redPlayer(${participant.getTotalDamageDealtToChampions()})}"></div>
+            <div th:replace="~{partials/detailed-match/match-performance :: redPlayer(${pStat.getPlayerTotals()[i.index]}, ${pStat.getHighestPlayerTotal()})}"></div>
         </th:block>
     </div>
 </div>

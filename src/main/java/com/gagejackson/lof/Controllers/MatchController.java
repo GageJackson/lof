@@ -1,11 +1,9 @@
 package com.gagejackson.lof.Controllers;
 
-import com.gagejackson.lof.DTOs.FriendSelection;
-import com.gagejackson.lof.DTOs.MatchInfo;
-import com.gagejackson.lof.DTOs.ParticipantDTO;
-import com.gagejackson.lof.DTOs.PerformanceStat;
+import com.gagejackson.lof.DTOs.*;
 import com.gagejackson.lof.Models.Friend.Friend;
 import com.gagejackson.lof.Models.Friend.FriendMatch;
+import com.gagejackson.lof.Models.MatchEvent.ChampKill;
 import com.gagejackson.lof.Models.MatchEvent.Event;
 import com.gagejackson.lof.Models.MatchEvent.EventItem;
 import com.gagejackson.lof.Models.MatchEvent.SkillUp;
@@ -27,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 public class MatchController {
@@ -84,51 +83,179 @@ public class MatchController {
 
         List<ParticipantDTO> participants = getParticipants(match);
 
-//        List<PerformanceStat> performanceStats = getPerformanceStats(participants);
+        List<PerformanceStat> performanceStats = getPerformanceStats(participants);
+
+        List<EventKill> killEvents = getKillEvents(participants);
 
         model.addAttribute("matchInfo", matchInfo);
         model.addAttribute("friends", friends);
         model.addAttribute("participants", participants);
-//        model.addAttribute("performanceStats", performanceStats);
+        model.addAttribute("performanceStats", performanceStats);
+        model.addAttribute("killEvents", killEvents);
 
         return "detailed-match";
     }
 
-//    private List<PerformanceStat> getPerformanceStats(List<ParticipantDTO> participants){
-//        List<PerformanceStat> performanceStats = new ArrayList<>();
-//
-//
-//        PerformanceStat killStats = new PerformanceStat("Damage Dealt");
-//        PerformanceStat goldStats = new PerformanceStat("Damage Dealt");
-//        PerformanceStat csStats = new PerformanceStat("Damage Dealt");
-//
-//        PerformanceStat shieldStats = new PerformanceStat("Damage Dealt");
-//        PerformanceStat healStats = new PerformanceStat("Damage Dealt");
-//        PerformanceStat wardStats = new PerformanceStat("Damage Dealt");
-//
-//        PerformanceStat totalDamageDealtStats = new PerformanceStat("Damage Dealt");
-//        PerformanceStat totalDamageTakenStats = new PerformanceStat("Damage Taken");
-//        PerformanceStat ccStats = new PerformanceStat("Damage Dealt");
-//
-//        PerformanceStat turretDamageDealtStats = new PerformanceStat("Damage Dealt");
-//        PerformanceStat inhibitorDamageDealtStats = new PerformanceStat("Damage Taken");
-//        PerformanceStat monsterDamageDealtStats = new PerformanceStat("Damage Dealt");
-//
-//
-//        for ( ParticipantDTO participantInfo : participants) {
-//            Participant participant = participantInfo.getParticipant();
-//        }
-//
-//        performanceStats.add(damageDealtStats);
-//        performanceStats.add(damageDealtStats);
-//        performanceStats.add(damageDealtStats);
-//        performanceStats.add(damageDealtStats);
-//        performanceStats.add(damageDealtStats);
-//        performanceStats.add(damageDealtStats);
-//        performanceStats.add(damageDealtStats);
-//
-//        return performanceStats;
-//    }
+    private List<EventKill> getKillEvents(List<ParticipantDTO> participants){
+        List<EventKill> killEvents = new ArrayList<>();
+
+        for (ParticipantDTO participant : participants) {
+            List<Event> events = participant.getParticipant().getEvent();
+            for (Event event : events) {
+                if (event.getChampKill() != null){
+                    ChampKill champKill = event.getChampKill();
+                    EventKill eventKill = new EventKill();
+                    eventKill.setKiller(event.getParticipant());
+                    eventKill.setKilled(champKill.getVictim());
+                    eventKill.setTimestamp(event.getTimestamp());
+
+                    System.out.println("champKill.getPositionX() = " + ((champKill.getPositionX() / 100)));
+                    System.out.println("champKill.getPositionY() = " + ((champKill.getPositionY() / 100)));
+
+                    eventKill.setPosX((champKill.getPositionX() / 100));
+                    eventKill.setPosY((champKill.getPositionY() / 100));
+
+                    killEvents.add(eventKill);
+                }
+            }
+        }
+
+        List<EventKill> sortedEvents = killEvents.stream()
+                .sorted(Comparator.comparing(EventKill::getTimestamp))
+                .collect(Collectors.toList());
+
+        return sortedEvents;
+    }
+
+    private List<PerformanceStat> getPerformanceStats(List<ParticipantDTO> participants){
+        List<PerformanceStat> performanceStats = new ArrayList<>();
+
+        PerformanceStat gold = new PerformanceStat("Total Gold");
+        PerformanceStat cs = new PerformanceStat("Total CS");
+        PerformanceStat bounty = new PerformanceStat("Bounty Gold Gained");
+
+        PerformanceStat shields = new PerformanceStat("Team Shielding");
+        PerformanceStat heals = new PerformanceStat("Team Healing");
+        PerformanceStat cc = new PerformanceStat("Time CC'ing Others");
+
+        PerformanceStat kills = new PerformanceStat("Kills");
+        PerformanceStat damageDealt = new PerformanceStat("Damage to Champions");
+        PerformanceStat assists = new PerformanceStat("Assists");
+
+        PerformanceStat structureTakedowns = new PerformanceStat("Structure Takedowns");
+        PerformanceStat eliteMonsterTakedowns = new PerformanceStat("Elite Monster Takedowns");
+        PerformanceStat objectiveDamage = new PerformanceStat("Damage to Objectives");
+
+        PerformanceStat visionScore = new PerformanceStat("Vision Score");
+        PerformanceStat wardsPlaced = new PerformanceStat("Wards Placed");
+        PerformanceStat wardsKilled = new PerformanceStat("Wards Destroyed");
+
+        PerformanceStat deaths = new PerformanceStat("Deaths");
+        PerformanceStat timeSpentDead = new PerformanceStat("Time Spent Dead");
+        PerformanceStat damageTaken = new PerformanceStat("Damage Taken");
+
+        PerformanceStat damageSelfMitigated = new PerformanceStat("Damage Mitigated");
+        PerformanceStat totalHeal = new PerformanceStat("Total Self Heals");
+        PerformanceStat skillShotsDodged = new PerformanceStat("Skill Shots Dodged");
+
+
+        for ( ParticipantDTO participantInfo : participants) {
+            Participant participant = participantInfo.getParticipant();
+            ParticipantChallenges challenges = participant.getParticipantChallenges();
+
+            int participantTeam = participant.getTeamId();
+            gold = setPerformanceStat(gold, participant.getGoldEarned(), participantTeam);
+            cs = setPerformanceStat(cs, (participant.getNeutralMinionsKilled() + participant.getTotalMinionsKilled()), participantTeam);
+            bounty = setPerformanceStat(bounty, challenges.getBountyGold(), participantTeam);
+
+            shields = setPerformanceStat(shields, participant.getTotalDamageShieldedOnTeammates(), participantTeam);
+            heals = setPerformanceStat(heals, participant.getTotalHealsOnTeammates(), participantTeam);
+            cc = setPerformanceStat(cc, participant.getTimeCCingOthers(), participantTeam);
+
+            kills = setPerformanceStat(kills, participant.getKills(), participantTeam);
+            damageDealt = setPerformanceStat(damageDealt, participant.getTotalDamageDealtToChampions(), participantTeam);
+            assists = setPerformanceStat(assists, participant.getAssists(), participantTeam);
+
+            int buildingTakedowns = participant.getInhibitorTakedowns() + participant.getInhibitorTakedowns() + participant.getNexusTakedowns();
+            int monsterTakedowns = challenges.getBaronTakedowns() + challenges.getRiftHeraldTakedowns() + challenges.getDragonTakedowns();
+
+            structureTakedowns = setPerformanceStat(structureTakedowns, buildingTakedowns, participantTeam);
+            eliteMonsterTakedowns = setPerformanceStat(eliteMonsterTakedowns, monsterTakedowns, participantTeam);
+            objectiveDamage = setPerformanceStat(objectiveDamage, participant.getDamageDealtToObjectives(), participantTeam);
+
+            visionScore = setPerformanceStat(visionScore, participant.getVisionScore(), participantTeam);
+            wardsPlaced = setPerformanceStat(wardsPlaced, participant.getWardsPlaced(), participantTeam);
+            wardsKilled = setPerformanceStat(wardsKilled, participant.getWardsKilled(), participantTeam);
+
+            deaths = setPerformanceStat(deaths, participant.getDeaths(), participantTeam);
+            timeSpentDead = setPerformanceStat(timeSpentDead, participant.getTotalTimeSpentDead(), participantTeam);
+            damageTaken = setPerformanceStat(damageTaken, participant.getTotalDamageTaken(), participantTeam);
+
+            damageSelfMitigated = setPerformanceStat(damageSelfMitigated, participant.getDamageSelfMitigated(), participantTeam);
+            totalHeal = setPerformanceStat(totalHeal, participant.getTotalHeal(), participantTeam);
+            skillShotsDodged = setPerformanceStat(skillShotsDodged, challenges.getSkillshotsDodged(), participantTeam);
+        }
+
+        performanceStats.add(gold);
+        performanceStats.add(cs);
+        performanceStats.add(bounty);
+
+        performanceStats.add(shields);
+        performanceStats.add(heals);
+        performanceStats.add(cc);
+
+        performanceStats.add(kills);
+        performanceStats.add(damageDealt);
+        performanceStats.add(assists);
+
+        performanceStats.add(structureTakedowns);
+        performanceStats.add(eliteMonsterTakedowns);
+        performanceStats.add(objectiveDamage);
+
+        performanceStats.add(visionScore);
+        performanceStats.add(wardsPlaced);
+        performanceStats.add(wardsKilled);
+
+        performanceStats.add(deaths);
+        performanceStats.add(timeSpentDead);
+        performanceStats.add(damageTaken);
+
+        performanceStats.add(damageSelfMitigated);
+        performanceStats.add(totalHeal);
+        performanceStats.add(skillShotsDodged);
+
+        return performanceStats;
+    }
+
+    private PerformanceStat setPerformanceStat(PerformanceStat performanceStat, int participantData, int participantTeam){
+        int highestPlayerTotal = performanceStat.getHighestPlayerTotal();
+
+        if (participantData > highestPlayerTotal){
+            performanceStat.setHighestPlayerTotal(participantData);
+        }
+
+        if (participantTeam == 100) {
+            int blueTeamTotal = performanceStat.getBlueTeamTotal();
+            blueTeamTotal += participantData;
+            performanceStat.setBlueTeamTotal(blueTeamTotal);
+        } else {
+            int redTeamTotal = performanceStat.getRedTeamTotal();
+            redTeamTotal += participantData;
+            performanceStat.setRedTeamTotal(redTeamTotal);
+        }
+
+        if (performanceStat.getPlayerTotals() == null){
+            List<Integer> playerTotals = new ArrayList<>();
+            playerTotals.add(participantData);
+            performanceStat.setPlayerTotals(playerTotals);
+        } else {
+            List<Integer> playerTotals = performanceStat.getPlayerTotals();
+            playerTotals.add(participantData);
+            performanceStat.setPlayerTotals(playerTotals);
+        }
+
+        return performanceStat;
+    }
 
     private List<FriendSelection> getFriends(List<Long> selection){
         List<FriendSelection> selectedFriends = new ArrayList<>();

@@ -24,3 +24,9 @@
      class="champ-icon non-selectable opacity-75"
      th:classappend="${'participant-toggle-' + num}"
 >
+
+<img th:fragment="timeline(name)"
+     th:src="@{${'/dragon_tail/13.14.1/img/champion/' + name + '.png'}}"
+     alt="champion icon"
+     class="friend-icon non-selectable opacity-75"
+>

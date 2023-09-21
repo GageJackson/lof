@@ -318,6 +318,18 @@ aside {
     background-image: url('../img/match-icons/cs.png');
 }
 
+#friend-refresh-btn {
+    background-image: url('../img/icon-refresh.png');
+}
+
+#friend-refresh-btn:hover {
+    background-image: url('../img/icon-refresh-over.png');
+}
+
+#friend-refresh-btn:active {
+    background-image: url('../img/icon-refresh-down.png');
+}
+
 .coin-icon {
     background-image: url('../img/match-icons/coin.png');
 }
@@ -518,8 +530,13 @@ aside {
     fill: var(--color-primary-red);
 }
 
-.back-rect {
+.front-rect {
     fill: var(--color-neutral-medDark);
 }
 
+.kill-event {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
 
