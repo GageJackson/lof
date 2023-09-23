@@ -112,8 +112,8 @@ public class MatchController {
                     System.out.println("champKill.getPositionX() = " + ((champKill.getPositionX() / 100)));
                     System.out.println("champKill.getPositionY() = " + ((champKill.getPositionY() / 100)));
 
-                    eventKill.setPosX((champKill.getPositionX() / 100));
-                    eventKill.setPosY((champKill.getPositionY() / 100));
+                    eventKill.setPosX((champKill.getPositionX() / 150) + 0);
+                    eventKill.setPosY((champKill.getPositionY() / 150) + 0);
 
                     killEvents.add(eventKill);
                 }
