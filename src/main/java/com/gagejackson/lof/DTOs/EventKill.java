@@ -9,6 +9,8 @@ public class EventKill {
     private int posY;
     private long timestamp;
 
+    private int id;
+
 
     /*////////////////////////////////////////////////////////////////
     CONSTRUCTORS
@@ -58,5 +60,13 @@ public class EventKill {
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

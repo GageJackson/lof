@@ -81,11 +81,13 @@ public class MatchController {
         matchInfo.setFriends(friendsInMatch);
         matchInfo.setFriendWin(friendWon);
 
+        String gameMode = match.getGameMode();
+
         List<ParticipantDTO> participants = getParticipants(match);
 
         List<PerformanceStat> performanceStats = getPerformanceStats(participants);
 
-        List<EventKill> killEvents = getKillEvents(participants);
+        List<EventKill> killEvents = getKillEvents(participants, gameMode);
 
         model.addAttribute("matchInfo", matchInfo);
         model.addAttribute("friends", friends);
@@ -96,8 +98,9 @@ public class MatchController {
         return "detailed-match";
     }
 
-    private List<EventKill> getKillEvents(List<ParticipantDTO> participants){
+    private List<EventKill> getKillEvents(List<ParticipantDTO> participants, String gameMode){
         List<EventKill> killEvents = new ArrayList<>();
+        int id = 0;
 
         for (ParticipantDTO participant : participants) {
             List<Event> events = participant.getParticipant().getEvent();
@@ -109,11 +112,16 @@ public class MatchController {
                     eventKill.setKilled(champKill.getVictim());
                     eventKill.setTimestamp(event.getTimestamp());
 
-                    System.out.println("champKill.getPositionX() = " + ((champKill.getPositionX() / 100)));
-                    System.out.println("champKill.getPositionY() = " + ((champKill.getPositionY() / 100)));
+                    if (Objects.equals(gameMode, "CLASSIC")) {
+                        eventKill.setPosX((champKill.getPositionX() / 150));
+                        eventKill.setPosY((champKill.getPositionY() / 150));
+                    } else if (Objects.equals(gameMode, "ARAM")) {
+                        eventKill.setPosX((champKill.getPositionX() / 130));
+                        eventKill.setPosY((champKill.getPositionY() / 130));
+                    }
 
-                    eventKill.setPosX((champKill.getPositionX() / 150) + 0);
-                    eventKill.setPosY((champKill.getPositionY() / 150) + 0);
+                    eventKill.setId(id);
+                    id++;
 
                     killEvents.add(eventKill);
                 }

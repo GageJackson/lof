@@ -1,30 +1,36 @@
 <div th:fragment="match-timeline" xmlns:th="http://www.w3.org/1999/html">
   <div class="container">
+    <div class="row mb-3">
+      <div class="col">
+        <div class="d-flex gap-3">
+          <th:block th:each="participantInfo, index : ${participants}"
+                    th:with="participant=${participantInfo.getParticipant()},
+                     participantId=${participant.getId()}
+            "
+          >
+            <button class="nav-link px-0 participant-kill-btns"
+                    th:id="${'participant-' + participantId}"
+                    th:data-participant-id="${participantId}"
+            >
+              <img th:replace="~{partials/icons/champion-icon.html :: image(teamId)}">
+            </button>
+          </th:block>
+        </div>
+      </div>
+    </div>
     <div class="row">
       <div class="col-8">
         <div class="position-relative">
-          <div class="kill-event green"
-               style="position: absolute; bottom: 0%; left: 0%;"
-          ></div>
-          <div class="kill-event green"
-               style="position: absolute; bottom: 50%; left: 50%;"
-          ></div>
-          <div class="kill-event green"
-               style="position: absolute; bottom: 0%; left: 100%;"
-          ></div>
-          <div class="kill-event green"
-               style="position: absolute; bottom: 100%; left: 0%;"
-          ></div>
-          <div class="kill-event green"
-               style="position: absolute; bottom: 100%; left: 100%;"
-          ></div>
           <th:block th:each="killEvent, i : ${killEvents}">
             <th:block th:with="posX=${(killEvent.getPosX())},
                                posY=${(killEvent.getPosY())}"
             >
-              <div class="kill-event"
+              <div th:id="${'event-dot-' + killEvent.getId()}"
+                   class="kill-event event-dots"
                    th:classappend="${killEvent.getKiller().getTeamId() == 100} ? 'bg-color-primary-blue' : 'bg-color-primary-red'"
                    th:style="'position: absolute; bottom: ' + ${posY} + '%; left: ' + ${posX} + '%;'"
+                   th:data-killer-id="${killEvent.getKiller().getId}"
+                   th:data-killed-id="${killEvent.getKilled().getId}"
               ></div>
             </th:block>
           </th:block>
@@ -40,27 +46,31 @@
         </div>
       </div>
 
-      <div class="col-4 bg-color-neutral-black">
+      <div class="col-4 bg-color-neutral-black py-2 px-3 killList">
         <th:block th:each="killEvent, i : ${killEvents}">
-          <div class="rounded p-2 mb-1"
+          <div th:id="${'event-block-' + killEvent.getId()}"
+               class="rounded p-2 mb-1 event-blocks"
                th:classappend="${killEvent.getKiller().getTeamId() == 100} ? 'bg-color-primary-blue' : 'bg-color-primary-red'"
                th:with="killerChamp=${killEvent.getKiller().getChampionName()},
                         killedChamp=${killEvent.getKilled().getChampionName()}"
+               th:data-killer-id="${killEvent.getKiller().getId}"
+               th:data-killed-id="${killEvent.getKilled().getId}"
           >
             <div class="d-flex align-items-center gap-2">
               <img th:replace="~{partials/icons/champion-icon :: timeline(${killerChamp})}">
               <img th:src="@{/img/match-icons/kda.png}" class="">
               <img th:replace="~{partials/icons/champion-icon :: timeline(${killedChamp})}">
+              <p th:with="timestamp=${killEvent.getTimestamp()},
+                          minutes=${(timestamp / 60000) + 'm'},
+                          mSeconds=${timestamp % 60000},
+                          seconds=${mSeconds / 1000 + 's'},
+                          timeFormatted=${minutes + ' ' + seconds}">
+                <span th:text="${timeFormatted}" class="color-neutral-light"></span>
+              </p>
             </div>
-            <p th:with="posX=${killEvent.getPosX()},
-                        posY=${killEvent.getPosY()}">
-              <span th:text="${posX}" class="color-neutral-light"></span>
-              <span th:text="${posY}" class="color-neutral-light"></span>
-            </p>
           </div>
         </th:block>
       </div>
     </div>
   </div>
-
 </div>

@@ -23,8 +23,13 @@
   <script src="/js/keys.js" defer></script>
   <script src="/js/riotApi.js" defer></script>
   <script src="/js/index.js" defer></script>
-  <script src="/js/detailedMatch.js" defer></script>
-  <script src="/js/match-performance.js" defer></script>
+
+  <th:block th:if="${title == 'Match'}">
+    <script src="/js/detailedMatch.js" defer></script>
+    <script src="/js/match-performance.js" defer></script>
+    <script src="/js/match-timeline.js" defer></script>
+  </th:block>
+
   <script src="/js/google-charts.js" defer></script>
 
 </head>
