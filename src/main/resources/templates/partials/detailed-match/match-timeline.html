@@ -9,7 +9,7 @@
             "
           >
             <button class="nav-link px-0 participant-kill-btns"
-                    th:id="${'participant-' + participantId}"
+                    th:id="${'participantKill-' + participantId}"
                     th:data-participant-id="${participantId}"
             >
               <img th:replace="~{partials/icons/champion-icon.html :: image(teamId)}">
@@ -36,11 +36,11 @@
           </th:block>
 
           <img th:if="${matchInfo.getMatch().getGameMode() == 'CLASSIC'}"
-               th:src="@{/img/maps/map11.png}" alt="Rift Map"
+               th:src="@{/img/maps/map11b.png}" alt="Rift Map"
                class="img-fluid"
           >
           <img th:if="${matchInfo.getMatch().getGameMode() == 'ARAM'}"
-               th:src="@{/img/maps/map12.png}" alt="Aram Map"
+               th:src="@{/img/maps/map12b.png}" alt="Aram Map"
                class="img-fluid"
           >
         </div>

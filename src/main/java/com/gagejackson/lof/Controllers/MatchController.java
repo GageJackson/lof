@@ -84,15 +84,13 @@ public class MatchController {
         String gameMode = match.getGameMode();
 
         List<ParticipantDTO> participants = getParticipants(match);
-
-        List<PerformanceStat> performanceStats = getPerformanceStats(participants);
-
+        List<PerformanceSet> performanceSets = getPerformanceSets(participants);
         List<EventKill> killEvents = getKillEvents(participants, gameMode);
 
         model.addAttribute("matchInfo", matchInfo);
         model.addAttribute("friends", friends);
         model.addAttribute("participants", participants);
-        model.addAttribute("performanceStats", performanceStats);
+        model.addAttribute("performanceSets", performanceSets);
         model.addAttribute("killEvents", killEvents);
 
         return "detailed-match";
@@ -135,8 +133,8 @@ public class MatchController {
         return sortedEvents;
     }
 
-    private List<PerformanceStat> getPerformanceStats(List<ParticipantDTO> participants){
-        List<PerformanceStat> performanceStats = new ArrayList<>();
+    private List<PerformanceSet> getPerformanceSets(List<ParticipantDTO> participants){
+        List<PerformanceSet> performanceSets = new ArrayList<>();
 
         PerformanceStat gold = new PerformanceStat("Total Gold");
         PerformanceStat cs = new PerformanceStat("Total CS");
@@ -204,35 +202,27 @@ public class MatchController {
             skillShotsDodged = setPerformanceStat(skillShotsDodged, challenges.getSkillshotsDodged(), participantTeam);
         }
 
-        performanceStats.add(gold);
-        performanceStats.add(cs);
-        performanceStats.add(bounty);
+        performanceSets.add(setPerformanceSets("Economy", cs, gold, bounty));
+        performanceSets.add(setPerformanceSets("Support", shields, heals, cc));
+        performanceSets.add(setPerformanceSets("Combat", kills, damageDealt, assists));
+        performanceSets.add(setPerformanceSets("Objectives", structureTakedowns, eliteMonsterTakedowns, objectiveDamage));
+        performanceSets.add(setPerformanceSets("Vision", visionScore, wardsPlaced, wardsKilled));
+        performanceSets.add(setPerformanceSets("Demise", deaths, timeSpentDead, damageTaken));
+        performanceSets.add(setPerformanceSets("Durability", damageSelfMitigated, totalHeal, skillShotsDodged));
 
-        performanceStats.add(shields);
-        performanceStats.add(heals);
-        performanceStats.add(cc);
+        return performanceSets;
+    }
 
-        performanceStats.add(kills);
-        performanceStats.add(damageDealt);
-        performanceStats.add(assists);
+    private PerformanceSet setPerformanceSets(String setName, PerformanceStat stat1, PerformanceStat stat2, PerformanceStat stat3){
+        PerformanceSet performanceSet = new PerformanceSet(setName);
 
-        performanceStats.add(structureTakedowns);
-        performanceStats.add(eliteMonsterTakedowns);
-        performanceStats.add(objectiveDamage);
+        List<PerformanceStat> performanceStats = new ArrayList<>();
+        performanceStats.add(stat1);
+        performanceStats.add(stat2);
+        performanceStats.add(stat3);
+        performanceSet.setPerformanceStats(performanceStats);
 
-        performanceStats.add(visionScore);
-        performanceStats.add(wardsPlaced);
-        performanceStats.add(wardsKilled);
-
-        performanceStats.add(deaths);
-        performanceStats.add(timeSpentDead);
-        performanceStats.add(damageTaken);
-
-        performanceStats.add(damageSelfMitigated);
-        performanceStats.add(totalHeal);
-        performanceStats.add(skillShotsDodged);
-
-        return performanceStats;
+        return performanceSet;
     }
 
     private PerformanceStat setPerformanceStat(PerformanceStat performanceStat, int participantData, int participantTeam){

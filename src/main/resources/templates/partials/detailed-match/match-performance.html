@@ -1,18 +1,59 @@
 <div th:fragment="match-performance"
 >
-    <th:block th:each="pStat : ${performanceStats}"
+    <th:block th:each="pSet : ${performanceSets}"
+              th:with="pSetName=${pSet.getGroupName()},
+              performanceStats=${pSet.getPerformanceStats()}
+"
+    >
+        <div class="d-flex justify-content-between align-content-center gap-3 mb-3 rounded bg-color-neutral-black">
+            <div class="bg-color-primary-main  ms-3">
+                <div class="vertical-text-container" >
+                    <h3 th:text="${pSetName}" class="vertical-text color-neutral-light"></h3>
+                </div>
+            </div>
+
+            <div th:replace="~{partials/detailed-match/match-performance :: performanceStat(${performanceStats}, ${pSetName})}"></div>
+
+            <div class="d-flex flex-column justify-content-evenly me-3">
+                <button th:id="${pSetName + '-btn-1'}"
+                        class="p-stat-btn btn bg-color-primary-main color-neutral-light"
+                        th:data-set-name="${pSetName}"
+                        th:data-set-num="${1}"
+                >1</button>
+
+                <button th:id="${pSetName + '-btn-2'}"
+                        class="p-stat-btn btn bg-color-primary-main color-neutral-light"
+                        th:data-set-name="${pSetName}"
+                        th:data-set-num="${2}"
+                >2</button>
+
+                <button th:id="${pSetName + '-btn-3'}"
+                        class="p-stat-btn btn bg-color-primary-main color-neutral-light"
+                        th:data-set-name="${pSetName}"
+                        th:data-set-num="${3}"
+                >3</button>
+            </div>
+        </div>
+    </th:block>
+</div>
+
+<div th:fragment="performanceStat(performanceStats, pSetName)"
+     class="d-flex justify-content-between align-content-center"
+>
+    <th:block th:each="pStat, index : ${performanceStats}"
               th:with="pStatName=${pStat.getStatName()},
               blueData=${pStat.getBlueTeamTotal()},
               redData=${pStat.getRedTeamTotal()},
               blueDataFormatted=${#numbers.formatDecimal(blueData, 1, 'COMMA', 0, 'POINT')},
-              redDataFormatted=${#numbers.formatDecimal(redData, 1, 'COMMA', 0, 'POINT')}
-"
+              redDataFormatted=${#numbers.formatDecimal(redData, 1, 'COMMA', 0, 'POINT')}"
     >
-        <div class="d-flex justify-content-between align-content-center gap-3 mb-3 bg-color-neutral-black">
+        <div th:id="${pSetName + '-' + index.count}"
+             class="d-flex justify-content-between align-content-center gap-3"
+             th:classappend="${index.count != 1} ? 'd-none ' + ${pSetName + '-stat'} : ${pSetName + '-stat'}"
+             th:data-set-num="${index.count}"
+        >
             <div th:replace="~{partials/detailed-match/match-performance :: team('Blue Team', ${0})}"></div>
-
             <div th:replace="~{partials/detailed-match/match-performance :: performanceDial(${pStatName}, ${redData}, ${blueData}, ${redDataFormatted}, ${blueDataFormatted})}"></div>
-
             <div th:replace="~{partials/detailed-match/match-performance :: team('Red Team', ${1})}"></div>
         </div>
     </th:block>
@@ -86,7 +127,7 @@
 >
     <div class="stat-info d-flex flex-column justify-content-center align-items-center rounded-circle">
         <p class="color-primary-blue fs-200 fw-bold mb-0" th:text="${blueDataFormatted}">0</p>
-        <p class="color-neutral-light mb-0" th:text="${dialName}"></p>
+        <p class="color-neutral-light text-center mb-0" th:text="${dialName}"></p>
         <p class="color-primary-red fs-200 fw-bold mb-0" th:text="${redDataFormatted}">0</p>
     </div>
     <svg class="stat-ring d-flex justify-content-center align-items-center">

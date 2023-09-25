@@ -11,7 +11,7 @@
     --color-neutral-main: #4b4b56;
     --color-neutral-medDark: #2c2f35;
     --color-neutral-dark: #21252a;
-    --color-neutral-black: rgba(23, 26, 31, 0.5);
+    --color-neutral-black: #171A1F;
 
     --fs-900: 4rem;
     --fs-800: 3rem;
@@ -547,6 +547,11 @@ aside {
 .highlighted-dot {
     z-index: 1000;
     scale: 200%;
+    opacity: 100% !important;
+}
+
+.event-dots {
+    opacity: 50%;
 }
 
 .killList {
@@ -558,3 +563,14 @@ aside {
     display: none;
 }
 
+.vertical-text-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.vertical-text {
+    writing-mode: vertical-lr;
+    text-align: center;
+    padding-top: .5rem;
+}
