@@ -1,523 +1,87 @@
-<div th:fragment="stats" class="container">
-    <div th:replace="~{partials/detailed-match/participant-stats/participant-stats.html :: economy}"></div>
-    <div th:replace="~{partials/detailed-match/participant-stats/participant-stats.html :: combat}"></div>
-    <div th:replace="~{partials/detailed-match/participant-stats/participant-stats.html :: damage}"></div>
-    <div th:replace="~{partials/detailed-match/participant-stats/participant-stats.html :: objectives}"></div>
-
-</div>
-
-<div th:fragment="economy"
-     th:with="challenges=${participant.getParticipantChallenges()}"
+<div th:fragment="stats" class="container"
+     th:with="sets=${participantInfo.getParticipantSets()}"
 >
-    <div class="row  mb-3 rounded bg-color-neutral-black">
-        <div class="col-1 bg-color-neutral-medDark ms-3 p-0">
-            <div class="vertical-text-container" >
-                <h3 class="vertical-text color-neutral-black m-0">Economy</h3>
-            </div>
-        </div>
-
-        <div class="col p-0">
-            <div class="container">
-                <div class="row"
-                     th:with="data1Title=${'Gold'},
-                     data1=${participant.getGoldEarned()},
-                     data1f=${#numbers.formatDecimal(data1, 1, 'COMMA', 0, 'POINT')},
-
-                     data2Title=${'Gold/min'},
-                     data2=${challenges.getGoldPerMinute()},
-                     data2f=${#numbers.formatDecimal(data2, 1, 'COMMA', 0, 'POINT')},
-
-                     data3Title=${'Bounty Gold'},
-                     data3=${challenges.getBountyGold()},
-                     data3f=${#numbers.formatDecimal(data3, 1, 'COMMA', 0, 'POINT')},
-
-                     data4Title=${'Gold Spent'},
-                     data4=${participant.getGoldSpent()},
-                     data4f=${#numbers.formatDecimal(data4, 1, 'COMMA', 0, 'POINT')},
-
-                     data5Title=${'Max Level Lead'},
-                     data5=${challenges.getMaxLevelLeadLaneOpponent()},
-                     data5f=${#numbers.formatDecimal(data5, 1, 'COMMA', 0, 'POINT')}"
-                >
-                    <div class="col-auto d-flex flex-column justify-content-center">
-                        <div th:replace="~{partials/icons/position-icon.html :: position-icon('mid', ${true})}"></div>
-                    </div>
-                    <div class="col d-flex flex-column justify-content-center">
-                        <p class="m-0 mb-2">
-                            <span th:text="${data1Title}" class="color-neutral-main fw-bold"></span>
-                            <span th:text="${data1f}" class="color-neutral-main"></span>
-                        </p>
-                        <p class="m-0">
-                            <span th:text="${data2Title}" class="color-neutral-main fw-bold"></span>
-                            <span th:text="${data2f}" class="color-neutral-main"></span>
-                        </p>
-                    </div>
-                    <div class="col d-flex flex-column justify-content-center">
-                        <p class="m-0 mb-2">
-                            <span th:text="${data3Title}" class="color-neutral-main fw-bold"></span>
-                            <span th:text="${data3f}" class="color-neutral-main"></span>
-                        </p>
-                        <p class="m-0">
-                            <span th:text="${data4Title}" class="color-neutral-main fw-bold"></span>
-                            <span th:text="${data4f}" class="color-neutral-main"></span>
-                        </p>
-                    </div>
-                    <div class="col d-flex flex-column justify-content-center">
-                        <p th:text="${data5Title}" class="color-neutral-main m-0 mb-2 fw-bold"></p>
-                        <p th:text="${data5f}" class="color-neutral-main m-0"></p>
-                    </div>
+    <th:block th:each="set : ${sets}">
+        <div class="row  mb-3 rounded bg-color-neutral-medDark">
+            <div class="col-1 bg-color-primary-dark ms-3 p-0">
+                <div class="vertical-text-container" >
+                    <h3 class="vertical-text color-neutral-light m-0" th:text="${set.getSetName()}"></h3>
                 </div>
-                <div class="row"
-                     th:with="data1Title=${'CS'},
-                     data1=${participant.getTotalMinionsKilled() + participant.getNeutralMinionsKilled()},
-                     data1f=${#numbers.formatDecimal(data1, 1, 'COMMA', 0, 'POINT')},
+            </div>
 
-                     data2Title=${'CS/min'},
-                     data2=${data1 / participant.getTimePlayed()},
-                     data2f=${#numbers.formatDecimal(data2, 1, 'COMMA', 0, 'POINT')},
-
-                     data3Title=${'Jungle CS'},
-                     data3A=${participant.getNeutralMinionsKilled()},
-                     data3B=${challenges.getJungleCsBefore10Minutes()},
-                     data3Af=${#numbers.formatDecimal(data3A, 1, 'COMMA', 0, 'POINT')},
-                     data3Bf=${' (' + #numbers.formatDecimal(data3B, 1, 'COMMA', 0, 'POINT') + ')'},
-
-                     data4Title=${'Minion CS'},
-                     data4A=${participant.getTotalMinionsKilled()},
-                     data4B=${challenges.getLaneMinionsFirst10Minutes()},
-                     data4Af=${#numbers.formatDecimal(data4A, 1, 'COMMA', 0, 'POINT')},
-                     data4Bf=${' (' + #numbers.formatDecimal(data4B, 1, 'COMMA', 0, 'POINT') + ')'},
-
-                     data5Title=${'Max CS Advantage'},
-                     data5=${challenges.getMaxCsAdvantageOnLaneOpponent()},
-                     data5f=${#numbers.formatDecimal(data5, 1, 'COMMA', 0, 'POINT')}"
+            <div class="col p-0">
+                <div class="container"
+                     th:with="section1IconName=${set.getSection1IconName()},
+                              section1Stats=${set.getSection1Stats()},
+                              section2IconName=${set.getSection2IconName()},
+                              section2Stats=${set.getSection2Stats()}"
                 >
-                    <div class="col-auto d-flex flex-column justify-content-center">
-                        <div th:replace="~{partials/icons/position-icon.html :: position-icon('mid', ${true})}"></div>
-                    </div>
-                    <div class="col d-flex flex-column justify-content-center">
-                        <p class="m-0 mb-2">
-                            <span th:text="${data1Title}" class="color-neutral-main fw-bold"></span>
-                            <span th:text="${data1f}" class="color-neutral-main"></span>
-                        </p>
-                        <p class="m-0">
-                            <span th:text="${data2Title}" class="color-neutral-main fw-bold"></span>
-                            <span th:text="${data2f}" class="color-neutral-main"></span>
-                        </p>
-                    </div>
-                    <div class="col d-flex flex-column justify-content-center">
-                        <p class="m-0 mb-2">
-                            <span th:text="${data3Title}" class="color-neutral-main fw-bold"></span>
-                            <span th:text="${data3Af}" class="color-neutral-main"></span>
-                            <span th:text="${data3Bf}" class="color-neutral-main"></span>
-                        </p>
-                        <p class="m-0">
-                            <span th:text="${data4Title}" class="color-neutral-main fw-bold"></span>
-                            <span th:text="${data4Af}" class="color-neutral-main"></span>
-                            <span th:text="${data4Bf}" class="color-neutral-main"></span>
-                        </p>
-                    </div>
-                    <div class="col d-flex flex-column justify-content-center">
-                        <p th:text="${data5Title}" class="color-neutral-main m-0 mb-2 fw-bold"></p>
-                        <p th:text="${data5f}" class="color-neutral-main m-0"></p>
-                    </div>
+                    <div th:replace="~{partials/detailed-match/participant-stats/participant-stats.html :: section(${section1Stats}, ${section1IconName})}"></div>
+                    <div th:replace="~{partials/detailed-match/participant-stats/participant-stats.html :: section(${section2Stats}, ${section2IconName})}"></div>
                 </div>
             </div>
         </div>
-    </div>
+    </th:block>
 </div>
 
-<div th:fragment="combat"
-     th:with="challenges=${participant.getParticipantChallenges()}"
+<div th:fragment="section(sectionStats, sectionIcon)"
+     class="row"
 >
-    <div class="row  mb-3 rounded bg-color-neutral-black">
-        <div class="col-1 bg-color-neutral-medDark ms-3 p-0">
-            <div class="vertical-text-container" >
-                <h3 class="vertical-text color-neutral-black m-0">Combat</h3>
-            </div>
-        </div>
-
-        <div class="col p-0">
-            <div class="container">
-                <div class="row"
-                     th:with="data1Title=${'Kills'},
-                     data1=${participant.getKills()},
-                     data1f=${#numbers.formatDecimal(data1, 1, 'COMMA', 0, 'POINT')},
-
-                     data2Title=${'Kill participation'},
-                     data2=${challenges.getKillParticipation()},
-                     data2f=${#numbers.formatDecimal(data2, 1, 'COMMA', 0, 'POINT')},
-
-                     data3Title=${'Assists'},
-                     data3=${participant.getAssists()},
-                     data3f=${#numbers.formatDecimal(data3, 1, 'COMMA', 0, 'POINT')},
-
-                     data4Title=${'KDA'},
-                     data4=${challenges.getKda()},
-                     data4f=${#numbers.formatDecimal(data4, 1, 'COMMA', 0, 'POINT')},
-
-                     data5Title=${'Solo Kills'},
-                     data5=${challenges.getSoloKills()},
-                     data5f=${#numbers.formatDecimal(data5, 1, 'COMMA', 0, 'POINT')}"
-                >
-                    <div class="col-auto d-flex flex-column justify-content-center">
-                        <div th:replace="~{partials/icons/position-icon.html :: position-icon('mid', ${true})}"></div>
-                    </div>
-                    <div class="col d-flex flex-column justify-content-center">
-                        <p class="m-0 mb-2">
-                            <span th:text="${data1Title}" class="color-neutral-main fw-bold"></span>
-                            <span th:text="${data1f}" class="color-neutral-main"></span>
-                        </p>
-                        <p class="m-0">
-                            <span th:text="${data2Title}" class="color-neutral-main fw-bold"></span>
-                            <span th:text="${data2f}" class="color-neutral-main"></span>
-                        </p>
-                    </div>
-                    <div class="col d-flex flex-column justify-content-center">
-                        <p class="m-0 mb-2">
-                            <span th:text="${data3Title}" class="color-neutral-main fw-bold"></span>
-                            <span th:text="${data3f}" class="color-neutral-main"></span>
-                        </p>
-                        <p class="m-0">
-                            <span th:text="${data4Title}" class="color-neutral-main fw-bold"></span>
-                            <span th:text="${data4f}" class="color-neutral-main"></span>
-                        </p>
-                    </div>
-                    <div class="col d-flex flex-column justify-content-center">
-                        <p th:text="${data5Title}" class="color-neutral-main m-0 mb-2 fw-bold"></p>
-                        <p th:text="${data5f}" class="color-neutral-main m-0"></p>
-                    </div>
-                </div>
-                <div class="row"
-                     th:with="data1Title=${'Bounty'},
-                     data1=${participant.getBountyLevel()},
-                     data1f=${#numbers.formatDecimal(data1, 1, 'COMMA', 0, 'POINT')},
-
-                     data2Title=${'Sprees'},
-                     data2=${participant.getKillingSprees()},
-                     data2f=${#numbers.formatDecimal(data2, 1, 'COMMA', 0, 'POINT')},
-
-                     data3Title=${'MultiKills'},
-                     data3=${challenges.getMultikills()},
-                     data3f=${#numbers.formatDecimal(data3, 1, 'COMMA', 0, 'POINT')},
-
-                     data4Title=${'Largest Spree'},
-                     data4=${participant.getLargestKillingSpree()},
-                     data4f=${#numbers.formatDecimal(data4, 1, 'COMMA', 0, 'POINT')},
-
-                     data5Title=${'Max CS Advantage'},
-                     data5A=${participant.getDoubleKills()},
-                     data5B=${participant.getTripleKills()},
-                     data5C=${participant.getQuadraKills()},
-                     data5D=${participant.getPentaKills()}"
-                >
-                    <div class="col-auto d-flex flex-column justify-content-center">
-                        <div th:replace="~{partials/icons/position-icon.html :: position-icon('mid', ${true})}"></div>
-                    </div>
-                    <div class="col d-flex flex-column justify-content-center">
-                        <p class="m-0 mb-2">
-                            <span th:text="${data1Title}" class="color-neutral-main fw-bold"></span>
-                            <span th:text="${data1f}" class="color-neutral-main"></span>
-                        </p>
-                        <p class="m-0">
-                            <span th:text="${data2Title}" class="color-neutral-main fw-bold"></span>
-                            <span th:text="${data2f}" class="color-neutral-main"></span>
-                        </p>
-                    </div>
-                    <div class="col d-flex flex-column justify-content-center">
-                        <p class="m-0 mb-2">
-                            <span th:text="${data3Title}" class="color-neutral-main fw-bold"></span>
-                            <span th:text="${data3f}" class="color-neutral-main"></span>
-                        </p>
-                        <p class="m-0">
-                            <span th:text="${data4Title}" class="color-neutral-main fw-bold"></span>
-                            <span th:text="${data4f}" class="color-neutral-main"></span>
-                        </p>
-                    </div>
-                    <div class="col d-flex flex-column justify-content-center">
-                        <p th:text="${data5Title}" class="color-neutral-main m-0 mb-2 fw-bold"></p>
-                        <p class="color-neutral-main m-0">
-                            <span th:text="${data5A}"></span>
-                            <span th:text="${data5B}"></span>
-                            <span th:text="${data5C}"></span>
-                            <span th:text="${data5D}"></span>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="col-auto d-flex flex-column justify-content-center">
+        <div th:replace="~{partials/icons/position-icon.html :: position-icon('top', ${true})}"></div>
     </div>
+
+        <th:block th:if="${sectionStats.size() == 5}">
+            <div th:replace="~{partials/detailed-match/participant-stats/participant-stats.html ::
+                stat2(${sectionStats[0].getStatName()}, ${sectionStats[0].getStats()}, ${sectionStats[1].getStatName()}, ${sectionStats[1].getStats()})}"
+            ></div>
+            <div th:replace="~{partials/detailed-match/participant-stats/participant-stats.html ::
+                stat2(${sectionStats[2].getStatName()}, ${sectionStats[2].getStats()}, ${sectionStats[3].getStatName()}, ${sectionStats[3].getStats()})}"
+            ></div>
+            <div th:replace="~{partials/detailed-match/participant-stats/participant-stats.html ::
+                stat1(${sectionStats[4].getStatName()}, ${sectionStats[4].getStats()})}"
+            ></div>
+        </th:block>
+
+        <th:block th:if="${sectionStats.size() == 6}">
+            <div th:replace="~{partials/detailed-match/participant-stats/participant-stats.html ::
+                stat2(${sectionStats[0].getStatName()}, ${sectionStats[0].getStats()}, ${sectionStats[1].getStatName()}, ${sectionStats[1].getStats()})}"
+            ></div>
+            <div th:replace="~{partials/detailed-match/participant-stats/participant-stats.html ::
+                stat2(${sectionStats[2].getStatName()}, ${sectionStats[2].getStats()}, ${sectionStats[3].getStatName()}, ${sectionStats[3].getStats()})}"
+            ></div>
+            <div th:replace="~{partials/detailed-match/participant-stats/participant-stats.html ::
+                stat2(${sectionStats[4].getStatName()}, ${sectionStats[4].getStats()}, ${sectionStats[5].getStatName()}, ${sectionStats[5].getStats()})}"
+            ></div>
+        </th:block>
+
+
 </div>
 
-<div th:fragment="damage"
-     th:with="challenges=${participant.getParticipantChallenges()}"
+<div th:fragment="stat1(name, dataSet)"
+     class="col d-flex flex-column justify-content-center"
 >
-    <div class="row  mb-3 rounded bg-color-neutral-black">
-        <div class="col-1 bg-color-neutral-medDark ms-3 p-0">
-            <div class="vertical-text-container" >
-                <h3 class="vertical-text color-neutral-black m-0">Damage</h3>
-            </div>
-        </div>
-
-        <div class="col p-0">
-            <div class="container">
-                <div class="row"
-                     th:with="data1Title=${'Dealt'},
-                     data1=${participant.getTotalDamageDealtToChampions()},
-                     data1f=${#numbers.formatDecimal(data1, 1, 'COMMA', 0, 'POINT')},
-
-                     data2Title=${'Damage/min'},
-                     data2=${challenges.getDamagePerMinute()},
-                     data2f=${#numbers.formatDecimal(data2, 1, 'COMMA', 0, 'POINT')},
-
-                     data3Title=${'% of Team'},
-                     data3=${challenges.getTeamDamagePercentage() * 100},
-                     data3f=${#numbers.formatDecimal(data3, 1, 'COMMA', 0, 'POINT')},
-
-                     data4Title=${'Highest Crit'},
-                     data4=${participant.getLargestCriticalStrike()},
-                     data4f=${#numbers.formatDecimal(data4, 1, 'COMMA', 0, 'POINT')},
-
-                     data5Title=${'Spread'},
-                     data5A=${participant.getMagicDamageDealtToChampions()},
-                     data5Af=${#numbers.formatDecimal(data5A, 1, 'COMMA', 0, 'POINT')},
-                     data5B=${participant.getPhysicalDamageDealtToChampions()},
-                     data5Bf=${#numbers.formatDecimal(data5B, 1, 'COMMA', 0, 'POINT')},
-                     data5C=${participant.getTrueDamageDealtToChampions()},
-                     data5Cf=${#numbers.formatDecimal(data5C, 1, 'COMMA', 0, 'POINT')}
-"
-                >
-                    <div class="col-auto d-flex flex-column justify-content-center">
-                        <div th:replace="~{partials/icons/position-icon.html :: position-icon('mid', ${true})}"></div>
-                    </div>
-                    <div class="col d-flex flex-column justify-content-center">
-                        <p class="m-0 mb-2">
-                            <span th:text="${data1Title}" class="color-neutral-main fw-bold"></span>
-                            <span th:text="${data1f}" class="color-neutral-main"></span>
-                        </p>
-                        <p class="m-0">
-                            <span th:text="${data2Title}" class="color-neutral-main fw-bold"></span>
-                            <span th:text="${data2f}" class="color-neutral-main"></span>
-                        </p>
-                    </div>
-                    <div class="col d-flex flex-column justify-content-center">
-                        <p class="m-0 mb-2">
-                            <span th:text="${data3Title}" class="color-neutral-main fw-bold"></span>
-                            <span th:text="${data3f}" class="color-neutral-main"></span>
-                        </p>
-                        <p class="m-0">
-                            <span th:text="${data4Title}" class="color-neutral-main fw-bold"></span>
-                            <span th:text="${data4f}" class="color-neutral-main"></span>
-                        </p>
-                    </div>
-                    <div class="col d-flex flex-column justify-content-center">
-                        <p th:text="${data5Title}" class="color-neutral-main m-0 mb-2 fw-bold"></p>
-                        <p class="color-neutral-main m-0">
-                            <span th:text="${data5Af}"></span>
-                            <span th:text="${data5Bf}"></span>
-                            <span th:text="${data5Cf}"></span>
-                        </p>
-                    </div>
-                </div>
-                <div class="row"
-                     th:with="data1Title=${'Taken'},
-                     data1=${participant.getTotalDamageTaken()},
-                     data1f=${#numbers.formatDecimal(data1, 1, 'COMMA', 0, 'POINT')},
-
-                     data2Title=${'Mitigated'},
-                     data2=${participant.getDamageSelfMitigated()},
-                     data2f=${#numbers.formatDecimal(data2, 1, 'COMMA', 0, 'POINT')},
-
-                     data3Title=${'% of Team'},
-                     data3=${challenges.getDamageTakenOnTeamPercentage() * 100},
-                     data3f=${#numbers.formatDecimal(data3, 1, 'COMMA', 0, 'POINT')},
-
-                     data4Title=${'Self Heal'},
-                     data4=${participant.getTotalHeal()},
-                     data4f=${#numbers.formatDecimal(data4, 1, 'COMMA', 0, 'POINT')},
-
-                     data5Title=${'Spread'},
-                     data5A=${participant.getMagicDamageTaken()},
-                     data5Af=${#numbers.formatDecimal(data5A, 1, 'COMMA', 0, 'POINT')},
-                     data5B=${participant.getPhysicalDamageTaken()},
-                     data5Bf=${#numbers.formatDecimal(data5B, 1, 'COMMA', 0, 'POINT')},
-                     data5C=${participant.getTrueDamageTaken()},
-                     data5Cf=${#numbers.formatDecimal(data5C, 1, 'COMMA', 0, 'POINT')}
-"
-                >
-                    <div class="col-auto d-flex flex-column justify-content-center">
-                        <div th:replace="~{partials/icons/position-icon.html :: position-icon('mid', ${true})}"></div>
-                    </div>
-                    <div class="col d-flex flex-column justify-content-center">
-                        <p class="m-0 mb-2">
-                            <span th:text="${data1Title}" class="color-neutral-main fw-bold"></span>
-                            <span th:text="${data1f}" class="color-neutral-main"></span>
-                        </p>
-                        <p class="m-0">
-                            <span th:text="${data2Title}" class="color-neutral-main fw-bold"></span>
-                            <span th:text="${data2f}" class="color-neutral-main"></span>
-                        </p>
-                    </div>
-                    <div class="col d-flex flex-column justify-content-center">
-                        <p class="m-0 mb-2">
-                            <span th:text="${data3Title}" class="color-neutral-main fw-bold"></span>
-                            <span th:text="${data3f}" class="color-neutral-main"></span>
-                        </p>
-                        <p class="m-0">
-                            <span th:text="${data4Title}" class="color-neutral-main fw-bold"></span>
-                            <span th:text="${data4f}" class="color-neutral-main"></span>
-                        </p>
-                    </div>
-                    <div class="col d-flex flex-column justify-content-center">
-                        <p th:text="${data5Title}" class="color-neutral-main m-0 mb-2 fw-bold"></p>
-                        <p class="color-neutral-main m-0">
-                            <span th:text="${data5Af}"></span>
-                            <span th:text="${data5Bf}"></span>
-                            <span th:text="${data5Cf}"></span>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <th:block th:replace="~{partials/detailed-match/participant-stats/participant-stats.html :: stat(${name}, ${dataSet})}"></th:block>
+    <th:block th:replace="~{partials/detailed-match/participant-stats/participant-stats.html :: emptyStat()}"></th:block>
 </div>
 
-<div th:fragment="objectives"
-     th:with="challenges=${participant.getParticipantChallenges()}"
+<div th:fragment="stat2(name1, dataSet1, name2, dataSet2)"
+     class="col d-flex flex-column justify-content-center"
 >
-    <div class="row  mb-3 rounded bg-color-neutral-black">
-        <div class="col-1 bg-color-neutral-medDark ms-3 p-0">
-            <div class="vertical-text-container" >
-                <h3 class="vertical-text color-neutral-black m-0">Objectives</h3>
-            </div>
-        </div>
-
-        <div class="col p-0">
-            <div class="container">
-                <div class="row"
-                     th:with="data1Title=${'Turret Plates'},
-                     data1=${challenges.getTurretPlatesTaken()},
-                     data1f=${#numbers.formatDecimal(data1, 1, 'COMMA', 0, 'POINT')},
-
-                     data2Title=${'Inhibitors'},
-                     data2A=${participant.getInhibitorKills()},
-                     data2Af=${#numbers.formatDecimal(data2A, 1, 'COMMA', 0, 'POINT')},
-                     data2B=${participant.getInhibitorTakedowns()},
-                     data2Bf=${' (' + #numbers.formatDecimal(data2B, 1, 'COMMA', 0, 'POINT') + ')'},
-
-                     data3Title=${'Turrets'},
-                     data3A=${participant.getTurretKills()},
-                     data3Af=${#numbers.formatDecimal(data3A, 1, 'COMMA', 0, 'POINT')},
-                     data3B=${participant.getTurretTakedowns()},
-                     data3Bf=${' (' + #numbers.formatDecimal(data3B, 1, 'COMMA', 0, 'POINT') + ')'},
-
-                     data4Title=${'Nexus'},
-                     data4A=${participant.getNexusKills()},
-                     data4Af=${#numbers.formatDecimal(data4A, 1, 'COMMA', 0, 'POINT')},
-                     data4B=${participant.getNexusTakedowns()},
-                     data4Bf=${' (' + #numbers.formatDecimal(data4B, 1, 'COMMA', 0, 'POINT') + ')'},
-
-                     data5Title=${'Damage Dealt'},
-                     data5=${participant.getDamageDealtToBuildings()},
-                     data5f=${#numbers.formatDecimal(data5, 1, 'COMMA', 0, 'POINT')}"
-                >
-                    <div class="col-auto d-flex flex-column justify-content-center">
-                        <div th:replace="~{partials/icons/position-icon.html :: position-icon('mid', ${true})}"></div>
-                    </div>
-                    <div class="col d-flex flex-column justify-content-center">
-                        <p class="m-0 mb-2">
-                            <span th:text="${data1Title}" class="color-neutral-main fw-bold"></span>
-                            <span th:text="${data1f}" class="color-neutral-main"></span>
-                        </p>
-                        <p class="m-0">
-                            <span th:text="${data2Title}" class="color-neutral-main fw-bold"></span>
-                            <span th:text="${data2Af}" class="color-neutral-main"></span>
-                            <span th:text="${data2Bf}" class="color-neutral-main"></span>
-                        </p>
-                    </div>
-                    <div class="col d-flex flex-column justify-content-center">
-                        <p class="m-0 mb-2">
-                            <span th:text="${data3Title}" class="color-neutral-main fw-bold"></span>
-                            <span th:text="${data3Af}" class="color-neutral-main"></span>
-                            <span th:text="${data3Bf}" class="color-neutral-main"></span>
-                        </p>
-                        <p class="m-0">
-                            <span th:text="${data4Title}" class="color-neutral-main fw-bold"></span>
-                            <span th:text="${data4Af}" class="color-neutral-main"></span>
-                            <span th:text="${data4Bf}" class="color-neutral-main"></span>
-                        </p>
-                    </div>
-                    <div class="col d-flex flex-column justify-content-center">
-                        <p th:text="${data5Title}" class="color-neutral-main m-0 mb-2 fw-bold"></p>
-                        <p class="color-neutral-main m-0">
-                            <span th:text="${data5}"></span>
-                        </p>
-                    </div>
-                </div>
-                <div class="row"
-                     th:with="data1Title=${'Rift Heralds'},
-                     data1A=${challenges.getRiftHeraldTakedowns()},
-                     data1Af=${#numbers.formatDecimal(data1A, 1, 'COMMA', 0, 'POINT')},
-                     data1B=${challenges.getRiftHeraldTakedowns()},
-                     data1Bf=${' (' + #numbers.formatDecimal(data1B, 1, 'COMMA', 0, 'POINT') + ')'},
-
-                     data2Title=${'Dragons'},
-                     data2A=${participant.getDragonKills()},
-                     data2Af=${#numbers.formatDecimal(data2A, 1, 'COMMA', 0, 'POINT')},
-                     data2B=${challenges.getDragonTakedowns()},
-                     data2Bf=${' (' + #numbers.formatDecimal(data2B, 1, 'COMMA', 0, 'POINT') + ')'},
-
-                     data3Title=${'Barons'},
-                     data3A=${participant.getBaronKills()},
-                     data3Af=${#numbers.formatDecimal(data3A, 1, 'COMMA', 0, 'POINT')},
-                     data3B=${challenges.getBaronTakedowns()},
-                     data3Bf=${' (' + #numbers.formatDecimal(data3B, 1, 'COMMA', 0, 'POINT') + ')'},
-
-                     data4Title=${'Stolen'},
-                     data4A=${participant.getObjectivesStolen()},
-                     data4Af=${#numbers.formatDecimal(data4A, 1, 'COMMA', 0, 'POINT')},
-                     data4B=${participant.getObjectivesStolenAssists()},
-                     data4Bf=${' (' + #numbers.formatDecimal(data4B, 1, 'COMMA', 0, 'POINT') + ')'},
-
-                     data5Title=${'Damage Dealt'},
-                     data5=${participant.getDamageDealtToObjectives() - participant.getDamageDealtToBuildings()},
-                     data5f=${#numbers.formatDecimal(data5, 1, 'COMMA', 0, 'POINT')}"
-                >
-                    <div class="col-auto d-flex flex-column justify-content-center">
-                        <div th:replace="~{partials/icons/position-icon.html :: position-icon('mid', ${true})}"></div>
-                    </div>
-                    <div class="col d-flex flex-column justify-content-center">
-                        <p class="m-0 mb-2">
-                            <span th:text="${data1Title}" class="color-neutral-main fw-bold"></span>
-                            <span th:text="${data1Af}" class="color-neutral-main"></span>
-                            <span th:text="${data1Bf}" class="color-neutral-main"></span>
-                        </p>
-                        <p class="m-0">
-                            <span th:text="${data2Title}" class="color-neutral-main fw-bold"></span>
-                            <span th:text="${data2Af}" class="color-neutral-main"></span>
-                            <span th:text="${data2Bf}" class="color-neutral-main"></span>
-                        </p>
-                    </div>
-                    <div class="col d-flex flex-column justify-content-center">
-                        <p class="m-0 mb-2">
-                            <span th:text="${data3Title}" class="color-neutral-main fw-bold"></span>
-                            <span th:text="${data3Af}" class="color-neutral-main"></span>
-                            <span th:text="${data3Bf}" class="color-neutral-main"></span>
-                        </p>
-                        <p class="m-0">
-                            <span th:text="${data4Title}" class="color-neutral-main fw-bold"></span>
-                            <span th:text="${data4Af}" class="color-neutral-main"></span>
-                            <span th:text="${data4Bf}" class="color-neutral-main"></span>
-                        </p>
-                    </div>
-                    <div class="col d-flex flex-column justify-content-center">
-                        <p th:text="${data5Title}" class="color-neutral-main m-0 mb-2 fw-bold"></p>
-                        <p class="color-neutral-main m-0">
-                            <span th:text="${data5}"></span>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <th:block th:replace="~{partials/detailed-match/participant-stats/participant-stats.html :: stat(${name1}, ${dataSet1})}"></th:block>
+    <th:block th:replace="~{partials/detailed-match/participant-stats/participant-stats.html :: stat(${name2}, ${dataSet2})}"></th:block>
 </div>
+
+<th:block th:fragment="stat(name, dataSet)">
+    <p th:text="${name}" class="color-primary-dark fw-bold fs-200 mb-0"></p>
+    <p class="color-neutral-light fs-300 mb-2">
+        <th:block th:each="data : ${dataSet}">
+            <span th:text="${data}"></span>
+        </th:block>
+    </p>
+</th:block>
+
+<th:block th:fragment="emptyStat()">
+    <p class="color-neutral-medDark fw-bold fs-200 mb-0" th:text="${'.'}"> </p>
+    <p class="color-neutral-medDark fs-300 mb-2" th:text="${'.'}"> </p>
+</th:block>

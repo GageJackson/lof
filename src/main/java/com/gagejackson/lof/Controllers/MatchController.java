@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -39,6 +41,9 @@ public class MatchController {
     private final ParticipantFrameDamageRepository participantFrameDamageRepositoryDao;
     private final ParticipantFrameChampRepository participantFrameChampRepositoryDao;
     private final EventRepository eventDao;
+
+    private final DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
+    private final NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
 
     public MatchController(
             FriendRepository friendRepositoryDao,
@@ -307,60 +312,419 @@ public class MatchController {
 
         for (Participant participant : participants) {
             ParticipantDTO participantDTO = new ParticipantDTO();
-            List<SkillUp> skillUps = new ArrayList<>();
-            List<List<EventItem>> eventItems = new ArrayList<>();
-            List<EventItem> allItems = new ArrayList<>();
-
             List<Event> events = participant.getEvent();
-            for (Event event : events) {
-                if (event.getEventItem() != null) {
-                    if (event.getEventItem().getItemType().equals("ITEM_PURCHASED")){
-                        allItems.add(event.getEventItem());
-                    }
-                }
-
-                if (event.getSkillUp() != null){
-                    skillUps.add(event.getSkillUp());
-                }
-            }
-
-            List<EventItem> currentGroup = new ArrayList<>();
-            int interval = 30;
-            System.out.println("allItems = " + allItems.size());
-            for ( int i = 0; i < allItems.size(); i++) {
-                EventItem currentItem = allItems.get(i);
-
-                if (currentGroup.isEmpty()) {
-                    currentGroup.add(currentItem);
-                } else {
-                    EventItem lastGroupedItem = currentGroup.get(currentGroup.size() - 1);
-                    if (currentItem.getEvent().getTimestamp() - lastGroupedItem.getEvent().getTimestamp() <= interval * 1000) {
-                        currentGroup.add(currentItem);
-                    } else {
-                        eventItems.add(currentGroup);
-                        currentGroup = new ArrayList<>();
-                        currentGroup.add(currentItem);
-                    }
-                }
-
-                if((i + 1) == allItems.size()){
-                    eventItems.add(currentGroup);
-                }
-            }
-
-            List<ParticipantFrame> participantFrames = participant.getParticipantFrame();
-
-            System.out.println("eventItems = " + eventItems.size());
 
             participantDTO.setParticipant(participant);
-            participantDTO.setEventItems(eventItems);
-            participantDTO.setSkillUps(skillUps);
-            participantDTO.setParticipantFrames(participantFrames);
+            participantDTO.setEventItems(getItemList(events));
+            participantDTO.setSkillUps(getSkillUps(events));
+            participantDTO.setParticipantFrames(participant.getParticipantFrame());
+            participantDTO.setParticipantSets(getParticipantSets(participant));
 
             participantDTOs.add(participantDTO);
         }
 
         return participantDTOs;
+    }
+
+    private List<ParticipantSet> getParticipantSets(Participant participant){
+        List<ParticipantSet> participantSets = new ArrayList<>();
+        ParticipantChallenges participantChallenges = participant.getParticipantChallenges();
+
+        List<ParticipantStat> setStats1A = getGoldStats(participant, participantChallenges);
+        List<ParticipantStat> setStats1B = getCsStats(participant, participantChallenges);
+        List<ParticipantStat> setStats2A = getKdaStats(participant, participantChallenges);
+        List<ParticipantStat> setStats2B = getNotorietyStats(participant, participantChallenges);
+        List<ParticipantStat> setStats3A = getDealtStats(participant, participantChallenges);
+        List<ParticipantStat> setStats3B = getTakenStats(participant, participantChallenges);
+        List<ParticipantStat> setStats4A = getBuildingStats(participant, participantChallenges);
+        List<ParticipantStat> setStats4B = getMonsterStats(participant, participantChallenges);
+        List<ParticipantStat> setStats5A = getSupportStats(participant, participantChallenges);
+        List<ParticipantStat> setStats5B = getJungleStats(participant, participantChallenges);
+        List<ParticipantStat> setStats6A = getVisionStats(participant, participantChallenges);
+        List<ParticipantStat> setStats6B = getMiscStats(participant, participantChallenges);
+
+        participantSets.add(getParticipantSet("Economy", "Gold", "CS", setStats1A, setStats1B));
+        participantSets.add(getParticipantSet("Combat", "KDA", "Notoriety", setStats2A, setStats2B));
+        participantSets.add(getParticipantSet("Damage", "Dealt", "Taken", setStats3A, setStats3B));
+        participantSets.add(getParticipantSet("Objectives", "Buildings", "Monsters", setStats4A, setStats4B));
+        participantSets.add(getParticipantSet("Positions", "Support", "Jungle", setStats5A, setStats5B));
+        participantSets.add(getParticipantSet("Other", "Vision", "Misc", setStats6A, setStats6B));
+
+        return participantSets;
+    }
+    private ParticipantSet getParticipantSet(String setName, String section1Name, String section2Name,
+                                             List<ParticipantStat> section1Stats, List<ParticipantStat> section2Stats)
+    {
+        ParticipantSet participantSet = new ParticipantSet(setName, section1Name, section2Name);
+
+        participantSet.setSection1IconName(section1Name);
+        participantSet.setSection2IconName(section2Name);
+
+        participantSet.setSection1Stats(section1Stats);
+        participantSet.setSection2Stats(section2Stats);
+
+        return participantSet;
+    }
+
+    private List<ParticipantStat> getGoldStats(Participant participant, ParticipantChallenges challenges){
+        List<ParticipantStat> sectionStats = new ArrayList<>();
+
+        int data1 = participant.getGoldEarned();
+        double data2 = challenges.getGoldPerMinute();
+        int data3 = challenges.getBountyGold();
+        int data4 = participant.getGoldSpent();
+        int data5 = challenges.getMaxLevelLeadLaneOpponent();
+
+        sectionStats.add(getParticipantStat("Gold Earned", data1));
+        sectionStats.add(getParticipantStat("Gold/min", data2));
+        sectionStats.add(getParticipantStat("Bounty Gold Taken", data3));
+        sectionStats.add(getParticipantStat("Gold Spent", data4));
+        sectionStats.add(getParticipantStat("Max Level Lead", data5));
+
+        return sectionStats;
+    }
+
+    private List<ParticipantStat> getCsStats(Participant participant, ParticipantChallenges challenges){
+        List<ParticipantStat> sectionStats = new ArrayList<>();
+
+        int data1 = participant.getTotalMinionsKilled() + participant.getNeutralMinionsKilled();
+        double data2 = (double) (data1 * 60) / participant.getTimePlayed();
+        int data3A = participant.getNeutralMinionsKilled();
+        int data3B = participant.getTotalMinionsKilled();
+        int data4A = challenges.getJungleCsBefore10Minutes();
+        int data4B = challenges.getLaneMinionsFirst10Minutes();
+        int data5 = challenges.getMaxCsAdvantageOnLaneOpponent();
+
+        sectionStats.add(getParticipantStat("CS", data1));
+        sectionStats.add(getParticipantStat("CS/min", data2));
+        sectionStats.add(getParticipantStat("Jungle CS", data3A, data3B));
+        sectionStats.add(getParticipantStat("Lane CS", data4A, data4B));
+        sectionStats.add(getParticipantStat("Max CS Adv.", data5));
+
+        return sectionStats;
+    }
+
+    private List<ParticipantStat> getKdaStats(Participant participant, ParticipantChallenges challenges){
+        List<ParticipantStat> sectionStats = new ArrayList<>();
+
+        int data1 = participant.getKills();
+        double data2 = challenges.getKillParticipation() * 100;
+        int data3 = participant.getAssists();
+        double data4 = challenges.getKda();
+        int data5 = challenges.getKillsUnderOwnTurret();
+        int data6 = challenges.getKillsNearEnemyTurret();
+
+        sectionStats.add(getParticipantStat("Kills", data1));
+        sectionStats.add(getParticipantStat("Kill Participation", data2));
+        sectionStats.add(getParticipantStat("Assists", data3));
+        sectionStats.add(getParticipantStat("KDA", data4));
+        sectionStats.add(getParticipantStat("Kills Under Ally Turret", data5));
+        sectionStats.add(getParticipantStat("Kills Under Enemy Turret", data6));
+
+        return sectionStats;
+    }
+
+    private List<ParticipantStat> getNotorietyStats(Participant participant, ParticipantChallenges challenges){
+        List<ParticipantStat> sectionStats = new ArrayList<>();
+
+        int data1 = participant.getBountyLevel();
+        int data2 = participant.getKillingSprees();
+        int data3 = challenges.getMultikills();
+        int data4 = participant.getLargestKillingSpree();
+        int data5A = participant.getDoubleKills();
+        int data5B = participant.getTripleKills();
+        int data6A = participant.getQuadraKills();
+        int data6B = participant.getPentaKills();
+
+        sectionStats.add(getParticipantStat("Bounty Level", data1));
+        sectionStats.add(getParticipantStat("Killing Sprees", data2));
+        sectionStats.add(getParticipantStat("MultiKills", data3));
+        sectionStats.add(getParticipantStat("Largest Spree", data4));
+        sectionStats.add(getParticipantStat("Double / Triple", data5A, data5B));
+        sectionStats.add(getParticipantStat("Quadra / Penta", data6A, data6B));
+
+        return sectionStats;
+    }
+
+    private List<ParticipantStat> getDealtStats(Participant participant, ParticipantChallenges challenges){
+        List<ParticipantStat> sectionStats = new ArrayList<>();
+
+        int data1 = participant.getTotalDamageDealtToChampions();
+        double data2 = challenges.getDamagePerMinute();
+        double data3 = challenges.getTeamDamagePercentage() * 100;
+        int data4 = participant.getLargestCriticalStrike();
+        int data5A = participant.getMagicDamageDealtToChampions();
+        int data5B = participant.getPhysicalDamageDealtToChampions();
+        int data5C = participant.getTrueDamageDealtToChampions();
+
+        sectionStats.add(getParticipantStat("Damage Dealt", data1));
+        sectionStats.add(getParticipantStat("Damage/min", data2));
+        sectionStats.add(getParticipantStat("% of Team Damage", data3));
+        sectionStats.add(getParticipantStat("Highest Critical Hit", data4));
+        sectionStats.add(getParticipantStat("Magic / Physical / True", data5A, data5B, data5C));
+
+        return sectionStats;
+    }
+
+    private List<ParticipantStat> getTakenStats(Participant participant, ParticipantChallenges challenges){
+        List<ParticipantStat> sectionStats = new ArrayList<>();
+
+        int data1 = participant.getTotalDamageTaken();
+        int data2 = participant.getDamageSelfMitigated();
+        double data3 = challenges.getDamageTakenOnTeamPercentage() * 100;
+        int data4 = participant.getTotalHeal();
+        int data5A = participant.getMagicDamageTaken();
+        int data5B = participant.getPhysicalDamageTaken();
+        int data5C = participant.getTrueDamageTaken();
+
+        sectionStats.add(getParticipantStat("Damage Taken", data1));
+        sectionStats.add(getParticipantStat("Damage Mitigated", data2));
+        sectionStats.add(getParticipantStat("% of Team Damage", data3));
+        sectionStats.add(getParticipantStat("Self Healing", data4));
+        sectionStats.add(getParticipantStat("Magic / Physical / True", data5A, data5B, data5C));
+
+        return sectionStats;
+    }
+
+    private List<ParticipantStat> getBuildingStats(Participant participant, ParticipantChallenges challenges){
+        List<ParticipantStat> sectionStats = new ArrayList<>();
+
+        int data1 = challenges.getTurretPlatesTaken();
+        int data2A = participant.getInhibitorKills();
+        int data2B = participant.getInhibitorTakedowns();
+        int data3A = participant.getTurretKills();
+        int data3B = participant.getTurretTakedowns();
+        int data4A = participant.getNexusKills();
+        int data4B = participant.getNexusTakedowns();
+        int data5 = participant.getDamageDealtToBuildings();
+
+        sectionStats.add(getParticipantStat("Turret Plates Destroyed", data1));
+        sectionStats.add(getParticipantStat("Inhibitors (Kill/TD)", data2A, data2B));
+        sectionStats.add(getParticipantStat("Turrets (Kill/TD)", data3A, data3B));
+        sectionStats.add(getParticipantStat("Nexus (Kill/TD)", data4A, data4B));
+        sectionStats.add(getParticipantStat("Damage To Objectives", data5));
+
+        return sectionStats;
+    }
+
+    private List<ParticipantStat> getMonsterStats(Participant participant, ParticipantChallenges challenges){
+        List<ParticipantStat> sectionStats = new ArrayList<>();
+
+        int data1A = challenges.getRiftHeraldTakedowns();
+        int data1B = challenges.getRiftHeraldTakedowns();
+        int data2A = participant.getDragonKills();
+        int data2B = challenges.getDragonTakedowns();
+        int data3A = participant.getBaronKills();
+        int data3B = challenges.getBaronTakedowns();
+        int data4A = participant.getObjectivesStolen();
+        int data4B = participant.getObjectivesStolenAssists();
+        int data5 = participant.getDamageDealtToObjectives() - participant.getDamageDealtToBuildings();
+
+        sectionStats.add(getParticipantStat("Rift Heralds (Kill/TD)", data1A, data1B));
+        sectionStats.add(getParticipantStat("Dragons (Kill/TD)", data2A, data2B));
+        sectionStats.add(getParticipantStat("Barons (Kill/TD)", data3A, data3B));
+        sectionStats.add(getParticipantStat("Stolen (Kill/TD)", data4A, data4B));
+        sectionStats.add(getParticipantStat("Damage to Objectives", data5));
+
+        return sectionStats;
+    }
+
+    private List<ParticipantStat> getSupportStats(Participant participant, ParticipantChallenges challenges){
+        List<ParticipantStat> sectionStats = new ArrayList<>();
+
+        int data1 = participant.getTotalDamageShieldedOnTeammates();
+        int data2 = participant.getTotalHealsOnTeammates();
+        int data3 = participant.getTimeCCingOthers();
+        int data4 = challenges.getEnemyChampionImmobilizations();
+        int data5 = challenges.getEffectiveHealAndShielding();
+
+        sectionStats.add(getParticipantStat("Shields for Allies", data1));
+        sectionStats.add(getParticipantStat("Heals for Allies", data2));
+        sectionStats.add(getParticipantStat("Crowd Control", data3));
+        sectionStats.add(getParticipantStat("Immobilize Enemies", data4));
+        sectionStats.add(getParticipantStat("Effective Heals & Shields", data5));
+
+        return sectionStats;
+    }
+
+    private List<ParticipantStat> getJungleStats(Participant participant, ParticipantChallenges challenges){
+        List<ParticipantStat> sectionStats = new ArrayList<>();
+
+        int data1 = challenges.getKillsOnOtherLanesEarlyJungleAsLaner();
+        int data2 = challenges.getScuttleCrabKills();
+        int data3 = challenges.getAlliedJungleMonsterKills();
+        int data4 = challenges.getEnemyJungleMonsterKills();
+        int data5 = challenges.getBuffsStolen();
+        int data6 = challenges.getMoreEnemyJungleThanOpponent();
+
+        sectionStats.add(getParticipantStat("Early Ganks", data1));
+        sectionStats.add(getParticipantStat("Skuttle Crabs", data2));
+        sectionStats.add(getParticipantStat("Allied Jungle CS", data3));
+        sectionStats.add(getParticipantStat("Enemy Jungle CS", data4));
+        sectionStats.add(getParticipantStat("Buffs Stolen", data5));
+        sectionStats.add(getParticipantStat("Jungle Diff", data6));
+
+        return sectionStats;
+    }
+
+    private List<ParticipantStat> getVisionStats(Participant participant, ParticipantChallenges challenges){
+        List<ParticipantStat> sectionStats = new ArrayList<>();
+
+        int data1 = participant.getVisionScore();
+        double data2 = challenges.getVisionScorePerMinute();
+        int data3 = participant.getWardsPlaced();
+        int data4 = participant.getWardsKilled();
+        int data5 = challenges.getWardsGuarded();
+        int data6 = challenges.getVisionScoreAdvantageLaneOpponent();
+
+        sectionStats.add(getParticipantStat("Vision Score", data1));
+        sectionStats.add(getParticipantStat("Vision/min", data2));
+        sectionStats.add(getParticipantStat("Wards Placed", data3));
+        sectionStats.add(getParticipantStat("Wards Killed", data4));
+        sectionStats.add(getParticipantStat("Wards Guarded", data5));
+        sectionStats.add(getParticipantStat("Vision Score Adv.", data6));
+
+        return sectionStats;
+    }
+
+    private List<ParticipantStat> getMiscStats(Participant participant, ParticipantChallenges challenges){
+        List<ParticipantStat> sectionStats = new ArrayList<>();
+
+        int data1 = participant.getDeaths();
+        int data2 = participant.getTotalTimeSpentDead();
+        int data3 = challenges.getSkillshotsHit();
+        int data4 = challenges.getSkillshotsDodged();
+        int data5 = challenges.getSnowballsHit();
+        int data6 = challenges.getMultiKillOneSpell();
+
+        sectionStats.add(getParticipantStat("Deaths", data1));
+        sectionStats.add(getParticipantStat("Time Spent Dead", data2));
+        sectionStats.add(getParticipantStat("Skillshots Hit", data3));
+        sectionStats.add(getParticipantStat("Skillshots Dodged", data4));
+        sectionStats.add(getParticipantStat("Snowballs Hit", data5));
+        sectionStats.add(getParticipantStat("One Spell Multikills", data6));
+
+        return sectionStats;
+    }
+
+    private ParticipantStat getParticipantStat(String statName, Object statValue) {
+        ParticipantStat participantStat = new ParticipantStat(statName);
+        List<String> statList = new ArrayList<>();
+
+        // Convert statValue to a string and add it to the statList
+        statList.add(formatStatValue(statValue));
+
+        participantStat.setStats(statList);
+        return participantStat;
+    }
+
+    private ParticipantStat getParticipantStat(String statName, Object statValue1, Object statValue2) {
+        ParticipantStat participantStat = new ParticipantStat(statName);
+        List<String> statList = new ArrayList<>();
+
+        // Convert statValue to a string and add it to the statList
+        statList.add(formatStatValue(statValue1));
+        statList.add(formatStatValue(statValue2));
+
+        participantStat.setStats(statList);
+        return participantStat;
+    }
+
+    private ParticipantStat getParticipantStat(String statName, Object statValue1, Object statValue2, Object statValue3) {
+        ParticipantStat participantStat = new ParticipantStat(statName);
+        List<String> statList = new ArrayList<>();
+
+        // Convert statValue to a string and add it to the statList
+        statList.add(formatStatValue(statValue1));
+        statList.add(formatStatValue(statValue2));
+        statList.add(formatStatValue(statValue3));
+
+        participantStat.setStats(statList);
+        return participantStat;
+    }
+
+    private ParticipantStat getParticipantStat(String statName, Object statValue1, Object statValue2, Object statValue3, Object statValue4) {
+        ParticipantStat participantStat = new ParticipantStat(statName);
+        List<String> statList = new ArrayList<>();
+
+        // Convert statValue to a string and add it to the statList
+        statList.add(formatStatValue(statValue1));
+        statList.add(formatStatValue(statValue2));
+        statList.add(formatStatValue(statValue3));
+        statList.add(formatStatValue(statValue4));
+
+        participantStat.setStats(statList);
+        return participantStat;
+    }
+
+    private String formatStatValue(Object statValue){
+        if (statValue instanceof Integer){
+            return numberFormat.format(statValue);
+        } else if(statValue instanceof Double){
+            return decimalFormat.format(statValue);
+        } else {
+            return "?";
+        }
+    }
+
+    private ParticipantStat getParticipantStat(String statName, String statValue){
+        ParticipantStat participantStat = new ParticipantStat(statName);
+        List<String> statList = new ArrayList<>();
+        statList.add(statValue);
+        participantStat.setStats(statList);
+
+        return participantStat;
+    }
+
+    private List<EventItem> getAllItems(List<Event> events){
+        List<EventItem> allItems = new ArrayList<>();
+        for (Event event : events) {
+            if (event.getEventItem() != null) {
+                if (event.getEventItem().getItemType().equals("ITEM_PURCHASED")){
+                    allItems.add(event.getEventItem());
+                }
+            }
+        }
+        return allItems;
+    }
+
+    private List<SkillUp> getSkillUps( List<Event> events){
+        List<SkillUp> skillUps = new ArrayList<>();
+        for (Event event : events) {
+            if (event.getSkillUp() != null){
+                skillUps.add(event.getSkillUp());
+            }
+        }
+        return skillUps;
+    }
+
+    private List<List<EventItem>> getItemList(List<Event> events){
+        List<List<EventItem>> eventItems = new ArrayList<>();
+        List<EventItem> allItems = getAllItems(events);
+
+        List<EventItem> currentGroup = new ArrayList<>();
+        int interval = 30;
+        for ( int i = 0; i < allItems.size(); i++) {
+            EventItem currentItem = allItems.get(i);
+
+            if (currentGroup.isEmpty()) {
+                currentGroup.add(currentItem);
+            } else {
+                EventItem lastGroupedItem = currentGroup.get(currentGroup.size() - 1);
+                if (currentItem.getEvent().getTimestamp() - lastGroupedItem.getEvent().getTimestamp() <= interval * 1000) {
+                    currentGroup.add(currentItem);
+                } else {
+                    eventItems.add(currentGroup);
+                    currentGroup = new ArrayList<>();
+                    currentGroup.add(currentItem);
+                }
+            }
+
+            if((i + 1) == allItems.size()){
+                eventItems.add(currentGroup);
+            }
+        }
+        return eventItems;
     }
 
     @GetMapping("/participant-stats-chart")
