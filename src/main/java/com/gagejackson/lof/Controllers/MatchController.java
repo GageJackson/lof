@@ -1,5 +1,7 @@
 package com.gagejackson.lof.Controllers;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gagejackson.lof.DTOs.*;
 import com.gagejackson.lof.Models.Friend.Friend;
 import com.gagejackson.lof.Models.Friend.FriendMatch;
@@ -24,6 +26,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.*;
@@ -319,11 +323,87 @@ public class MatchController {
             participantDTO.setSkillUps(getSkillUps(events));
             participantDTO.setParticipantFrames(participant.getParticipantFrame());
             participantDTO.setParticipantSets(getParticipantSets(participant));
+            participantDTO.setParticipantPerks(getParticipantPerks(participant));
 
             participantDTOs.add(participantDTO);
         }
 
         return participantDTOs;
+    }
+
+    private List<ParticipantPerk> getParticipantPerks(Participant participant){
+        List<ParticipantPerk> participantPerks = new ArrayList<>();
+        List<Perk> perks = participant.getPerk();
+
+        for (Perk perk : perks) {
+            ParticipantPerk participantPerk = new ParticipantPerk();
+
+            participantPerk.setPrimary(perk.isPrimary());
+            participantPerk.setPerkNum(perk.getPerkNum());
+            participantPerk.setStyle(perk.getStyle());
+            participantPerk.setPerkStats(getPerksStats(perk));
+
+            participantPerks.add(participantPerk);
+        }
+
+        return participantPerks;
+    }
+
+    private List<String> getPerksStats(Perk perk){
+        List<String> perkStats = new ArrayList<>();
+        String perkStat1 = String.valueOf(perk.getPerkStat1());
+        String perkStat2 = String.valueOf(perk.getPerkStat2());
+        String perkStat3 = String.valueOf(perk.getPerkStat3());
+
+        List<String> perkDescriptions = getPerkDescriptions(perk.getPerkNum());
+
+        for (String perkDescription : perkDescriptions) {
+            if (perkDescription.contains("@eogvar1@")){
+                perkDescription = perkDescription.replace("@eogvar1@", perkStat1);
+            }
+            if (perkDescription.contains("@eogvar2@")){
+                perkDescription = perkDescription.replace("@eogvar2@", perkStat2);
+            }
+            if (perkDescription.contains("@eogvar3@")){
+                perkDescription = perkDescription.replace("@eogvar3@", perkStat3);
+            }
+            perkStats.add(perkDescription);
+        }
+        return perkStats;
+    }
+
+    private List<String> getPerkDescriptions(int perkNum){
+        List<String> perkDescriptions = new ArrayList<>();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            // Get Json file
+            JsonNode jsonNode = objectMapper.readTree(new File("src/main/resources/json/perks.json"));
+
+            // Iterate through the JSON array
+            for (JsonNode itemNode : jsonNode) {
+                int itemId = itemNode.get("id").asInt();
+
+                if (itemId == perkNum) {
+                    // Found the item with the desired ID, extract endOfGameStatDescs
+                    JsonNode endOfGameStatDescsNode = itemNode.get("endOfGameStatDescs");
+
+                    // Extract and print the endOfGameStatDescs
+                    if (endOfGameStatDescsNode != null && endOfGameStatDescsNode.isArray()) {
+                        perkDescriptions = objectMapper.convertValue(endOfGameStatDescsNode, List.class);
+
+                    } else {
+                        System.out.println("End Of Game Stat Descriptions not found for item ID: " + perkNum);
+                    }
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return perkDescriptions;
     }
 
     private List<ParticipantSet> getParticipantSets(Participant participant){

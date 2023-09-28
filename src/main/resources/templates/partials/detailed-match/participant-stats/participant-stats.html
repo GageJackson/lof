@@ -2,14 +2,14 @@
      th:with="sets=${participantInfo.getParticipantSets()}"
 >
     <th:block th:each="set : ${sets}">
-        <div class="row  mb-3 rounded bg-color-neutral-medDark">
+        <div class="row rounded bg-color-neutral-black mb-3">
             <div class="col-1 bg-color-primary-dark ms-3 p-0">
                 <div class="vertical-text-container" >
-                    <h3 class="vertical-text color-neutral-light m-0" th:text="${set.getSetName()}"></h3>
+                    <h3 class="vertical-text color-neutral-black m-0" th:text="${set.getSetName()}"></h3>
                 </div>
             </div>
 
-            <div class="col p-0">
+            <div class="col p-0 pe-2">
                 <div class="container"
                      th:with="section1IconName=${set.getSection1IconName()},
                               section1Stats=${set.getSection1Stats()},
@@ -59,29 +59,31 @@
 </div>
 
 <div th:fragment="stat1(name, dataSet)"
-     class="col d-flex flex-column justify-content-center"
+     class="col d-flex flex-column justify-content-center p-0"
 >
-    <th:block th:replace="~{partials/detailed-match/participant-stats/participant-stats.html :: stat(${name}, ${dataSet})}"></th:block>
+    <th:block th:replace="~{partials/detailed-match/participant-stats/participant-stats.html :: stat(${name}, ${dataSet}, ${true})}"></th:block>
     <th:block th:replace="~{partials/detailed-match/participant-stats/participant-stats.html :: emptyStat()}"></th:block>
 </div>
 
 <div th:fragment="stat2(name1, dataSet1, name2, dataSet2)"
-     class="col d-flex flex-column justify-content-center"
+     class="col d-flex flex-column justify-content-center p-0"
 >
-    <th:block th:replace="~{partials/detailed-match/participant-stats/participant-stats.html :: stat(${name1}, ${dataSet1})}"></th:block>
-    <th:block th:replace="~{partials/detailed-match/participant-stats/participant-stats.html :: stat(${name2}, ${dataSet2})}"></th:block>
+    <th:block th:replace="~{partials/detailed-match/participant-stats/participant-stats.html :: stat(${name1}, ${dataSet1}, ${true})}"></th:block>
+    <th:block th:replace="~{partials/detailed-match/participant-stats/participant-stats.html :: stat(${name2}, ${dataSet2}, ${false})}"></th:block>
 </div>
 
-<th:block th:fragment="stat(name, dataSet)">
-    <p th:text="${name}" class="color-primary-dark fw-bold fs-200 mb-0"></p>
-    <p class="color-neutral-light fs-300 mb-2">
-        <th:block th:each="data : ${dataSet}">
-            <span th:text="${data}"></span>
-        </th:block>
-    </p>
+<th:block th:fragment="stat(name, dataSet, isFirst)">
+    <div class="" th:classappend="${isFirst} ? 'bg-color-neutral-dark' : ''">
+        <p th:text="${name}" class="color-primary-main fw-bold fs-200 mb-0 ps-1 text-center"></p>
+        <p class="color-neutral-light fs-300 mb-2 ps-1 text-center">
+            <th:block th:each="data : ${dataSet}">
+                <span th:text="${data}"></span>
+            </th:block>
+        </p>
+    </div>
 </th:block>
 
 <th:block th:fragment="emptyStat()">
-    <p class="color-neutral-medDark fw-bold fs-200 mb-0" th:text="${'.'}"> </p>
-    <p class="color-neutral-medDark fs-300 mb-2" th:text="${'.'}"> </p>
+    <p class="color-neutral-medDark fw-bold fs-200 mb-0 non-selectable" th:text="${'.'}"> </p>
+    <p class="color-neutral-medDark fs-300 mb-2 non-selectable" th:text="${'.'}"> </p>
 </th:block>
