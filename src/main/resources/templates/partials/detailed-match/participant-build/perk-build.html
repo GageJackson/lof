@@ -7,61 +7,48 @@
     </div>
   </div>
 
-  <div class="col-7 p-2">
-    <div class="container ">
-      <div class="row mb-2">
-        <div class="d-flex justify-content-center">
-          <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${perks[0].getStyle()}, ${true})}"></div>
+  <div class="col p-2">
+    <div class="d-flex justify-content-center mb-2">
+      <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${perks[0].getStyle()}, ${true})}"></div>
+    </div>
+    <th:block th:each="perk, perkIndex : ${perks}"
+              th:with="perkNum=${perk.getPerkNum()}"
+    >
+      <div th:if="${perkIndex.index <= 3}"
+           class="d-flex p-2"
+           th:classappend="${perkIndex.index % 2 == 0} ? 'bg-color-neutral-medDark' : ''"
+      >
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${perkNum}, ${false})}"></div>
+        <div class="ps-3">
+          <th:block th:each="perkStat : ${perk.getPerkStats()}">
+            <p class="color-neutral-light fs-300 mb-0" th:text="${perkStat}"></p>
+          </th:block>
         </div>
       </div>
-      <div class="row row-cols-2 rounded bg-color-neutral-medDark">
-        <th:block th:each="perk, perkIndex : ${perks}"
-                  th:with="perkNum=${perk.getPerkNum()}"
-        >
-          <div th:if="${perkIndex.index <= 3}"
-               class="col p-2"
-          >
-            <div class="d-flex justify-content-center">
-              <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${perkNum}, ${false})}"></div>
-            </div>
-
-            <th:block th:each="perkStat : ${perk.getPerkStats()}">
-              <p class="color-neutral-light fs-300 mb-0" th:text="${perkStat}"></p>
-            </th:block>
-          </div>
-        </th:block>
-      </div>
-    </div>
+    </th:block>
   </div>
 
   <div class="col p-2">
-    <div class="container">
-      <div class="row mb-2">
-        <div class="d-flex justify-content-center">
-          <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${perks[4].getStyle()}, ${true})}"></div>
+    <div class="d-flex justify-content-center mb-2">
+      <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${perks[4].getStyle()}, ${true})}"></div>
+    </div>
+    <th:block th:each="perk, perkIndex : ${perks}"
+              th:with="perkNum=${perk.getPerkNum()}"
+    >
+      <div th:if="${perkIndex.index > 3}"
+           class="d-flex p-2"
+           th:classappend="${perkIndex.index % 2 == 0} ? 'bg-color-neutral-medDark' : ''"
+      >
+        <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${perkNum}, ${false})}"></div>
+        <div class="ps-3">
+          <th:block th:each="perkStat : ${perk.getPerkStats()}">
+            <p class="color-neutral-light fs-300 mb-0" th:text="${perkStat}"></p>
+          </th:block>
         </div>
       </div>
-      <div class="row row-cols-1 rounded bg-color-neutral-medDark">
-        <th:block th:each="perk, perkIndex : ${perks}"
-                  th:with="perkNum=${perk.getPerkNum()}"
-        >
-          <div th:if="${perkIndex.index > 3}"
-               class="col rounded bg-color-neutral-medDark p-2"
-          >
-            <div class="d-flex justify-content-center">
-              <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: rune-icon(${perkNum}, ${false})}"></div>
-            </div>
-
-            <th:block th:each="perkStat : ${perk.getPerkStats()}">
-              <p class="color-neutral-light fs-300 mb-0" th:text="${perkStat}"></p>
-            </th:block>
-          </div>
-        </th:block>
-      </div>
-    </div>
+    </th:block>
   </div>
 </th:block>
-
 
 <img th:fragment="rune-icon(perkNum, isPrimary)"
      th:src="@{${'/img/summoner_runes/' + perkNum + '.png'}}"

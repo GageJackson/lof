@@ -27,35 +27,29 @@
 <div th:fragment="section(sectionStats, sectionIcon)"
      class="row"
 >
-    <div class="col-auto d-flex flex-column justify-content-center">
+    <div class="col-auto d-flex flex-column justify-content-center my-2">
         <div th:replace="~{partials/icons/position-icon.html :: position-icon('top', ${true})}"></div>
     </div>
 
-        <th:block th:if="${sectionStats.size() == 5}">
-            <div th:replace="~{partials/detailed-match/participant-stats/participant-stats.html ::
-                stat2(${sectionStats[0].getStatName()}, ${sectionStats[0].getStats()}, ${sectionStats[1].getStatName()}, ${sectionStats[1].getStats()})}"
-            ></div>
-            <div th:replace="~{partials/detailed-match/participant-stats/participant-stats.html ::
-                stat2(${sectionStats[2].getStatName()}, ${sectionStats[2].getStats()}, ${sectionStats[3].getStatName()}, ${sectionStats[3].getStats()})}"
-            ></div>
-            <div th:replace="~{partials/detailed-match/participant-stats/participant-stats.html ::
-                stat1(${sectionStats[4].getStatName()}, ${sectionStats[4].getStats()})}"
-            ></div>
-        </th:block>
+    <div th:replace="~{partials/detailed-match/participant-stats/participant-stats.html ::
+        stat2(${sectionStats[0].getStatName()}, ${sectionStats[0].getStats()}, ${sectionStats[1].getStatName()}, ${sectionStats[1].getStats()})}"
+    ></div>
 
-        <th:block th:if="${sectionStats.size() == 6}">
-            <div th:replace="~{partials/detailed-match/participant-stats/participant-stats.html ::
-                stat2(${sectionStats[0].getStatName()}, ${sectionStats[0].getStats()}, ${sectionStats[1].getStatName()}, ${sectionStats[1].getStats()})}"
-            ></div>
-            <div th:replace="~{partials/detailed-match/participant-stats/participant-stats.html ::
-                stat2(${sectionStats[2].getStatName()}, ${sectionStats[2].getStats()}, ${sectionStats[3].getStatName()}, ${sectionStats[3].getStats()})}"
-            ></div>
-            <div th:replace="~{partials/detailed-match/participant-stats/participant-stats.html ::
-                stat2(${sectionStats[4].getStatName()}, ${sectionStats[4].getStats()}, ${sectionStats[5].getStatName()}, ${sectionStats[5].getStats()})}"
-            ></div>
-        </th:block>
+    <div th:replace="~{partials/detailed-match/participant-stats/participant-stats.html ::
+        stat2(${sectionStats[2].getStatName()}, ${sectionStats[2].getStats()}, ${sectionStats[3].getStatName()}, ${sectionStats[3].getStats()})}"
+    ></div>
 
+    <th:block th:if="${sectionStats.size() == 5}">
+        <div th:replace="~{partials/detailed-match/participant-stats/participant-stats.html ::
+            stat1(${sectionStats[4].getStatName()}, ${sectionStats[4].getStats()})}"
+        ></div>
+    </th:block>
 
+    <th:block th:if="${sectionStats.size() == 6}">
+        <div th:replace="~{partials/detailed-match/participant-stats/participant-stats.html ::
+            stat2(${sectionStats[4].getStatName()}, ${sectionStats[4].getStats()}, ${sectionStats[5].getStatName()}, ${sectionStats[5].getStats()})}"
+        ></div>
+    </th:block>
 </div>
 
 <div th:fragment="stat1(name, dataSet)"
@@ -73,9 +67,9 @@
 </div>
 
 <th:block th:fragment="stat(name, dataSet, isFirst)">
-    <div class="" th:classappend="${isFirst} ? 'bg-color-neutral-dark' : ''">
+    <div class="my-1" th:classappend="${isFirst} ? 'bg-color-neutral-dark py-1' : ''">
         <p th:text="${name}" class="color-primary-main fw-bold fs-200 mb-0 ps-1 text-center"></p>
-        <p class="color-neutral-light fs-300 mb-2 ps-1 text-center">
+        <p class="color-neutral-light fs-300 m-0 ps-1 text-center">
             <th:block th:each="data : ${dataSet}">
                 <span th:text="${data}"></span>
             </th:block>
