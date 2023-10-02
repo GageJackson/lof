@@ -17,13 +17,13 @@
      class="tab-pane fade"
      th:classappend="${isActive} ? 'show active' : ''"
 >
-    <h3 class="color-neutral-light">
+    <h3 class="color-neutral-light text-center">
         <span th:text="${contentId}"></span>
         <span class="match-graph-title"> Damage Dealt</span>
     </h3>
 
     <div th:if="${isAllParticipants}"
-         class="d-flex gap-2"
+         class="d-flex justify-content-center gap-2 mt-3"
     >
         <th:block th:each="participantInfo, index : ${participants}"
                   th:with="participant=${participantInfo.getParticipant()},

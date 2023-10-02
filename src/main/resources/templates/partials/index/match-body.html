@@ -63,8 +63,5 @@
       <!--RED TEAM INFO-->
       <div th:replace="~{partials/index/team-footer.html :: team('Red', 1)}"></div>
     </div>
-    <a th:href="@{${'/match?match=' + matchInfo.getMatch().getId()}}"
-       class="btn match-btn" th:text="${'More Details'}"
-    ></a>
   </div>
 </div>

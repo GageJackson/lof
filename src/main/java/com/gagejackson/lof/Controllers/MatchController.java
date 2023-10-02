@@ -36,42 +36,16 @@ import java.util.stream.Collectors;
 @Controller
 public class MatchController {
     private final FriendRepository friendRepositoryDao;
-    private final FriendChampsRepository friendChampsRepositoryDao;
-    private final FriendRankRepository friendRankRepositoryDao;
-    private final FriendMatchRepository friendMatchRepositoryDao;
     private final MatchRepository matchRepositoryDao;
-    private final ParticipantRepository participantRepositoryDao;
-    private final ParticipantFrameRepository participantFrameRepositoryDao;
-    private final ParticipantFrameDamageRepository participantFrameDamageRepositoryDao;
-    private final ParticipantFrameChampRepository participantFrameChampRepositoryDao;
-    private final EventRepository eventDao;
-
     private final DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
     private final NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
 
     public MatchController(
             FriendRepository friendRepositoryDao,
-            FriendChampsRepository friendChampsRepositoryDao,
-            FriendRankRepository friendRankRepositoryDao,
-            FriendMatchRepository friendMatchRepositoryDao,
-            MatchRepository matchRepositoryDao,
-            ParticipantRepository participantRepositoryDao,
-            ParticipantFrameRepository participantFrameRepositoryDao,
-            ParticipantFrameDamageRepository participantFrameDamageRepositoryDao,
-            ParticipantFrameChampRepository participantFrameChampRepositoryDao,
-            EventRepository eventDao
-
+            MatchRepository matchRepositoryDao
     ){
         this.friendRepositoryDao = friendRepositoryDao;
-        this.friendChampsRepositoryDao = friendChampsRepositoryDao;
-        this.friendRankRepositoryDao = friendRankRepositoryDao;
-        this.friendMatchRepositoryDao = friendMatchRepositoryDao;
         this.matchRepositoryDao = matchRepositoryDao;
-        this.participantRepositoryDao = participantRepositoryDao;
-        this.participantFrameRepositoryDao = participantFrameRepositoryDao;
-        this.participantFrameDamageRepositoryDao = participantFrameDamageRepositoryDao;
-        this.participantFrameChampRepositoryDao = participantFrameChampRepositoryDao;
-        this.eventDao = eventDao;
     }
 
     @GetMapping("/match")

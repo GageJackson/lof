@@ -15,28 +15,28 @@
         ></span>
 
         <span class="badge"
-              th:classappend="${teamWin} ? 'bg-color-primary-main' : 'bg-color-primary-dark'"
+              th:classappend="${teamWin} ? 'bg-color-primary-main' : 'bg-color-neutral-main'"
               th:text="${teamWin} ? 'Won' : 'Lost'"
         ></span>
       </p>
     </div>
 
     <div>
-      <img th:src="@{${'/img/kda.png'}}"
+      <img th:src="@{${'/img/match-icons/kda.png'}}"
            alt="player position top"
-           class="position-icon non-selectable opacity-75"
+           class="icon-16 non-selectable opacity-75"
       >
-      <span class="color-neutral-light fw-semibold"
+      <span class="color-neutral-light fw-semibold mb-1"
             th:text="${teamKills + '/' + teamAssists + '/' + teamDeaths}">
       </span>
     </div>
 
     <div>
-      <img th:src="@{${'/img/gold.png'}}"
+      <img th:src="@{${'/img/match-icons/coins.png'}}"
            alt="player position top"
-           class="position-icon non-selectable opacity-75"
+           class="icon-16 non-selectable opacity-75"
       >
-      <span class="color-neutral-light fw-semibold"
+      <span class="color-neutral-light fw-semibold mb-1"
             th:text="${teamGold}">
       </span>
     </div>

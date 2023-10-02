@@ -109,6 +109,23 @@ VISUAL FRAMEWORK
     border-radius: 50%;
 }
 
+.icon-16{
+    height: 16px;
+    width: 16px;
+}
+
+.ui-icon {
+    height: 24px;
+    width: 24px;
+    border-radius: 50%;
+}
+
+.friend-icon-2 {
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+}
+
 .champ-icon {
     height: 20px;
     aspect-ratio: 1;
@@ -332,78 +349,78 @@ aside {
 }
 
 .coin-icon {
-    background-image: url('../img/match-icons/coin.png');
+    background-image: url('../img/graphs/coin.png');
 }
 
 .vision-icon {
-    background-image: url('../img/match-icons/vision.png');
+    background-image: url('../img/graphs/vision.png');
 }
 
 .kda-icon {
-    background-image: url('../img/match-icons/kda.png');
+    background-image: url('../img/graphs/kda.png');
 }
 
 .Overview-icon {
-    background-image: url('../img/match-icons/coin.png');
+    background-image: url('../img/graphs/coin.png');
 }
 
 .Gold-icon {
-    background-image: url('../img/match-icons/coin.png');
+    background-image: url('../img/graphs/coin.png');
 }
 
 .Xp-icon {
-    background-image: url('../img/match-icons/xp.png');
+    background-image: url('../img/graphs/xp.png');
 }
 
 .CS-icon {
-    background-image: url('../img/match-icons/cs.png');
+    background-image: url('../img/graphs/cs.png');
 }
 
 .DamageDealt-icon {
-    background-image: url('../img/match-icons/damageDealt.png');
+    background-image: url('../img/graphs/damageDealt.png');
 }
 
 .DamageTaken-icon {
-    background-image: url('../img/match-icons/damageTaken.png');
+    background-image: url('../img/graphs/damageTaken.png');
 }
 
 .DamageBoth-icon{
-    background-image: url('../img/match-icons/damageBoth.png');
+    background-image: url('../img/graphs/damageBoth.png');
 }
 
 .active > .Overview-icon,
 .active.Overview-icon {
-    background-image: url('../img/gold.png');
+    background-image: url('../img/graphs/coin_active.png');
 }
 
 .active > .Gold-icon,
 .active.Gold-icon {
-    background-image: url('../img/gold.png');
+    background-image: url('../img/graphs/coin_active.png');
 }
 
 .active > .Xp-icon,
 .active.Xp-icon {
-    background-image: url('../img/gold.png');
+    background-image: url('../img/graphs/xp_active.png');
 }
 
 .active > .CS-icon,
 .active.CS-icon {
-    background-image: url('../img/gold.png');
+    background-image: url('../img/graphs/cs_active.png');
 }
 
 .active > .DamageDealt-icon,
 .active.DamageDealt-icon {
-    background-image: url('../img/gold.png');
+    background-image: url('../img/graphs/damageDealt_active.png');
 }
 
 .active > .DamageTaken-icon,
 .active.DamageTaken-icon {
-    background-image: url('../img/gold.png');
+    background-image: url('../img/graphs/damageTaken_active.png');
 }
 
 .active > .DamageBoth-icon,
 .active.DamageBoth-icon {
-    background-image: url('../img/gold.png');
+    background-image: url('../img/graphs/damageBoth_active.png');
 }
 
 .line-h-0 {

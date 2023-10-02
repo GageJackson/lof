@@ -10,7 +10,7 @@
 </div>
 
 <div th:fragment="champions(teamId)"
-     class=" d-flex justify-content-between gap-3 mb-2"
+     class=" d-flex justify-content-between gap-3"
      th:with="participants=${matchInfo.getMatch().getParticipant()}"
 >
   <th:block th:each="participant : ${participants}"
