@@ -15,7 +15,7 @@
             th:classappend="${friend.isSelected() ? 'selected' : 'bg-transparent'}"
     >
       <img th:replace="~{partials/icons/friend-icon.html :: image}">
-      <div>
+      <div class="ms-2">
         <p th:text="${friend.getName()}" class="to-lower bold color-neutral-light mb-0 non-selectable"></p>
         <p th:text="${friend.getSummonerLevel()}" class="color-primary-main mb-0 fs-200 text-start non-selectable"></p>
       </div>

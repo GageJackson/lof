@@ -148,6 +148,13 @@
             // Wait for 0.25 seconds to prevent exceeding 20 calls per second
             await delay(250);
             await Promise.all(promises);
+
+            const url = '/index';
+            try {
+                window.location.href = url;
+            } catch (error) {
+                console.error('Error:', error);
+            }
         }
     }
 
