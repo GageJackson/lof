@@ -1,0 +1,83 @@
+<div th:fragment="stats" class="container"
+     th:with="sets=${participantInfo.getParticipantSets()}"
+>
+    <th:block th:each="set : ${sets}">
+        <div class="row rounded bg-color-neutral-black mb-3">
+            <div class="col-1 bg-color-primary-dark ms-3 p-0">
+                <div class="vertical-text-container" >
+                    <h3 class="vertical-text color-neutral-black m-0" th:text="${set.getSetName()}"></h3>
+                </div>
+            </div>
+
+            <div class="col p-0 pe-2">
+                <div class="container"
+                     th:with="section1IconName=${set.getSection1IconName()},
+                              section1Stats=${set.getSection1Stats()},
+                              section2IconName=${set.getSection2IconName()},
+                              section2Stats=${set.getSection2Stats()}"
+                >
+                    <div th:replace="~{partials/detailed-match/participant-stats/participant-stats.html :: section(${section1Stats}, ${section1IconName})}"></div>
+                    <div th:replace="~{partials/detailed-match/participant-stats/participant-stats.html :: section(${section2Stats}, ${section2IconName})}"></div>
+                </div>
+            </div>
+        </div>
+    </th:block>
+</div>
+
+<div th:fragment="section(sectionStats, sectionIcon)"
+     class="row"
+>
+    <div class="col-auto d-flex flex-column justify-content-center my-2">
+        <div th:replace="~{partials/icons/position-icon.html :: position-icon('top', ${true})}"></div>
+    </div>
+
+    <div th:replace="~{partials/detailed-match/participant-stats/participant-stats.html ::
+        stat2(${sectionStats[0].getStatName()}, ${sectionStats[0].getStats()}, ${sectionStats[1].getStatName()}, ${sectionStats[1].getStats()})}"
+    ></div>
+
+    <div th:replace="~{partials/detailed-match/participant-stats/participant-stats.html ::
+        stat2(${sectionStats[2].getStatName()}, ${sectionStats[2].getStats()}, ${sectionStats[3].getStatName()}, ${sectionStats[3].getStats()})}"
+    ></div>
+
+    <th:block th:if="${sectionStats.size() == 5}">
+        <div th:replace="~{partials/detailed-match/participant-stats/participant-stats.html ::
+            stat1(${sectionStats[4].getStatName()}, ${sectionStats[4].getStats()})}"
+        ></div>
+    </th:block>
+
+    <th:block th:if="${sectionStats.size() == 6}">
+        <div th:replace="~{partials/detailed-match/participant-stats/participant-stats.html ::
+            stat2(${sectionStats[4].getStatName()}, ${sectionStats[4].getStats()}, ${sectionStats[5].getStatName()}, ${sectionStats[5].getStats()})}"
+        ></div>
+    </th:block>
+</div>
+
+<div th:fragment="stat1(name, dataSet)"
+     class="col d-flex flex-column justify-content-center p-0"
+>
+    <th:block th:replace="~{partials/detailed-match/participant-stats/participant-stats.html :: stat(${name}, ${dataSet}, ${true})}"></th:block>
+    <th:block th:replace="~{partials/detailed-match/participant-stats/participant-stats.html :: emptyStat()}"></th:block>
+</div>
+
+<div th:fragment="stat2(name1, dataSet1, name2, dataSet2)"
+     class="col d-flex flex-column justify-content-center p-0"
+>
+    <th:block th:replace="~{partials/detailed-match/participant-stats/participant-stats.html :: stat(${name1}, ${dataSet1}, ${true})}"></th:block>
+    <th:block th:replace="~{partials/detailed-match/participant-stats/participant-stats.html :: stat(${name2}, ${dataSet2}, ${false})}"></th:block>
+</div>
+
+<th:block th:fragment="stat(name, dataSet, isFirst)">
+    <div class="my-1" th:classappend="${isFirst} ? 'bg-color-neutral-dark py-1' : ''">
+        <p th:text="${name}" class="color-primary-main fw-bold fs-200 mb-0 ps-1 text-center"></p>
+        <p class="color-neutral-light fs-300 m-0 ps-1 text-center">
+            <th:block th:each="data : ${dataSet}">
+                <span th:text="${data}"></span>
+            </th:block>
+        </p>
+    </div>
+</th:block>
+
+<th:block th:fragment="emptyStat()">
+    <p class="color-neutral-medDark fw-bold fs-200 mb-0 non-selectable" th:text="${'.'}"> </p>
+    <p class="color-neutral-medDark fs-300 mb-2 non-selectable" th:text="${'.'}"> </p>
+</th:block>

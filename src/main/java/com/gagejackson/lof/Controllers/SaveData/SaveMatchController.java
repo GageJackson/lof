@@ -275,6 +275,7 @@ public class SaveMatchController {
             participant.setWin((boolean) participantData.get("win"));
             participant.setMatch(newMatch);
 
+            participant.setParticipantChallenges(saveParticipantChallenges(participantData, participant));
             participant.setPerk(savePerkData(participantData, participant));
 
             participants.add(participant);
@@ -312,6 +313,129 @@ public class SaveMatchController {
 
         return perks;
     }
+
+    private ParticipantChallenges saveParticipantChallenges(Map<String, Object> info, Participant newParticipant) {
+        Map<String, Object> participantChallengesData = (Map<String, Object>) info.get("challenges");
+        ParticipantChallenges participantChallenges = new ParticipantChallenges();
+
+        participantChallenges.setAbilityUses(((Number)participantChallengesData.getOrDefault("abilityUses", 0)).intValue());
+        participantChallenges.setAcesBefore15Minutes(((Number)participantChallengesData.getOrDefault("acesBefore15Minutes", 0)).intValue());
+        participantChallenges.setAlliedJungleMonsterKills(((Number)participantChallengesData.getOrDefault("alliedJungleMonsterKills", 0)).intValue());
+        participantChallenges.setBaronTakedowns(((Number)participantChallengesData.getOrDefault("baronTakedowns", 0)).intValue());
+        participantChallenges.setBlastConeOppositeOpponentCount(((Number)participantChallengesData.getOrDefault("blastConeOppositeOpponentCount", 0)).intValue());
+        participantChallenges.setBountyGold(((Number)participantChallengesData.getOrDefault("bountyGold", 0)).intValue());
+        participantChallenges.setBuffsStolen(((Number)participantChallengesData.getOrDefault("buffsStolen", 0)).intValue());
+        participantChallenges.setCompleteSupportQuestInTime(((Number)participantChallengesData.getOrDefault("completeSupportQuestInTime", 0)).intValue());
+        participantChallenges.setControlWardsPlaced(((Number)participantChallengesData.getOrDefault("controlWardsPlaced", 0)).intValue());
+        participantChallenges.setDamagePerMinute(((Number)participantChallengesData.getOrDefault("damagePerMinute", 0.0)).doubleValue());
+        participantChallenges.setDamageTakenOnTeamPercentage(((Number)participantChallengesData.getOrDefault("damageTakenOnTeamPercentage", 0.0)).doubleValue());
+        participantChallenges.setDancedWithRiftHerald(((Number)participantChallengesData.getOrDefault("dancedWithRiftHerald", 0)).intValue());
+        participantChallenges.setDeathsByEnemyChamps(((Number)participantChallengesData.getOrDefault("deathsByEnemyChamps", 0)).intValue());
+        participantChallenges.setDodgeSkillShotsSmallWindow(((Number)participantChallengesData.getOrDefault("dodgeSkillShotsSmallWindow", 0)).intValue());
+        participantChallenges.setDoubleAces(((Number)participantChallengesData.getOrDefault("doubleAces", 0)).intValue());
+        participantChallenges.setDragonTakedowns(((Number)participantChallengesData.getOrDefault("dragonTakedowns", 0)).intValue());
+        participantChallenges.setEarlyLaningPhaseGoldExpAdvantage(((Number)participantChallengesData.getOrDefault("earlyLaningPhaseGoldExpAdvantage", 0)).intValue());
+        participantChallenges.setEffectiveHealAndShielding(((Number)participantChallengesData.getOrDefault("effectiveHealAndShielding", 0)).intValue());
+        participantChallenges.setElderDragonKillsWithOpposingSoul(((Number)participantChallengesData.getOrDefault("elderDragonKillsWithOpposingSoul", 0)).intValue());
+        participantChallenges.setElderDragonMultikills(((Number)participantChallengesData.getOrDefault("elderDragonMultikills", 0)).intValue());
+        participantChallenges.setEnemyChampionImmobilizations(((Number)participantChallengesData.getOrDefault("enemyChampionImmobilizations", 0)).intValue());
+        participantChallenges.setEnemyJungleMonsterKills(((Number)participantChallengesData.getOrDefault("enemyJungleMonsterKills", 0)).intValue());
+        participantChallenges.setEpicMonsterKillsNearEnemyJungler(((Number)participantChallengesData.getOrDefault("epicMonsterKillsNearEnemyJungler", 0)).intValue());
+        participantChallenges.setEpicMonsterKillsWithin30SecondsOfSpawn(((Number)participantChallengesData.getOrDefault("epicMonsterKillsWithin30SecondsOfSpawn", 0)).intValue());
+        participantChallenges.setEpicMonsterSteals(((Number)participantChallengesData.getOrDefault("epicMonsterSteals", 0)).intValue());
+        participantChallenges.setEpicMonsterStolenWithoutSmite(((Number)participantChallengesData.getOrDefault("epicMonsterStolenWithoutSmite", 0)).intValue());
+        participantChallenges.setFirstTurretKilled(((Number)participantChallengesData.getOrDefault("firstTurretKilled", 0)).intValue());
+        participantChallenges.setFirstTurretKilledTime(((Number)participantChallengesData.getOrDefault("firstTurretKilledTime", 0.0)).doubleValue());
+        participantChallenges.setFlawlessAces(((Number)participantChallengesData.getOrDefault("flawlessAces", 0)).intValue());
+        participantChallenges.setFullTeamTakedown(((Number)participantChallengesData.getOrDefault("fullTeamTakedown", 0)).intValue());
+        participantChallenges.setGameLength(((Number)participantChallengesData.getOrDefault("gameLength", 0.0)).doubleValue());
+        participantChallenges.setGetTakedownsInAllLanesEarlyJungleAsLaner(((Number)participantChallengesData.getOrDefault("getTakedownsInAllLanesEarlyJungleAsLaner", 0)).intValue());
+        participantChallenges.setGoldPerMinute(((Number)participantChallengesData.getOrDefault("goldPerMinute", 0.0)).doubleValue());
+        participantChallenges.setHadOpenNexus(((Number)participantChallengesData.getOrDefault("hadOpenNexus", 0)).intValue());
+        participantChallenges.setImmobilizeAndKillWithAlly(((Number)participantChallengesData.getOrDefault("immobilizeAndKillWithAlly", 0)).intValue());
+        participantChallenges.setInitialBuffCount(((Number)participantChallengesData.getOrDefault("initialBuffCount", 0)).intValue());
+        participantChallenges.setInitialCrabCount(((Number)participantChallengesData.getOrDefault("initialCrabCount", 0)).intValue());
+        participantChallenges.setJungleCsBefore10Minutes(((Number)participantChallengesData.getOrDefault("jungleCsBefore10Minutes", 0)).intValue());
+        participantChallenges.setJunglerTakedownsNearDamagedEpicMonster(((Number)participantChallengesData.getOrDefault("junglerTakedownsNearDamagedEpicMonster", 0)).intValue());
+        participantChallenges.setkTurretsDestroyedBeforePlatesFall(((Number)participantChallengesData.getOrDefault("kTurretsDestroyedBeforePlatesFall", 0)).intValue());
+        participantChallenges.setKda(((Number)participantChallengesData.getOrDefault("kda", 0.0)).doubleValue());
+        participantChallenges.setKillAfterHiddenWithAlly(((Number)participantChallengesData.getOrDefault("killAfterHiddenWithAlly", 0)).intValue());
+        participantChallenges.setKillParticipation(((Number)participantChallengesData.getOrDefault("killParticipation", 0.0)).doubleValue());
+        participantChallenges.setKilledChampTookFullTeamDamageSurvived(((Number)participantChallengesData.getOrDefault("killedChampTookFullTeamDamageSurvived", 0)).intValue());
+        participantChallenges.setKillingSprees(((Number)participantChallengesData.getOrDefault("killingSprees", 0)).intValue());
+        participantChallenges.setKillsNearEnemyTurret(((Number)participantChallengesData.getOrDefault("killsNearEnemyTurret", 0)).intValue());
+        participantChallenges.setKillsOnOtherLanesEarlyJungleAsLaner(((Number)participantChallengesData.getOrDefault("killsOnOtherLanesEarlyJungleAsLaner", 0)).intValue());
+        participantChallenges.setKillsOnRecentlyHealedByAramPack(((Number)participantChallengesData.getOrDefault("killsOnRecentlyHealedByAramPack", 0)).intValue());
+        participantChallenges.setKillsUnderOwnTurret(((Number)participantChallengesData.getOrDefault("killsUnderOwnTurret", 0)).intValue());
+        participantChallenges.setKillsWithHelpFromEpicMonster(((Number)participantChallengesData.getOrDefault("killsWithHelpFromEpicMonster", 0)).intValue());
+        participantChallenges.setKnockEnemyIntoTeamAndKill(((Number)participantChallengesData.getOrDefault("knockEnemyIntoTeamAndKill", 0)).intValue());
+        participantChallenges.setLandSkillShotsEarlyGame(((Number)participantChallengesData.getOrDefault("landSkillShotsEarlyGame", 0)).intValue());
+        participantChallenges.setLaneMinionsFirst10Minutes(((Number)participantChallengesData.getOrDefault("laneMinionsFirst10Minutes", 0)).intValue());
+        participantChallenges.setLaningPhaseGoldExpAdvantage(((Number)participantChallengesData.getOrDefault("laningPhaseGoldExpAdvantage", 0)).intValue());
+        participantChallenges.setLegendaryCount(((Number)participantChallengesData.getOrDefault("legendaryCount", 0)).intValue());
+        participantChallenges.setLostAnInhibitor(((Number)participantChallengesData.getOrDefault("lostAnInhibitor", 0)).intValue());
+        participantChallenges.setMaxCsAdvantageOnLaneOpponent(((Number)participantChallengesData.getOrDefault("maxCsAdvantageOnLaneOpponent", 0)).intValue());
+        participantChallenges.setMaxKillDeficit(((Number)participantChallengesData.getOrDefault("maxKillDeficit", 0)).intValue());
+        participantChallenges.setMaxLevelLeadLaneOpponent(((Number)participantChallengesData.getOrDefault("maxLevelLeadLaneOpponent", 0)).intValue());
+        participantChallenges.setMejaisFullStackInTime(((Number)participantChallengesData.getOrDefault("mejaisFullStackInTime", 0)).intValue());
+        participantChallenges.setMoreEnemyJungleThanOpponent(((Number)participantChallengesData.getOrDefault("moreEnemyJungleThanOpponent", 0)).intValue());
+        participantChallenges.setMultiKillOneSpell(((Number)participantChallengesData.getOrDefault("multiKillOneSpell", 0)).intValue());
+        participantChallenges.setMultiTurretRiftHeraldCount(((Number)participantChallengesData.getOrDefault("multiTurretRiftHeraldCount", 0)).intValue());
+        participantChallenges.setMultikills(((Number)participantChallengesData.getOrDefault("multikills", 0)).intValue());
+        participantChallenges.setMultikillsAfterAggressiveFlash(((Number)participantChallengesData.getOrDefault("multikillsAfterAggressiveFlash", 0)).intValue());
+        participantChallenges.setMythicItemUsed(((Number)participantChallengesData.getOrDefault("mythicItemUsed", 0)).intValue());
+        participantChallenges.setOuterTurretExecutesBefore10Minutes(((Number)participantChallengesData.getOrDefault("outerTurretExecutesBefore10Minutes", 0)).intValue());
+        participantChallenges.setOutnumberedKills(((Number)participantChallengesData.getOrDefault("outnumberedKills", 0)).intValue());
+        participantChallenges.setOutnumberedNexusKill(((Number)participantChallengesData.getOrDefault("outnumberedNexusKill", 0)).intValue());
+        participantChallenges.setPerfectDragonSoulsTaken(((Number)participantChallengesData.getOrDefault("perfectDragonSoulsTaken", 0)).intValue());
+        participantChallenges.setPerfectGame(((Number)participantChallengesData.getOrDefault("perfectGame", 0)).intValue());
+        participantChallenges.setPickKillWithAlly(((Number)participantChallengesData.getOrDefault("pickKillWithAlly", 0)).intValue());
+        participantChallenges.setPoroExplosions(((Number)participantChallengesData.getOrDefault("poroExplosions", 0)).intValue());
+        participantChallenges.setQuickCleanse(((Number)participantChallengesData.getOrDefault("quickCleanse", 0)).intValue());
+        participantChallenges.setQuickFirstTurret(((Number)participantChallengesData.getOrDefault("quickFirstTurret", 0)).intValue());
+        participantChallenges.setQuickSoloKills(((Number)participantChallengesData.getOrDefault("quickSoloKills", 0)).intValue());
+        participantChallenges.setRiftHeraldTakedowns(((Number)participantChallengesData.getOrDefault("riftHeraldTakedowns", 0)).intValue());
+        participantChallenges.setSaveAllyFromDeath(((Number)participantChallengesData.getOrDefault("saveAllyFromDeath", 0)).intValue());
+        participantChallenges.setScuttleCrabKills(((Number)participantChallengesData.getOrDefault("scuttleCrabKills", 0)).intValue());
+        participantChallenges.setShortestTimeToAceFromFirstTakedown(((Number)participantChallengesData.getOrDefault("shortestTimeToAceFromFirstTakedown", 0.0)).doubleValue());
+        participantChallenges.setSkillshotsDodged(((Number)participantChallengesData.getOrDefault("skillshotsDodged", 0)).intValue());
+        participantChallenges.setSkillshotsHit(((Number)participantChallengesData.getOrDefault("skillshotsHit", 0)).intValue());
+        participantChallenges.setSnowballsHit(((Number)participantChallengesData.getOrDefault("snowballsHit", 0)).intValue());
+        participantChallenges.setSoloBaronKills(((Number)participantChallengesData.getOrDefault("soloBaronKills", 0)).intValue());
+        participantChallenges.setSoloKills(((Number)participantChallengesData.getOrDefault("soloKills", 0)).intValue());
+        participantChallenges.setStealthWardsPlaced(((Number)participantChallengesData.getOrDefault("stealthWardsPlaced", 0)).intValue());
+        participantChallenges.setSurvivedSingleDigitHpCount(((Number)participantChallengesData.getOrDefault("survivedSingleDigitHpCount", 0)).intValue());
+        participantChallenges.setSurvivedThreeImmobilizesInFight(((Number)participantChallengesData.getOrDefault("survivedThreeImmobilizesInFight", 0)).intValue());
+        participantChallenges.setTakedownOnFirstTurret(((Number)participantChallengesData.getOrDefault("takedownOnFirstTurret", 0)).intValue());
+        participantChallenges.setTakedowns(((Number)participantChallengesData.getOrDefault("takedowns", 0)).intValue());
+        participantChallenges.setTakedownsAfterGainingLevelAdvantage(((Number)participantChallengesData.getOrDefault("takedownsAfterGainingLevelAdvantage", 0)).intValue());
+        participantChallenges.setTakedownsBeforeJungleMinionSpawn(((Number)participantChallengesData.getOrDefault("takedownsBeforeJungleMinionSpawn", 0)).intValue());
+        participantChallenges.setTakedownsFirstXMinutes(((Number)participantChallengesData.getOrDefault("takedownsFirstXMinutes", 0)).intValue());
+        participantChallenges.setTakedownsInAlcove(((Number)participantChallengesData.getOrDefault("takedownsInAlcove", 0)).intValue());
+        participantChallenges.setTakedownsInEnemyFountain(((Number)participantChallengesData.getOrDefault("takedownsInEnemyFountain", 0)).intValue());
+        participantChallenges.setTeamBaronKills(((Number)participantChallengesData.getOrDefault("teamBaronKills", 0)).intValue());
+        participantChallenges.setTeamDamagePercentage(((Number)participantChallengesData.getOrDefault("teamDamagePercentage", 0.0)).doubleValue());
+        participantChallenges.setTeamElderDragonKills(((Number)participantChallengesData.getOrDefault("teamElderDragonKills", 0)).intValue());
+        participantChallenges.setTeamRiftHeraldKills(((Number)participantChallengesData.getOrDefault("teamRiftHeraldKills", 0)).intValue());
+        participantChallenges.setTookLargeDamageSurvived(((Number)participantChallengesData.getOrDefault("tookLargeDamageSurvived", 0)).intValue());
+        participantChallenges.setTurretPlatesTaken(((Number)participantChallengesData.getOrDefault("turretPlatesTaken", 0)).intValue());
+        participantChallenges.setTurretTakedowns(((Number)participantChallengesData.getOrDefault("turretTakedowns", 0)).intValue());
+        participantChallenges.setTurretsTakenWithRiftHerald(((Number)participantChallengesData.getOrDefault("turretsTakenWithRiftHerald", 0)).intValue());
+        participantChallenges.setTwentyMinionsIn3SecondsCount(((Number)participantChallengesData.getOrDefault("twentyMinionsIn3SecondsCount", 0)).intValue());
+        participantChallenges.setTwoWardsOneSweeperCount(((Number)participantChallengesData.getOrDefault("twoWardsOneSweeperCount", 0)).intValue());
+        participantChallenges.setUnseenRecalls(((Number)participantChallengesData.getOrDefault("unseenRecalls", 0)).intValue());
+        participantChallenges.setVisionScoreAdvantageLaneOpponent(((Number)participantChallengesData.getOrDefault("visionScoreAdvantageLaneOpponent", 0)).intValue());
+        participantChallenges.setVisionScorePerMinute(((Number)participantChallengesData.getOrDefault("visionScorePerMinute", 0.0)).doubleValue());
+        participantChallenges.setWardTakedowns(((Number)participantChallengesData.getOrDefault("wardTakedowns", 0)).intValue());
+        participantChallenges.setWardTakedownsBefore20M(((Number)participantChallengesData.getOrDefault("wardTakedownsBefore20M", 0)).intValue());
+        participantChallenges.setWardsGuarded(((Number)participantChallengesData.getOrDefault("wardsGuarded", 0)).intValue());
+
+        participantChallenges.setParticipant(newParticipant);
+
+        return participantChallenges;
+    }
+
+
 
     private List<Team> saveTeamData(Map<String, Object> info, Match newMatch) {
         List<Map<String, Object>> teamsData = (List<Map<String, Object>>) info.get("teams");

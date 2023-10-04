@@ -1,13 +1,13 @@
 <div th:fragment="builds"
      class="container"
 >
-  <div class="row mb-3">
+  <div class="row rounded bg-color-neutral-black mb-3">
+    <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: perkBuild}"></div>
+  </div>
+  <div class="row rounded bg-color-neutral-black mb-3">
     <div th:replace="~{partials/detailed-match/participant-build/item-build.html :: itemBuild}"></div>
   </div>
-  <div class="row mb-3">
+  <div class="row rounded bg-color-neutral-black mb-3">
     <div th:replace="~{partials/detailed-match/participant-build/skill-build.html :: skillBuild}"></div>
   </div>
-<!--  <div class="row mb-3">-->
-<!--    <div th:replace="~{partials/detailed-match/participant-build/perk-build.html :: perkBuild}"></div>-->
-<!--  </div>-->
 </div>

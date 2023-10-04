@@ -2,7 +2,7 @@
      class="d-flex justify-content-center align-items-center"
      th:classappend="${isVertical} ? 'position-icon-lg-box my-3' : ''"
 >
-  <img th:src="@{${'/img/' + position + '.png'}}"
+  <img th:src="@{${'/img/positions/' + position + '.png'}}"
        th:alt="${'player position ' + position}"
        class="non-selectable opacity-75"
        th:classappend="${isVertical} ? 'position-icon-lg' : 'position-icon'"

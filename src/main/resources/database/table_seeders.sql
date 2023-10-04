@@ -8,3 +8,8 @@ VALUES ('gagermeister', 1, 100, 'm-_faKcheSfh6jJgn2RNi4aHB2XShSmWx95jaOm_GbXZDbE
        ('mightywarrior7', 1, 100, '4oMpxQSllEvmhHHVQ0TEJFtQLsqdsTGYX1Ey7HObLjRM-D4', '59QeUpjTM1S-zUc7PYUaAG0jvy7xZ6evXklLNnpT2d1S-hF5iTSs6ir2Q7eAQ0-gBrE3DVynsFfK_Q', 't05Ef_XHw4ecxKGx6IQQ3DLQ7Fr3JJAjsh8UKRRePsUnsQ'),
        ('iamthejewbear', 1, 100, '-A9JREivIpiYUNnbfK3cfj9_OnraMefziZ17-J3XlsMUhMc', 'C09Y2tiCz3Up2C80SCFiOwesY3m_YQEPc-Pg1lQzQQLd_tIQHJ6n3cYEvyUFJEb0NRWCDX8HUIvOFg', 'zaNRPfUVOPdYjbLildr905pS_Yzo6bOvaHtQhRex6YaVheE'),
        ('RealMannyy', 1, 100, '2xTwNkswk_7BG6I1K731VihRHIvjrRlVY0rUpPArwSTKlk2PB58aLod7LA', 'kxc3nnpgScfzE9o5HWUpnZd4Cj0fOEW92NAUsAGYSMC0agYJ5dBoLsb5lnU67Kx64pmB4zAaGxlJpQ', '4FlCpQEXi-R1lUbrjFR_lgODZhDXjwS91gVsSenNUfCKSeC-GIg1enS7')
+
+SELECT TABLE_SCHEMA AS "DB NAME",
+       SUM(DATA_LENGTH + TABLES.INDEX_LENGTH) / 1024 / 1024 AS "SIZE MB"
+    FROM information_schema.TABLES
+GROUP BY TABLE_SCHEMA;

@@ -1,6 +1,6 @@
 :root {
     --color-primary-light: #d0b689;
-    --color-primary-main: #9C865CFF;
+    --color-primary-main: #9C865C;
     --color-primary-dark: #5e5543;
 
     --color-primary-red: #a2434e;
@@ -11,7 +11,7 @@
     --color-neutral-main: #4b4b56;
     --color-neutral-medDark: #2c2f35;
     --color-neutral-dark: #21252a;
-    --color-neutral-black: rgba(23, 26, 31, 0.5);
+    --color-neutral-black: #171A1F;
 
     --fs-900: 4rem;
     --fs-800: 3rem;
@@ -50,6 +50,7 @@ UTILITY CLASSES
 .color-neutral-white {color: var(--color-neutral-white);}
 .color-neutral-light {color: var(--color-neutral-light);}
 .color-neutral-main {color: var(--color-neutral-main);}
+.color-neutral-medDark {color: var(--color-neutral-medDark);}
 .color-neutral-dark {color: var(--color-neutral-dark);}
 .color-neutral-black {color: var(--color-neutral-black);}
 
@@ -108,6 +109,28 @@ VISUAL FRAMEWORK
     border-radius: 50%;
 }
 
+.icon-16{
+    height: 16px;
+    width: 16px;
+}
+
+.icon-64{
+    height: 64px;
+    width: 64px;
+}
+
+.ui-icon {
+    height: 24px;
+    width: 24px;
+    border-radius: 50%;
+}
+
+.friend-icon-2 {
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+}
+
 .champ-icon {
     height: 20px;
     aspect-ratio: 1;
@@ -134,6 +157,13 @@ VISUAL FRAMEWORK
 .objective-icon {
     height: 16px;
     aspect-ratio: 1;
+}
+
+.participant-champion {
+    height: 720px;
+    width: 200px;
+    /*background-position: center;*/
+    background-size: cover;
 }
 
 .rune-container {
@@ -166,58 +196,6 @@ VISUAL FRAMEWORK
     width: 36px;
 }
 
-.accordion {
-    border: none;
-    --bs-accordion-border-width:0;
-    --bs-accordion-btn-color: #ff0000;
-    --bs-accordion-body-padding-x: .5rem;
-    --bs-accordion-body-padding-y: 2rem;
-}
-
-/*.accordion-item {*/
-/*    background-color: rgba(33, 37, 42, 0);*/
-/*    border: none;*/
-/*    outline: none;*/
-/*    overflow: hidden;*/
-/*}*/
-
-.accordion-body {
-    border: none;
-    /*--bs-accordion-border-width:0;*/
-
-    /*--bs-accordion-btn-focus-border-color: #ff6200;*/
-}
-
-.accordion-button::after {
-    height: 60px;
-    width: 60px;
-    aspect-ratio: 1;
-    background-size: 60px;
-    background-image: url("../img/arrow.png");
-    /*background-image: var(--bs-accordion-btn-active-icon);*/
-    margin-inline-start: 0;
-}
-
-.accordion-button:not(.collapsed)::after {
-    /*background-size: 20px;*/
-    background-image: url("../img/arrow.png");
-}
-
-.accordion-button[aria-expanded="true"] {
-    background-color: rgba(33, 37, 42, 0);
-}
-
-.accordion-button[aria-expanded="false"] {
-    background-color: rgba(33, 37, 42, 0);
-}
-
-/*.accordion-button:focus {*/
-/*    background-color: rgba(33, 37, 42, 0);*/
-/*    border: none;*/
-/*    outline: none;*/
-/*    overflow: hidden;*/
-/*}*/
-
 .selected {
     background: rgba(255, 255, 255, 0.05);
     border-radius: .5rem;
@@ -226,6 +204,10 @@ VISUAL FRAMEWORK
 .friend-btns:hover {
     background: rgba(255, 255, 255, 0.05); !important;
     border-radius: .5rem;
+}
+
+.p-stat-btn:hover {
+    background-color: var(--color-primary-light);
 }
 
 .nav-pills {
@@ -283,27 +265,27 @@ aside {
 }
 
 #challenges-btn {
-    background-image: url('../img/challenges-neutral.png');
+    background-image: url('../img/ui/challenges-neutral2.png');
 }
 
 #challenges-btn:hover, #challenges-btn.active {
-    background-image: url('../img/challenges-active.png');
+    background-image: url('../img/ui/challenges-active2.png');
 }
 
 #friend-btn {
-    background-image: url('../img/friend-neutral.png');
+    background-image: url('../img/ui/friend-neutral2.png');
 }
 
 #friend-btn:hover, #friend-btn.active {
-    background-image: url('../img/friend-active.png');
+    background-image: url('../img/ui/friend-active2.png');
 }
 
 #matches-btn {
-    background-image: url('../img/matches-neutral.png');
+    background-image: url('../img/ui/matches-neutral.png');
 }
 
 #matches-btn:hover, #matches-btn.active {
-    background-image: url('../img/matches-active.png');
+    background-image: url('../img/ui/matches-active.png');
 }
 
 .small-icons {
@@ -318,79 +300,83 @@ aside {
     background-image: url('../img/match-icons/cs.png');
 }
 
+#friend-refresh-btn {
+    background-image: url('../img/ui/icon-refresh.png');
+}
+
+#friend-refresh-btn:hover {
+    background-image: url('../img/ui/icon-refresh-over.png');
+}
+
+#friend-refresh-btn:active {
+    background-image: url('../img/ui/icon-refresh-down.png');
+}
+
 .coin-icon {
-    background-image: url('../img/match-icons/coin.png');
-}
-
-.vision-icon {
-    background-image: url('../img/match-icons/vision.png');
-}
-
-.kda-icon {
-    background-image: url('../img/match-icons/kda.png');
+    background-image: url('../img/graphs/coin.png');
 }
 
 .Overview-icon {
-    background-image: url('../img/match-icons/coin.png');
+    background-image: url('../img/graphs/coin.png');
 }
 
 .Gold-icon {
-    background-image: url('../img/match-icons/coin.png');
+    background-image: url('../img/graphs/coin.png');
 }
 
 .Xp-icon {
-    background-image: url('../img/match-icons/xp.png');
+    background-image: url('../img/graphs/xp.png');
 }
 
 .CS-icon {
-    background-image: url('../img/match-icons/cs.png');
+    background-image: url('../img/graphs/cs.png');
 }
 
 .DamageDealt-icon {
-    background-image: url('../img/match-icons/damageDealt.png');
+    background-image: url('../img/graphs/damageDealt.png');
 }
 
 .DamageTaken-icon {
-    background-image: url('../img/match-icons/damageTaken.png');
+    background-image: url('../img/graphs/damageTaken.png');
 }
 
 .DamageBoth-icon{
-    background-image: url('../img/match-icons/damageBoth.png');
+    background-image: url('../img/graphs/damageBoth.png');
 }
 
 .active > .Overview-icon,
 .active.Overview-icon {
-    background-image: url('../img/gold.png');
+    background-image: url('../img/graphs/coin_active.png');
 }
 
 .active > .Gold-icon,
 .active.Gold-icon {
-    background-image: url('../img/gold.png');
+    background-image: url('../img/graphs/coin_active.png');
 }
 
 .active > .Xp-icon,
 .active.Xp-icon {
-    background-image: url('../img/gold.png');
+    background-image: url('../img/graphs/xp_active.png');
 }
 
 .active > .CS-icon,
 .active.CS-icon {
-    background-image: url('../img/gold.png');
+    background-image: url('../img/graphs/cs_active.png');
 }
 
 .active > .DamageDealt-icon,
 .active.DamageDealt-icon {
-    background-image: url('../img/gold.png');
+    background-image: url('../img/graphs/damageDealt_active.png');
 }
 
 .active > .DamageTaken-icon,
 .active.DamageTaken-icon {
-    background-image: url('../img/gold.png');
+    background-image: url('../img/graphs/damageTaken_active.png');
 }
 
 .active > .DamageBoth-icon,
 .active.DamageBoth-icon {
-    background-image: url('../img/gold.png');
+    background-image: url('../img/graphs/damageBoth_active.png');
 }
 
 .line-h-0 {
@@ -518,8 +504,47 @@ aside {
     fill: var(--color-primary-red);
 }
 
-.back-rect {
+.front-rect {
     fill: var(--color-neutral-medDark);
 }
 
+.kill-event {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
 
+.highlighted-block {
+    scale: 102%;
+}
+
+.highlighted-dot {
+    z-index: 1000;
+    scale: 200%;
+    opacity: 100% !important;
+}
+
+.event-dots {
+    opacity: 50%;
+}
+
+.killList {
+    height: 575px;
+    overflow-y: scroll;
+}
+
+.hide-me {
+    display: none;
+}
+
+.vertical-text-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.vertical-text {
+    writing-mode: vertical-lr;
+    text-align: center;
+    padding-top: .5rem;
+}

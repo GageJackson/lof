@@ -28,26 +28,14 @@ import java.util.*;
 public class IndexController {
 
     private final FriendRepository friendRepositoryDao;
-    private final FriendChampsRepository friendChampsRepositoryDao;
-    private final FriendRankRepository friendRankRepositoryDao;
-    private final FriendMatchRepository friendMatchRepositoryDao;
     private final MatchRepository matchRepositoryDao;
-    private final ParticipantRepository participantRepositoryDao;
 
     public IndexController(
             FriendRepository friendRepositoryDao,
-            FriendChampsRepository friendChampsRepositoryDao,
-            FriendRankRepository friendRankRepositoryDao,
-            FriendMatchRepository friendMatchRepositoryDao,
-            MatchRepository matchRepositoryDao,
-            ParticipantRepository participantRepositoryDao
+            MatchRepository matchRepositoryDao
     ){
         this.friendRepositoryDao = friendRepositoryDao;
-        this.friendChampsRepositoryDao = friendChampsRepositoryDao;
-        this.friendRankRepositoryDao = friendRankRepositoryDao;
-        this.friendMatchRepositoryDao = friendMatchRepositoryDao;
         this.matchRepositoryDao = matchRepositoryDao;
-        this.participantRepositoryDao = participantRepositoryDao;
     }
 
     @GetMapping({"/", "/index"})
@@ -133,7 +121,7 @@ public class IndexController {
     private List<Match> findAllMatches(){
         String sortBy = "gameId";
         int page = 0;
-        int matchCount = 25;
+        int matchCount = 100;
         Sort sort = Sort.by(Sort.Direction.DESC, sortBy);
         Pageable pageable = PageRequest.of(page, matchCount, sort);
 
@@ -154,7 +142,6 @@ public class IndexController {
     private boolean didFriendWin(Match match, Friend friend){
         boolean friendsWon = false;
         if(match.isSaved()){
-//            Participant participant = participantRepositoryDao.findByMatchAndPuuid(match,friend.getPuuId());
             List<Participant> participants = match.getParticipant();
             for (Participant participant : participants) {
                 if (participant.getPuuid().equals(friend.getPuuId())){

@@ -1,7 +1,11 @@
 <aside th:fragment="aside"
        class="col-auto"
 >
-  <p class="color-primary-main fs-500">Friends</p>
+  <div class="d-flex align-items-center gap-3">
+    <p class="color-primary-main fs-500 mb-0">Friends</p>
+    <div id="friend-refresh-btn" class="small-icons"></div>
+  </div>
+
   <hr class="color-primary-main">
   <div th:each="friend : ${friends}"
        class="mb-1 w-100"
@@ -11,7 +15,7 @@
             th:classappend="${friend.isSelected() ? 'selected' : 'bg-transparent'}"
     >
       <img th:replace="~{partials/icons/friend-icon.html :: image}">
-      <div>
+      <div class="ms-2">
         <p th:text="${friend.getName()}" class="to-lower bold color-neutral-light mb-0 non-selectable"></p>
         <p th:text="${friend.getSummonerLevel()}" class="color-primary-main mb-0 fs-200 text-start non-selectable"></p>
       </div>

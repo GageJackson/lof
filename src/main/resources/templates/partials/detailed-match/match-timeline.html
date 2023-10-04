@@ -1,0 +1,76 @@
+<div th:fragment="match-timeline" xmlns:th="http://www.w3.org/1999/html">
+  <div class="container">
+    <div class="row mb-3">
+      <div class="col">
+        <div class="d-flex gap-3">
+          <th:block th:each="participantInfo, index : ${participants}"
+                    th:with="participant=${participantInfo.getParticipant()},
+                     participantId=${participant.getId()}
+            "
+          >
+            <button class="nav-link px-0 participant-kill-btns"
+                    th:id="${'participantKill-' + participantId}"
+                    th:data-participant-id="${participantId}"
+            >
+              <img th:replace="~{partials/icons/champion-icon.html :: image(teamId)}">
+            </button>
+          </th:block>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-8">
+        <div class="position-relative">
+          <th:block th:each="killEvent, i : ${killEvents}">
+            <th:block th:with="posX=${(killEvent.getPosX())},
+                               posY=${(killEvent.getPosY())}"
+            >
+              <div th:id="${'event-dot-' + killEvent.getId()}"
+                   class="kill-event event-dots"
+                   th:classappend="${killEvent.getKiller().getTeamId() == 100} ? 'bg-color-primary-blue' : 'bg-color-primary-red'"
+                   th:style="'position: absolute; bottom: ' + ${posY} + '%; left: ' + ${posX} + '%;'"
+                   th:data-killer-id="${killEvent.getKiller().getId}"
+                   th:data-killed-id="${killEvent.getKilled().getId}"
+              ></div>
+            </th:block>
+          </th:block>
+
+          <img th:if="${matchInfo.getMatch().getGameMode() == 'CLASSIC'}"
+               th:src="@{/img/maps/map11b.png}" alt="Rift Map"
+               class="img-fluid"
+          >
+          <img th:if="${matchInfo.getMatch().getGameMode() == 'ARAM'}"
+               th:src="@{/img/maps/map12b.png}" alt="Aram Map"
+               class="img-fluid"
+          >
+        </div>
+      </div>
+
+      <div class="col-4 bg-color-neutral-black py-2 px-3 killList">
+        <th:block th:each="killEvent, i : ${killEvents}">
+          <div th:id="${'event-block-' + killEvent.getId()}"
+               class="rounded p-2 mb-1 event-blocks"
+               th:classappend="${killEvent.getKiller().getTeamId() == 100} ? 'bg-color-primary-blue' : 'bg-color-primary-red'"
+               th:with="killerChamp=${killEvent.getKiller().getChampionName()},
+                        killedChamp=${killEvent.getKilled().getChampionName()}"
+               th:data-killer-id="${killEvent.getKiller().getId}"
+               th:data-killed-id="${killEvent.getKilled().getId}"
+          >
+            <div class="d-flex align-items-center gap-2">
+              <img th:replace="~{partials/icons/champion-icon :: timeline(${killerChamp})}">
+              <img th:src="@{/img/match-icons/kda.png}" class="">
+              <img th:replace="~{partials/icons/champion-icon :: timeline(${killedChamp})}">
+              <p th:with="timestamp=${killEvent.getTimestamp()},
+                          minutes=${(timestamp / 60000) + 'm'},
+                          mSeconds=${timestamp % 60000},
+                          seconds=${mSeconds / 1000 + 's'},
+                          timeFormatted=${minutes + ' ' + seconds}">
+                <span th:text="${timeFormatted}" class="color-neutral-light"></span>
+              </p>
+            </div>
+          </div>
+        </th:block>
+      </div>
+    </div>
+  </div>
+</div>

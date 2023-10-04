@@ -26,8 +26,8 @@
     <th:block th:each="participantInfo, index : ${participants}"
               th:with="participant=${participantInfo.getParticipant()},
                        participantId=${participant.getId()},
-                       participantTag=${'participant-' + participantId}
-              "    >
+                       participantTag=${'participant-' + participantId}"
+    >
       <div th:id="${participantTag}"
            class="tab-pane fade"
            th:aria-labelledby="${'participant-' + participantTag + '-tab'}"
@@ -42,7 +42,7 @@
               <img th:with="champion=${participant.getChampionName()}"
                    th:src="@{${'/dragon_tail/img/champion/loading/' + champion + '_0.jpg'}}"
                    th:alt="${champion + ' splash'}"
-                   class="non-selectable opacity-75 img-fluid"
+                   class="participant-champion non-selectable opacity-75"
               >
             </div>
             <div class="col">
@@ -53,6 +53,13 @@
                           type="button" role="tab" th:aria-controls="${'participant-overview-' + participantId}"
                           aria-selected="true"
                   >Overview</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" th:id="${'participant-stats-tab-' + participantId}"
+                          data-bs-toggle="pill" th:data-bs-target="${'#participant-stats-' + participantId}"
+                          type="button" role="tab" th:aria-controls="${'participant-stats-' + participantId}"
+                          aria-selected="false"
+                  >Stats</button>
                 </li>
                 <li class="nav-item" role="presentation">
                   <button class="nav-link" th:id="${'participant-buildPath-tab-' + participantId}"
@@ -75,13 +82,21 @@
                 >
                   <div th:replace="~{partials/detailed-match/participant-overview/participant-overview.html :: overview }"></div>
                 </div>
+
+                <div class="tab-pane fade" th:id="${'participant-stats-' + participantId}"
+                     role="tabpanel" th:aria-labelledby="${'participant-stats-tab-' + participantId}" tabindex="1"
+                >
+                  <div th:replace="~{partials/detailed-match/participant-stats/participant-stats.html :: stats }"></div>
+                </div>
+
                 <div class="tab-pane fade" th:id="${'participant-buildPath-' + participantId}"
-                     role="tabpanel" th:aria-labelledby="${'participant-buildPath-tab-' + participantId}" tabindex="1"
+                     role="tabpanel" th:aria-labelledby="${'participant-buildPath-tab-' + participantId}" tabindex="2"
                 >
                   <div th:replace="~{partials/detailed-match/participant-build/participant-build.html :: builds }"></div>
                 </div>
+
                 <div class="tab-pane fade" th:id="${'participant-graphs-' + participantId}"
-                     role="tabpanel" th:aria-labelledby="${'participant-graphs-tab-' + participantId}" tabindex="1"
+                     role="tabpanel" th:aria-labelledby="${'participant-graphs-tab-' + participantId}" tabindex="3"
                 >
                   <div th:replace="~{partials/detailed-match/participant-graphs/participant-graphs.html :: graphs(${participant.getParticipantNum() - 1})}"></div>
                 </div>

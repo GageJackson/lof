@@ -16,6 +16,11 @@ public class ParticipantDTO {
     private List<List<EventItem>> eventItems;
     private List<SkillUp> skillUps;
 
+    //Participant Stat Sets
+    private List<ParticipantSet> participantSets;
+
+    private List<ParticipantPerk> participantPerks;
+
 
     /*////////////////////////////////////////////////////////////////
     CONSTRUCTORS
@@ -23,11 +28,13 @@ public class ParticipantDTO {
     public ParticipantDTO() {
     }
 
-    public ParticipantDTO(Participant participant, List<ParticipantFrame> participantFrames, List<List<EventItem>> eventItems, List<SkillUp> skillUps) {
+    public ParticipantDTO(Participant participant, List<ParticipantFrame> participantFrames, List<List<EventItem>> eventItems, List<SkillUp> skillUps, List<ParticipantSet> participantSets, List<ParticipantPerk> participantPerks) {
         this.participant = participant;
         this.participantFrames = participantFrames;
         this.eventItems = eventItems;
         this.skillUps = skillUps;
+        this.participantSets = participantSets;
+        this.participantPerks = participantPerks;
     }
 
 
@@ -64,5 +71,21 @@ public class ParticipantDTO {
 
     public void setSkillUps(List<SkillUp> skillUps) {
         this.skillUps = skillUps;
+    }
+
+    public List<ParticipantSet> getParticipantSets() {
+        return participantSets;
+    }
+
+    public void setParticipantSets(List<ParticipantSet> participantSets) {
+        this.participantSets = participantSets;
+    }
+
+    public List<ParticipantPerk> getParticipantPerks() {
+        return participantPerks;
+    }
+
+    public void setParticipantPerks(List<ParticipantPerk> participantPerks) {
+        this.participantPerks = participantPerks;
     }
 }

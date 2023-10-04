@@ -1,7 +1,10 @@
   <nav th:fragment="primary-nav"
-       class="col-auto nav nav-pills d-flex flex-column bg-color-neutral-black px-5 py-5"
+       class="col-auto nav nav-pills d-flex flex-column justify-content-between bg-color-neutral-black px-5 py-5"
   >
-    <a class="nav-link menu-btns p-0 mb-4 active" aria-current="page" id="matches-btn" href="/"></a>
-    <a class="nav-link menu-btns p-0 mb-4" id="challenges-btn" href="#"></a>
-    <a class=" menu-btns p-0 mb-4" id="friend-btn" href="#"></a>
+    <div class="d-flex justify-content-center align-items-center flex-column">
+      <a class="nav-link menu-btns p-0 mb-4 active" aria-current="page" id="matches-btn" href="/"></a>
+      <a class="nav-link menu-btns p-0 mb-4" id="challenges-btn" href="#"></a>
+      <a class=" menu-btns p-0 mb-4" id="friend-btn" href="#"></a>
+    </div>
+    <img th:src="@{/img/logo.png}" class="non-selectable icon-64">
   </nav>

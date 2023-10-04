@@ -1,25 +1,31 @@
-<div th:fragment="itemBuild" class="col">
-  <div th:with="itemGroups=${participantInfo.getEventItems()}"
-       class="d-flex flex-wrap gap-3"
-  >
-    <div th:each="itemGroup : ${itemGroups}"
-         class=""
-    >
-      <div class="d-flex gap-1 bg-color-neutral-medDark p-1 rounded">
-        <th:block th:each="item : ${itemGroup}"
-                  th:with="itemNum=${item.getItemNum()}"
-        >
-          <div th:replace="~{partials/icons/item-icon.html :: itemLg(${itemNum})}"></div>
-        </th:block>
-      </div>
-
-      <p th:with="timestamp=${itemGroup[0].getEvent().getTimestamp()},
-                  timeMins=${timestamp / (60 * 1000)},
-                  timeSecs=${#numbers.formatDecimal((timestamp % (60 * 1000)/1000), 0, 'COMMA', 0, 'POINT')},
-                  formattedTimestamp=${' ' + timeMins + 'm ' + timeSecs + 's'}"
-         th:text="${formattedTimestamp}"
-         class="color-neutral-main mb-0 fst-italic fs-200"
-      ></p>
+<th:block th:fragment="itemBuild"
+          th:with="itemGroups=${participantInfo.getEventItems()}"
+>
+  <div class="col-1 bg-color-primary-dark ms-3 p-0">
+    <div class="vertical-text-container" >
+      <h3 class="vertical-text color-neutral-black m-0" th:text="${'Item Build'}"></h3>
     </div>
   </div>
-</div>
+
+  <div class="col">
+    <div class="d-flex flex-wrap p-3 gap-4">
+      <div th:each="itemGroup : ${itemGroups}" class="d-flex flex-column">
+        <div class="d-flex gap-2 bg-color-neutral-medDark p-1 rounded">
+          <th:block th:each="item : ${itemGroup}"
+                    th:with="itemNum=${item.getItemNum()}"
+          >
+            <div th:replace="~{partials/icons/item-icon.html :: itemLg(${itemNum})}"></div>
+          </th:block>
+        </div>
+
+        <p th:with="timestamp=${itemGroup[0].getEvent().getTimestamp()},
+              timeMins=${timestamp / (60 * 1000)},
+              timeSecs=${#numbers.formatDecimal((timestamp % (60 * 1000)/1000), 0, 'COMMA', 0, 'POINT')},
+              formattedTimestamp=${' ' + timeMins + 'm ' + timeSecs + 's'}"
+           th:text="${formattedTimestamp}"
+           class="color-neutral-main mb-0 fst-italic fs-200"
+        ></p>
+      </div>
+    </div>
+  </div>
+</th:block>

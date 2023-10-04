@@ -10,7 +10,7 @@ window.addEventListener('load', function(){
 
         let frontRing = item.querySelector('.front-ring');
         let backRing = item.querySelector('.back-ring');
-        let radius = 80;
+        let radius = 75;
         let diameter = Math.round(3.14 * 2 * radius);
         let strokeOffset = diameter - ( diameter * ( redNum / matchTotal ))
 
@@ -51,4 +51,22 @@ window.addEventListener('load', function(){
         backRect.setAttribute("width", width);
         backRect.setAttribute("height", height);
     })
+
+    const playerStatBtns = document.querySelectorAll('.p-stat-btn');
+    playerStatBtns.forEach(item => {
+        let btnId = item.id;
+        let setName = item.getAttribute('data-set-name');
+        let btnNum = parseInt(item.getAttribute('data-set-num'));
+        let playerStats = document.querySelectorAll('.' + setName + '-stat');
+
+        item.addEventListener("click", function(){
+            for (const playerStat of playerStats) {
+                if (parseInt(playerStat.getAttribute('data-set-num')) === btnNum){
+                    playerStat.classList.remove('d-none')
+                } else {
+                    playerStat.classList.add('d-none');
+                }
+            }
+        });
+    });
 });

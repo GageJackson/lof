@@ -129,7 +129,10 @@
         }
     }
 
-    async function pageLoad() {
+    const friendRefreshBtn = document.getElementById('friend-refresh-btn');
+    friendRefreshBtn.addEventListener('click', refreshFriends);
+
+    async function refreshFriends() {
         let friends = await getData('/testing');
         console.log(friends);
         for (const friend of friends) {
@@ -140,9 +143,18 @@
             promises.push(getChampsData(friend.summonerId));
             promises.push(getFriendMatches(friend.puuId));
 
+            console.log(promises);
+
             // Wait for 0.25 seconds to prevent exceeding 20 calls per second
             await delay(250);
             await Promise.all(promises);
+
+            const url = '/index';
+            try {
+                window.location.href = url;
+            } catch (error) {
+                console.error('Error:', error);
+            }
         }
     }
 
