@@ -28,7 +28,7 @@
      class="row"
 >
     <div class="col-auto d-flex flex-column justify-content-center my-2">
-        <div th:replace="~{partials/icons/position-icon.html :: position-icon('top', ${true})}"></div>
+        <img class="icon-16" th:src="@{${'/img/match-icons/participant-stats/' + sectionIcon + '.png'}}">
     </div>
 
     <div th:replace="~{partials/detailed-match/participant-stats/participant-stats.html ::

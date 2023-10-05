@@ -112,6 +112,7 @@ function getChartType(chartType, height, width) {
         dropShadow: {
             enabled: false,
         },
+        background: '#171A1F'
     };
 
     if (chartType === 'line') {

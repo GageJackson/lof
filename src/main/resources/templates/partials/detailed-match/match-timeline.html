@@ -50,7 +50,7 @@
         <th:block th:each="killEvent, i : ${killEvents}">
           <div th:id="${'event-block-' + killEvent.getId()}"
                class="rounded p-2 mb-1 event-blocks"
-               th:classappend="${killEvent.getKiller().getTeamId() == 100} ? 'bg-color-primary-blue' : 'bg-color-primary-red'"
+               th:classappend="${killEvent.getKiller().getTeamId() == 100} ? 'blue-team-kill' : 'red-team-kill'"
                th:with="killerChamp=${killEvent.getKiller().getChampionName()},
                         killedChamp=${killEvent.getKilled().getChampionName()}"
                th:data-killer-id="${killEvent.getKiller().getId}"

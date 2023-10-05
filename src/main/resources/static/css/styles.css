@@ -96,6 +96,22 @@ UTILITY CLASSES
     background: linear-gradient(270deg, rgba(162, 67, 78, 0.5) 0%, rgba(33, 37, 42, 0.5) 100%);
 }
 
+.blue-team-kill {
+    background: linear-gradient(90deg, rgba(71, 117, 180, 0.5) 0%, rgba(23, 26, 31, 0.5) 100%);
+}
+
+.red-team-kill {
+    background: linear-gradient(90deg, rgba(162, 67, 78, 0.5) 0%, rgba(23, 26, 31, 0.5) 100%);
+}
+
+.blue-team-kill:hover {
+    background: linear-gradient(90deg, rgb(71, 117, 180) 0%, rgba(23, 26, 31, 0.5) 100%);
+}
+
+.red-team-kill:hover {
+    background: linear-gradient(90deg, rgb(162, 67, 78) 0%, rgba(23, 26, 31, 0.5) 100%);
+}
+
 .non-selectable {
     user-select: none;
 }
@@ -160,10 +176,7 @@ VISUAL FRAMEWORK
 }
 
 .participant-champion {
-    height: 720px;
-    width: 200px;
-    /*background-position: center;*/
-    background-size: cover;
+
 }
 
 .rune-container {

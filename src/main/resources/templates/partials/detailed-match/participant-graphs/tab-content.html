@@ -23,7 +23,7 @@
     </h3>
 
     <div th:if="${isAllParticipants}"
-         class="d-flex justify-content-center gap-2 mt-3"
+         class="d-flex justify-content-center gap-2 mt-3 bg-color-neutral-black"
     >
         <th:block th:each="participantInfo, index : ${participants}"
                   th:with="participant=${participantInfo.getParticipant()},
