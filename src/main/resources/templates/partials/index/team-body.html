@@ -83,7 +83,7 @@
      th:text="${kills + ' / ' + deaths + ' / ' + assists}"
   ></p>
 
-  <p class="color-neutral-light mb-2 fst-italic fs-200 text-secondary"
+  <p class="color-neutral-light mb-2 fst-italic fs-200 opacity-75"
      th:text="${kda == 0} ? ${'Perfect'} : ${kda + ' KDA'}"
   ></p>
 </div>
@@ -103,7 +103,7 @@
     <span th:text="${minionKills == 0} ? '0 CS' : ${formattedMinionKills}" class="fw-semibold"></span>
   </p>
 
-  <p class="color-neutral-light mb-2 fst-italic fs-200 text-secondary">
+  <p class="color-neutral-light mb-2 fst-italic fs-200 opacity-75">
     <span th:text="${playerKills == 0} ? 'Oof...' : ${formattedPlayerKills}"></span>
   </p>
 </div>

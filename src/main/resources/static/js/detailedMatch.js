@@ -64,16 +64,16 @@ function getColors(numberOfDatasets){
     }
     if (numberOfDatasets > 4) {
         return [
-            '#4775B4',
-            '#2d5a96',
+            '#4eaee1',
+            '#2c739f',
             '#153d72',
-            '#082d5d',
-            '#001d42',
-            '#a2434e',
-            '#852b35',
+            '#2c549f',
+            '#4e66e1',
+            '#e85376',
+            '#9a2e4e',
             '#65151e',
-            '#4f0810',
-            '#330106',
+            '#9a2e2e',
+            '#e85353',
         ];
     }
 }
