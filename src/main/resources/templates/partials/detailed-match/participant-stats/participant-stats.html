@@ -70,8 +70,9 @@
     <div class="my-1" th:classappend="${isFirst} ? 'bg-color-neutral-dark py-1' : ''">
         <p th:text="${name}" class="color-primary-main fw-bold fs-200 mb-0 ps-1 text-center"></p>
         <p class="color-neutral-light fs-300 m-0 ps-1 text-center">
-            <th:block th:each="data : ${dataSet}">
+            <th:block th:each="data, i : ${dataSet}">
                 <span th:text="${data}"></span>
+                <span th:if="${dataSet.size() > 1 && !i.last}" th:text="${'/'}"><span>
             </th:block>
         </p>
     </div>

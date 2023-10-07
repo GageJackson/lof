@@ -443,16 +443,17 @@ public class MatchController {
 
         int data1 = participant.getTotalMinionsKilled() + participant.getNeutralMinionsKilled();
         double data2 = (double) (data1 * 60) / participant.getTimePlayed();
-        int data3A = participant.getNeutralMinionsKilled();
-        int data3B = participant.getTotalMinionsKilled();
-        int data4A = challenges.getJungleCsBefore10Minutes();
-        int data4B = challenges.getLaneMinionsFirst10Minutes();
+        int data3A = participant.getTotalMinionsKilled();
+        int data3B = challenges.getLaneMinionsFirst10Minutes();
+        int data4A = participant.getNeutralMinionsKilled();
+        int data4B = challenges.getJungleCsBefore10Minutes();
+
         int data5 = challenges.getMaxCsAdvantageOnLaneOpponent();
 
         sectionStats.add(getParticipantStat("CS", data1));
         sectionStats.add(getParticipantStat("CS/min", data2));
-        sectionStats.add(getParticipantStat("Jungle CS", data3A, data3B));
-        sectionStats.add(getParticipantStat("Lane CS", data4A, data4B));
+        sectionStats.add(getParticipantStat("Lane CS (total / @10m)", data3A, data3B));
+        sectionStats.add(getParticipantStat("Jungle CS (total / @10m)", data4A, data4B));
         sectionStats.add(getParticipantStat("Max CS Adv.", data5));
 
         return sectionStats;
@@ -697,20 +698,6 @@ public class MatchController {
         return participantStat;
     }
 
-    private ParticipantStat getParticipantStat(String statName, Object statValue1, Object statValue2, Object statValue3, Object statValue4) {
-        ParticipantStat participantStat = new ParticipantStat(statName);
-        List<String> statList = new ArrayList<>();
-
-        // Convert statValue to a string and add it to the statList
-        statList.add(formatStatValue(statValue1));
-        statList.add(formatStatValue(statValue2));
-        statList.add(formatStatValue(statValue3));
-        statList.add(formatStatValue(statValue4));
-
-        participantStat.setStats(statList);
-        return participantStat;
-    }
-
     private String formatStatValue(Object statValue){
         if (statValue instanceof Integer){
             return numberFormat.format(statValue);
@@ -719,15 +706,6 @@ public class MatchController {
         } else {
             return "?";
         }
-    }
-
-    private ParticipantStat getParticipantStat(String statName, String statValue){
-        ParticipantStat participantStat = new ParticipantStat(statName);
-        List<String> statList = new ArrayList<>();
-        statList.add(statValue);
-        participantStat.setStats(statList);
-
-        return participantStat;
     }
 
     private List<EventItem> getAllItems(List<Event> events){
