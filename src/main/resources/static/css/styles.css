@@ -76,8 +76,12 @@ UTILITY CLASSES
     margin-inline-start: -.825rem;
 }
 
+*, *:before, *:after {
+    /*border: solid 1px limegreen;*/
+}
+
 .card-bg {
-    background: linear-gradient(90deg, var(--color-neutral-black) 0%, rgba(33, 37, 42, 0.5) 100%);
+    background: linear-gradient(90deg, var(--color-neutral-black) 0%, var(--color-neutral-black) 100%);
 }
 
 .card-bg-win {
@@ -89,11 +93,11 @@ UTILITY CLASSES
 }
 
 .blue-team-bg {
-    background: linear-gradient(90deg, rgba(71, 117, 180, 0.5) 0%, rgba(33, 37, 42, 0.5) 100%);
+    background: linear-gradient(90deg, rgba(71, 117, 180, 0.5) 0%, rgba(23, 26, 31, 0.5) 100%);
 }
 
 .red-team-bg {
-    background: linear-gradient(270deg, rgba(162, 67, 78, 0.5) 0%, rgba(33, 37, 42, 0.5) 100%);
+    background: linear-gradient(270deg, rgba(162, 67, 78, 0.5) 0%, rgba(23, 26, 31, 0.5) 100%);
 }
 
 .blue-team-kill {
@@ -260,8 +264,8 @@ nav, aside {
 }
 
 aside {
-    padding-block-start: 3rem;
-    margin-inline-end: 3rem;
+    padding-block: 3rem;
+    /*margin-inline-end: 3rem;*/
 }
 
 .content {
@@ -396,14 +400,6 @@ aside {
     line-height: 0;
 }
 
-.blue-participant:hover {
-    background: linear-gradient(90deg, rgba(71, 117, 183, 0.5) 0%, rgba(33, 37, 42, 0.5) 100%);
-}
-
-.red-participant:hover {
-    background: linear-gradient(270deg, rgba(162, 67, 81, 0.5) 0%, rgba(33, 37, 42, 0.5) 100%);
-}
-
 .match-btn {
     color: var(--color-neutral-light);
     background: var(--color-primary-main);
@@ -456,6 +452,10 @@ aside {
 
 .participant-toggle-10 {
     border: 2px solid #e85353;
+}
+
+.stat-border {
+    border: 2px solid var(--color-neutral-dark);
 }
 
 .unclicked {
@@ -518,7 +518,7 @@ aside {
 }
 
 .front-rect {
-    fill: var(--color-neutral-medDark);
+    fill: var(--color-neutral-dark);
 }
 
 .kill-event {
@@ -533,8 +533,9 @@ aside {
 
 .highlighted-dot {
     z-index: 1000;
-    scale: 200%;
+    scale: 250%;
     opacity: 100% !important;
+    border: solid 1px var(--color-neutral-black);
 }
 
 .event-dots {

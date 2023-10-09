@@ -1,7 +1,7 @@
 <div th:fragment="position-icons(isVertical)"
      th:switch="${matchInfo.getMatch().getGameMode()}"
      class=""
-     th:classappend="${isVertical} ? 'bg-color-neutral-dark col-auto py-0 px-0' : ''"
+     th:classappend="${isVertical} ? 'bg-color-neutral-black col-auto py-0 px-0' : ''"
 >
     <th:block th:case="CLASSIC">
         <div th:replace="~{partials/index/position-icons.html :: classic(${isVertical})}"></div>

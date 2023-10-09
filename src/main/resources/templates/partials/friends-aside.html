@@ -1,12 +1,8 @@
 <aside th:fragment="aside"
-       class="col-auto"
+       class="col-auto px-3"
 >
-  <div class="d-flex align-items-center gap-3">
-    <p class="color-primary-main fs-500 mb-0">Friends</p>
-    <div id="friend-refresh-btn" class="small-icons"></div>
-  </div>
-
-  <hr class="color-primary-main">
+  <p class="color-primary-main fs-600 mb-0">Friends</p>
+  <hr class="color-primary-main my-0">
   <div th:each="friend : ${friends}"
        class="mb-1 w-100"
   >

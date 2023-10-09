@@ -1,5 +1,5 @@
-<div th:fragment="match-timeline" xmlns:th="http://www.w3.org/1999/html">
-  <div class="container">
+<div th:fragment="match-timeline">
+  <div class="container bg-color-neutral-black py-2 px-3 rounded">
     <div class="row mb-3">
       <div class="col">
         <div class="d-flex gap-3">
@@ -57,14 +57,16 @@
                th:data-killed-id="${killEvent.getKilled().getId}"
           >
             <div class="d-flex align-items-center gap-2">
-              <img th:replace="~{partials/icons/champion-icon :: timeline(${killerChamp})}">
+              <img th:replace="~{partials/icons/champion-icon :: timeline(${killerChamp}, ${false})}">
               <img th:src="@{/img/match-icons/kda.png}" class="">
-              <img th:replace="~{partials/icons/champion-icon :: timeline(${killedChamp})}">
+              <img th:replace="~{partials/icons/champion-icon :: timeline(${killedChamp}, ${true})}">
               <p th:with="timestamp=${killEvent.getTimestamp()},
                           minutes=${(timestamp / 60000) + 'm'},
                           mSeconds=${timestamp % 60000},
                           seconds=${mSeconds / 1000 + 's'},
-                          timeFormatted=${minutes + ' ' + seconds}">
+                          timeFormatted=${minutes + ' ' + seconds}"
+                class="mb-0 ms-3"
+              >
                 <span th:text="${timeFormatted}" class="color-neutral-light"></span>
               </p>
             </div>

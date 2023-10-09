@@ -1,16 +1,16 @@
 <th:block th:fragment="itemBuild"
           th:with="itemGroups=${participantInfo.getEventItems()}"
 >
-  <div class="col-1 bg-color-primary-dark ms-3 p-0">
+  <div class="col-1 ms-3 p-0 bg-color-neutral-dark">
     <div class="vertical-text-container" >
-      <h3 class="vertical-text color-neutral-black m-0" th:text="${'Item Build'}"></h3>
+      <h3 class="vertical-text color-primary-main m-0" th:text="${'Item Build'}"></h3>
     </div>
   </div>
 
   <div class="col">
     <div class="d-flex flex-wrap p-3 gap-4">
       <div th:each="itemGroup : ${itemGroups}" class="d-flex flex-column">
-        <div class="d-flex gap-2 bg-color-neutral-medDark p-1 rounded">
+        <div class="d-flex gap-2 bg-color-neutral-dark p-1 rounded">
           <th:block th:each="item : ${itemGroup}"
                     th:with="itemNum=${item.getItemNum()}"
           >

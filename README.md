@@ -28,6 +28,6 @@ Show examples and demonstrate how to use your project. Include code snippets and
 
 Acknowledge any individuals, libraries, or resources that you used or were inspired by during the development of your project.
 
-![Project Image](image.png)
+![Project Image](C:\Users\wgage\IdeaProjects\lof\src\main\resources\static\img\bg-imgs\background-aram2022.jpg)
 
 ![Project GIF](example.gif)
