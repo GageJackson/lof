@@ -3,29 +3,34 @@
       xmlns="http://www.w3.org/1999/html" lang="en">
 <head th:replace="~{partials/head.html :: head('Home')}"><title>title</title></head>
 <body class="bg-color-neutral-dark">
-<main class="container-fluid ms-0">
-    <div class="row gx-5">
+<main class="container-fluid px-0 mx-0">
+    <div class="row px-0 mx-0">
         <nav th:replace="~{partials/primary-nav.html :: primary-nav}"></nav>
 
         <section class="col-6 content">
             <h1 class="font-bold color-neutral-light my-3">Recent matches</h1>
-            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">All</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="pills-aram-tab" data-bs-toggle="pill" data-bs-target="#pills-aram" type="button" role="tab" aria-controls="pills-aram" aria-selected="false">Aram</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="pills-rift-tab" data-bs-toggle="pill" data-bs-target="#pills-rift" type="button" role="tab" aria-controls="pills-rift" aria-selected="false">Rift</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="pills-arena-tab" data-bs-toggle="pill" data-bs-target="#pills-arena" type="button" role="tab" aria-controls="pills-arena" aria-selected="false">Other</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="pills-new-tab" data-bs-toggle="pill" data-bs-target="#pills-new" type="button" role="tab" aria-controls="pills-new" aria-selected="false">New</button>
-                </li>
-            </ul>
+            <div class="d-flex justify-content-between align-items-start">
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">All</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-aram-tab" data-bs-toggle="pill" data-bs-target="#pills-aram" type="button" role="tab" aria-controls="pills-aram" aria-selected="false">Aram</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-rift-tab" data-bs-toggle="pill" data-bs-target="#pills-rift" type="button" role="tab" aria-controls="pills-rift" aria-selected="false">Rift</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-arena-tab" data-bs-toggle="pill" data-bs-target="#pills-arena" type="button" role="tab" aria-controls="pills-arena" aria-selected="false">Other</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-new-tab" data-bs-toggle="pill" data-bs-target="#pills-new" type="button" role="tab" aria-controls="pills-new" aria-selected="false">New</button>
+                    </li>
+                </ul>
+
+                <div id="friend-refresh-btn" class="small-icons m-2"></div>
+            </div>
+
             <div class="tab-content" id="pills-tabContent">
                 <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
                     <th:block th:each="matchInfo : ${matchInfos}">

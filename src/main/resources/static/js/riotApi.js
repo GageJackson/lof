@@ -130,7 +130,12 @@
     }
 
     const friendRefreshBtn = document.getElementById('friend-refresh-btn');
-    friendRefreshBtn.addEventListener('click', refreshFriends);
+
+    try {
+        friendRefreshBtn.addEventListener('click', refreshFriends);
+    } catch (error) {
+        console.error('Error:', error)
+    }
 
     async function refreshFriends() {
         let friends = await getData('/testing');

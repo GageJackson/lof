@@ -2,10 +2,10 @@
      th:with="sets=${participantInfo.getParticipantSets()}"
 >
     <th:block th:each="set : ${sets}">
-        <div class="row rounded bg-color-neutral-black mb-3">
-            <div class="col-1 bg-color-primary-dark ms-3 p-0">
+        <div class="row rounded stat-border mb-3">
+            <div class="col-1 bg-color-neutral-dark ms-3 p-0">
                 <div class="vertical-text-container" >
-                    <h3 class="vertical-text color-neutral-black m-0" th:text="${set.getSetName()}"></h3>
+                    <h3 class="vertical-text color-primary-main m-0" th:text="${set.getSetName()}"></h3>
                 </div>
             </div>
 
@@ -28,7 +28,7 @@
      class="row"
 >
     <div class="col-auto d-flex flex-column justify-content-center my-2">
-        <div th:replace="~{partials/icons/position-icon.html :: position-icon('top', ${true})}"></div>
+        <img class="icon-16" th:src="@{${'/img/match-icons/participant-stats/' + sectionIcon + '.png'}}">
     </div>
 
     <div th:replace="~{partials/detailed-match/participant-stats/participant-stats.html ::
@@ -70,8 +70,9 @@
     <div class="my-1" th:classappend="${isFirst} ? 'bg-color-neutral-dark py-1' : ''">
         <p th:text="${name}" class="color-primary-main fw-bold fs-200 mb-0 ps-1 text-center"></p>
         <p class="color-neutral-light fs-300 m-0 ps-1 text-center">
-            <th:block th:each="data : ${dataSet}">
+            <th:block th:each="data, i : ${dataSet}">
                 <span th:text="${data}"></span>
+                <span th:if="${dataSet.size() > 1 && !i.last}" th:text="${'/'}"><span>
             </th:block>
         </p>
     </div>

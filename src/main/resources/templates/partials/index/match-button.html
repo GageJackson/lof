@@ -2,7 +2,7 @@
          class="d-flex justify-content-between align-items-center"
          th:with="gameId=${matchInfo.getMatch().getGameId()}"
 >
-  <div th:replace="~{partials/index/match-button.html :: match-basicInfo}"></div>
+  <div th:replace="~{partials/index/match-button.html :: match-basicInfo(${true})}"></div>
   <div th:replace="~{partials/index/match-champions.html :: match-champions}"></div>
   <a class="btn match-btn d-flex align-items-center gap-2"
      th:href="@{${'/match?match=' + matchInfo.getMatch().getId()}}"
@@ -12,7 +12,7 @@
   </a>
 </div>
 
-<div th:fragment="match-basicInfo"
+<div th:fragment="match-basicInfo(isIndex)"
       th:with="gameMode=${matchInfo.getMatch().getGameMode()}"
 >
   <th:block th:if="${matchInfo.isFriendWin()}">
@@ -43,7 +43,8 @@
     </th:block>
   </th:block>
 
-  <p th:with="gameDate=${(matchInfo.getMatch().getGameCreation())},
+  <p th:if="${isIndex}"
+     th:with="gameDate=${(matchInfo.getMatch().getGameCreation())},
               formattedDate=${#temporals.format(T(java.time.Instant).ofEpochMilli(gameDate), 'MMM-dd')}"
      class="color-neutral-light fs-400 my-0 non-selectable"
   >

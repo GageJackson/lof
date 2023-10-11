@@ -1,16 +1,16 @@
 <div  th:fragment="accordion-body"
       th:with="gameId=${matchInfo.getMatch().getGameId()}"
       th:id="${'accordion-' + gameId}"
-      class="accordion-collapse collapse"
+      class=""
       th:attr="data-bs-parent=${'#accordion' + gameId}"
 >
-  <div class="accordion-body bg-color-neutral-dark">
+  <div class="">
     <div th:replace="~{partials/index/match-body.html :: card}"></div>
   </div>
 </div>
 
 <div th:fragment="card"
-     class="card bg-transparent border-0 w-100"
+     class="card bg-color-neutral-black border-0 w-100"
 >
   <div th:replace="~{partials/index/match-body.html :: card-header}"></div>
   <div th:replace="~{partials/index/match-body.html :: card-body}"></div>
@@ -25,7 +25,16 @@
       <!--BLUE TEAM INFO-->
       <div th:replace="~{partials/index/team-header.html :: team('Blue', 0)}"></div>
 
-      <div class="col-2"></div>
+      <div class="col-2">
+        <div class="d-flex justify-content-center">
+          <p th:with="gameDuration=${matchInfo.getMatch().getGameDuration()},
+                    formattedDuration=${' ' + (gameDuration / 60) + 'm ' + (gameDuration % 60) + 's'}"
+             class="color-neutral-main mb-0"
+          >
+            <span th:text="${formattedDuration}"></span>
+          </p>
+        </div>
+      </div>
 
       <!--RED TEAM INFO-->
       <div th:replace="~{partials/index/team-header.html :: team('Red', 1)}"></div>

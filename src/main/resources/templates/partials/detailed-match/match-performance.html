@@ -1,14 +1,17 @@
 <div th:fragment="match-performance"
+     class="bg-color-neutral-black rounded p-3"
 >
-    <th:block th:each="pSet : ${performanceSets}"
+    <th:block th:each="pSet, i : ${performanceSets}"
               th:with="pSetName=${pSet.getGroupName()},
               performanceStats=${pSet.getPerformanceStats()}
 "
     >
-        <div class="d-flex justify-content-between align-content-center gap-3 my-3 rounded bg-color-neutral-black">
-            <div class="bg-color-primary-dark  ms-3">
+        <div class="d-flex justify-content-between align-content-center gap-3 stat-border rounded"
+            th:classappend="${i.last} ? 'mb-0' : 'mb-4'"
+        >
+            <div class="bg-color-neutral-dark ms-3">
                 <div class="vertical-text-container" >
-                    <h3 th:text="${pSetName}" class="vertical-text color-neutral-black"></h3>
+                    <h3 th:text="${pSetName}" class="vertical-text color-primary-main"></h3>
                 </div>
             </div>
 

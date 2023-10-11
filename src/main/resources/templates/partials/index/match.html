@@ -15,7 +15,7 @@
 <div th:fragment="saved-match"
         th:with="gameId=${matchInfo.getMatch().getGameId()},
                  friendWon=${matchInfo.isFriendWin()}"
-        class="card card-bg w-100 mb-3 ps-3 py-2 border-0"
+        class="card card-bg w-100 mb-3 p-3 border-0"
 >
   <div th:replace="~{partials/index/match-button.html :: button}"></div>
 </div>
@@ -24,7 +24,7 @@
         th:with="gameId=${matchInfo.getMatch().getGameId()},
                  friends=${matchInfo.getFriends()}"
         th:id="${'accordion' + gameId}"
-        class="card match card-bg w-100 mb-3 ps-3 border-0"
+        class="card match card-bg w-100 mb-3 p-3 border-0"
 >
   <div class="card-body border-0 d-flex justify-content-between align-items-center px-0">
     <div class="d-flex flex-column justify-content-start align-items-start">

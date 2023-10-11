@@ -1,5 +1,5 @@
 <div th:fragment="match-graphs"
-     class="participant-charts mb-5"
+     class="participant-charts mb-5 bg-color-neutral-black rounded"
      th:with="tab1Name=${'Match'},
               tab2Name=${'Team'},
               tab3Name=${'Individual'},
@@ -13,7 +13,7 @@
               tab3ButtonId=${'button-' + tab3Name}
               "
 >
-  <ul class="nav nav-pills mb-3"
+  <ul class="nav nav-pills mb-0"
       th:id="${'matchGraphs-tabButtons'}"
       role="tablist">
     <li th:replace="~{partials/detailed-match/participant-graphs/tab-list.html ::
@@ -47,7 +47,7 @@
 
   <div id="tooltip-data" class="color-neutral-light"></div>
 
-  <div class="d-flex justify-content-center gap-3">
+  <div class="d-flex justify-content-center gap-3 p-2">
     <button th:id="${'toggleDamageDealt'}" class="small-icons nav-link match-graph-toggle DamageDealt-icon active"></button>
     <button th:id="${'toggleDamageTaken'}" class="small-icons nav-link match-graph-toggle DamageTaken-icon "></button>
     <button th:id="${'toggleXp'}" class="small-icons nav-link match-graph-toggle Xp-icon "></button>

@@ -8,12 +8,12 @@
 <!--&gt;-->
 
 <th:block th:fragment="image(teamId)"
-     th:with="champion=${participant.getChampionName()}"
+          th:with="champion=${participant.getChampionName()}"
 >
     <div class="position-relative">
         <img th:src="@{${'/dragon_tail/main/img/champion/' + champion + '.png'}}"
              alt="champion icon"
-             class="friend-icon non-selectable opacity-75 border border-2 border-secondary"
+             class="friend-icon non-selectable border border-2 border-secondary"
         >
         <th:block th:each="friend : ${friends}">
             <img th:if="${participant.getPuuid() == friend.getPuuId()}"
@@ -25,26 +25,47 @@
     </div>
 </th:block>
 
-<img th:fragment="graph(num)"
-     th:with="champion=${participant.getChampionName()},
-              isFriend=${#lists.contains(friends.![puuId], participant.getPuuid())}"
-     th:src="@{${'/dragon_tail/main/img/champion/' + champion + '.png'}}"
-     alt="champion icon"
-     class="friend-icon non-selectable opacity-75"
-     th:classappend="${'participant-toggle-' + num}"
+<th:block th:fragment="graph(num)"
+          th:with="champion=${participant.getChampionName()}"
 >
+    <div class="position-relative">
+        <img th:src="@{${'/dragon_tail/main/img/champion/' + champion + '.png'}}"
+             alt="champion icon"
+             class="friend-icon non-selectable"
+             th:classappend="${'participant-toggle-' + num}"
+        >
+        <th:block th:each="friend : ${friends}">
+            <img th:if="${participant.getPuuid() == friend.getPuuId()}"
+                 th:src="@{${'/dragon_tail/main/img/profileicon/' + friend.getIcon() + '.png'}}"
+                 class="friend-icon-2 non-selectable position-absolute bottom-0 end-0"
+                 th:alt="${friend.getName} + '\'s icon'"
+            >
+        </th:block>
+    </div>
+</th:block>
+
+<!--<img th:fragment="graph(num)"-->
+<!--     th:with="champion=${participant.getChampionName()},-->
+<!--              isFriend=${#lists.contains(friends.![puuId], participant.getPuuid())}"-->
+<!--     th:src="@{${'/dragon_tail/main/img/champion/' + champion + '.png'}}"-->
+<!--     alt="champion icon"-->
+<!--     class="friend-icon non-selectable opacity-75"-->
+<!--     -->
+<!--&gt;-->
 
 <img th:fragment="small(num)"
      th:with="champion=${participant.getChampionName()},
               isFriend=${#lists.contains(friends.![puuId], participant.getPuuid())}"
      th:src="@{${'/dragon_tail/main/img/champion/' + champion + '.png'}}"
      alt="champion icon"
-     class="champ-icon non-selectable opacity-75"
+     class="champ-icon non-selectable"
      th:classappend="${'participant-toggle-' + num}"
 >
 
-<img th:fragment="timeline(name)"
+<img th:fragment="timeline(name, wasKilled)"
      th:src="@{${'/dragon_tail/main/img/champion/' + name + '.png'}}"
      alt="champion icon"
-     class="friend-icon non-selectable opacity-75"
+     class="friend-icon non-selectable"
+     th:classappend="${wasKilled} ? 'unclicked' : ''"
 >
+
