@@ -43,35 +43,35 @@ I would like to express my gratitude to the following individuals, organizations
 
 ## Screenshots
 
-![Project Image](README_IMGS\01_Home.png)
+![Project Image](./README_IMGS\01_Home.png)
 Home Page
 
-![Project Image](README_IMGS\03_Sort2.png)
+![Project Image](./README_IMGS\03_Sort2.png)
 Sort matches by selecting friends from sidebar.
 
-![Project Image](README_IMGS\06_LoadGames2.png)
+![Project Image](./README_IMGS\06_LoadGames2.png)
 Download new games and load them into the database.
 
-![Project Image](README_IMGS\07_Match_Overview.png)
+![Project Image](./README_IMGS\07_Match_Overview.png)
 Overview of the match played
 
-![Project Image](README_IMGS\08_Match_Timeline1.png)
-![Project Image](README_IMGS\09_Match_TimeLine2.png)
+![Project Image](./README_IMGS\08_Match_Timeline1.png)
+![Project Image](./README_IMGS\09_Match_TimeLine2.png)
 A heat map of player kills and deaths. Selecting a player will showcase only their kills and deaths
 
-![Project Image](README_IMGS\12_Match_Graphs3.png)
-![Project Image](README_IMGS\13_Match_Graphs4.png)
+![Project Image](./README_IMGS\12_Match_Graphs3.png)
+![Project Image](./README_IMGS\13_Match_Graphs4.png)
 Match graphs to see how well teams and individuals did over the duration of the match.
 
-![Project Image](README_IMGS\14_Match_Stats1.png)
-![Project Image](README_IMGS\15_Match_Stats2.png)
+![Project Image](./README_IMGS\14_Match_Stats1.png)
+![Project Image](./README_IMGS\15_Match_Stats2.png)
 Toggleable match stats to compare how players compare to team and the other team.
 
-![Project Image](README_IMGS\16_Match_Participants1.png)
+![Project Image](./README_IMGS\16_Match_Participants1.png)
 Individual player stats for the match.
 
-![Project Image](README_IMGS\17_Match_Participants2.png)
+![Project Image](./README_IMGS\17_Match_Participants2.png)
 The build path for the player during a match.
 
-![Project Image](README_IMGS\18_Match_Participants3.png)
+![Project Image](./README_IMGS\18_Match_Participants3.png)
 Graphs for player stat breakdowns over time.
